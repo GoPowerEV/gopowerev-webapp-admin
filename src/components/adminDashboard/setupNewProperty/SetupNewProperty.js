@@ -128,6 +128,7 @@ export default function SetupNewProperty(props) {
     const [newPropertyAddress, setNewPropertyAddress] = React.useState('')
     const [photoAdded, setPhotoAdded] = React.useState(false)
     const [photoFile, setPhotoFile] = React.useState(null)
+    const [photoBinary, setPhotoBinary] = React.useState(null)
     const [photoFileName, setPhotoFileName] = React.useState('')
     const [propertyInfo, setPropertyInfo] = React.useState({})
     const allStates = getAllStates()
@@ -220,25 +221,40 @@ export default function SetupNewProperty(props) {
         // }
     }
 
-    const uploadPropertyImg = () => {
+    const getBinaryFromImg = (picFile) => {
+        new Promise((resolve, reject) => {
+            const reader = new FileReader()
+
+            reader.onload = (event) => {
+                resolve(event.target.result)
+            }
+
+            reader.onerror = (err) => {
+                reject(err)
+            }
+
+            reader.readAsArrayBuffer(picFile)
+        }).then((result) => {
+            setPhotoBinary(result)
+        })
+    }
+
+    const uploadPropertyImg = (propertyId) => {
         setIsLoading(true)
-        console.log('uploading property image')
+
         if (props.token) {
-            console.log(JSON.stringify(propertyInfo))
-            fetch(API_URL + 'properties-image/' + propertyUUID, {
+            fetch(API_URL + 'properties-image/' + propertyId, {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'image/jpg',
                 },
-                body: JSON.stringify(propertyInfo),
+                body: photoBinary,
             })
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        setPropertyUUID(result.propertyUUID)
                         setIsLoading(false)
-                        console.log('new property id', result.propertyUUID)
                         handleComplete(propertyInfo)
                     },
                     (error) => {
@@ -266,9 +282,7 @@ export default function SetupNewProperty(props) {
                         setPropertyUUID(result.propertyUUID)
                         setIsLoading(false)
                         if (photoFile) {
-                            ;(async () => {
-                                await uploadPropertyImg
-                            })()
+                            uploadPropertyImg(result.propertyUUID)
                         } else {
                             handleComplete(propertyInfo)
                         }
@@ -333,8 +347,8 @@ export default function SetupNewProperty(props) {
         e.preventDefault()
         const files = e.dataTransfer.files
         setPhotoAdded(true)
-        console.log('photo', files[0])
         setPhotoFile(files[0])
+        getBinaryFromImg(files[0])
         setPhotoFileName(files[0].name)
     }
 
