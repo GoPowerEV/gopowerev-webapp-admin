@@ -124,11 +124,16 @@ const useStyles = makeStyles((theme) => ({
 export default function AddInstaller(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
+    const [selectedInstaller, setSelectedInstaller] = useState('')
     const [installers, setInstallers] = useState([
-        { name: 'Chris Shatrov' },
-        { name: 'John Smith' },
-        { name: 'Adam Sandler' },
+        { name: 'Chris Shatrov', id: '5a08bc2c-e8cf-4462-958a-0017beb495f2' },
     ])
+
+    const handleSelectInstaller = (installerId) => {
+        setSelectedInstaller(installerId)
+        console.log('selecting this installer', installerId)
+        props.setInstallerName(installerId);
+    }
 
     useEffect(() => {
         setIsLoading(true)
@@ -226,13 +231,13 @@ export default function AddInstaller(props) {
                                     className={classes.textField}
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
-                                    value={props.installerName}
-                                    onChange={(event) => props.setInstallerName(event.target.value)}
+                                    value={selectedInstaller}
+                                    onChange={(event) => handleSelectInstaller(event.target.value)}
                                     label="Company Installers"
                                 >
                                     {installers?.map((installer) => (
                                         <MenuItem
-                                            value={installer.name}
+                                            value={installer.id}
                                             key={installer.name}
                                         >
                                             {installer.name}

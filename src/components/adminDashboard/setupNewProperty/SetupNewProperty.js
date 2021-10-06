@@ -241,6 +241,7 @@ export default function SetupNewProperty(props) {
                     (result) => {
                         setPropertyUUID(result.propertyUUID)
                         setIsLoading(false)
+                        console.log('new property id', result.propertyUUID)
                         handleComplete(propertyInfo)
                     },
                     (error) => {
@@ -251,33 +252,30 @@ export default function SetupNewProperty(props) {
     }
 
     const addInstaller = () => {
-        console.log('here', propertyInfo)
-        //let tempPropertyInfo = propertyInfo
-        //tempPropertyInfo.installerUUID = installerUUID
-        console.log('uuid', propertyUUID)
-        handleComplete(propertyInfo)
-        // setIsLoading(true)
-        // if (props.token) {
-        //     fetch(API_URL + 'properties', {
-        //         method: 'PUT',
-        //         headers: {
-        //             Authorization: 'Bearer ' + props.token,
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(propertyInfo),
-        //     })
-        //         .then((res) => res.json())
-        //         .then(
-        //             (result) => {
-        //                 setPropertyUUID(result.propertyUUID)
-        //                 setIsLoading(false)
-        //                 handleComplete(propertyInfo)
-        //             },
-        //             (error) => {
-        //                 setIsLoading(false)
-        //             }
-        //         )
-        // }
+        let tempPropertyInfo = propertyInfo
+        tempPropertyInfo.installerUUID = installerName
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL + 'properties/' + propertyUUID, {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(propertyInfo),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setPropertyUUID(result.propertyUUID)
+                        setIsLoading(false)
+                        handleComplete(propertyInfo)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
     }
 
     const dragOver = (e) => {

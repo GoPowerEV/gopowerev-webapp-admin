@@ -8,6 +8,7 @@ import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
 import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import { getBadgeClass } from './utils/PropertyUtils'
+import NoImageAvailable from './../../../assets/images/noImageAvailable.png'
 
 const useStyles = makeStyles({
     root: {
@@ -49,7 +50,11 @@ const PropertyCard = (props) => {
             >
                 <img
                     alt="Property Img"
-                    src={propertyInfo.pictureUrl1}
+                    src={
+                        propertyInfo.pictureUrl1
+                            ? propertyInfo.pictureUrl1
+                            : NoImageAvailable
+                    }
                     className="propertyImage"
                 />
                 <CardContent className={classes.content}>

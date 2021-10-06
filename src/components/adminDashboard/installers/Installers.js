@@ -24,7 +24,7 @@ const Installers = (props) => {
         console.log('getting the list of installers')
         if (props.token) {
             console.log('here', props.token)
-            fetch(API_URL + 'admin/users/INSTALLER', {
+            fetch(API_URL + 'admin/users?role=INSTALLER', {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
