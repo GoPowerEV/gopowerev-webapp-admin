@@ -127,6 +127,7 @@ export default function SetupNewProperty(props) {
     const [propertyUUID, setPropertyUUID] = React.useState()
     const [newPropertyAddress, setNewPropertyAddress] = React.useState('')
     const [photoAdded, setPhotoAdded] = React.useState(false)
+    const [photoFile, setPhotoFile] = React.useState(null)
     const [photoFileName, setPhotoFileName] = React.useState('')
     const [propertyInfo, setPropertyInfo] = React.useState({})
     const allStates = getAllStates()
@@ -219,13 +220,36 @@ export default function SetupNewProperty(props) {
         // }
     }
 
+    const uploadPropertyImg = () => {
+        setIsLoading(true)
+        console.log('uploading property image')
+        if (props.token) {
+            console.log(JSON.stringify(propertyInfo))
+            fetch(API_URL + 'properties-image/' + propertyUUID, {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(propertyInfo),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setPropertyUUID(result.propertyUUID)
+                        setIsLoading(false)
+                        console.log('new property id', result.propertyUUID)
+                        handleComplete(propertyInfo)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
     const createProperty = (propertyInfo) => {
         setIsLoading(true)
-        let formData = new FormData()
-        for (let value in propertyInfo) {
-            formData.append(value, propertyInfo[value])
-        }
-        console.log('formData object', formData)
         if (props.token) {
             console.log(JSON.stringify(propertyInfo))
             fetch(API_URL + 'properties', {
@@ -241,8 +265,13 @@ export default function SetupNewProperty(props) {
                     (result) => {
                         setPropertyUUID(result.propertyUUID)
                         setIsLoading(false)
-                        console.log('new property id', result.propertyUUID)
-                        handleComplete(propertyInfo)
+                        if (photoFile) {
+                            ;(async () => {
+                                await uploadPropertyImg
+                            })()
+                        } else {
+                            handleComplete(propertyInfo)
+                        }
                     },
                     (error) => {
                         setIsLoading(false)
@@ -304,6 +333,8 @@ export default function SetupNewProperty(props) {
         e.preventDefault()
         const files = e.dataTransfer.files
         setPhotoAdded(true)
+        console.log('photo', files[0])
+        setPhotoFile(files[0])
         setPhotoFileName(files[0].name)
     }
 
@@ -387,7 +418,6 @@ export default function SetupNewProperty(props) {
                             initialValues={initialValues}
                             validationSchema={validationSchema}
                             onSubmit={async (values) => {
-                                // alert(JSON.stringify(values, null, 2))
                                 createProperty(values)
                             }}
                         >
