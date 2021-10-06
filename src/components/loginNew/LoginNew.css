@@ -1,0 +1,25 @@
+.primary-green {
+    background-color: #16a44a;
+}
+
+.login-link {
+    position: absolute;
+    margin-top: 10px;
+    color: #000f20 !important;
+}
+
+.login-header {
+    margin-bottom: 25px !important;
+}
+
+.forgotPasswordContainer {
+    display: inline-block;
+}
+
+.cellPhonePic {
+    height: auto;
+    width: 330px;
+    -ms-transform: rotate(-15deg);
+    -webkit-transform: rotate(-15deg);
+    transform: rotate(-15deg);
+}

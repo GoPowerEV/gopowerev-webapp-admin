@@ -1,0 +1,264 @@
+.topButton {
+    width: 100px;
+    background-color: #12bfa2 !important;
+    margin-top: 20px;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    font-size: 15px !important;
+    border-radius: 5px !important;
+    float: left;
+}
+
+.boldTex {
+    font-weight: bold;
+    color: black;
+}
+
+.expandIcon {
+    font-size: 45px !important;
+    cursor: pointer;
+}
+
+.propertiesMainBody {
+    padding-left: 15px;
+    width: 100%;
+    text-align: left;
+}
+
+.tabHeader {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #bababa;
+    font-size: 19px;
+}
+
+.greyHeader {
+    font-weight: bold;
+    color: #bababa;
+    font-size: 21px;
+    display: inline-flex;
+}
+
+.lcuContainer {
+    margin-top: 25px !important;
+}
+
+.lcuLocation {
+    margin-left: 15px;
+    font-size: 19px;
+    font-weight: bold;
+    color: black;
+}
+
+.lcuHeaderColumn {
+    display: inline-flex;
+}
+
+.lcuHeader {
+    font-weight: bold;
+}
+
+.lcuRowText {
+    font-weight: bold;
+    color: black;
+}
+
+.greyIconEdit  {
+    color: grey;
+    cursor: pointer;
+}
+
+.editLcuDetailsContainer {
+    margin-top: 25px !important;
+}
+
+.lcuDetailsContainer {
+    background-color: #bababa4a;
+    color: black;
+    border-radius: 9px;
+    margin: 5px !important;
+}
+
+.lcuDetailsText {
+    font-weight: bold;
+}
+
+.lcuDetailsTextSmall {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.textAsLink {
+    cursor: pointer;
+}
+
+.textAsLink:hover {
+    color: #756c6c;
+}
+
+.propertiesHr {
+    margin-top: 80px;
+    margin-bottom: 30px;
+    border-top: 1px dashed #bababa;
+}
+
+.propertiesHrLcu {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-top: 1px dashed #bababa;
+}
+
+.allPropertiesContainer {
+    margin-top: 25px;
+}
+
+.propertyImage {
+    height: 100px;
+    width: 100%;
+}
+
+.badge {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 2px;
+    padding: 5px 11px;
+    margin-bottom: 6px;
+    border-radius: 7px;
+    width: fit-content;
+}
+
+.badgeBox {
+    display: inline-flex;
+}
+
+.badgeText {
+    margin-top: 3px;
+    margin-left: 4px;
+}
+
+.loaderContainer {
+    margin-top: 45px;
+    padding-left: 45%;
+}
+
+.viewedPropertyMainImage {
+    border-radius: 13px;
+    width: 100%;
+}
+
+.viewedPropertyTitle {
+    font-size: 26px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.viewedPropertyTitleCollapsed {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.collapsedPropertyInfo {
+    margin-top: 25px;
+}
+
+.splitter {
+    font-size: 19px;
+    margin-left: 12px;
+    margin-right: 12px;
+    color: #adaeaf;
+    font-weight: 0;
+}
+
+.viewedPropertyLocation {
+    font-size: 18px;
+    font-weight: bold;
+    color: #bababa;
+    display: inline-flex;
+}
+
+.viewedPropertyInfoContainer {
+    padding-left: 25px;
+    padding-right: 50px;
+}
+
+.propertyDetailsEditText {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    display: inline-flex;
+    justify-content: space-between;
+    width: 94% !important;
+}
+
+.propertyEditIcon {
+    cursor: pointer;
+    background-color: #12bfa2 !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 13px !important;
+    margin-left: -20px !important;
+}
+
+.editInfoContainer {
+    margin-top: 25px;
+}
+
+.editInfoItem {
+    font-size: 18px;
+    font-weight: bold;
+    color: #bababa;
+    display: inline-flex;
+}
+
+.editInfoItem span {
+    margin-left: 10px;
+}
+
+.editInfoItem div {
+    margin-left: 5px;
+    margin-top: -2px;
+}
+
+.editInfoSaveButton {
+    margin-top: 20px !important;
+    background-color: #12bfa2 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: 'none' !important;
+}
+
+.locationNotes {
+    margin-bottom: 45px;
+}
+
+.rightBorder {
+    border-right: 1px solid black;
+}
+
+.grey {
+    background-color: #323438;
+}
+
+.yellow {
+    background-color: #ffb72b;
+}
+
+.brightGreen {
+    background-color: #16d76f;
+}
+
+.pink {
+    background-color: #ef5da8;
+}
+
+.purple {
+    background-color: #5d5fef;
+}
+
+.blue {
+    background-color: #12bfa2;
+}

@@ -1,0 +1,21 @@
+.menu-items {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    position: relative !important;
+}
+
+.selected-row {
+    background-color: #16a44a !important;
+    color: white !important;
+    font-weight: 700 !important;
+}
+
+.customTab {
+    color: #ffffff !important;
+    background-color: #12BFA2 !important;
+    border-radius: 25px !important;
+    padding: 10px !important;
+    opacity: 100 !important;
+    margin-left: 140px !important;
+}
