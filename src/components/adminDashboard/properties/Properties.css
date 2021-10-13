@@ -1,7 +1,19 @@
-.topButton {
-    width: 100px;
+.topButtonProperties {
     background-color: #12bfa2 !important;
     margin-top: 20px;
+    margin-right: 20px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    font-size: 15px !important;
+    border-radius: 5px !important;
+    float: left;
+}
+
+.topButtonPropertiesNotActive {
+    background-color: #d6d6d7 !important;
+    margin-top: 20px;
+    margin-right: 20px !important;
     color: #ffffff !important;
     font-weight: bold !important;
     text-transform: none !important;
@@ -65,7 +77,7 @@
     color: black;
 }
 
-.greyIconEdit  {
+.greyIconEdit {
     color: grey;
     cursor: pointer;
 }

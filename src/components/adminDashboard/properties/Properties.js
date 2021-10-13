@@ -12,6 +12,7 @@ const Properties = (props) => {
     const [propertyOpened, setPropertyOpened] = useState(false)
     const [openedPropertyData, setOpenedPropertyData] = useState([])
     const [allProperties, setAllProperties] = useState([])
+    const [activeFilter, setActiveFilter] = useState()
 
     const getAllProperties = () => {
         setIsLoading(true)
@@ -28,7 +29,6 @@ const Properties = (props) => {
                     (result) => {
                         setIsLoading(false)
                         setAllProperties(result.properties)
-                        console.log(result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -50,6 +50,11 @@ const Properties = (props) => {
 
     useEffect(() => {
         getAllProperties()
+    }, [activeFilter])
+
+    useEffect(() => {
+        getAllProperties()
+        setActiveFilter('all')
     }, [])
 
     return (
@@ -57,8 +62,104 @@ const Properties = (props) => {
             {!isLoading && !propertyOpened && (
                 <div className="propertiesMainBody">
                     <div className="tabHeader">My Properties</div>
-                    <Button className="topButton" variant="contained">
+                    <Button
+                        className={
+                            activeFilter === 'all'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('all')}
+                    >
                         All
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'new'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('new')}
+                    >
+                        New
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'pending'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('pending')}
+                    >
+                        Pending
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'ready'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('ready')}
+                    >
+                        Ready For Install
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'in'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('in')}
+                    >
+                        In-Install
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'installed'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('installed')}
+                    >
+                        Installed
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'inspected'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('inspected')}
+                    >
+                        Inspected
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'paused'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('paused')}
+                    >
+                        Paused
+                    </Button>
+                    <Button
+                        className={
+                            activeFilter === 'deactivated'
+                                ? 'topButtonProperties'
+                                : 'topButtonPropertiesNotActive'
+                        }
+                        variant="contained"
+                        onClick={(e) => setActiveFilter('deactivated')}
+                    >
+                        Deactivated
                     </Button>
                     <hr className="propertiesHr" />
                     <Grid

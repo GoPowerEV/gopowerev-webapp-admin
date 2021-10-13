@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
 import './../../adminDashboard/dashboardTab/DashboardTab.css'
 import { makeStyles } from '@material-ui/core/styles'
+import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import './LocationCard.css'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
 
@@ -56,26 +57,128 @@ const LocationCard = (props) => {
                         <Grid item xs={8}>
                             <Grid
                                 container
-                                xs={12}
-                                className="locationDetailsContainer"
+                                spacing={3}
+                                className="editLcuDetailsContainer"
                             >
                                 <Grid
                                     item
                                     xs={7}
-                                    className="locationDetails nameMargin"
+                                    className="lcuDetailsContainer"
                                 >
-                                    <div className="lcuDetailsHeader">
-                                        Location Name
-                                    </div>
-                                    <div className="lcuDetailsText">
-                                        {locationInfo.name}
-                                    </div>
+                                    <Grid container>
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            justify="space-between"
+                                            alignItems="center"
+                                        >
+                                            <Grid item xs={7}>
+                                                <div className="lcuDetailsHeader">
+                                                    Location Name
+                                                </div>
+                                                <div className="lcuDetailsText">
+                                                    {locationInfo.name}
+                                                </div>
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                xs={1}
+                                                className="greyIconEdit"
+                                            >
+                                                <EditOutlinedIcon />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={4} className="locationDetails">
-                                    <div className="lcuDetailsHeader">
-                                        Max Volt-Amps
-                                    </div>
-                                    <div className="lcuDetailsText">10,000</div>
+                                <Grid
+                                    item
+                                    xs={4}
+                                    className="lcuDetailsContainer"
+                                >
+                                    <Grid container>
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            justify="space-between"
+                                            alignItems="center"
+                                        >
+                                            <Grid item xs={10}>
+                                                <div className="lcuDetailsHeader">
+                                                    Max-Volt-Amps
+                                                </div>
+                                                <div className="lcuDetailsText">
+                                                    10,000
+                                                </div>
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                xs={2}
+                                                className="greyIconEdit"
+                                            >
+                                                <EditOutlinedIcon />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Grid
+                                container
+                                spacing={5}
+                                className="editLcuDetailsContainer"
+                            >
+                                <Grid
+                                    item
+                                    xs={11}
+                                    className="lcuDetailsContainer"
+                                >
+                                    <Grid container>
+                                        <Grid
+                                            container
+                                            direction="row"
+                                            justify="space-between"
+                                            alignItems="center"
+                                        >
+                                            <Grid item xs={10}>
+                                                <div className="lcuDetailsHeader">
+                                                    Notes
+                                                </div>
+                                                <div className="lcuDetailsText">
+                                                    Lorem ipsum dolor sit amet,
+                                                    consectetur adipiscing elit.
+                                                    Cras vitae justo luctus,
+                                                    sollicitudin velit in,
+                                                    hendrerit augue. Sed non
+                                                    sollicitudin quam. Vivamus
+                                                    diam tellus, interdum
+                                                    ultricies elementum congue,
+                                                    lacinia et justo. Nam
+                                                    gravida in ipsum et
+                                                    vehicula. Curabitur in odio
+                                                    ac orci pretium pharetra.
+                                                    Aenean mollis urna a erat
+                                                    hendrerit aliquam. Duis sit
+                                                    amet sem tristique, cursus
+                                                    erat a, bibendum lacus. Sed
+                                                    iaculis diam lacus, nec
+                                                    mollis enim porttitor non.
+                                                    Nam consequat viverra lacus
+                                                    et faucibus. Nunc ac tellus
+                                                    ac sapien dapibus imperdiet.
+                                                    Mauris in arcu mauris. Proin
+                                                    sed nunc ipsum. Donec ex
+                                                    erat, vulputate vel ex in,
+                                                    pellentesque luctus mi.
+                                                </div>
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                xs={1}
+                                                className="greyIconEdit"
+                                            >
+                                                <EditOutlinedIcon />
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>

@@ -342,7 +342,7 @@ const CurrentlyViewedProperty = (props) => {
                 </Grid>
             </Collapse>
             <hr className="propertiesHrLcu" />
-            <Grid container xs={12} spacing={3} className="lcuContainer">
+            <Grid container xs={12} spacing={2} className="lcuContainer">
                 <Grid item xs={2} className="lcuHeaderColumn rightBorder">
                     <span className="greyHeader">
                         <EvStationOutlinedIcon />
@@ -404,50 +404,178 @@ const CurrentlyViewedProperty = (props) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">IMEI</div>
-                        <div className="lcuDetailsText">
-                            XXXXXXXXXXXXXXXXXXX
-                        </div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={5}>
+                                    <div className="lcuDetailsHeader">IMEI</div>
+                                    <div className="lcuDetailsText">
+                                        XXXXXXXXXXXXXXXXXXX
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">
-                            Confirmation Code
-                        </div>
-                        <div className="lcuDetailsText">32144412</div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={5}>
+                                    <div className="lcuDetailsHeader">
+                                        Confirmation Code
+                                    </div>
+                                    <div className="lcuDetailsText">
+                                        32144412
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid container spacing={3} className="editLcuDetailsContainer">
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">Admin State</div>
-                        <div className="lcuDetailsText">Pre-Config</div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={5}>
+                                    <div className="lcuDetailsHeader">
+                                        Admin State
+                                    </div>
+                                    <div className="lcuDetailsText">
+                                        Pre-Config
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">SIM</div>
-                        <div className="lcuDetailsText">
-                            XXXXXXXXXXXXXXXXXXX
-                        </div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={5}>
+                                    <div className="lcuDetailsHeader">SIM</div>
+                                    <div className="lcuDetailsText">
+                                        XXXXXXXXXXXXXXXXXXX
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">Carrier</div>
-                        <div className="lcuDetailsText">Verizon</div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={5}>
+                                    <div className="lcuDetailsHeader">
+                                        Carrier
+                                    </div>
+                                    <div className="lcuDetailsText">
+                                        Verizon
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid container spacing={3} className="editLcuDetailsContainer">
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">Model</div>
-                        <div className="lcuDetailsText">
-                            MOTOROLA MG7540 16x4
-                        </div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={9}>
+                                    <div className="lcuDetailsHeader">
+                                        Model
+                                    </div>
+                                    <div className="lcuDetailsText">
+                                        MOTOROLA MG7540 16x4
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">Serial</div>
-                        <div className="lcuDetailsText">
-                            XXXXXXXXXXXXXXXXXXX
-                        </div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={5}>
+                                    <div className="lcuDetailsHeader">
+                                        Serial
+                                    </div>
+                                    <div className="lcuDetailsText">
+                                        XXXXXXXXXXXXXXXXXXX
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={3} className="lcuDetailsContainer">
-                        <div className="lcuDetailsHeader">Line</div>
-                        <div className="lcuDetailsText">555-555-5555</div>
+                        <Grid container>
+                            <Grid
+                                container
+                                direction="row"
+                                justify="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item xs={5}>
+                                    <div className="lcuDetailsHeader">Line</div>
+                                    <div className="lcuDetailsText">
+                                        555-555-5555
+                                    </div>
+                                </Grid>
+                                <Grid item xs={1} className="greyIconEdit">
+                                    <EditOutlinedIcon />
+                                </Grid>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 </Grid>
                 <Grid container spacing={3} className="editLcuDetailsContainer">
@@ -533,33 +661,33 @@ const CurrentlyViewedProperty = (props) => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <hr className="propertiesHrLcu" />
-                <div className="tabHeader inInstallHeader">Locations</div>
-                <Grid
-                    container
-                    className="allDashboardItemsContainer"
-                    xs={12}
-                    spacing={2}
-                >
-                    <Grid item xs={12}>
-                        {locationsFake.map((location, index) => (
-                            <div className="status-card-ininstall">
-                                <Grid
-                                    container
-                                    className="allPropertiesContainer"
-                                    xs={12}
-                                    spacing={2}
-                                >
-                                    <Grid item xs={12} key={index}>
-                                        <LocationCard location={location} />
-                                    </Grid>
-                                </Grid>
-                                <SmartOutlets />
-                            </div>
-                        ))}
-                    </Grid>
-                </Grid>
             </Collapse>
+            <hr className="propertiesHrLcu" />
+            <div className="tabHeader inInstallHeader">Locations</div>
+            <Grid
+                container
+                className="allDashboardItemsContainer"
+                xs={12}
+                spacing={2}
+            >
+                <Grid item xs={12}>
+                    {locationsFake.map((location, index) => (
+                        <div className="status-card-ininstall">
+                            <Grid
+                                container
+                                className="allPropertiesContainer"
+                                xs={12}
+                                spacing={2}
+                            >
+                                <Grid item xs={12} key={index}>
+                                    <LocationCard location={location} />
+                                </Grid>
+                            </Grid>
+                            <SmartOutlets />
+                        </div>
+                    ))}
+                </Grid>
+            </Grid>
             <hr className="propertiesHrLcu" />
             <Collapse in={lcuInfoOpened2}></Collapse>
         </div>

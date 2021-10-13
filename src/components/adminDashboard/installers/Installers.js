@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { API_URL } from './../../../constants'
+import { API_URL_ADMIN } from './../../../constants'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import './Installers.css'
@@ -24,8 +24,9 @@ const Installers = (props) => {
         console.log('getting the list of installers')
         if (props.token) {
             console.log('here', props.token)
-            fetch(API_URL + 'admin/users?role=INSTALLER', {
+            fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
                 method: 'GET',
+                mode: 'no-cors',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
                     'Content-Type': 'application/json',
