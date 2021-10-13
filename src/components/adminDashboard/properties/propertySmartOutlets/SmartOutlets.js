@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '@material-ui/core/Card'
 import Typography from '@material-ui/core/Typography'
 import CardContent from '@material-ui/core/CardContent'
@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid'
 import './SmartOutlets.css'
 import { makeStyles } from '@material-ui/core/styles'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
+import EditSmartOutletModal from './EditSmartOutletModal'
 
 const useStyles = makeStyles({
     root: {
@@ -58,13 +59,25 @@ const useStyles = makeStyles({
 
 const SmartOutlets = (props) => {
     const classes = useStyles()
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleOpen = () => {
+        setOpenModal(true)
+    }
+
+    const handleClose = () => {
+        setOpenModal(false)
+    }
 
     return (
         <div className="smartOutletsContainer">
-            <div className="outletHeader"><FlashOnOutlinedIcon />Smart Outlets (2)</div>
+            <div className="outletHeader">
+                <FlashOnOutlinedIcon />
+                Smart Outlets (2)
+            </div>
             <Grid container xs={12} spacing={2}>
                 <Grid item xs={3}>
-                    <Card className={classes.root}>
+                    <Card className={classes.root} onClick={handleOpen}>
                         <CardContent className={classes.content}>
                             <Grid container spacing={3}>
                                 <Grid item xs={4}>
@@ -77,7 +90,7 @@ const SmartOutlets = (props) => {
                                 </Grid>
                             </Grid>
                             <Typography className={classes.location}>
-                                East Building Nothside
+                                East Building Northside
                             </Typography>
                             <Grid container spacing={4}>
                                 <Grid item xs={3}>
@@ -178,7 +191,7 @@ const SmartOutlets = (props) => {
                     </Card>
                 </Grid>
                 <Grid item xs={3}>
-                    <Card className={classes.root}>
+                    <Card className={classes.root} onClick={handleOpen}>
                         <CardContent className={classes.content}>
                             <Grid container spacing={3}>
                                 <Grid item xs={4}>
@@ -191,7 +204,7 @@ const SmartOutlets = (props) => {
                                 </Grid>
                             </Grid>
                             <Typography className={classes.location}>
-                                East Building Nothside
+                                East Building Southside
                             </Typography>
                             <Grid container spacing={4}>
                                 <Grid item xs={3}>
@@ -292,6 +305,12 @@ const SmartOutlets = (props) => {
                     </Card>
                 </Grid>
             </Grid>
+            {/* EDIT SMART OUTLET MODAL */}
+            <EditSmartOutletModal
+                handleOpen={handleOpen}
+                handleClose={handleClose}
+                open={openModal}
+            />
         </div>
     )
 }
