@@ -8,25 +8,13 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 
 const Installers = (props) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [allInstallers, setAllInstallers] = useState([
-        {
-            name: 'Chris Shatrov',
-            location: 'Kansas City, MO',
-        },
-        {
-            name: 'John Smith',
-            location: 'Los Angeles, CA',
-        },
-    ])
+    const [allInstallers, setAllInstallers] = useState([])
 
     const getAllInstallers = () => {
         setIsLoading(true)
-        console.log('getting the list of installers')
         if (props.token) {
-            console.log('here', props.token)
             fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
                 method: 'GET',
-                mode: 'no-cors',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
                     'Content-Type': 'application/json',
@@ -36,8 +24,7 @@ const Installers = (props) => {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        // setAllInstallers(result.properties)
-                        console.log('installers list', result)
+                        setAllInstallers(result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -64,11 +51,15 @@ const Installers = (props) => {
                     xs={12}
                     spacing={2}
                 >
-                    {allInstallers.map((installer, index) => (
-                        <Grid item xs={3} key={index}>
-                            <InstallerCard installer={installer} />
-                        </Grid>
-                    ))}
+                    {allInstallers &&
+                        allInstallers.map((installer, index) => (
+                            <Grid item xs={3} key={index}>
+                                <InstallerCard installer={installer} />
+                            </Grid>
+                        ))}
+                    {allInstallers.length === 0 && (
+                        <div>There are no installers available.</div>
+                    )}
                 </Grid>
             </div>
             {isLoading && (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import { makeStyles } from '@material-ui/core/styles'
@@ -26,7 +26,8 @@ const useStyles = makeStyles(() => ({
 const CurrentlyViewedProperty = (props) => {
     const classes = useStyles()
 
-    const property = props.property
+    const [property, setProperty] = useState({})
+    const [propertyContactName, setPropertyContactName] = useState('')
     const [openEditor, setOpenEditor] = useState(false)
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
     const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
@@ -63,6 +64,21 @@ const CurrentlyViewedProperty = (props) => {
     const toggleLcuInfo = () => {
         setLcuInfoOpened(!lcuInfoOpened)
     }
+
+    const handleContactNameEditChange = (value) => {
+        console.log(value)
+        let tempPropertyData = property
+        tempPropertyData['contactName'] = value
+        setProperty(tempPropertyData)
+        setPropertyContactName(value)
+        console.log(tempPropertyData)
+    }
+
+    useEffect(() => {
+        console.log('prop details', property)
+        setPropertyContactName(props.property.contactName)
+        setProperty(props.property)
+    }, [])
 
     return (
         <div className="propertiesMainBody">
@@ -124,10 +140,12 @@ const CurrentlyViewedProperty = (props) => {
                                 <LocationOnOutlinedIcon /> 13000 Maple st,
                                 Beverly Hills, 90210
                             </div>
-                            <div className={getBadgeClass(property.status)}>
-                                {property.status.charAt(0).toUpperCase() +
-                                    property.status.slice(1)}
-                            </div>
+                            {property.status !== undefined && (
+                                <div className={getBadgeClass(property.status)}>
+                                    {property.status.charAt(0).toUpperCase() +
+                                        property.status.slice(1)}
+                                </div>
+                            )}
                             <div className="propertyDetailsEditText">
                                 <span>Property Details</span>
                                 <Button
@@ -144,7 +162,9 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item xs={6}>
                                             <div className="editInfoItem">
                                                 <PersonOutlineOutlinedIcon />
-                                                <span>John Smith</span>
+                                                <span>
+                                                    {propertyContactName}
+                                                </span>
                                             </div>
                                         </Grid>
                                         <Grid item xs={6}>
@@ -157,7 +177,7 @@ const CurrentlyViewedProperty = (props) => {
                                             <div className="editInfoItem">
                                                 <MailOutlineOutlinedIcon />
                                                 <span>
-                                                    John.Smith@gmail.com
+                                                    {property.contactEmail}
                                                 </span>
                                             </div>
                                         </Grid>
@@ -175,15 +195,17 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item xs={6}>
                                             <div className="editInfoItem">
                                                 <CallOutlinedIcon />
-                                                <span>913-555-22-23</span>
+                                                <span>
+                                                    {property.contactPhone1}
+                                                </span>
                                             </div>
                                         </Grid>
                                         <Grid item xs={6}>
                                             <div className="editInfoItem">
                                                 <FlashOnOutlinedIcon />
                                                 <span>
-                                                    {property.maxAmps}k Max Volt
-                                                    Amps
+                                                    {property.maxVoltAmps} Max
+                                                    Volt Amps
                                                 </span>
                                             </div>
                                         </Grid>
@@ -204,11 +226,12 @@ const CurrentlyViewedProperty = (props) => {
                                                         },
                                                     }}
                                                     name="name"
-                                                    value="John Smith"
-                                                    // onChange={
-                                                    //     props.handleChange
-                                                    // }
-                                                    // onBlur={props.handleBlur}
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
                                                     label="Administrator's Name"
                                                     variant="outlined"
                                                     fullWidth
@@ -248,7 +271,9 @@ const CurrentlyViewedProperty = (props) => {
                                                         },
                                                     }}
                                                     name="email"
-                                                    value="John.Smith@gmail.com"
+                                                    value={
+                                                        property.contactEmail
+                                                    }
                                                     // onChange={
                                                     //     props.handleChange
                                                     // }
@@ -294,7 +319,9 @@ const CurrentlyViewedProperty = (props) => {
                                                         },
                                                     }}
                                                     name="phoneNumber"
-                                                    value="913-555-22-23"
+                                                    value={
+                                                        property.contactPhone1
+                                                    }
                                                     // onChange={
                                                     //     props.handleChange
                                                     // }
@@ -316,7 +343,7 @@ const CurrentlyViewedProperty = (props) => {
                                                         },
                                                     }}
                                                     name="maxVoltAmpts"
-                                                    value={property.maxAmps}
+                                                    value={property.maxVoltAmps}
                                                     // onChange={
                                                     //     props.handleChange
                                                     // }

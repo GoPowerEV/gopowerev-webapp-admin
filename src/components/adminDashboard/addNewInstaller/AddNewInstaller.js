@@ -1,5 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Grid from '@material-ui/core/Grid'
+import { API_URL_ADMIN } from './../../../constants'
+import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
+import TextField from '@material-ui/core/TextField'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import './AddNewInstaller.css'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -87,11 +93,111 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function AddNewInstaller(props) {
+    const [isLoading, setIsLoading] = useState(false)
+    const [userId, setUserId] = useState('')
+    const [showNoInfoEnteredMessage, setShowNoInfoEnteredMessage] = useState(
+        false
+    )
+    const [callFailedError, setCallFailedError] = useState(false)
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+
     const classes = useStyles()
+
+    const addInstaller = () => {
+        if (userId.length === 0) {
+            setShowNoInfoEnteredMessage(true)
+            setShowSuccessMessage(false)
+            setCallFailedError(false)
+        } else {
+            setShowNoInfoEnteredMessage(false)
+            setIsLoading(true)
+            let objectToSend = { cognitoUUID: userId, role: 'INSTALLER' }
+            if (props.token) {
+                fetch(API_URL_ADMIN + 'admin/set-user-role', {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(objectToSend),
+                })
+                    .then((res) => res.json())
+                    .then(
+                        (result) => {
+                            console.log(result)
+                            if (result.code) {
+                                setIsLoading(false)
+                                setCallFailedError(true)
+                            } else {
+                                setIsLoading(false)
+                                setCallFailedError(false)
+                                setShowSuccessMessage(true)
+                            }
+                        },
+                        (error) => {
+                            setIsLoading(false)
+                        }
+                    )
+            }
+        }
+    }
 
     return (
         <div className={classes.root}>
-            Add New Installer Screen will go here
+            <React.Fragment>
+                <Grid className={classes.headerContainer} container>
+                    {!isLoading && (
+                        <Grid item xs={6}>
+                            <span className={classes.firstHeader}>
+                                Create New Installer
+                            </span>
+                            <div className="addNewInstallerMainContainer">
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    id="userId"
+                                    label="User ID"
+                                    name="id"
+                                    autoComplete="id"
+                                    autoFocus
+                                    value={userId}
+                                    onChange={(e) => setUserId(e.target.value)}
+                                />
+                                {showNoInfoEnteredMessage && (
+                                    <div className="installerErrorMessageText">
+                                        Please enter a proper user ID.
+                                    </div>
+                                )}
+                                {showSuccessMessage && (
+                                    <div className="installerSuccessrMessageText">
+                                        Success!
+                                    </div>
+                                )}
+                                {callFailedError && (
+                                    <div className="installerErrorMessageText">
+                                        Encountered an internal server error.
+                                        Try again later.
+                                    </div>
+                                )}
+                                <Button
+                                    className="addInstallerButton"
+                                    variant="contained"
+                                    onClick={addInstaller}
+                                >
+                                    Assign Installer Role
+                                </Button>
+                            </div>
+                        </Grid>
+                    )}
+                    {isLoading && (
+                        <Grid item xs={12}>
+                            <CircularProgress />
+                        </Grid>
+                    )}
+                </Grid>
+            </React.Fragment>
         </div>
     )
 }

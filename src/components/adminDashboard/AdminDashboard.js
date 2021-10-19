@@ -326,7 +326,7 @@ export default function AdminDashboard(props) {
                         </Button>
                     </Paper>
                 </Grid>
-                {!displaySetupNewProperty && (
+                {!displaySetupNewProperty && !displayAddNewInstaller && (
                     <Grid item xs={10}>
                         <Paper className={classes.mainBody}>
                             <TabPanel value={value} index={0}>

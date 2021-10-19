@@ -125,7 +125,9 @@ const MainBody = (props) => {
 
     const checkDashboardRedirect = () => {
         if (props.loggedIn) {
-            return <AdminDashboard loggedIn={props.loggedIn} token={props.token} />
+            return (
+                <AdminDashboard loggedIn={props.loggedIn} token={props.token} />
+            )
         } else {
             return (
                 <Redirect
@@ -153,24 +155,24 @@ const MainBody = (props) => {
             <CssBaseline />
             <AppBar className="main-app-bar" position="relative">
                 <Toolbar>
-                        <Grid container spacing={8}>
-                            <Grid item xs={props.loggedIn ? 9 : 9}>
-                                <img
-                                    src={MainLogoWhite}
-                                    className="main-logo"
-                                    alt="fireSpot"
-                                    onClick={handleLogoClick}
-                                />
-                            </Grid>
-                            <Grid item xs={props.loggedIn ? 3 : 3}>
-                                <MainNav
-                                    handleMenuChange={handleMenuChange}
-                                    loggedIn={props.loggedIn}
-                                    value={value}
-                                    history={props.history}
-                                />
-                            </Grid>
+                    <Grid container spacing={8}>
+                        <Grid item xs={props.loggedIn ? 9 : 9}>
+                            <img
+                                src={MainLogoWhite}
+                                className="main-logo"
+                                alt="fireSpot"
+                                onClick={handleLogoClick}
+                            />
                         </Grid>
+                        <Grid item xs={props.loggedIn ? 3 : 3}>
+                            <MainNav
+                                handleMenuChange={handleMenuChange}
+                                loggedIn={props.loggedIn}
+                                value={value}
+                                history={props.history}
+                            />
+                        </Grid>
+                    </Grid>
                 </Toolbar>
             </AppBar>
             {!loading && (
