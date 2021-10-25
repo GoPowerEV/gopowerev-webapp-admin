@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CardContent from '@material-ui/core/CardContent'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import './LocationCard.css'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
+import Button from '@material-ui/core/Button'
 
 const useStyles = makeStyles({
     root: {
@@ -37,6 +38,33 @@ const useStyles = makeStyles({
 const LocationCard = (props) => {
     const classes = useStyles()
     const locationInfo = props.location
+    const [editingNotes, setEditingNotes] = useState(false)
+    const [editingName, setEditingName] = useState(false)
+    const [editingMaxVoltAmps, setEditingMaxVoltAmps] = useState(false)
+
+    const makeNameEditable = () => {
+        setEditingName(true)
+    }
+
+    const saveName = () => {
+        setEditingName(false)
+    }
+
+    const saveMaxVoltAmps = () => {
+        setEditingMaxVoltAmps(false)
+    }
+
+    const makeMaxVoltAmpsEditable = () => {
+        setEditingMaxVoltAmps(true)
+    }
+
+    const makeNotesEditable = () => {
+        setEditingNotes(true)
+    }
+
+    const saveNotes = () => {
+        setEditingNotes(false)
+    }
 
     return (
         <React.Fragment>
@@ -76,16 +104,41 @@ const LocationCard = (props) => {
                                                 <div className="lcuDetailsHeader">
                                                     Location Name
                                                 </div>
-                                                <div className="lcuDetailsText">
-                                                    {locationInfo.name}
-                                                </div>
+                                                {!editingName && (
+                                                    <div className="lcuDetailsText">
+                                                        {locationInfo.name}
+                                                    </div>
+                                                )}
+                                                {editingName && (
+                                                    <input
+                                                        className="locationNameInput"
+                                                        value={
+                                                            locationInfo.name
+                                                        }
+                                                    />
+                                                )}
                                             </Grid>
                                             <Grid
                                                 item
                                                 xs={1}
                                                 className="greyIconEdit"
                                             >
-                                                <EditOutlinedIcon />
+                                                {!editingName && (
+                                                    <EditOutlinedIcon
+                                                        onClick={
+                                                            makeNameEditable
+                                                        }
+                                                    />
+                                                )}
+                                                {editingName && (
+                                                    <Button
+                                                        className="editInfoSaveButton saveNameButton"
+                                                        variant="contained"
+                                                        onClick={saveName}
+                                                    >
+                                                        Save
+                                                    </Button>
+                                                )}
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -106,16 +159,41 @@ const LocationCard = (props) => {
                                                 <div className="lcuDetailsHeader">
                                                     Max-Volt-Amps
                                                 </div>
-                                                <div className="lcuDetailsText">
-                                                    10,000
-                                                </div>
+                                                {!editingMaxVoltAmps && (
+                                                    <div className="lcuDetailsText">
+                                                        10,000
+                                                    </div>
+                                                )}
+                                                {editingMaxVoltAmps && (
+                                                    <input
+                                                        className="locationMaxVoltAmpsInput"
+                                                        value="10000"
+                                                    />
+                                                )}
                                             </Grid>
                                             <Grid
                                                 item
                                                 xs={2}
                                                 className="greyIconEdit"
                                             >
-                                                <EditOutlinedIcon />
+                                                {!editingMaxVoltAmps && (
+                                                    <EditOutlinedIcon
+                                                        onClick={
+                                                            makeMaxVoltAmpsEditable
+                                                        }
+                                                    />
+                                                )}
+                                                {editingMaxVoltAmps && (
+                                                    <Button
+                                                        className="editInfoSaveButton saveMaxVoltAmpsButton"
+                                                        variant="contained"
+                                                        onClick={
+                                                            saveMaxVoltAmps
+                                                        }
+                                                    >
+                                                        Save
+                                                    </Button>
+                                                )}
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -143,7 +221,52 @@ const LocationCard = (props) => {
                                                     Notes
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    Lorem ipsum dolor sit amet,
+                                                    {!editingNotes && (
+                                                        <div>
+                                                            Lorem ipsum dolor
+                                                            sit amet,
+                                                            consectetur
+                                                            adipiscing elit.
+                                                            Cras vitae justo
+                                                            luctus, sollicitudin
+                                                            velit in, hendrerit
+                                                            augue. Sed non
+                                                            sollicitudin quam.
+                                                            Vivamus diam tellus,
+                                                            interdum ultricies
+                                                            elementum congue,
+                                                            lacinia et justo.
+                                                            Nam gravida in ipsum
+                                                            et vehicula.
+                                                            Curabitur in odio ac
+                                                            orci pretium
+                                                            pharetra. Aenean
+                                                            mollis urna a erat
+                                                            hendrerit aliquam.
+                                                            Duis sit amet sem
+                                                            tristique, cursus
+                                                            erat a, bibendum
+                                                            lacus. Sed iaculis
+                                                            diam lacus, nec
+                                                            mollis enim
+                                                            porttitor non. Nam
+                                                            consequat viverra
+                                                            lacus et faucibus.
+                                                            Nunc ac tellus ac
+                                                            sapien dapibus
+                                                            imperdiet. Mauris in
+                                                            arcu mauris. Proin
+                                                            sed nunc ipsum.
+                                                            Donec ex erat,
+                                                            vulputate vel ex in,
+                                                            pellentesque luctus
+                                                            mi.
+                                                        </div>
+                                                    )}
+                                                    {editingNotes && (
+                                                        <textarea
+                                                            className="editableLocationCardField"
+                                                            value="Lorem ipsum dolor sit amet,
                                                     consectetur adipiscing elit.
                                                     Cras vitae justo luctus,
                                                     sollicitudin velit in,
@@ -167,7 +290,9 @@ const LocationCard = (props) => {
                                                     Mauris in arcu mauris. Proin
                                                     sed nunc ipsum. Donec ex
                                                     erat, vulputate vel ex in,
-                                                    pellentesque luctus mi.
+                                                    pellentesque luctus mi."
+                                                        />
+                                                    )}
                                                 </div>
                                             </Grid>
                                             <Grid
@@ -175,7 +300,22 @@ const LocationCard = (props) => {
                                                 xs={1}
                                                 className="greyIconEdit"
                                             >
-                                                <EditOutlinedIcon />
+                                                {!editingNotes && (
+                                                    <EditOutlinedIcon
+                                                        onClick={
+                                                            makeNotesEditable
+                                                        }
+                                                    />
+                                                )}
+                                                {editingNotes && (
+                                                    <Button
+                                                        className="editInfoSaveButton saveNotesButton"
+                                                        variant="contained"
+                                                        onClick={saveNotes}
+                                                    >
+                                                        Save
+                                                    </Button>
+                                                )}
                                             </Grid>
                                         </Grid>
                                     </Grid>

@@ -104,6 +104,7 @@ export default function AddNewInstaller(props) {
     const classes = useStyles()
 
     const addInstaller = () => {
+        console.log('token stuff', props.token)
         if (userId.length === 0) {
             setShowNoInfoEnteredMessage(true)
             setShowSuccessMessage(false)
@@ -111,7 +112,10 @@ export default function AddNewInstaller(props) {
         } else {
             setShowNoInfoEnteredMessage(false)
             setIsLoading(true)
-            let objectToSend = { cognitoUUID: userId, role: 'INSTALLER' }
+            let objectToSend = {
+                email: userId,
+                role: 'INSTALLER',
+            }
             if (props.token) {
                 fetch(API_URL_ADMIN + 'admin/set-user-role', {
                     method: 'PUT',
@@ -158,7 +162,7 @@ export default function AddNewInstaller(props) {
                                     required
                                     fullWidth
                                     id="userId"
-                                    label="User ID"
+                                    label="User Email"
                                     name="id"
                                     autoComplete="id"
                                     autoFocus
