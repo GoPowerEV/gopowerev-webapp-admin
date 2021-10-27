@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/gopowerev-webapp-admin/static/css/main.f8b0bd51.chunk.css",
-    "main.js": "/gopowerev-webapp-admin/static/js/main.0885f99e.chunk.js",
-    "main.js.map": "/gopowerev-webapp-admin/static/js/main.0885f99e.chunk.js.map",
-    "runtime-main.js": "/gopowerev-webapp-admin/static/js/runtime-main.451d2e72.js",
-    "runtime-main.js.map": "/gopowerev-webapp-admin/static/js/runtime-main.451d2e72.js.map",
-    "static/js/2.8e724b3f.chunk.js": "/gopowerev-webapp-admin/static/js/2.8e724b3f.chunk.js",
-    "static/js/2.8e724b3f.chunk.js.map": "/gopowerev-webapp-admin/static/js/2.8e724b3f.chunk.js.map",
-    "static/js/3.b9ab04a8.chunk.js": "/gopowerev-webapp-admin/static/js/3.b9ab04a8.chunk.js",
-    "static/js/3.b9ab04a8.chunk.js.map": "/gopowerev-webapp-admin/static/js/3.b9ab04a8.chunk.js.map",
+    "main.css": "/gopowerev-webapp-admin/static/css/main.6817c938.chunk.css",
+    "main.js": "/gopowerev-webapp-admin/static/js/main.c7ee9c97.chunk.js",
+    "main.js.map": "/gopowerev-webapp-admin/static/js/main.c7ee9c97.chunk.js.map",
+    "runtime-main.js": "/gopowerev-webapp-admin/static/js/runtime-main.647e0bb2.js",
+    "runtime-main.js.map": "/gopowerev-webapp-admin/static/js/runtime-main.647e0bb2.js.map",
+    "static/js/2.a28448e8.chunk.js": "/gopowerev-webapp-admin/static/js/2.a28448e8.chunk.js",
+    "static/js/2.a28448e8.chunk.js.map": "/gopowerev-webapp-admin/static/js/2.a28448e8.chunk.js.map",
+    "static/js/3.461832d3.chunk.js": "/gopowerev-webapp-admin/static/js/3.461832d3.chunk.js",
+    "static/js/3.461832d3.chunk.js.map": "/gopowerev-webapp-admin/static/js/3.461832d3.chunk.js.map",
     "index.html": "/gopowerev-webapp-admin/index.html",
-    "static/css/main.f8b0bd51.chunk.css.map": "/gopowerev-webapp-admin/static/css/main.f8b0bd51.chunk.css.map",
-    "static/js/2.8e724b3f.chunk.js.LICENSE.txt": "/gopowerev-webapp-admin/static/js/2.8e724b3f.chunk.js.LICENSE.txt",
+    "static/css/main.6817c938.chunk.css.map": "/gopowerev-webapp-admin/static/css/main.6817c938.chunk.css.map",
+    "static/js/2.a28448e8.chunk.js.LICENSE.txt": "/gopowerev-webapp-admin/static/js/2.a28448e8.chunk.js.LICENSE.txt",
     "static/media/mainLogoWhite.4457ab80.png": "/gopowerev-webapp-admin/static/media/mainLogoWhite.4457ab80.png",
     "static/media/noImageAvailable.5f09172c.png": "/gopowerev-webapp-admin/static/media/noImageAvailable.5f09172c.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.451d2e72.js",
-    "static/js/2.8e724b3f.chunk.js",
-    "static/css/main.f8b0bd51.chunk.css",
-    "static/js/main.0885f99e.chunk.js"
+    "static/js/runtime-main.647e0bb2.js",
+    "static/js/2.a28448e8.chunk.js",
+    "static/css/main.6817c938.chunk.css",
+    "static/js/main.c7ee9c97.chunk.js"
   ]
 }
