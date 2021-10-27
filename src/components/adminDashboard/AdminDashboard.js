@@ -258,44 +258,6 @@ export default function AdminDashboard(props) {
                                 label="Installers"
                                 {...a11yProps(2)}
                             />
-                            <Tab
-                                className={classes.customTab}
-                                icon={
-                                    <PersonOutlineOutlinedIcon
-                                        style={{
-                                            marginTop: '4px',
-                                            marginRight: '-20px',
-                                            float: 'left',
-                                        }}
-                                    />
-                                }
-                                classes={{
-                                    root: classes.tabRoot,
-                                    selected: classes.tabSelected,
-                                    wrapper: classes.alignment,
-                                }}
-                                label="Consumer"
-                                {...a11yProps(3)}
-                            />
-                            <Tab
-                                className={classes.customTab}
-                                icon={
-                                    <FolderOutlinedIcon
-                                        style={{
-                                            marginTop: '4px',
-                                            marginRight: '-20px',
-                                            float: 'left',
-                                        }}
-                                    />
-                                }
-                                classes={{
-                                    root: classes.tabRoot,
-                                    selected: classes.tabSelected,
-                                    wrapper: classes.alignment,
-                                }}
-                                label="Reports"
-                                {...a11yProps(4)}
-                            />
                         </Tabs>
                         <div className="hr-container">
                             <hr className="dotted-hr" />

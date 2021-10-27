@@ -25,13 +25,13 @@
 }
 
 .saveMaxVoltAmpsButton {
-    margin-left: -40px;
+    margin-left: -40px !important;
 }
 
 .saveNameButton {
-    margin-left: -50px;
+    margin-left: -50px !important;
 }
 
 .saveNotesButton {
-    margin-left: -20px;
+    margin-left: -20px !important;
 }

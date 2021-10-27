@@ -47,10 +47,11 @@ const InstallerCard = (props) => {
             <Card className={classes.root}>
                 <CardContent className={classes.content}>
                     <Typography className={classes.cardHeader}>
-                        {installerInfo.name}
+                        {installerInfo.firstName ?? 'No name available'}
+                        {installerInfo.lastName ?? ''}
                     </Typography>
                     <Typography className={classes.installerLocation}>
-                        {installerInfo.location}
+                        {installerInfo.email}
                     </Typography>
                 </CardContent>
             </Card>

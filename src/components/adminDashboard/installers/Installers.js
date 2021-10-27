@@ -23,6 +23,7 @@ const Installers = (props) => {
                 .then((res) => res.json())
                 .then(
                     (result) => {
+                        console.log('result', result)
                         setIsLoading(false)
                         setAllInstallers(result)
                     },
@@ -57,7 +58,7 @@ const Installers = (props) => {
                                 <InstallerCard installer={installer} />
                             </Grid>
                         ))}
-                    {allInstallers.length === 0 && (
+                    {allInstallers.length === 0 && !isLoading && (
                         <div>There are no installers available.</div>
                     )}
                 </Grid>
