@@ -185,6 +185,11 @@ const MainBody = (props) => {
                                 render={() => checkDashboardRedirect()}
                             />
                             <Route
+                                exact
+                                path="/gopowerev-webapp-admin"
+                                render={() => checkDashboardRedirect()}
+                            />
+                            <Route
                                 path="/admin-dashboard"
                                 render={() => checkDashboardRedirect()}
                             />
