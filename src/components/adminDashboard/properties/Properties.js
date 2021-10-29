@@ -11,10 +11,18 @@ const Properties = (props) => {
     const [isLoading, setIsLoading] = useState(false)
     const [propertyOpened, setPropertyOpened] = useState(false)
     const [openedPropertyData, setOpenedPropertyData] = useState([])
+    const [openedPropertyLcus, setOpenedPropertyLcus] = useState([])
+    const [openedPropertyLocations, setOpenedPropertyLocations] = useState([])
+    const [
+        openedPropertySmartOutlets,
+        setOpenedPropertySmartOutlets,
+    ] = useState([])
     const [allProperties, setAllProperties] = useState([])
     const [activeFilter, setActiveFilter] = useState()
+    const [activeFilterFull, setActiveFilterFull] = useState()
 
     const getAllProperties = () => {
+        setActiveFilterFull('All')
         setIsLoading(true)
         if (props.token) {
             fetch(API_URL + 'properties', {
@@ -28,6 +36,7 @@ const Properties = (props) => {
                 .then(
                     (result) => {
                         setIsLoading(false)
+                        console.log('all properties', result.properties)
                         setAllProperties(result.properties)
                     },
                     (error) => {
@@ -37,8 +46,38 @@ const Properties = (props) => {
         }
     }
 
-    const openPropertyDetails = (property) => {
+    const getAllPropertiesByStatus = (status) => {
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL + 'properties', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        setAllProperties(
+                            result.properties.filter(
+                                (property) => property.status === status
+                            )
+                        )
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const openPropertyDetails = (property, lcus, locations, smartOutlets) => {
         setOpenedPropertyData(property)
+        setOpenedPropertyLcus(lcus)
+        setOpenedPropertyLocations(locations)
+        setOpenedPropertySmartOutlets(smartOutlets)
         console.log('property data', property)
         setPropertyOpened(true)
     }
@@ -48,13 +87,30 @@ const Properties = (props) => {
         setPropertyOpened(false)
     }
 
-    useEffect(() => {
-        getAllProperties()
-    }, [activeFilter])
+    const filterOutPropertiesByStatus = (status) => {
+        if (status === 'ready') {
+            setActiveFilterFull(
+                status[0].toUpperCase() + status.slice(1) + ' For Install'
+            )
+        } else if (status === 'in') {
+            setActiveFilterFull(
+                status[0].toUpperCase() + status.slice(1) + '-Install'
+            )
+        } else {
+            setActiveFilterFull(status[0].toUpperCase() + status.slice(1))
+        }
+        setActiveFilter(status)
+        if (status === 'all') {
+            getAllProperties()
+        } else {
+            getAllPropertiesByStatus(status)
+        }
+    }
 
     useEffect(() => {
         getAllProperties()
         setActiveFilter('all')
+        setActiveFilterFull('All')
     }, [])
 
     return (
@@ -69,7 +125,7 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('all')}
+                        onClick={(e) => filterOutPropertiesByStatus('all')}
                     >
                         All
                     </Button>
@@ -80,7 +136,7 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('new')}
+                        onClick={(e) => filterOutPropertiesByStatus('new')}
                     >
                         New
                     </Button>
@@ -91,7 +147,7 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('pending')}
+                        onClick={(e) => filterOutPropertiesByStatus('pending')}
                     >
                         Pending
                     </Button>
@@ -102,7 +158,7 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('ready')}
+                        onClick={(e) => filterOutPropertiesByStatus('ready')}
                     >
                         Ready For Install
                     </Button>
@@ -113,7 +169,7 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('in')}
+                        onClick={(e) => filterOutPropertiesByStatus('in')}
                     >
                         In-Install
                     </Button>
@@ -124,7 +180,9 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('installed')}
+                        onClick={(e) =>
+                            filterOutPropertiesByStatus('installed')
+                        }
                     >
                         Installed
                     </Button>
@@ -135,7 +193,9 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('inspected')}
+                        onClick={(e) =>
+                            filterOutPropertiesByStatus('inspected')
+                        }
                     >
                         Inspected
                     </Button>
@@ -146,7 +206,7 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('paused')}
+                        onClick={(e) => filterOutPropertiesByStatus('paused')}
                     >
                         Paused
                     </Button>
@@ -157,7 +217,9 @@ const Properties = (props) => {
                                 : 'topButtonPropertiesNotActive'
                         }
                         variant="contained"
-                        onClick={(e) => setActiveFilter('deactivated')}
+                        onClick={(e) =>
+                            filterOutPropertiesByStatus('deactivated')
+                        }
                     >
                         Deactivated
                     </Button>
@@ -172,17 +234,28 @@ const Properties = (props) => {
                             <Grid item xs={3} key={index}>
                                 <PropertyCard
                                     property={property}
+                                    token={props.token}
                                     openPropertyDetails={openPropertyDetails}
                                 />
                             </Grid>
                         ))}
+                        {allProperties.length === 0 && (
+                            <div className="noPropertiesWithThisStatus">
+                                No properties with a status of
+                                <strong> {activeFilterFull}</strong>
+                            </div>
+                        )}
                     </Grid>
                 </div>
             )}
             {!isLoading && propertyOpened && openedPropertyData && (
                 <CurrentlyViewedProperty
                     property={openedPropertyData}
+                    lcus={openedPropertyLcus}
+                    locations={openedPropertyLocations}
+                    smartOutlets={openedPropertySmartOutlets}
                     closeOpenedProperty={closeOpenedProperty}
+                    token={props.token}
                 />
             )}
             {isLoading && (

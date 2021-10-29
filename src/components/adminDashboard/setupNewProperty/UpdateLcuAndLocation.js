@@ -14,6 +14,9 @@ import Select from '@material-ui/core/Select'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined'
+import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined'
+import { green } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -91,7 +94,6 @@ const useStyles = makeStyles((theme) => ({
     completed: {},
     createButton: {
         width: '400px',
-        float: 'right',
         backgroundColor: '#12BFA2',
         marginTop: '20px',
         marginBottom: '40px',
@@ -120,6 +122,10 @@ const useStyles = makeStyles((theme) => ({
         color: '#323438',
         cursor: 'pointer',
     },
+    removeLocationIcon: {
+        fontSize: '30px',
+        cursor: 'pointer',
+    },
     dottedHr: {
         borderTop: '1px dashed #ADAEAF',
         borderBottom: 'none',
@@ -141,10 +147,16 @@ const useStyles = makeStyles((theme) => ({
 export default function UpdateLcuAndLocation(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
-    const [numberOfLocations, setNumberOfLocations] = useState(0)
+    const [numberOfLocations, setNumberOfLocations] = useState(1)
     const [locations, setLocations] = useState([])
     const [locationsError, setLocationsError] = useState(false)
     const [lcuModels, setLcuModels] = useState([])
+    const [lcuName, setLcuName] = useState('')
+    const [lcuModel, setLcuModel] = useState()
+    const [photoAdded, setPhotoAdded] = React.useState(false)
+    const [photoFile, setPhotoFile] = React.useState(null)
+    const [photoBinaries, setPhotoBinaries] = React.useState([])
+    const [photoFileNames, setPhotoFileNames] = React.useState([])
 
     const sampleLocationObject = {
         description: '',
@@ -156,22 +168,105 @@ export default function UpdateLcuAndLocation(props) {
         propertyUUID: '',
     }
 
-    const handleNumberOfLocationsChange = (value) => {
-        if (isNaN(value)) {
-            setLocationsError(true)
-        } else if (parseInt(value) === 0) {
-            setNumberOfLocations(value)
-            setLocations([])
-        } else {
-            setLocations([])
-            setLocationsError(false)
-            setNumberOfLocations(value)
-            let tempLocations = locations
-            for (let i = 0; i < parseInt(value); i++) {
-                tempLocations.push({ sampleLocationObject })
+    const handleNumberOfLocationsChange = () => {
+        let tempLocations = locations
+        tempLocations.push(sampleLocationObject)
+        setLocations(tempLocations)
+        setNumberOfLocations(tempLocations.length)
+    }
+
+    const removeThisLocation = (index) => {
+        let tempLocations = locations.splice(1, index)
+        setLocations(tempLocations)
+        setNumberOfLocations(tempLocations.length)
+    }
+
+    const handleLcuNameChange = (event) => {
+        console.log('setting name to', event.target.value)
+        setLcuName(event.target.value)
+    }
+
+    const handleLcuModelChange = (event) => {
+        console.log('setting model to', event.target.value)
+        setLcuModel(event.target.value)
+    }
+
+    const handleThisLocationNameChange = (value, index) => {
+        let tempLocations = locations
+        tempLocations[index].description = value
+        console.log('allTempLocations', tempLocations)
+        setLocations(tempLocations)
+    }
+
+    const handleThisLocationNumberOfSmartOutletsChange = (value, index) => {
+        // let tempLocations = locations
+        // tempLocations[index].description = value
+        // console.log('allTempLocations', tempLocations)
+        // setLocations(tempLocations)
+    }
+
+    const handleThisLocationMaxVoltAmpsChange = (value, index) => {
+        let tempLocations = locations
+        tempLocations[index].maxVoltAmps = Number(value)
+        console.log('allTempLocations', tempLocations)
+        setLocations(tempLocations)
+    }
+
+    const getBinaryFromImg = (picFile, locationIndex) => {
+        new Promise((resolve, reject) => {
+            const reader = new FileReader()
+
+            reader.onload = (event) => {
+                resolve(event.target.result)
             }
-            setLocations(tempLocations)
-            console.log(locations.length)
+
+            reader.onerror = (err) => {
+                reject(err)
+            }
+
+            reader.readAsArrayBuffer(picFile)
+        }).then((result) => {
+            let tempBinaries = photoBinaries
+            tempBinaries[locationIndex] = result
+            setPhotoBinaries(tempBinaries)
+        })
+    }
+
+    const fileDrop = (event, locationIndex) => {
+        event.preventDefault()
+        const files = event.dataTransfer.files
+        setPhotoAdded(true)
+        setPhotoFile(files[0])
+        getBinaryFromImg(files[0], locationIndex)
+        let tempFileNames = photoFileNames
+        tempFileNames[locationIndex] = files[0].name
+        setPhotoFileNames(tempFileNames)
+    }
+
+    const hiddenFileInput = React.useRef(null)
+
+    const handlePhotoClick = (event) => {
+        hiddenFileInput.current.click()
+    }
+
+    const dragOver = (e) => {
+        e.preventDefault()
+    }
+
+    const dragEnter = (e) => {
+        e.preventDefault()
+    }
+
+    const dragLeave = (e) => {
+        e.preventDefault()
+    }
+
+    const handlePhotoChange = (e) => {
+        if (e.target.files.length) {
+            //   setImage({
+            //     preview: URL.createObjectURL(e.target.files[0]),
+            //     raw: e.target.files[0]
+            //   });
         }
     }
 
@@ -190,13 +285,21 @@ export default function UpdateLcuAndLocation(props) {
                     (result) => {
                         setIsLoading(false)
                         setLcuModels(result.lcus)
-                        console.log(result.lcus)
+                        console.log('lcus', result.lcus)
                     },
                     (error) => {
                         setIsLoading(false)
                     }
                 )
         }
+        setLocations([])
+        setNumberOfLocations(1)
+        let tempLocations = locations
+        for (let i = 0; i < 1; i++) {
+            tempLocations.push(sampleLocationObject)
+        }
+        setLocations(tempLocations)
+        setNumberOfLocations(1)
     }, [])
 
     return (
@@ -265,14 +368,6 @@ export default function UpdateLcuAndLocation(props) {
                             <span className={classes.installerDetailsStep2}>
                                 {props.installerName}
                             </span>
-                            <span className={classes.splitter}>|</span>
-                            <span className={classes.installerDetailsStep2}>
-                                installer@gmail.com
-                            </span>
-                            <span className={classes.splitter}>|</span>
-                            <span className={classes.installerDetailsStep2}>
-                                913-555-2331
-                            </span>
                         </Grid>
                         <Grid item xs={2}>
                             <EditOutlinedIcon
@@ -289,6 +384,8 @@ export default function UpdateLcuAndLocation(props) {
                                     className={classes.textField}
                                     label="Add LCU name"
                                     variant="outlined"
+                                    value={lcuName}
+                                    onChange={handleLcuNameChange}
                                     fullWidth
                                 />
                             </Grid>
@@ -306,12 +403,8 @@ export default function UpdateLcuAndLocation(props) {
                                         className={classes.textField}
                                         labelId="demo-simple-select-outlined-label"
                                         id="demo-simple-select-outlined"
-                                        value={props.installerName}
-                                        onChange={(event) =>
-                                            props.setInstallerName(
-                                                event.target.value
-                                            )
-                                        }
+                                        value={lcuModel}
+                                        onChange={handleLcuModelChange}
                                         label="LCU Models"
                                     >
                                         {lcuModels?.map((lcu) => (
@@ -319,7 +412,8 @@ export default function UpdateLcuAndLocation(props) {
                                                 value={lcu.lcuUUID}
                                                 key={lcu.lcuUUID}
                                             >
-                                                {lcu.modelNumber} ({lcu.serialNumber})
+                                                {lcu.modelNumber} (
+                                                {lcu.serialNumber})
                                             </MenuItem>
                                         ))}
                                     </Select>
@@ -339,6 +433,7 @@ export default function UpdateLcuAndLocation(props) {
                                     }
                                     variant="outlined"
                                     fullWidth
+                                    disabled
                                 />
                                 {locationsError && (
                                     <div className={classes.errorText}>
@@ -352,6 +447,30 @@ export default function UpdateLcuAndLocation(props) {
                         <React.Fragment>
                             {locations.map((location, index) => (
                                 <div className={classes.formContainer}>
+                                    <Grid
+                                        justify="space-between"
+                                        container
+                                        spacing={24}
+                                    >
+                                        <Grid item></Grid>
+
+                                        {index > 0 && (
+                                            <Grid item>
+                                                <div>
+                                                    <CloseOutlinedIcon
+                                                        className={
+                                                            classes.removeLocationIcon
+                                                        }
+                                                        onClick={() =>
+                                                            removeThisLocation(
+                                                                index
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            </Grid>
+                                        )}
+                                    </Grid>
                                     <Grid container xs={12} spacing={5}>
                                         <Grid item xs={6}>
                                             <div className={classes.formHeader}>
@@ -361,6 +480,12 @@ export default function UpdateLcuAndLocation(props) {
                                                 className={classes.textField}
                                                 label="Location name"
                                                 variant="outlined"
+                                                onChange={(event) =>
+                                                    handleThisLocationNameChange(
+                                                        event.target.value,
+                                                        index
+                                                    )
+                                                }
                                                 fullWidth
                                             />
                                         </Grid>
@@ -369,19 +494,56 @@ export default function UpdateLcuAndLocation(props) {
                                                 Location Photo
                                             </div>
                                             <Grid container spacing={3}>
-                                                <Button
-                                                    className={
-                                                        classes.photoUploadButton
-                                                    }
-                                                    variant="contained"
-                                                    startIcon={
-                                                        <ImageOutlinedIcon />
-                                                    }
-                                                    fullWidth
-                                                >
-                                                    Click here or drag and drop
-                                                    photo
-                                                </Button>
+                                                {!photoAdded && (
+                                                    <Button
+                                                        className={
+                                                            classes.photoUploadButton
+                                                        }
+                                                        variant="contained"
+                                                        startIcon={
+                                                            <ImageOutlinedIcon />
+                                                        }
+                                                        onClick={
+                                                            handlePhotoClick
+                                                        }
+                                                        onDragOver={dragOver}
+                                                        onDragEnter={dragEnter}
+                                                        onDragLeave={dragLeave}
+                                                        onDrop={(e) =>
+                                                            fileDrop(e, index)
+                                                        }
+                                                        fullWidth
+                                                    >
+                                                        Click here or drag and
+                                                        drop photo
+                                                    </Button>
+                                                )}
+                                                {photoAdded && (
+                                                    <div
+                                                        className={
+                                                            classes.photoSelectedName
+                                                        }
+                                                    >
+                                                        <DoneOutlineOutlinedIcon
+                                                            style={{
+                                                                marginRight:
+                                                                    '10px',
+                                                                color:
+                                                                    green[500],
+                                                            }}
+                                                        />
+                                                        Photo selected:
+                                                        {photoFileNames[index]}
+                                                    </div>
+                                                )}
+                                                <input
+                                                    type="file"
+                                                    ref={hiddenFileInput}
+                                                    style={{
+                                                        display: 'none',
+                                                    }}
+                                                    onChange={handlePhotoChange}
+                                                />
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -396,6 +558,13 @@ export default function UpdateLcuAndLocation(props) {
                                                         label="Number of Smart Outlets"
                                                         variant="outlined"
                                                         fullWidth
+                                                        onChange={(event) =>
+                                                            handleThisLocationNumberOfSmartOutletsChange(
+                                                                event.target
+                                                                    .value,
+                                                                index
+                                                            )
+                                                        }
                                                     />
                                                 </Grid>
                                                 <Grid item xs={6}>
@@ -406,6 +575,13 @@ export default function UpdateLcuAndLocation(props) {
                                                         label="Max Volt-Amps"
                                                         variant="outlined"
                                                         fullWidth
+                                                        onChange={(event) =>
+                                                            handleThisLocationMaxVoltAmpsChange(
+                                                                event.target
+                                                                    .value,
+                                                                index
+                                                            )
+                                                        }
                                                     />
                                                 </Grid>
                                             </Grid>
@@ -420,12 +596,29 @@ export default function UpdateLcuAndLocation(props) {
                         container
                         spacing={1}
                     >
-                        <Grid item xs={11}>
+                        <Grid item xs={7}>
                             <Button
                                 fullWidth
                                 variant="contained"
                                 className={classes.createButton}
-                                onClick={() => props.handleSubmitForInstallation([])}
+                                onClick={() => handleNumberOfLocationsChange()}
+                            >
+                                Add New Location
+                            </Button>
+                        </Grid>
+                        <Grid item xs={5}>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                className={classes.createButton}
+                                onClick={() =>
+                                    props.handleSubmitForInstallation(
+                                        lcuName,
+                                        lcuModel,
+                                        locations,
+                                        photoBinaries
+                                    )
+                                }
                             >
                                 Submit for Installation
                             </Button>

@@ -161,7 +161,9 @@ const LocationCard = (props) => {
                                                 </div>
                                                 {!editingMaxVoltAmps && (
                                                     <div className="lcuDetailsText">
-                                                        10,000
+                                                        {
+                                                            locationInfo.maxVoltAmps
+                                                        }
                                                     </div>
                                                 )}
                                                 {editingMaxVoltAmps && (

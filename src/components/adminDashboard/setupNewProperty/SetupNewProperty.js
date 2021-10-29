@@ -177,6 +177,7 @@ export default function SetupNewProperty(props) {
         const newCompleted = completed
         newCompleted[activeStep] = true
         setCompleted(newCompleted)
+        console.log('here you go', formValues)
         if (activeStep === 0) {
             setPropertyInfo(formValues)
             setNewPropertyName(formValues.name)
@@ -190,12 +191,140 @@ export default function SetupNewProperty(props) {
                     ' ' +
                     formValues.zipcode
             )
+        } else {
+            setPropertyInfo(formValues)
         }
         handleNext()
     }
 
-    const handleSubmitForInstallation = () => {
-        console.log('done')
+    const uploadLocationPicture = (locationId, photoBinaries, index) => {
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL + 'locations-image/' + locationId, {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'image/jpg',
+                },
+                body: photoBinaries[index],
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        console.log(
+                            'uploaded location image successfully',
+                            result
+                        )
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const createLocation = (lcuId, location, photoBinaries, index) => {
+        setIsLoading(true)
+        let locationObject = {
+            description: '',
+            lcuUUID: lcuId,
+            maxAmps: 0,
+            maxVoltAmps: location.maxVoltAmps,
+            name: location.name,
+            picture: '',
+            propertyUUID: propertyUUID,
+        }
+        if (props.token) {
+            fetch(API_URL + 'locations/', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(locationObject),
+            })
+                .then((res) => res.json())
+                .then(
+                    async (result) => {
+                        setIsLoading(false)
+                        console.log('created location successfully', result)
+                        await uploadLocationPicture(
+                            result.cognitoUuid,
+                            photoBinaries,
+                            index
+                        )
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const createLcu = (lcuName, lcuModel, locations, photoBinaries) => {
+        setIsLoading(true)
+        let lcuObject = {
+            adminStatus: '',
+            cellCarrier: '',
+            cellConfirmationCode: '',
+            description: '',
+            fwLastUpdated: '',
+            fwVersion: '',
+            hwVersion: '',
+            imeiNumber: '',
+            lineNumber: '',
+            modelNumber: lcuModel,
+            name: lcuName,
+            operationalStatus: '',
+            serialNumber: '',
+            simNumber: '',
+            swLastUpdated: '',
+            swVersion: '',
+            wifiSsid: '',
+        }
+        if (props.token) {
+            fetch(API_URL + 'lcus', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(lcuObject),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        console.log('created lcu successfully', result)
+                        locations.forEach((location, index) => {
+                            createLocation(
+                                result.uuid,
+                                location,
+                                photoBinaries,
+                                index
+                            )
+                        })
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const handleSubmitForInstallation = (
+        lcuName,
+        lcuModel,
+        locations,
+        photoBinaries
+    ) => {
+        console.log('lcuName', lcuName)
+        console.log('lcuModel', lcuModel)
+        console.log('locations', locations)
+        console.log('photoBinaries', photoBinaries)
+        createLcu(lcuName, lcuModel, locations, photoBinaries)
+        // props.goToProperties()
         // setIsLoading(true)
         // if (props.token) {
         //     console.log(JSON.stringify(propertyInfo))
@@ -239,9 +368,8 @@ export default function SetupNewProperty(props) {
         })
     }
 
-    const uploadPropertyImg = (propertyId) => {
+    const uploadPropertyImg = (propertyId, thisPropertyInfo) => {
         setIsLoading(true)
-
         if (props.token) {
             fetch(API_URL + 'properties-image/' + propertyId, {
                 method: 'PUT',
@@ -255,7 +383,8 @@ export default function SetupNewProperty(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        handleComplete(propertyInfo)
+                        console.log('here image result', result)
+                        handleComplete(thisPropertyInfo)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -265,6 +394,9 @@ export default function SetupNewProperty(props) {
     }
 
     const createProperty = (propertyInfo) => {
+        console.log(
+            'step 1. Property is being created.' + JSON.stringify(propertyInfo)
+        )
         setIsLoading(true)
         if (props.token) {
             console.log(JSON.stringify(propertyInfo))
@@ -282,7 +414,7 @@ export default function SetupNewProperty(props) {
                         setPropertyUUID(result.propertyUUID)
                         setIsLoading(false)
                         if (photoFile) {
-                            uploadPropertyImg(result.propertyUUID)
+                            uploadPropertyImg(result.propertyUUID, propertyInfo)
                         } else {
                             handleComplete(propertyInfo)
                         }
@@ -297,6 +429,10 @@ export default function SetupNewProperty(props) {
     const addInstaller = () => {
         let tempPropertyInfo = propertyInfo
         tempPropertyInfo.installerUUID = installerName
+        console.log(
+            'step 2. Installer being added.' + JSON.stringify(tempPropertyInfo)
+        )
+        setPropertyInfo(tempPropertyInfo)
         setIsLoading(true)
         if (props.token) {
             fetch(API_URL + 'properties/' + propertyUUID, {
@@ -305,14 +441,14 @@ export default function SetupNewProperty(props) {
                     Authorization: 'Bearer ' + props.token,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(propertyInfo),
+                body: JSON.stringify(tempPropertyInfo),
             })
                 .then((res) => res.json())
                 .then(
                     (result) => {
                         setPropertyUUID(result.propertyUUID)
                         setIsLoading(false)
-                        handleComplete(propertyInfo)
+                        handleComplete(tempPropertyInfo)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -334,7 +470,6 @@ export default function SetupNewProperty(props) {
     }
 
     const handlePhotoChange = (e) => {
-        alert('Image added')
         if (e.target.files.length) {
             //   setImage({
             //     preview: URL.createObjectURL(e.target.files[0]),

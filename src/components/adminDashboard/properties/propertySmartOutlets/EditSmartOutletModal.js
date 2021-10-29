@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import Grid from '@material-ui/core/Grid'
 import './EditSmartOutletModal.css'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
-import { GridListTile } from '@material-ui/core'
+import moment from 'moment'
 
 function getModalStyle() {
     const top = 50
@@ -48,19 +48,29 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function EditSmartOutletModal(props) {
-    const [modalStyle] = React.useState(getModalStyle)
+    const [outletData, setOutletData] = useState({})
+    const [modalStyle] = useState(getModalStyle)
     const classes = useStyles()
+
+    useEffect(() => {
+        setOutletData(props.outletData)
+    }, [props.outletData])
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <div id="simple-modal-description">
-                <Grid container xs={12} spacing={2} className="smartOutletEditDetails">
+                <Grid
+                    container
+                    xs={12}
+                    spacing={2}
+                    className="smartOutletEditDetails"
+                >
                     <Grid item xs={3}>
                         <div className="smartOutletGridHeader smartOutletGridItem">
-                            Smart Outlet <span>1</span>
+                            Smart Outlet <span>{props.outletIndex}</span>
                         </div>
                         <div className="smartOutletGridLocationHeader smartOutletGridItem">
-                            East Side Garage
+                            Parking Spot: {outletData?.parkingSpot}
                         </div>
                     </Grid>
                     <Grid item xs={3}>
@@ -68,21 +78,23 @@ export default function EditSmartOutletModal(props) {
                             Operational Status
                         </div>
                         <div className="smartOutletGridLocationHeaderSmall smartOutletGridItem">
-                            Never connected
+                            {outletData?.status ?? '-'}
                         </div>
                     </Grid>
                     <Grid item xs={3}>
-                        <div className="smartOutletGridHeader smartOutletGridItem">
+                        <div className="smartOutletGFridHeader smartOutletGridItem">
                             Heartbeat
                         </div>
                         <div className="smartOutletGridLocationHeaderSmall smartOutletGridItem">
-                            11:20:20am PST - 09-20-21
+                            {moment(outletData?.lastHeartbeat).format(
+                                'MM/DD/YYYY, h:mm:ss a'
+                            )}
                         </div>
                     </Grid>
                     <Grid item xs={3}>
                         <div className="smartOutletGridHeader">Installed</div>
                         <div className="smartOutletGridLocationHeaderSmall">
-                            07-10-21
+                            {outletData?.installed ?? '-'}
                         </div>
                     </Grid>
                 </Grid>
@@ -144,42 +156,7 @@ export default function EditSmartOutletModal(props) {
                                         Hardware Version
                                     </div>
                                     <div className="smartOutletDetailsText">
-                                        Alpha-1,001
-                                    </div>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <div className="smartOutletDetailsHeader">
-                                        Last Updated
-                                    </div>
-                                    <div className="smartOutletDetailsTextSmall">
-                                        11:20:10PM PST 09/20/2021
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item xs={5} className="smartOutletDetailsContainer">
-                        <Grid container>
-                            <Grid
-                                container
-                                direction="row"
-                                justify="space-between"
-                                alignItems="center"
-                            >
-                                <Grid item xs={7}>
-                                    <div className="smartOutletDetailsHeader">
-                                        Software Version
-                                    </div>
-                                    <div className="smartOutletDetailsText">
-                                        Alpha-1,001
-                                    </div>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <div className="smartOutletDetailsHeader">
-                                        Last Updated
-                                    </div>
-                                    <div className="smartOutletDetailsTextSmall">
-                                        11:20:10PM PST 09/20/2021
+                                        {outletData?.hwVersion}
                                     </div>
                                 </Grid>
                             </Grid>
@@ -198,7 +175,7 @@ export default function EditSmartOutletModal(props) {
                                         Firmware Version
                                     </div>
                                     <div className="smartOutletDetailsText">
-                                        Alpha-1,001
+                                        {outletData?.fwVersion}
                                     </div>
                                 </Grid>
                                 <Grid item xs={5}>
@@ -206,7 +183,9 @@ export default function EditSmartOutletModal(props) {
                                         Last Updated
                                     </div>
                                     <div className="smartOutletDetailsTextSmall">
-                                        11:20:10PM PST 09/20/2021
+                                        {moment(
+                                            outletData?.fwLastUpdated
+                                        ).format('MMM Do YYYY')}
                                     </div>
                                 </Grid>
                             </Grid>

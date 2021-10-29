@@ -315,6 +315,7 @@ export default function AdminDashboard(props) {
                             <SetupNewProperty
                                 token={props.token}
                                 goToProperties={goToProperties}
+                                history={props.history}
                             />
                         </div>
                     </Grid>

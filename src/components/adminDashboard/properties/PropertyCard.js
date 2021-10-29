@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import CardContent from '@material-ui/core/CardContent'
 import Card from '@material-ui/core/Card'
 import './Properties.css'
+import { API_URL } from './../../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
 import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
@@ -39,14 +40,114 @@ const useStyles = makeStyles({
 })
 
 const PropertyCard = (props) => {
+    const [lcusOfThisProperty, setLcusOfThisProperty] = useState([])
+    const [locationsOfThisProperty, setLocationsOfThisProperty] = useState([])
+    const [
+        smartOutletsOfThisProperty,
+        setSmartOutletsOfThisProperty,
+    ] = useState([])
     const classes = useStyles()
     const propertyInfo = props.property
+
+    const getLocationSmartOutlets = (locationId) => {
+        if (props.token) {
+            fetch(API_URL + 'smart-outlets?soUUID=' + locationId, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log(
+                            'all smart outlets for this location',
+                            result.smartOutlets
+                        )
+                        setSmartOutletsOfThisProperty(result.smartOutlets)
+                    },
+                    (error) => {}
+                )
+        }
+    }
+
+    const getPropertyLocations = () => {
+        if (props.token) {
+            fetch(
+                API_URL +
+                    'locations?propertyUUID=' +
+                    props.property.propertyUUID,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log(
+                            'all locations for this property',
+                            result.locations
+                        )
+                        setLocationsOfThisProperty(result.locations)
+                        if (result.locations.length > 0) {
+                            result.locations.forEach((location) => {
+                                getLocationSmartOutlets(location.locationUUID)
+                            })
+                            getLocationSmartOutlets()
+                        } else {
+                            setSmartOutletsOfThisProperty([])
+                        }
+                    },
+                    (error) => {}
+                )
+        }
+    }
+
+    const getPropertyLcus = () => {
+        if (props.token) {
+            fetch(
+                API_URL + 'lcus?propertyUUID=' + props.property.propertyUUID,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log('all lcus for this property', result.lcus)
+                        setLcusOfThisProperty(result.lcus)
+                    },
+                    (error) => {}
+                )
+        }
+    }
+
+    useEffect(() => {
+        getPropertyLcus()
+        getPropertyLocations()
+    }, [])
 
     return (
         <React.Fragment>
             <Card
                 className={classes.root}
-                onClick={() => props.openPropertyDetails(propertyInfo)}
+                onClick={() =>
+                    props.openPropertyDetails(
+                        propertyInfo,
+                        lcusOfThisProperty,
+                        locationsOfThisProperty,
+                        smartOutletsOfThisProperty
+                    )
+                }
             >
                 <img
                     alt="Property Img"
@@ -69,7 +170,7 @@ const PropertyCard = (props) => {
                         <div className="badgeBox">
                             <EvStationOutlinedIcon />
                             <span className="badgeText">
-                                {propertyInfo.amountOfLcus} LCUs
+                                {lcusOfThisProperty.length} LCUs
                             </span>
                         </div>
                     </div>
@@ -77,7 +178,8 @@ const PropertyCard = (props) => {
                         <div className="badgeBox">
                             <WifiOutlinedIcon />
                             <span className="badgeText">
-                                {propertyInfo.smartOutletsAmount} Smart Outlets
+                                {smartOutletsOfThisProperty.length} Smart
+                                Outlets
                             </span>
                         </div>
                     </div>
@@ -85,7 +187,7 @@ const PropertyCard = (props) => {
                         <div className="badgeBox">
                             <FlashOnOutlinedIcon />
                             <span className="badgeText">
-                                {propertyInfo.maxAmps}k Max Volt-Amps
+                                {propertyInfo.maxVoltAmps / 1000}k Max Volt-Amps
                             </span>
                         </div>
                     </div>

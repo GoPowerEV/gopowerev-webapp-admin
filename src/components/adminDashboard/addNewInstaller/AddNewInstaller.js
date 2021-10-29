@@ -171,7 +171,7 @@ export default function AddNewInstaller(props) {
                                 />
                                 {showNoInfoEnteredMessage && (
                                     <div className="installerErrorMessageText">
-                                        Please enter a proper user ID.
+                                        Please enter a proper user email.
                                     </div>
                                 )}
                                 {showSuccessMessage && (

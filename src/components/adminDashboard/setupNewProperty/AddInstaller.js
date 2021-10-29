@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { API_URL } from './../../../constants'
+import { API_URL_ADMIN } from './../../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -125,17 +126,39 @@ export default function AddInstaller(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
     const [selectedInstaller, setSelectedInstaller] = useState('')
-    const [installers, setInstallers] = useState([
-        { name: 'Chris Shatrov', id: '5a08bc2c-e8cf-4462-958a-0017beb495f2' },
-    ])
+    const [installers, setInstallers] = useState([])
 
     const handleSelectInstaller = (installerId) => {
         setSelectedInstaller(installerId)
         console.log('selecting this installer', installerId)
-        props.setInstallerName(installerId);
+        props.setInstallerName(installerId)
     }
 
-    useEffect(() => {
+    const getAllInstallers = () => {
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log('all installers', result)
+                        setIsLoading(false)
+                        setInstallers(result)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const getAllLcus = () => {
         setIsLoading(true)
         if (props.token) {
             fetch(API_URL + 'lcus', {
@@ -156,6 +179,11 @@ export default function AddInstaller(props) {
                     }
                 )
         }
+    }
+
+    useEffect(() => {
+        getAllLcus()
+        getAllInstallers()
     }, [])
 
     return (
@@ -232,15 +260,19 @@ export default function AddInstaller(props) {
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
                                     value={selectedInstaller}
-                                    onChange={(event) => handleSelectInstaller(event.target.value)}
+                                    onChange={(event) =>
+                                        handleSelectInstaller(
+                                            event.target.value,
+                                        )
+                                    }
                                     label="Company Installers"
                                 >
                                     {installers?.map((installer) => (
                                         <MenuItem
-                                            value={installer.id}
-                                            key={installer.name}
+                                            value={installer.cognitoUUID}
+                                            key={installer.cognitoUUID}
                                         >
-                                            {installer.name}
+                                            {installer.email}
                                         </MenuItem>
                                     ))}
                                 </Select>

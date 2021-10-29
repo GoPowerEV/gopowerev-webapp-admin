@@ -126,7 +126,11 @@ const MainBody = (props) => {
     const checkDashboardRedirect = () => {
         if (props.loggedIn) {
             return (
-                <AdminDashboard loggedIn={props.loggedIn} token={props.token} />
+                <AdminDashboard
+                    loggedIn={props.loggedIn}
+                    token={props.token}
+                    history={props.history}
+                />
             )
         } else {
             return (
