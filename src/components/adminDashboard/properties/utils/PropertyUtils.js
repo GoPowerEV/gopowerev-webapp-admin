@@ -12,6 +12,20 @@ export const getBadgeClass = (status) => {
     }
 }
 
+export const getBadgeText = (status) => {
+    if (status === 'inspected') {
+        return 'inspected'
+    } else if (status === 'new') {
+        return 'New'
+    } else if (status === 'ready-or-nstall') {
+        return 'Ready For Install'
+    } else if (status === 'operational') {
+        return 'Opertational'
+    } else {
+        return 'Pre-Config'
+    }
+}
+
 export const getDashboardBadgeClass = (status) => {
     if (status === 'Inspected') {
         return 'brightGreen dash-badge'

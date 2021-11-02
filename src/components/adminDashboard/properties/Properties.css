@@ -27,9 +27,21 @@
     color: black;
 }
 
-.expandIcon {
+.expandIconFirstPortion {
     font-size: 45px !important;
     cursor: pointer;
+    margin-left: -2px;
+}
+
+.expandIcon {
+    font-size: 45px !important;
+    cursor: pointer;;
+}
+
+.expandIconFirstPortionOpened {
+    font-size: 45px !important;
+    cursor: pointer;
+    margin-left: -15px;
 }
 
 .propertiesMainBody {

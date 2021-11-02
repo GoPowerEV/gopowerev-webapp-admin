@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { API_URL } from './../../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
@@ -224,19 +224,81 @@ export default function SetupNewProperty(props) {
         }
     }
 
-    const createLocation = (lcuId, location, photoBinaries, index) => {
+    useEffect(() => {
+        if (props.token) {
+            fetch(API_URL + 'smart-outlets', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    async (result) => {
+                        setIsLoading(false)
+                        console.log('listOfSmartOutlets', result)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }, [])
+
+    const createSmartOutlets = (amountOfOutlets, locationId) => {
+        console.log('this is the amount of outlets', amountOfOutlets)
+        console.log('locationId', locationId)
+        for (var i = 0; i < amountOfOutlets; i++) {
+            setIsLoading(true)
+            let locationObject = {
+                locationUUID: locationId,
+                model: 'Frank 10',
+            }
+            if (props.token) {
+                fetch(API_URL + 'smart-outlets', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(locationObject),
+                })
+                    .then((res) => res.json())
+                    .then(
+                        async (result) => {
+                            setIsLoading(false)
+                            console.log(
+                                'created smart outlet successfully',
+                                result
+                            )
+                        },
+                        (error) => {
+                            setIsLoading(false)
+                        }
+                    )
+            }
+        }
+    }
+
+    const createLocation = (
+        lcuId,
+        location,
+        photoBinaries,
+        index,
+        amountOfSmartOutlets
+    ) => {
+        let locationId = null
         setIsLoading(true)
         let locationObject = {
-            description: '',
             lcuUUID: lcuId,
-            maxAmps: 0,
             maxVoltAmps: location.maxVoltAmps,
             name: location.name,
-            picture: '',
             propertyUUID: propertyUUID,
         }
+        console.log('creating this location', locationObject)
         if (props.token) {
-            fetch(API_URL + 'locations/', {
+            fetch(API_URL + 'locations', {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -249,11 +311,23 @@ export default function SetupNewProperty(props) {
                     async (result) => {
                         setIsLoading(false)
                         console.log('created location successfully', result)
-                        await uploadLocationPicture(
-                            result.cognitoUuid,
-                            photoBinaries,
-                            index
-                        )
+                        locationId = result.locationUUID
+                        if (photoBinaries.length > 0 && photoBinaries[index]) {
+                            await uploadLocationPicture(
+                                locationId,
+                                photoBinaries,
+                                index
+                            )
+                        }
+                        if (
+                            amountOfSmartOutlets.length > 0 &&
+                            amountOfSmartOutlets[index]
+                        ) {
+                            await createSmartOutlets(
+                                amountOfSmartOutlets[index],
+                                locationId
+                            )
+                        }
                     },
                     (error) => {
                         setIsLoading(false)
@@ -262,26 +336,17 @@ export default function SetupNewProperty(props) {
         }
     }
 
-    const createLcu = (lcuName, lcuModel, locations, photoBinaries) => {
+    const createLcu = (
+        lcuName,
+        lcuModel,
+        locations,
+        photoBinaries,
+        amountOfSmartOutlets
+    ) => {
         setIsLoading(true)
         let lcuObject = {
-            adminStatus: '',
-            cellCarrier: '',
-            cellConfirmationCode: '',
-            description: '',
-            fwLastUpdated: '',
-            fwVersion: '',
-            hwVersion: '',
-            imeiNumber: '',
-            lineNumber: '',
             modelNumber: lcuModel,
             name: lcuName,
-            operationalStatus: '',
-            serialNumber: '',
-            simNumber: '',
-            swLastUpdated: '',
-            swVersion: '',
-            wifiSsid: '',
         }
         if (props.token) {
             fetch(API_URL + 'lcus', {
@@ -299,10 +364,11 @@ export default function SetupNewProperty(props) {
                         console.log('created lcu successfully', result)
                         locations.forEach((location, index) => {
                             createLocation(
-                                result.uuid,
+                                result.lcuUUID,
                                 location,
                                 photoBinaries,
-                                index
+                                index,
+                                amountOfSmartOutlets
                             )
                         })
                     },
@@ -317,13 +383,21 @@ export default function SetupNewProperty(props) {
         lcuName,
         lcuModel,
         locations,
-        photoBinaries
+        photoBinaries,
+        amountOfSmartOutlets
     ) => {
         console.log('lcuName', lcuName)
         console.log('lcuModel', lcuModel)
         console.log('locations', locations)
         console.log('photoBinaries', photoBinaries)
-        createLcu(lcuName, lcuModel, locations, photoBinaries)
+        console.log('amountOfSmartOutlets', amountOfSmartOutlets)
+        createLcu(
+            lcuName,
+            lcuModel,
+            locations,
+            photoBinaries,
+            amountOfSmartOutlets
+        )
         // props.goToProperties()
         // setIsLoading(true)
         // if (props.token) {

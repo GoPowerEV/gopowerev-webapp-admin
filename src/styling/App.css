@@ -43,9 +43,28 @@ body {
     display: none !important;
 }
 
+.mobileVersionWarning {
+    display: none;
+}
+
 @media only screen and (max-width: 768px) {
     .main-logo {
         width: 12rem;
         height: auto;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .mobileVersionWarning {
+        display: block;
+        color: white;
+        height: 100%;
+        padding-top: 40%;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .regularContent {
+        display: none;
     }
 }

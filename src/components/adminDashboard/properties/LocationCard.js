@@ -8,6 +8,7 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import './LocationCard.css'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
 import Button from '@material-ui/core/Button'
+import NoImageAvailable from './../../../assets/images/noImageAvailable.png'
 
 const useStyles = makeStyles({
     root: {
@@ -70,7 +71,7 @@ const LocationCard = (props) => {
         <React.Fragment>
             <div className={classes.cardHeader}>
                 <LocationOnOutlinedIcon />
-                {locationInfo.name}
+                {locationInfo.name ?? 'No Location Name Available'}
             </div>
             <Card className={classes.root}>
                 <CardContent className={classes.content}>
@@ -78,7 +79,9 @@ const LocationCard = (props) => {
                         <Grid item xs={4}>
                             <img
                                 alt="Property Img"
-                                src={locationInfo.pictureUrl1}
+                                src={
+                                    locationInfo.pictureUrl1 ?? NoImageAvailable
+                                }
                                 className="viewedPropertyMainImage"
                             />
                         </Grid>

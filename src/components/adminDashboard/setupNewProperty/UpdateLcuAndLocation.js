@@ -157,6 +157,7 @@ export default function UpdateLcuAndLocation(props) {
     const [photoFile, setPhotoFile] = React.useState(null)
     const [photoBinaries, setPhotoBinaries] = React.useState([])
     const [photoFileNames, setPhotoFileNames] = React.useState([])
+    const [amountOfSmartOutlets, setAmountOfSmartOutlets] = React.useState([])
 
     const sampleLocationObject = {
         description: '',
@@ -199,10 +200,9 @@ export default function UpdateLcuAndLocation(props) {
     }
 
     const handleThisLocationNumberOfSmartOutletsChange = (value, index) => {
-        // let tempLocations = locations
-        // tempLocations[index].description = value
-        // console.log('allTempLocations', tempLocations)
-        // setLocations(tempLocations)
+        let tempAmountOfSmartOutlets = amountOfSmartOutlets
+        tempAmountOfSmartOutlets[index] = Number(value)
+        setAmountOfSmartOutlets(tempAmountOfSmartOutlets)
     }
 
     const handleThisLocationMaxVoltAmpsChange = (value, index) => {
@@ -616,7 +616,8 @@ export default function UpdateLcuAndLocation(props) {
                                         lcuName,
                                         lcuModel,
                                         locations,
-                                        photoBinaries
+                                        photoBinaries,
+                                        amountOfSmartOutlets
                                     )
                                 }
                             >

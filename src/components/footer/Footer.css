@@ -54,3 +54,11 @@
     font-weight: 700;
     text-decoration: none;
 }
+
+@media only screen and (max-width: 800px) {
+    .footer-logo {
+        width: 13rem;
+        height: auto;
+        cursor: pointer;
+    }
+}

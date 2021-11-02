@@ -83,12 +83,18 @@ const App = () => {
 
     return (
         <BrowserRouter>
-            <MainBody
-                stripe={stripePromise}
-                isMobile={isMobile}
-                loggedIn={loggedIn}
-                token={token}
-            />
+            <div className="mobileVersionWarning">
+                We are sorry, but at this time this app does not support mobile
+                devices.
+            </div>
+            <div className="regularContent">
+                <MainBody
+                    stripe={stripePromise}
+                    isMobile={isMobile}
+                    loggedIn={loggedIn}
+                    token={token}
+                />
+            </div>
             <Footer />
         </BrowserRouter>
     )
