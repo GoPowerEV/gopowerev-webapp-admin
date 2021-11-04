@@ -104,7 +104,6 @@ export default function AddNewInstaller(props) {
     const classes = useStyles()
 
     const addInstaller = () => {
-        console.log('token stuff', props.token)
         if (userId.length === 0) {
             setShowNoInfoEnteredMessage(true)
             setShowSuccessMessage(false)
@@ -132,6 +131,12 @@ export default function AddNewInstaller(props) {
                             if (result.code) {
                                 setIsLoading(false)
                                 setCallFailedError(true)
+                                alert(
+                                    'Success! ' +
+                                        userId +
+                                        ' is now an installer.'
+                                )
+                                setUserId('')
                             } else {
                                 setIsLoading(false)
                                 setCallFailedError(false)

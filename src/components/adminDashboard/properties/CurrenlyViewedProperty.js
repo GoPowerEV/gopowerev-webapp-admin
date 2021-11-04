@@ -36,22 +36,6 @@ const CurrentlyViewedProperty = (props) => {
     const locations = props.locations
     const lcus = props.lcus
     const smartOutlets = props.smartOutlets
-    const locationsFake = [
-        {
-            name: 'North-East Parking Lot',
-            pictureUrl1:
-                'https://media.istockphoto.com/photos/europe-modern-complex-of-residential-buildings-picture-id1165384568?k=6&m=1165384568&s=612x612&w=0&h=EFKcg8aMptUfpr5TCFTyYnHEdDmUL0tmsOT3TWeXl8I=',
-            smartOutletsAmount: 10,
-            maxVoltAmps: 13,
-        },
-        {
-            name: 'South-West Parking Lot',
-            pictureUrl1:
-                'https://media.istockphoto.com/photos/europe-modern-complex-of-residential-buildings-picture-id1165384568?k=6&m=1165384568&s=612x612&w=0&h=EFKcg8aMptUfpr5TCFTyYnHEdDmUL0tmsOT3TWeXl8I=',
-            smartOutletsAmount: 10,
-            maxVoltAmps: 13,
-        },
-    ]
 
     const openEditForm = () => {
         setOpenEditor(true)
@@ -451,12 +435,12 @@ const CurrentlyViewedProperty = (props) => {
                                             justify="space-between"
                                             alignItems="center"
                                         >
-                                            <Grid item xs={5}>
+                                            <Grid item xs={9}>
                                                 <div className="lcuDetailsHeader">
                                                     LCU Name
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    Main Office
+                                                    {lcu.name}
                                                 </div>
                                             </Grid>
                                             <Grid
@@ -516,7 +500,8 @@ const CurrentlyViewedProperty = (props) => {
                                                     Confirmation Code
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    32144412
+                                                    {lcu.cellConfirmationCode ??
+                                                        '-'}
                                                 </div>
                                             </Grid>
                                             <Grid
@@ -612,7 +597,7 @@ const CurrentlyViewedProperty = (props) => {
                                                     Carrier
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    Verizon
+                                                    {lcu.cellCarrier ?? '-'}
                                                 </div>
                                             </Grid>
                                             <Grid
@@ -648,7 +633,7 @@ const CurrentlyViewedProperty = (props) => {
                                                     Model
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    MOTOROLA MG7540 16x4
+                                                    {lcu.modelNumber ?? '-'}
                                                 </div>
                                             </Grid>
                                             <Grid
@@ -744,7 +729,7 @@ const CurrentlyViewedProperty = (props) => {
                                                     Hardware Version
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    Alpha-1,001
+                                                    {lcu.hwVersion ?? '-'}
                                                 </div>
                                             </Grid>
                                             <Grid item xs={5}>
@@ -775,7 +760,7 @@ const CurrentlyViewedProperty = (props) => {
                                                     Software Version
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    Alpha-1,001
+                                                    {lcu.swVersion ?? '-'}
                                                 </div>
                                             </Grid>
                                             <Grid item xs={5}>
@@ -806,7 +791,7 @@ const CurrentlyViewedProperty = (props) => {
                                                     Firmware Version
                                                 </div>
                                                 <div className="lcuDetailsText">
-                                                    Alpha-1,001
+                                                    {lcu.fwVersion ?? '-'}
                                                 </div>
                                             </Grid>
                                             <Grid item xs={5}>

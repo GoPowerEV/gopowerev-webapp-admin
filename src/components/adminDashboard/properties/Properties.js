@@ -239,7 +239,7 @@ const Properties = (props) => {
                                 />
                             </Grid>
                         ))}
-                        {allProperties.length === 0 && (
+                        {allProperties?.length === 0 && (
                             <div className="noPropertiesWithThisStatus">
                                 No properties with a status of
                                 <strong> {activeFilterFull}</strong>

@@ -119,7 +119,7 @@ function getSteps() {
 export default function SetupNewProperty(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
-    const [activeStep, setActiveStep] = React.useState(0)
+    const [activeStep, setActiveStep] = React.useState(2)
     const [installerName, setInstallerName] = React.useState('')
     const [completed, setCompleted] = React.useState({})
     const [newPropertyName, setNewPropertyName] = React.useState('')
@@ -253,7 +253,7 @@ export default function SetupNewProperty(props) {
             setIsLoading(true)
             let locationObject = {
                 locationUUID: locationId,
-                model: 'Frank 10',
+                model: 'Proto X0-Frank',
             }
             if (props.token) {
                 fetch(API_URL + 'smart-outlets', {
@@ -328,6 +328,7 @@ export default function SetupNewProperty(props) {
                                 locationId
                             )
                         }
+                        props.goToProperties()
                     },
                     (error) => {
                         setIsLoading(false)
@@ -398,30 +399,6 @@ export default function SetupNewProperty(props) {
             photoBinaries,
             amountOfSmartOutlets
         )
-        // props.goToProperties()
-        // setIsLoading(true)
-        // if (props.token) {
-        //     console.log(JSON.stringify(propertyInfo))
-        //     fetch(API_URL + 'properties', {
-        //         method: 'PUT',
-        //         headers: {
-        //             Authorization: 'Bearer ' + props.token,
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(propertyInfo),
-        //     })
-        //         .then((res) => res.json())
-        //         .then(
-        //             (result) => {
-        //                 setPropertyUUID(result.propertyUUID)
-        //                 setIsLoading(false)
-        //                 handleComplete(propertyInfo)
-        //             },
-        //             (error) => {
-        //                 setIsLoading(false)
-        //             }
-        //         )
-        // }
     }
 
     const getBinaryFromImg = (picFile) => {
@@ -621,7 +598,6 @@ export default function SetupNewProperty(props) {
                         {steps.map((label, index) => (
                             <Step key={label}>
                                 <StepLabel
-                                    onClick={handleStep(index)}
                                     completed={completed[index]}
                                     StepIconProps={{
                                         classes: {

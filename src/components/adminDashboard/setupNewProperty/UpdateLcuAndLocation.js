@@ -142,6 +142,12 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: '700',
         marginTop: '5px',
     },
+    locationError: {
+        fontSize: '14px',
+        paddingLeft: '4px',
+        marginTop: '7px',
+        color: 'red',
+    },
 }))
 
 export default function UpdateLcuAndLocation(props) {
@@ -150,14 +156,17 @@ export default function UpdateLcuAndLocation(props) {
     const [numberOfLocations, setNumberOfLocations] = useState(1)
     const [locations, setLocations] = useState([])
     const [locationsError, setLocationsError] = useState(false)
-    const [lcuModels, setLcuModels] = useState([])
     const [lcuName, setLcuName] = useState('')
-    const [lcuModel, setLcuModel] = useState()
+    const [lcuModel, setLcuModel] = useState('LCU10')
     const [photoAdded, setPhotoAdded] = React.useState(false)
     const [photoFile, setPhotoFile] = React.useState(null)
     const [photoBinaries, setPhotoBinaries] = React.useState([])
     const [photoFileNames, setPhotoFileNames] = React.useState([])
     const [amountOfSmartOutlets, setAmountOfSmartOutlets] = React.useState([])
+    const [voltAmpsErrors, setVoltAmpsErrors] = React.useState([])
+    const [smartOutletsErrors, setSmartOutletsErrors] = React.useState([])
+    const [locationsNamesErrors, setLocationsNamesErrors] = React.useState([])
+    const [hasErrors, setHasErrors] = React.useState(false)
 
     const sampleLocationObject = {
         description: '',
@@ -193,23 +202,94 @@ export default function UpdateLcuAndLocation(props) {
     }
 
     const handleThisLocationNameChange = (value, index) => {
-        let tempLocations = locations
-        tempLocations[index].description = value
-        console.log('allTempLocations', tempLocations)
-        setLocations(tempLocations)
+        if (value && value.length > 0) {
+            let tempLocations = locations
+            tempLocations[index].name = value
+            console.log('allTempLocations', tempLocations)
+            setLocations(tempLocations)
+            let tempErrors = locationsNamesErrors
+            tempErrors[index] = null
+            setLocationsNamesErrors(tempErrors)
+        } else {
+            let tempErrors = locationsNamesErrors
+            tempErrors[index] = true
+            setLocationsNamesErrors(tempErrors)
+        }
+    }
+
+    const checkIfThereAreStillErrors = () => {
+        let errorCount = 0
+        smartOutletsErrors.forEach((value) => {
+            if (value === true) {
+                errorCount++
+            }
+        })
+
+        voltAmpsErrors.forEach((value) => {
+            if (value === true) {
+                errorCount++
+            }
+        })
+
+        locationsNamesErrors.forEach((value) => {
+            if (value === true) {
+                errorCount++
+            }
+        })
+
+        console.log('here is error count ' + errorCount)
+
+        if (errorCount > 0) {
+            return true
+        } else {
+            return false
+        }
     }
 
     const handleThisLocationNumberOfSmartOutletsChange = (value, index) => {
-        let tempAmountOfSmartOutlets = amountOfSmartOutlets
-        tempAmountOfSmartOutlets[index] = Number(value)
-        setAmountOfSmartOutlets(tempAmountOfSmartOutlets)
+        console.log('outlets firing')
+        if (isNaN(Number(value))) {
+            let tempErrors = smartOutletsErrors
+            tempErrors[index] = true
+            setSmartOutletsErrors(tempErrors)
+            setHasErrors(true)
+        } else if (Number(value) < 0 || Number(value) > 50) {
+            let tempErrors = smartOutletsErrors
+            tempErrors[index] = true
+            setSmartOutletsErrors(tempErrors)
+            setHasErrors(true)
+        } else {
+            let tempErrors = smartOutletsErrors
+            tempErrors[index] = null
+            setSmartOutletsErrors(tempErrors)
+            let tempAmountOfSmartOutlets = amountOfSmartOutlets
+            tempAmountOfSmartOutlets[index] = Number(value)
+            setAmountOfSmartOutlets(tempAmountOfSmartOutlets)
+        }
     }
 
     const handleThisLocationMaxVoltAmpsChange = (value, index) => {
-        let tempLocations = locations
-        tempLocations[index].maxVoltAmps = Number(value)
-        console.log('allTempLocations', tempLocations)
-        setLocations(tempLocations)
+        console.log('volts firing')
+        if (isNaN(Number(value))) {
+            let tempErrors = voltAmpsErrors
+            tempErrors[index] = true
+            setVoltAmpsErrors(tempErrors)
+            setHasErrors(true)
+        } else if (Number(value) <= 0) {
+            let tempErrors = voltAmpsErrors
+            tempErrors[index] = true
+            setVoltAmpsErrors(tempErrors)
+            setHasErrors(true)
+        } else {
+            let tempErrors = voltAmpsErrors
+            tempErrors[index] = null
+            setVoltAmpsErrors(tempErrors)
+            checkIfThereAreStillErrors()
+            let tempLocations = locations
+            tempLocations[index].maxVoltAmps = Number(value)
+            console.log('allTempLocations', tempLocations)
+            setLocations(tempLocations)
+        }
     }
 
     const getBinaryFromImg = (picFile, locationIndex) => {
@@ -270,29 +350,40 @@ export default function UpdateLcuAndLocation(props) {
         }
     }
 
-    useEffect(() => {
-        setIsLoading(true)
-        if (props.token) {
-            fetch(API_URL + 'lcus', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        setLcuModels(result.lcus)
-                        console.log('lcus', result.lcus)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
+    const checkLocationsNames = () => {
+        let tempErrors = locationsNamesErrors
+        locations.forEach((location, index) => {
+            if (location.name.length === 0 || location.name === null) {
+                tempErrors[index] = true
+                setHasErrors(true)
+            } else {
+                tempErrors[index] = null
+            }
+        })
+        setLocationsNamesErrors(tempErrors)
+        checkIfThereAreStillErrors()
+    }
+
+    // const checkLcuName = () => {}
+
+    const validateAndSubmit = () => {
+        checkLocationsNames()
+        // checkLcuName()
+        console.log('here does it have errors? ' + hasErrors)
+        if (!checkIfThereAreStillErrors) {
+            props.handleSubmitForInstallation(
+                lcuName,
+                lcuModel,
+                locations,
+                photoBinaries,
+                amountOfSmartOutlets
+            )
+        } else {
+            window.scrollTo(0, 0)
         }
-        setLocations([])
+    }
+
+    useEffect(() => {
         setNumberOfLocations(1)
         let tempLocations = locations
         for (let i = 0; i < 1; i++) {
@@ -390,34 +481,15 @@ export default function UpdateLcuAndLocation(props) {
                                 />
                             </Grid>
                             <Grid item xs={6}>
-                                <FormControl
-                                    fullWidth
+                                <TextField
+                                    className={classes.textField}
+                                    label="LCU Model"
                                     variant="outlined"
-                                    className={classes.formControl}
-                                >
-                                    <InputLabel id="demo-simple-select-outlined-label">
-                                        LCU Models
-                                    </InputLabel>
-                                    <Select
-                                        fullWidth
-                                        className={classes.textField}
-                                        labelId="demo-simple-select-outlined-label"
-                                        id="demo-simple-select-outlined"
-                                        value={lcuModel}
-                                        onChange={handleLcuModelChange}
-                                        label="LCU Models"
-                                    >
-                                        {lcuModels?.map((lcu) => (
-                                            <MenuItem
-                                                value={lcu.lcuUUID}
-                                                key={lcu.lcuUUID}
-                                            >
-                                                {lcu.modelNumber} (
-                                                {lcu.serialNumber})
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                    value={lcuModel}
+                                    onChange={handleLcuModelChange}
+                                    fullWidth
+                                    disabled
+                                />
                             </Grid>
                         </Grid>
                         <Grid container xs={12} spacing={4}>
@@ -488,6 +560,17 @@ export default function UpdateLcuAndLocation(props) {
                                                 }
                                                 fullWidth
                                             />
+                                            {locationsNamesErrors[index] ===
+                                                true && (
+                                                <div
+                                                    className={
+                                                        classes.locationError
+                                                    }
+                                                >
+                                                    Location name must have a
+                                                    value.
+                                                </div>
+                                            )}
                                         </Grid>
                                         <Grid item xs={6}>
                                             <div className={classes.formHeader}>
@@ -566,6 +649,18 @@ export default function UpdateLcuAndLocation(props) {
                                                             )
                                                         }
                                                     />
+                                                    {smartOutletsErrors[
+                                                        index
+                                                    ] === true && (
+                                                        <div
+                                                            className={
+                                                                classes.locationError
+                                                            }
+                                                        >
+                                                            Must be a number
+                                                            between 1 and 50.
+                                                        </div>
+                                                    )}
                                                 </Grid>
                                                 <Grid item xs={6}>
                                                     <TextField
@@ -583,6 +678,18 @@ export default function UpdateLcuAndLocation(props) {
                                                             )
                                                         }
                                                     />
+                                                    {voltAmpsErrors[index] ===
+                                                        true && (
+                                                        <div
+                                                            className={
+                                                                classes.locationError
+                                                            }
+                                                        >
+                                                            Must be a number
+                                                            that is more than a
+                                                            zero.
+                                                        </div>
+                                                    )}
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -611,15 +718,7 @@ export default function UpdateLcuAndLocation(props) {
                                 fullWidth
                                 variant="contained"
                                 className={classes.createButton}
-                                onClick={() =>
-                                    props.handleSubmitForInstallation(
-                                        lcuName,
-                                        lcuModel,
-                                        locations,
-                                        photoBinaries,
-                                        amountOfSmartOutlets
-                                    )
-                                }
+                                onClick={() => validateAndSubmit()}
                             >
                                 Submit for Installation
                             </Button>
