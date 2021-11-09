@@ -1,0 +1,26 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@2.0.3
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: env-builds
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12-browsers
+    working_directory: ~/admin-webapp
+    steps:
+      - checkout
+      - run:
+          name: Testing
+          command: |
+            node --version
+            npm --version
