@@ -12,7 +12,7 @@ const stripePromise = loadStripe(
 
 const App = () => {
     const [isMobile, setIsMobile] = useState(true)
-    const [loggedIn, setLoggedIn] = useState(true)
+    const [loggedIn, setLoggedIn] = useState(false)
     const [token, setToken] = useState('')
 
     // This function is used to autocalculate the screen size and switch navs.

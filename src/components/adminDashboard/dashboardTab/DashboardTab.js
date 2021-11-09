@@ -169,7 +169,7 @@ const DashboardTab = () => {
             </div>
             {isLoading && (
                 <div>
-                    <CircularProgress />
+                    <CircularProgress style={{ color: '#12BFA2' }} />
                 </div>
             )}
         </React.Fragment>

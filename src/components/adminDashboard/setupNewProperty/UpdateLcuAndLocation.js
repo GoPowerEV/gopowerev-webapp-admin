@@ -728,7 +728,7 @@ export default function UpdateLcuAndLocation(props) {
             )}
             {isLoading && (
                 <div className="loaderContainer">
-                    <CircularProgress />
+                    <CircularProgress style={{ color: '#12BFA2' }} />
                 </div>
             )}
         </div>

@@ -72,7 +72,7 @@ ScrollTop.propTypes = {
 
 const MainBody = (props) => {
     const classes = useStyles()
-    const [value, setValue] = useState('5')
+    const [value, setValue] = useState(5)
     const [openModal, setOpenModal] = useState(false)
     const [
         usernameToChangePasswordFor,
@@ -85,7 +85,7 @@ const MainBody = (props) => {
             setOpenModal(true)
         } else {
             // this moves the top nav menu selector
-            setValue(index.toString())
+            setValue(Number(index))
             // this sets the route and renders the body
             props.history.push('/' + goHere)
         }
@@ -97,7 +97,7 @@ const MainBody = (props) => {
             await Auth.signOut()
             setLoading(false)
             props.history.push('/login')
-            setValue('1')
+            setValue(1)
         } catch (error) {
             console.log('error signing out: ', error)
         }
@@ -119,31 +119,12 @@ const MainBody = (props) => {
     }
 
     const handleLogoClick = () => {
-        setValue('0')
-        props.history.push('/admin-dashboard')
-    }
-
-    const checkDashboardRedirect = () => {
-        if (props.loggedIn) {
-            return (
-                <AdminDashboard
-                    loggedIn={props.loggedIn}
-                    token={props.token}
-                    history={props.history}
-                />
-            )
-        } else {
-            return (
-                <Redirect
-                    to={{
-                        pathname: '/login',
-                    }}
-                />
-            )
-        }
+        setValue(0)
+        props.history.push('/admin-dashboard/dashboard')
     }
 
     useEffect(() => {
+        console.log('token123', props.token)
         if (props.history.location) {
             var tabName = props.history.location.pathname.replace(/\\|\//g, '')
             if (tabName === 'dashboard') {
@@ -183,19 +164,23 @@ const MainBody = (props) => {
                 <div className="main-body-container">
                     <Box className="main-box">
                         <Switch>
+                            <Route exact path="/">
+                                <Redirect to="/admin-dashboard/dashboard" />
+                            </Route>
+                            <Route exact path="/gopowerev-webapp-admin">
+                                <Redirect to="/admin-dashboard/dashboard" />
+                            </Route>
                             <Route
-                                exact
-                                path="/"
-                                render={() => checkDashboardRedirect()}
+                                path="/admin-dashboard/:menuItem"
+                                render={(properties) => (
+                                    <AdminDashboard
+                                        path={properties.match.params}
+                                        loggedIn={props.loggedIn}
+                                        token={props.token}
+                                        history={props.history}
+                                    />
+                                )}
                             />
-                            <Route
-                                exact
-                                path="/gopowerev-webapp-admin"
-                                render={() => checkDashboardRedirect()}
-                            />
-                            <Route
-                                path="/admin-dashboard"
-                                render={() => checkDashboardRedirect()}
                             />
                             <Route path="/login">
                                 <LoginNew
@@ -203,6 +188,9 @@ const MainBody = (props) => {
                                     handleMenuChange={handleMenuChange}
                                     loggedIn={props.loggedIn}
                                 />
+                            </Route>
+                            <Route exact path="/admin-dashboard">
+                                <Redirect to="/admin-dashboard/dashboard" />
                             </Route>
                             <Route path="/forgotPassword">
                                 <ForgotPassword
@@ -232,7 +220,7 @@ const MainBody = (props) => {
             )}
             {loading && (
                 <div className={classes.loaderClass}>
-                    <CircularProgress />
+                    <CircularProgress style={{ color: '#12BFA2' }} />
                 </div>
             )}
             <ScrollTop {...props}>

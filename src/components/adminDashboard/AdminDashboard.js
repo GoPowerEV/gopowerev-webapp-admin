@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -163,18 +164,27 @@ export default function AdminDashboard(props) {
     )
 
     const handleChange = (event, newValue) => {
+        if (newValue === 1) {
+            props.history.push('/admin-dashboard/properties')
+        } else if (newValue === 0) {
+            props.history.push('/admin-dashboard/dashboard')
+        } else if (newValue === 2) {
+            props.history.push('/admin-dashboard/installers')
+        }
         setDisplaySetupNewProperty(false)
         setDisplayAddNewInstaller(false)
         setValue(newValue)
     }
 
     const goToProperties = () => {
+        props.history.push('/admin-dashboard/properties')
         setDisplaySetupNewProperty(false)
         setDisplayAddNewInstaller(false)
         setValue(1)
     }
 
     const setupNewProperty = () => {
+        props.history.push('/admin-dashboard/setup-new-property')
         // Setting the value to something non-existant
         setValue(7)
         setDisplaySetupNewProperty(true)
@@ -182,11 +192,48 @@ export default function AdminDashboard(props) {
     }
 
     const addNewInstaller = () => {
+        props.history.push('/admin-dashboard/add-new-installer')
         // Setting the value to something non-existant
         setValue(8)
         setDisplaySetupNewProperty(false)
         setDisplayAddNewInstaller(true)
     }
+
+    useEffect(() => {
+        if (!props.loggedIn) {
+            return (
+                <Redirect
+                    to={{
+                        pathname: '/login',
+                    }}
+                />
+            )
+        } else {
+            const urlLocation = props.match.params.menuItem
+            props.history.push('/admin-dashboard/' + urlLocation)
+            if (urlLocation === 'dashboard') {
+                setDisplaySetupNewProperty(false)
+                setDisplayAddNewInstaller(false)
+                setValue(0)
+            } else if (urlLocation === 'properties') {
+                setDisplaySetupNewProperty(false)
+                setDisplayAddNewInstaller(false)
+                setValue(1)
+            } else if (urlLocation === 'installers') {
+                setDisplaySetupNewProperty(false)
+                setDisplayAddNewInstaller(false)
+                setValue(2)
+            } else if (urlLocation === 'setup-new-property') {
+                setValue(7)
+                setDisplaySetupNewProperty(true)
+                setDisplayAddNewInstaller(false)
+            } else {
+                setValue(8)
+                setDisplaySetupNewProperty(false)
+                setDisplayAddNewInstaller(true)
+            }
+        }
+    }, [])
 
     return (
         <div className={classes.root}>

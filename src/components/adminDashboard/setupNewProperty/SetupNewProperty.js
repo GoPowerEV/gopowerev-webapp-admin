@@ -119,7 +119,7 @@ function getSteps() {
 export default function SetupNewProperty(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
-    const [activeStep, setActiveStep] = React.useState(2)
+    const [activeStep, setActiveStep] = React.useState(0)
     const [installerName, setInstallerName] = React.useState('')
     const [completed, setCompleted] = React.useState({})
     const [newPropertyName, setNewPropertyName] = React.useState('')
@@ -1060,7 +1060,7 @@ export default function SetupNewProperty(props) {
                     )}
                     {isLoading && (
                         <div className="loaderContainer">
-                            <CircularProgress />
+                            <CircularProgress style={{ color: '#12BFA2' }} />
                         </div>
                     )}
                 </React.Fragment>

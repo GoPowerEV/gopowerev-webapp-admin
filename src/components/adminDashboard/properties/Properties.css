@@ -257,6 +257,10 @@
     text-transform: 'none' !important;
 }
 
+.propertiesLoader {
+    margin-top: 20%;
+}
+
 .locationNotes {
     margin-bottom: 45px;
 }
