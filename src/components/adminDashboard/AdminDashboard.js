@@ -176,6 +176,13 @@ export default function AdminDashboard(props) {
         setValue(newValue)
     }
 
+    const goToInstallers = () => {
+        props.history.push('/admin-dashboard/installers')
+        setDisplaySetupNewProperty(false)
+        setDisplayAddNewInstaller(false)
+        setValue(2)
+    }
+
     const goToProperties = () => {
         props.history.push('/admin-dashboard/properties')
         setDisplaySetupNewProperty(false)
@@ -344,7 +351,11 @@ export default function AdminDashboard(props) {
                         <Grid item xs={10}>
                             <Paper className={classes.mainBody}>
                                 <TabPanel value={value} index={0}>
-                                    <DashboardTab />
+                                    <DashboardTab
+                                        goToInstallers={goToInstallers}
+                                        token={props.token}
+                                        goToProperties={goToProperties}
+                                    />
                                 </TabPanel>
                                 <TabPanel value={value} index={1}>
                                     <Properties token={props.token} />

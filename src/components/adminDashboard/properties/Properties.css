@@ -58,11 +58,21 @@
     font-size: 19px;
 }
 
+.no-properties-warning {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
 .greyHeader {
     font-weight: bold;
     color: #bababa;
     font-size: 21px;
     display: inline-flex;
+}
+
+.propertyCountLoader {
+    margin-left: 35%;
 }
 
 .lcuContainer {

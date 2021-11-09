@@ -25,9 +25,10 @@ const useStyles = makeStyles({
         margin: '0 2px',
         transform: 'scale(0.8)',
     },
-    cardHeader: {
+    propertyCardHeader: {
         fontSize: 19,
         fontWeight: '600',
+        height: '50px',
         marginBottom: '15px',
     },
     pos: {
@@ -59,7 +60,7 @@ const PropertyCardInInstall = (props) => {
                     </div>
                 </div>
                 <CardContent className={classes.content}>
-                    <Typography className={classes.cardHeader}>
+                    <Typography className={classes.propertyCardHeader}>
                         {propertyInfo.name}
                     </Typography>
                     <div className="grey badge">
