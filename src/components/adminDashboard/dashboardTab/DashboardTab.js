@@ -247,11 +247,6 @@ const DashboardTab = (props) => {
                     </Grid>
                 </Grid>
             </div>
-            {isLoading && (
-                <div>
-                    <CircularProgress style={{ color: '#12BFA2' }} />
-                </div>
-            )}
         </React.Fragment>
     )
 }
