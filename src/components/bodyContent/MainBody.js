@@ -174,7 +174,7 @@ const MainBody = (props) => {
                                 path="/admin-dashboard/:menuItem"
                                 render={(properties) => (
                                     <AdminDashboard
-                                        path={properties.match.params}
+                                        path={properties.match.params.menuItem}
                                         loggedIn={props.loggedIn}
                                         token={props.token}
                                         history={props.history}

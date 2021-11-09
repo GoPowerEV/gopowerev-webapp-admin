@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
@@ -12,8 +12,7 @@ import Box from '@material-ui/core/Box'
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined'
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
-import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined'
-import FolderOutlinedIcon from '@material-ui/icons/FolderOutlined'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined'
 import SetupNewProperty from './setupNewProperty/SetupNewProperty'
 import AddNewInstaller from './addNewInstaller/AddNewInstaller'
@@ -155,6 +154,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AdminDashboard(props) {
     const classes = useStyles()
     const [value, setValue] = React.useState(0)
+    const [isLoading, setIsLoading] = useState(false)
     const [
         displaySetupNewProperty,
         setDisplaySetupNewProperty,
@@ -200,7 +200,9 @@ export default function AdminDashboard(props) {
     }
 
     useEffect(() => {
+        setIsLoading(true)
         if (!props.loggedIn) {
+            setIsLoading(false)
             return (
                 <Redirect
                     to={{
@@ -209,7 +211,8 @@ export default function AdminDashboard(props) {
                 />
             )
         } else {
-            const urlLocation = props.match.params.menuItem
+            const urlLocation = props.path
+            console.log('location', urlLocation)
             props.history.push('/admin-dashboard/' + urlLocation)
             if (urlLocation === 'dashboard') {
                 setDisplaySetupNewProperty(false)
@@ -232,149 +235,157 @@ export default function AdminDashboard(props) {
                 setDisplaySetupNewProperty(false)
                 setDisplayAddNewInstaller(true)
             }
+            setIsLoading(false)
         }
     }, [])
 
     return (
         <div className={classes.root}>
-            <Grid container>
-                <Grid item xs={2}>
-                    <Paper className={classes.menu}>
-                        <Tabs
-                            orientation="vertical"
-                            variant="scrollable"
-                            value={value}
-                            onChange={handleChange}
-                            aria-label="Vertical tabs example"
-                            className={classes.tabs}
-                        >
-                            <Tab
-                                className={classes.customTab}
-                                icon={
-                                    <DashboardOutlinedIcon
-                                        style={{
-                                            marginTop: '4px',
-                                            marginRight: '-20px',
-                                            float: 'left',
-                                        }}
+            {!isLoading && (
+                <Grid container>
+                    <Grid item xs={2}>
+                        <Paper className={classes.menu}>
+                            <Tabs
+                                orientation="vertical"
+                                variant="scrollable"
+                                value={value}
+                                onChange={handleChange}
+                                aria-label="Vertical tabs example"
+                                className={classes.tabs}
+                            >
+                                <Tab
+                                    className={classes.customTab}
+                                    icon={
+                                        <DashboardOutlinedIcon
+                                            style={{
+                                                marginTop: '4px',
+                                                marginRight: '-20px',
+                                                float: 'left',
+                                            }}
+                                        />
+                                    }
+                                    classes={{
+                                        root: classes.tabRoot,
+                                        selected: classes.tabSelected,
+                                        wrapper: classes.alignment,
+                                    }}
+                                    label="Dashboard"
+                                    {...a11yProps(0)}
+                                />
+                                <Tab
+                                    className={classes.customTab}
+                                    icon={
+                                        <BrokenImageOutlinedIcon
+                                            style={{
+                                                marginTop: '4px',
+                                                marginRight: '-20px',
+                                                float: 'left',
+                                            }}
+                                        />
+                                    }
+                                    classes={{
+                                        root: classes.tabRoot,
+                                        selected: classes.tabSelected,
+                                        wrapper: classes.alignment,
+                                    }}
+                                    label="Properties"
+                                    {...a11yProps(1)}
+                                />
+                                <Tab
+                                    className={classes.customTab}
+                                    icon={
+                                        <EvStationOutlinedIcon
+                                            style={{
+                                                marginTop: '4px',
+                                                marginRight: '-20px',
+                                                float: 'left',
+                                            }}
+                                        />
+                                    }
+                                    classes={{
+                                        root: classes.tabRoot,
+                                        selected: classes.tabSelected,
+                                        wrapper: classes.alignment,
+                                    }}
+                                    label="Installers"
+                                    {...a11yProps(2)}
+                                />
+                            </Tabs>
+                            <div className="hr-container">
+                                <hr className="dotted-hr" />
+                            </div>
+                            <Button
+                                className={classes.outlinedButton}
+                                variant="outlined"
+                                onClick={setupNewProperty}
+                                endIcon={
+                                    <RoomOutlinedIcon
+                                        className={classes.buttonIcon}
                                     />
                                 }
-                                classes={{
-                                    root: classes.tabRoot,
-                                    selected: classes.tabSelected,
-                                    wrapper: classes.alignment,
-                                }}
-                                label="Dashboard"
-                                {...a11yProps(0)}
-                            />
-                            <Tab
-                                className={classes.customTab}
-                                icon={
-                                    <BrokenImageOutlinedIcon
-                                        style={{
-                                            marginTop: '4px',
-                                            marginRight: '-20px',
-                                            float: 'left',
-                                        }}
-                                    />
-                                }
-                                classes={{
-                                    root: classes.tabRoot,
-                                    selected: classes.tabSelected,
-                                    wrapper: classes.alignment,
-                                }}
-                                label="Properties"
-                                {...a11yProps(1)}
-                            />
-                            <Tab
-                                className={classes.customTab}
-                                icon={
+                            >
+                                Setup New Property
+                            </Button>
+                            <Button
+                                className={classes.outlinedButtonInstaller}
+                                variant="outlined"
+                                onClick={addNewInstaller}
+                                endIcon={
                                     <EvStationOutlinedIcon
-                                        style={{
-                                            marginTop: '4px',
-                                            marginRight: '-20px',
-                                            float: 'left',
-                                        }}
+                                        className={classes.buttonIcon}
                                     />
                                 }
-                                classes={{
-                                    root: classes.tabRoot,
-                                    selected: classes.tabSelected,
-                                    wrapper: classes.alignment,
-                                }}
-                                label="Installers"
-                                {...a11yProps(2)}
-                            />
-                        </Tabs>
-                        <div className="hr-container">
-                            <hr className="dotted-hr" />
-                        </div>
-                        <Button
-                            className={classes.outlinedButton}
-                            variant="outlined"
-                            onClick={setupNewProperty}
-                            endIcon={
-                                <RoomOutlinedIcon
-                                    className={classes.buttonIcon}
-                                />
-                            }
-                        >
-                            Setup New Property
-                        </Button>
-                        <Button
-                            className={classes.outlinedButtonInstaller}
-                            variant="outlined"
-                            onClick={addNewInstaller}
-                            endIcon={
-                                <EvStationOutlinedIcon
-                                    className={classes.buttonIcon}
-                                />
-                            }
-                        >
-                            Add New Installer
-                        </Button>
-                    </Paper>
-                </Grid>
-                {!displaySetupNewProperty && !displayAddNewInstaller && (
-                    <Grid item xs={10}>
-                        <Paper className={classes.mainBody}>
-                            <TabPanel value={value} index={0}>
-                                <DashboardTab />
-                            </TabPanel>
-                            <TabPanel value={value} index={1}>
-                                <Properties token={props.token} />
-                            </TabPanel>
-                            <TabPanel value={value} index={2}>
-                                <Installers token={props.token} />
-                            </TabPanel>
-                            <TabPanel value={value} index={3}>
-                                Consumer Information will go here
-                            </TabPanel>
-                            <TabPanel value={value} index={4}>
-                                Reports Information will go here
-                            </TabPanel>
+                            >
+                                Add New Installer
+                            </Button>
                         </Paper>
                     </Grid>
-                )}
-                {displaySetupNewProperty && (
-                    <Grid item xs={10}>
-                        <div>
-                            <SetupNewProperty
-                                token={props.token}
-                                goToProperties={goToProperties}
-                                history={props.history}
-                            />
-                        </div>
-                    </Grid>
-                )}
-                {displayAddNewInstaller && (
-                    <Grid item xs={10}>
-                        <div>
-                            <AddNewInstaller token={props.token} />
-                        </div>
-                    </Grid>
-                )}
-            </Grid>
+                    {!displaySetupNewProperty && !displayAddNewInstaller && (
+                        <Grid item xs={10}>
+                            <Paper className={classes.mainBody}>
+                                <TabPanel value={value} index={0}>
+                                    <DashboardTab />
+                                </TabPanel>
+                                <TabPanel value={value} index={1}>
+                                    <Properties token={props.token} />
+                                </TabPanel>
+                                <TabPanel value={value} index={2}>
+                                    <Installers token={props.token} />
+                                </TabPanel>
+                                <TabPanel value={value} index={3}>
+                                    Consumer Information will go here
+                                </TabPanel>
+                                <TabPanel value={value} index={4}>
+                                    Reports Information will go here
+                                </TabPanel>
+                            </Paper>
+                        </Grid>
+                    )}
+                    {displaySetupNewProperty && (
+                        <Grid item xs={10}>
+                            <div>
+                                <SetupNewProperty
+                                    token={props.token}
+                                    goToProperties={goToProperties}
+                                    history={props.history}
+                                />
+                            </div>
+                        </Grid>
+                    )}
+                    {displayAddNewInstaller && (
+                        <Grid item xs={10}>
+                            <div>
+                                <AddNewInstaller token={props.token} />
+                            </div>
+                        </Grid>
+                    )}
+                </Grid>
+            )}
+            {isLoading && (
+                <div className="propertiesLoader">
+                    <CircularProgress style={{ color: '#12BFA2' }} />
+                </div>
+            )}
         </div>
     )
 }
