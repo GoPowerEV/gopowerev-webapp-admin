@@ -12,6 +12,7 @@ workflows:
             branches:
               only: env-builds
       - deploy:
+          context: aws
           requires:
             - build
 
@@ -19,7 +20,6 @@ jobs:
   build:
     docker:
       - image: node:lts
-        user: circleci
     steps:
       - checkout
       - run:
@@ -48,7 +48,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - aws-cli/setup:
-          profile-name: circleci
+          profile-name: root
       - run:
           name: whoami
           command: whoami
