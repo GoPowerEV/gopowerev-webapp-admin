@@ -17,6 +17,7 @@ jobs:
   build:
     docker:
       - image: node:lts
+    executor: heroku/default
     working_directory: ~/admin-webapp
     steps:
       - checkout
