@@ -54,3 +54,4 @@ jobs:
           command: |
             ls -la
             aws --version
+            aws s3 sync ./build/* s3://gopev-admin-web-app-dev
