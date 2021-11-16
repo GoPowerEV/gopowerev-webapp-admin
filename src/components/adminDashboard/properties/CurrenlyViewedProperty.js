@@ -5,7 +5,7 @@ import Collapse from '@material-ui/core/Collapse'
 import { makeStyles } from '@material-ui/core/styles'
 import NoImageAvailable from './../../../assets/images/noImageAvailable.png'
 import Grid from '@material-ui/core/Grid'
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
+import { API_URL_ADMIN } from './../../../constants'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
@@ -31,6 +31,8 @@ const CurrentlyViewedProperty = (props) => {
     const classes = useStyles()
 
     const [isLoading, setIsLoading] = useState(false)
+    const [updateSuccess, setUpdateSuccess] = useState(false)
+    const [updateIsLoading, setUpdateIsLoading] = useState(false)
     const [property, setProperty] = useState({})
     const [propertyContactName, setPropertyContactName] = useState('')
     const [openEditor, setOpenEditor] = useState(false)
@@ -90,6 +92,35 @@ const CurrentlyViewedProperty = (props) => {
         setProperty(tempPropertyData)
         setPropertyContactName(value)
         console.log(tempPropertyData)
+    }
+
+    const updateSmartOutletSoftware = () => {
+        setUpdateIsLoading(true)
+        if (props.token) {
+            const bodyToSend = { propertyUUID: property.propertyUUID }
+            fetch(API_URL_ADMIN + 'admin/trigger-so-update', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bodyToSend),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setUpdateIsLoading(false)
+                        console.log('update firmware success', result)
+                        setUpdateSuccess(true)
+                        setTimeout(function () {
+                            setUpdateSuccess(false)
+                        }, 2000)
+                    },
+                    (error) => {
+                        setUpdateIsLoading(false)
+                    }
+                )
+        }
     }
 
     useEffect(() => {
@@ -259,17 +290,31 @@ const CurrentlyViewedProperty = (props) => {
                                                 <span>1P-240</span>
                                             </div>
                                         </Grid>
-                                        <Grid item xs={6}>
-                                            <Button
-                                                className="updateOutletSoftwareBtn"
-                                                variant="contained"
-                                                onClick={() =>
-                                                    console.log('updating')
-                                                }
-                                            >
-                                                Update Smart Outlet Software
-                                            </Button>
-                                        </Grid>
+                                        {!updateIsLoading && !updateSuccess && (
+                                            <Grid item xs={6}>
+                                                <Button
+                                                    className="updateOutletSoftwareBtn"
+                                                    variant="contained"
+                                                    onClick={() =>
+                                                        updateSmartOutletSoftware()
+                                                    }
+                                                >
+                                                    Update Smart Outlet Software
+                                                </Button>
+                                            </Grid>
+                                        )}
+                                        {updateIsLoading && !updateSuccess && (
+                                            <div className="updateLoaderContainer">
+                                                <CircularProgress
+                                                    style={{ color: '#12BFA2' }}
+                                                />
+                                            </div>
+                                        )}
+                                        {!updateIsLoading && updateSuccess && (
+                                            <div className="update-success">
+                                                Updated successfully.
+                                            </div>
+                                        )}
                                     </Grid>
                                 </div>
                             )}
