@@ -21,10 +21,12 @@ jobs:
       - image: node:lts
     steps:
       - checkout
+      - run:
+          name: whoami
+          command: whoami
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
       - run:
           name: Building
           command: |
@@ -37,7 +39,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - save_cache:
+      - save_build:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - build
@@ -46,7 +48,10 @@ jobs:
     steps:
       - aws-cli/setup:
           profile-name: circleci
-      - restore_cache:
+      - run:
+          name: whoami
+          command: whoami
+      - restore_build:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Upload
