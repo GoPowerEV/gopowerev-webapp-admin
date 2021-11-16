@@ -291,6 +291,15 @@
     text-transform: 'none' !important;
 }
 
+.updateLoaderContainer {
+    margin-left: 50px;
+}
+
+.update-success {
+    font-weight: bold;
+    color: #12bfa2;
+}
+
 .propertiesLoader {
     margin-top: 20%;
 }
