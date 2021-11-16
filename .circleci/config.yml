@@ -40,20 +40,20 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - save_cache:
-          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+      - persist_to_workspace:
+          root: .
           paths:
             - build
   deploy:
     executor: aws-cli/default
     steps:
       - aws-cli/setup:
-          profile-name: root
+          profile-name: circleci
       - run:
           name: whoami
           command: whoami
-      - restore_cache:
-          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+      - attach_workspace:
+          at: .
       - run:
           name: Upload
           command: |
