@@ -18,6 +18,7 @@ import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import TextField from '@material-ui/core/TextField'
 import SmartOutlets from './propertySmartOutlets/SmartOutlets'
+import ApartmentOutlinedIcon from '@material-ui/icons/ApartmentOutlined'
 import './Properties.css'
 import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
 import LocationCard from './LocationCard'
@@ -92,6 +93,7 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0)
         console.log('prop details', props.property)
         setPropertyContactName(props.property.contactName)
         setProperty(props.property)
@@ -164,20 +166,6 @@ const CurrentlyViewedProperty = (props) => {
                                     </div>
                                 </Grid>
                             </Grid>
-                            <div className="viewedPropertyLocation">
-                                <LocationOnOutlinedIcon />{' '}
-                                {property.address1 && (
-                                    <span className="addressRow">
-                                        {property.address1}, {property.city},{' '}
-                                        {property.state} {property.zipcode}
-                                    </span>
-                                )}
-                                {!property.address1 && (
-                                    <span className="addressRow">
-                                        No address available
-                                    </span>
-                                )}
-                            </div>
                             {property.status !== undefined && (
                                 <div className={getBadgeClass(property.status)}>
                                     {property.status.charAt(0).toUpperCase() +
@@ -186,6 +174,332 @@ const CurrentlyViewedProperty = (props) => {
                             )}
                             <div className="propertyDetailsEditText">
                                 <span>Property Details</span>
+                                <Button
+                                    endIcon={<EditOutlinedIcon />}
+                                    onClick={openEditForm}
+                                    className="propertyEditIcon"
+                                >
+                                    Edit
+                                </Button>
+                            </div>
+                            {!openEditor && !isLoading && (
+                                <div className="editInfoContainer">
+                                    <Grid container xs={12} spacing={1}>
+                                        <Grid item xs={12}>
+                                            <div className="editInfoItem">
+                                                Property Name:
+                                                <span>{property.name}</span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <div className="editInfoItem">
+                                                Street Address:
+                                                <span>
+                                                    {property.streetAddress1 ??
+                                                        'No Address Available'}
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                City:
+                                                <span>
+                                                    {property.city ??
+                                                        'No City Available'}
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                Zip:
+                                                <span>
+                                                    {property.zip ??
+                                                        'No Zip Code Available'}
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                State:
+                                                <span>
+                                                    {property.state ??
+                                                        'No State Available'}
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <FlashOnOutlinedIcon />
+                                                <span>
+                                                    {property.maxVoltAmps} Max
+                                                    Volt Amps
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <WifiOutlinedIcon />
+                                                <span>
+                                                    {smartOutlets.length} Smart
+                                                    Outlets
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <EvStationOutlinedIcon />
+                                                <span>
+                                                    {lcus.length} LCU(s)
+                                                </span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                Type Of Power Service:
+                                                <span>1P-240</span>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Button
+                                                className="updateOutletSoftwareBtn"
+                                                variant="contained"
+                                                onClick={() =>
+                                                    console.log('updating')
+                                                }
+                                            >
+                                                Update Smart Outlet Software
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            )}
+                            {openEditor && !isLoading && (
+                                <div className="editInfoContainer">
+                                    <Grid container xs={12} spacing={3}>
+                                        <Grid item xs={11}>
+                                            <div className="editInfoItemFullWidth">
+                                                <ApartmentOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="Property Name"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={11}>
+                                            <div className="editInfoItemFullWidth">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="Street Address"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="City"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="Zip"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <div className="editInfoItem">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="State"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <EvStationOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="numberOfLcus"
+                                                    value={lcus.length}
+                                                    disabled
+                                                    label="Number of LCUs"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <WifiOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="smartOutlets"
+                                                    disabled
+                                                    value={smartOutlets.length}
+                                                    label="Number of Smart Outlets"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <CallOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="phoneNumber"
+                                                    value={
+                                                        property.contactPhone1
+                                                    }
+                                                    // onChange={
+                                                    //     props.handleChange
+                                                    // }
+                                                    // onBlur={props.handleBlur}
+                                                    label="Phone Number"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <FlashOnOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="maxVoltAmpts"
+                                                    value={property.maxVoltAmps}
+                                                    // onChange={
+                                                    //     props.handleChange
+                                                    // }
+                                                    // onBlur={props.handleBlur}
+                                                    label="Max Volt Amps"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                    </Grid>
+                                    <Button
+                                        className="editInfoSaveButton"
+                                        variant="contained"
+                                        onClick={() => savePropertyInfo()}
+                                    >
+                                        Save
+                                    </Button>
+                                </div>
+                            )}
+                            {isLoading && (
+                                <div className="loaderContainer">
+                                    <CircularProgress
+                                        style={{ color: '#12BFA2' }}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </Grid>
+                </Grid>
+                <Grid container className="singlePropertyContainer" xs={12}>
+                    <Grid item xs={12}>
+                        <div className="viewedPropertyContactInfoContainer">
+                            <div className="propertyDetailsEditText">
+                                <span>Property Contact Details</span>
                                 <Button
                                     endIcon={<EditOutlinedIcon />}
                                     onClick={openEditForm}
@@ -253,6 +567,121 @@ const CurrentlyViewedProperty = (props) => {
                             {openEditor && !isLoading && (
                                 <div className="editInfoContainer">
                                     <Grid container xs={12} spacing={3}>
+                                        <Grid item xs={11}>
+                                            <div className="editInfoItemFullWidth">
+                                                <ApartmentOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="Property Name"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={11}>
+                                            <div className="editInfoItemFullWidth">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="Street"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <div className="editInfoItem">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="City"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <div className="editInfoItem">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="Zip"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <div className="editInfoItem">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="State"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
                                         <Grid item xs={6}>
                                             <div className="editInfoItem">
                                                 <PersonOutlineOutlinedIcon />
@@ -357,6 +786,29 @@ const CurrentlyViewedProperty = (props) => {
                                                     // }
                                                     // onBlur={props.handleBlur}
                                                     label="Phone Number"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <div className="editInfoItem">
+                                                <PersonOutlineOutlinedIcon />
+                                                <TextField
+                                                    InputProps={{
+                                                        classes: {
+                                                            input:
+                                                                classes.editPropertyField,
+                                                        },
+                                                    }}
+                                                    name="name"
+                                                    value={propertyContactName}
+                                                    onChange={(e) =>
+                                                        handleContactNameEditChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    label="Administrator's Name"
                                                     variant="outlined"
                                                     fullWidth
                                                 />

@@ -39,7 +39,7 @@
 
 .expandIcon {
     font-size: 45px !important;
-    cursor: pointer;;
+    cursor: pointer;
 }
 
 .expandIconFirstPortionOpened {
@@ -225,6 +225,12 @@
     padding-right: 50px;
 }
 
+.viewedPropertyContactInfoContainer {
+    padding-left: 25px;
+    padding-right: 50px;
+    margin-top: 40px;
+}
+
 .propertyDetailsEditText {
     font-size: 18px;
     font-weight: bold;
@@ -254,6 +260,14 @@
     display: inline-flex;
 }
 
+.editInfoItemFullWidth {
+    width: 91%;
+    font-size: 18px;
+    font-weight: bold;
+    color: #bababa;
+    display: inline-flex;
+}
+
 .editInfoItem span {
     margin-left: 10px;
 }
@@ -261,6 +275,12 @@
 .editInfoItem div {
     margin-left: 5px;
     margin-top: -2px;
+}
+
+.updateOutletSoftwareBtn {
+    background-color: #12bfa2 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
 }
 
 .editInfoSaveButton {

@@ -74,6 +74,7 @@ const MainBody = (props) => {
     const classes = useStyles()
     const [value, setValue] = useState(5)
     const [openModal, setOpenModal] = useState(false)
+    const [token, setToken] = useState('')
     const [
         usernameToChangePasswordFor,
         setUsernameToChangePasswordFor,
@@ -124,7 +125,18 @@ const MainBody = (props) => {
     }
 
     useEffect(() => {
-        console.log('token123', props.token)
+        console.log('here logged in', props.loggedIn)
+        if (!props.loggedIn) {
+            props.history.push('/login')
+        }
+    }, [])
+
+    useEffect(() => {
+        console.log('here token changed', props.token)
+        setToken(props.token)
+    }, [props.token])
+
+    useEffect(() => {
         if (props.history.location) {
             var tabName = props.history.location.pathname.replace(/\\|\//g, '')
             if (tabName === 'dashboard') {
@@ -176,7 +188,7 @@ const MainBody = (props) => {
                                     <AdminDashboard
                                         path={properties.match.params.menuItem}
                                         loggedIn={props.loggedIn}
-                                        token={props.token}
+                                        token={token}
                                         history={props.history}
                                     />
                                 )}
@@ -187,6 +199,7 @@ const MainBody = (props) => {
                                     history={props.history}
                                     handleMenuChange={handleMenuChange}
                                     loggedIn={props.loggedIn}
+                                    setToken={setToken}
                                 />
                             </Route>
                             <Route exact path="/admin-dashboard">
