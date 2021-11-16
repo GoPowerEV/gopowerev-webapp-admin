@@ -38,7 +38,6 @@ jobs:
     executor: aws-cli/default
     working_directory: ~/admin-webapp
     steps:
-      - checkout
       - aws-cli/setup:
           profile-name: circleci
       - restore_cache:
