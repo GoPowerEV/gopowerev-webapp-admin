@@ -10,17 +10,48 @@ workflows:
       - build:
           filters:
             branches:
-              only: env-builds
+              only: develop
+      - deploy:
+          requires:
+            - build
 
 jobs:
   build:
     docker:
-      - image: circleci/node:12-browsers
-    working_directory: ~/admin-webapp
+      - image: node:lts
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - run:
-          name: Testing
+          name: Building
           command: |
             node --version
             npm --version
+            npm install reactjs
+            npx browserslist@latest --update-db
+            npm run build:dev
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy:
+    executor: aws-cli/default
+    steps:
+      - aws-cli/setup:
+          profile-name: circleci
+      - attach_workspace:
+          at: .
+      - run:
+          name: Upload
+          command: |
+            ls -la
+            aws --version
+            cd build
+            aws s3 sync . s3://gopev-admin-web-app-dev
