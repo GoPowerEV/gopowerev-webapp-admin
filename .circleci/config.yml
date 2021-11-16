@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
-  heroku: circleci/heroku@1.2.6
 
 workflows:
   version: 2
@@ -17,7 +16,6 @@ jobs:
   build:
     docker:
       - image: node:lts
-    executor: heroku/default
     working_directory: ~/admin-webapp
     steps:
       - checkout
@@ -26,4 +24,5 @@ jobs:
           command: |
             node --version
             npm --version
+            npm install reactjs
             npm run build
