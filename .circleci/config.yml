@@ -28,4 +28,8 @@ jobs:
             node --version
             npm --version
             npm install reactjs
+            npx browserslist@latest --update-db
             npm run build
+      - run:
+          name: ls -la
+          command: ls -la
