@@ -21,9 +21,6 @@ jobs:
       - image: node:lts
     steps:
       - checkout
-      - run:
-          name: whoami
-          command: whoami
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
@@ -40,6 +37,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
+            - build
       - persist_to_workspace:
           root: .
           paths:
@@ -49,13 +47,10 @@ jobs:
     steps:
       - aws-cli/setup:
           profile-name: circleci
-      - run:
-          name: whoami
-          command: whoami
       - attach_workspace:
           at: .
       - run:
           name: Upload
           command: |
             ls -la
-            awscli --version
+            aws --version
