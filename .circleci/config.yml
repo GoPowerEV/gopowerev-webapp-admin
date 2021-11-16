@@ -19,6 +19,7 @@ jobs:
   build:
     docker:
       - image: node:lts
+        user: circleci
     steps:
       - checkout
       - run:
