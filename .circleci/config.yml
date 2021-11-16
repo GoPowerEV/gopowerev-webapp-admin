@@ -24,3 +24,4 @@ jobs:
           command: |
             node --version
             npm --version
+            npm run build
