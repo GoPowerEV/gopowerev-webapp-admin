@@ -29,7 +29,7 @@ const useStyles = makeStyles({
         margin: '0 2px',
         transform: 'scale(0.8)',
     },
-    cardHeader: {
+    propertyCardHeader: {
         fontSize: 19,
         fontWeight: '600',
         marginBottom: '15px',
@@ -159,7 +159,7 @@ const PropertyCard = (props) => {
                     className="propertyImage"
                 />
                 <CardContent className={classes.content}>
-                    <Typography className={classes.cardHeader}>
+                    <Typography className={classes.propertyCardHeader}>
                         {propertyInfo.name}
                     </Typography>
                     <div className={getBadgeClass(propertyInfo.status)}>

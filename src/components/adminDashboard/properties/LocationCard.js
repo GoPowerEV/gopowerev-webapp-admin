@@ -25,10 +25,10 @@ const useStyles = makeStyles({
         margin: '0 2px',
         transform: 'scale(0.8)',
     },
-    cardHeader: {
+    locationCardHeader: {
         fontSize: 19,
         fontWeight: '600',
-        marginBottom: '15px',
+        marginBottom: '25px',
         display: 'inline-flex',
     },
     pos: {
@@ -69,7 +69,7 @@ const LocationCard = (props) => {
 
     return (
         <React.Fragment>
-            <div className={classes.cardHeader}>
+            <div className={classes.locationCardHeader}>
                 <LocationOnOutlinedIcon />
                 {locationInfo.name ?? 'No Location Name Available'}
             </div>

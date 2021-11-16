@@ -209,7 +209,9 @@ const LoginNew = (props) => {
                             <Grid container>
                                 <Grid item>
                                     <div className={classes.loaderClass}>
-                                        <CircularProgress />
+                                        <CircularProgress
+                                            style={{ color: '#12BFA2' }}
+                                        />
                                     </div>
                                 </Grid>
                             </Grid>

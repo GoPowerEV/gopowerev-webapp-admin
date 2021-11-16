@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { API_URL } from './../../../constants'
 import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import { makeStyles } from '@material-ui/core/styles'
@@ -14,6 +15,7 @@ import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import MailOutlineOutlinedIcon from '@material-ui/icons/MailOutlineOutlined'
 import CallOutlinedIcon from '@material-ui/icons/CallOutlined'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import TextField from '@material-ui/core/TextField'
 import SmartOutlets from './propertySmartOutlets/SmartOutlets'
 import './Properties.css'
@@ -27,6 +29,7 @@ const useStyles = makeStyles(() => ({
 const CurrentlyViewedProperty = (props) => {
     const classes = useStyles()
 
+    const [isLoading, setIsLoading] = useState(false)
     const [property, setProperty] = useState({})
     const [propertyContactName, setPropertyContactName] = useState('')
     const [openEditor, setOpenEditor] = useState(false)
@@ -51,6 +54,32 @@ const CurrentlyViewedProperty = (props) => {
 
     const toggleLcuInfo = () => {
         setLcuInfoOpened(!lcuInfoOpened)
+    }
+
+    const savePropertyInfo = () => {
+        console.log('about to save this info', property)
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL + 'properties/' + property.propertyUUID, {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'image/jpg',
+                },
+                body: JSON.stringify(property),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        console.log('save property success', result)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+        closeEditForm()
     }
 
     const handleContactNameEditChange = (value) => {
@@ -88,8 +117,15 @@ const CurrentlyViewedProperty = (props) => {
                         <span className="lcuLocation">{property.name}</span>
                     </Grid>
                     <Grid item xs={3} className="rightBorder">
-                        {property.address1}, {property.city}, {property.state}{' '}
-                        {property.zipcode}
+                        {property.address1 !== null && (
+                            <span>
+                                {property.address1}, {property.city},{' '}
+                                {property.state} {property.zipcode}
+                            </span>
+                        )}
+                        {!property.address1 && (
+                            <span>No address available</span>
+                        )}
                     </Grid>
                     <Grid item xs={5}>
                         {property.contactName}
@@ -129,9 +165,18 @@ const CurrentlyViewedProperty = (props) => {
                                 </Grid>
                             </Grid>
                             <div className="viewedPropertyLocation">
-                                <LocationOnOutlinedIcon /> {property.address1},{' '}
-                                {property.city}, {property.state}{' '}
-                                {property.zipcode}
+                                <LocationOnOutlinedIcon />{' '}
+                                {property.address1 && (
+                                    <span className="addressRow">
+                                        {property.address1}, {property.city},{' '}
+                                        {property.state} {property.zipcode}
+                                    </span>
+                                )}
+                                {!property.address1 && (
+                                    <span className="addressRow">
+                                        No address available
+                                    </span>
+                                )}
                             </div>
                             {property.status !== undefined && (
                                 <div className={getBadgeClass(property.status)}>
@@ -149,7 +194,7 @@ const CurrentlyViewedProperty = (props) => {
                                     Edit
                                 </Button>
                             </div>
-                            {!openEditor && (
+                            {!openEditor && !isLoading && (
                                 <div className="editInfoContainer">
                                     <Grid container xs={12} spacing={1}>
                                         <Grid item xs={6}>
@@ -205,7 +250,7 @@ const CurrentlyViewedProperty = (props) => {
                                     </Grid>
                                 </div>
                             )}
-                            {openEditor && (
+                            {openEditor && !isLoading && (
                                 <div className="editInfoContainer">
                                     <Grid container xs={12} spacing={3}>
                                         <Grid item xs={6}>
@@ -343,10 +388,17 @@ const CurrentlyViewedProperty = (props) => {
                                     <Button
                                         className="editInfoSaveButton"
                                         variant="contained"
-                                        onClick={closeEditForm}
+                                        onClick={() => savePropertyInfo()}
                                     >
                                         Save
                                     </Button>
+                                </div>
+                            )}
+                            {isLoading && (
+                                <div className="loaderContainer">
+                                    <CircularProgress
+                                        style={{ color: '#12BFA2' }}
+                                    />
                                 </div>
                             )}
                         </div>

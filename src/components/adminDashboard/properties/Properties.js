@@ -259,8 +259,8 @@ const Properties = (props) => {
                 />
             )}
             {isLoading && (
-                <div>
-                    <CircularProgress />
+                <div className="propertiesLoader">
+                    <CircularProgress style={{ color: '#12BFA2' }} />
                 </div>
             )}
         </React.Fragment>

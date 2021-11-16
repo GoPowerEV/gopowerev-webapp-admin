@@ -127,7 +127,6 @@ export default function AddNewInstaller(props) {
                     .then((res) => res.json())
                     .then(
                         (result) => {
-                            console.log(result)
                             if (result.code) {
                                 setIsLoading(false)
                                 setCallFailedError(true)
@@ -202,7 +201,7 @@ export default function AddNewInstaller(props) {
                     )}
                     {isLoading && (
                         <Grid item xs={12}>
-                            <CircularProgress />
+                            <CircularProgress style={{ color: '#12BFA2' }} />
                         </Grid>
                     )}
                 </Grid>

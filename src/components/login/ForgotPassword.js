@@ -155,7 +155,7 @@ const ForgotPassword = (props) => {
                 )}
                 {loading && (
                     <div className={classes.loaderClass}>
-                        <CircularProgress />
+                        <CircularProgress style={{ color: '#12BFA2' }} />
                     </div>
                 )}
             </div>
