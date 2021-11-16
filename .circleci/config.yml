@@ -19,11 +19,14 @@ jobs:
   build:
     docker:
       - image: node:lts
-    working_directory: ~/admin-webapp
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - run:
-          name: Testing
+          name: Building
           command: |
             node --version
             npm --version
@@ -31,12 +34,15 @@ jobs:
             npx browserslist@latest --update-db
             npm run build:dev
       - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - save_cache:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - build
   deploy:
     executor: aws-cli/default
-    working_directory: ~/admin-webapp
     steps:
       - aws-cli/setup:
           profile-name: circleci
