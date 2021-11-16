@@ -39,7 +39,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - save_build:
+      - save_cache:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - build
@@ -51,7 +51,7 @@ jobs:
       - run:
           name: whoami
           command: whoami
-      - restore_build:
+      - restore_cache:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Upload
