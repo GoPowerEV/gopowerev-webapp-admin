@@ -11,6 +11,9 @@ workflows:
           filters:
             branches:
               only: env-builds
+      - deploy:
+          requires:
+            - build
 
 jobs:
   build:
@@ -26,7 +29,22 @@ jobs:
             npm --version
             npm install reactjs
             npx browserslist@latest --update-db
-            npm run build
+            npm run build:dev
+      - save_cache:
+          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - build
+  deploy:
+    executor: aws-cli/default
+    working_directory: ~/admin-webapp
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile-name: circleci
+      - restore_cache:
+          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - run:
-          name: ls -la
-          command: ls -la
+          name: Upload
+          command: |
+            ls -la
+            awscli --version
