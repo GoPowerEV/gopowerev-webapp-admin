@@ -23,17 +23,6 @@ const App = () => {
             setIsMobile(false)
         }
     }
-    const getToken = () => {
-        Auth.currentSession()
-            .then((response) => {
-                setToken(response.idToken.jwtToken)
-                setLoggedIn(true)
-            })
-            .catch((err) => {
-                setLoggedIn(false)
-                console.log('ERROR', err)
-            })
-    }
 
     const setAuthListener = () => {
         Hub.listen('auth', (data) => {
@@ -50,18 +39,29 @@ const App = () => {
         })
     }
 
+    const checkIfUserIsLoggedIn = () => {
+        Auth.currentAuthenticatedUser()
+            .then((user) => {
+                Auth.currentSession()
+                    .then((response) => {
+                        setToken(response.idToken.jwtToken)
+                        console.log('here', response.idToken.jwtToken)
+                        setLoggedIn(true)
+                    })
+                    .catch((err) => {
+                        setLoggedIn(false)
+                        console.log('ERROR', err)
+                    })
+                setLoggedIn(true)
+            })
+            .catch((err) => {
+                setLoggedIn(false)
+                console.log('ERROR', err)
+            })
+    }
+
     useEffect(() => {
-        const checkIfUserIsLoggedIn = () => {
-            Auth.currentAuthenticatedUser()
-                .then((user) => {
-                    getToken()
-                    setLoggedIn(true)
-                })
-                .catch((err) => {
-                    setLoggedIn(false)
-                    console.log('ERROR', err)
-                })
-        }
+        console.log('here initializing')
         // Configure Amplify
         Amplify.configure({
             Auth: {

@@ -109,11 +109,15 @@ const LoginNew = (props) => {
             password,
         })
             .then((user) => {
+                console.log('here is the user', user)
                 setEmail('')
                 setPassword('')
                 console.log(user)
-                props.handleMenuChange('4', 'admin-dashboard')
-                setLoading(false)
+                props.setToken(user.signInUserSession.idToken.jwtToken)
+                setTimeout(function () {
+                    props.handleMenuChange('4', 'admin-dashboard')
+                    setLoading(false)
+                }, 1000)
             })
             .catch((err) => {
                 console.log(err)
