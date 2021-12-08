@@ -146,22 +146,6 @@
     margin-top: 25px;
 }
 
-.editInfoItem {
-    font-size: 18px;
-    font-weight: bold;
-    color: #bababa;
-    display: inline-flex;
-}
-
-.editInfoItem span {
-    margin-left: 10px;
-}
-
-.editInfoItem div {
-    margin-left: 5px;
-    margin-top: -2px;
-}
-
 .editInfoSaveButton {
     margin-top: 20px !important;
     background-color: #12bfa2 !important;

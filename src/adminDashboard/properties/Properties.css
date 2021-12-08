@@ -103,20 +103,8 @@
     color: black;
 }
 
-.greyIconEdit {
-    color: grey;
-    cursor: pointer;
-}
-
 .editLcuDetailsContainer {
     margin-top: 25px !important;
-}
-
-.lcuDetailsContainer {
-    background-color: #bababa4a;
-    color: black;
-    border-radius: 9px;
-    margin: 5px !important;
 }
 
 .lcuDetailsText {
@@ -269,15 +257,7 @@
 .editInfoItem {
     font-size: 18px;
     font-weight: bold;
-    color: #bababa;
-    display: inline-flex;
-}
-
-.editInfoItemFullWidth {
-    width: 91%;
-    font-size: 18px;
-    font-weight: bold;
-    color: #bababa;
+    color: black;
     display: inline-flex;
 }
 
@@ -294,6 +274,8 @@
     background-color: #12bfa2 !important;
     color: #ffffff !important;
     font-weight: bold !important;
+    height: 100%;
+    width: 100%;
 }
 
 .editInfoSaveButton {
@@ -327,10 +309,6 @@
 
 .propertyDetailsText {
     font-weight: bold;
-}
-
-.propertyDetailsContainer {
-    padding: 14px;
 }
 
 .top-button-group {

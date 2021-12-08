@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import CardContent from '@material-ui/core/CardContent'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
+import TextField from '@material-ui/core/TextField'
 import './../../adminDashboard/dashboardTab/DashboardTab.css'
 import { makeStyles } from '@material-ui/core/styles'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
@@ -91,239 +92,41 @@ const LocationCard = (props) => {
                                 spacing={3}
                                 className="editLcuDetailsContainer"
                             >
-                                <Grid
-                                    item
-                                    xs={7}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={7}>
-                                                <div className="lcuDetailsHeader">
-                                                    Location Name
-                                                </div>
-                                                {!editingName && (
-                                                    <div className="lcuDetailsText">
-                                                        {locationInfo.name}
-                                                    </div>
-                                                )}
-                                                {editingName && (
-                                                    <input
-                                                        className="locationNameInput"
-                                                        value={
-                                                            locationInfo.name
-                                                        }
-                                                    />
-                                                )}
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                {!editingName && (
-                                                    <EditOutlinedIcon
-                                                        onClick={
-                                                            makeNameEditable
-                                                        }
-                                                    />
-                                                )}
-                                                {editingName && (
-                                                    <Button
-                                                        className="editInfoSaveButton saveNameButton"
-                                                        variant="contained"
-                                                        onClick={saveName}
-                                                    >
-                                                        Save
-                                                    </Button>
-                                                )}
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        fullWidth
+                                        id="locationName"
+                                        label="Location Name"
+                                        variant="filled"
+                                        value={locationInfo.name}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
                                 </Grid>
-                                <Grid
-                                    item
-                                    xs={4}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={10}>
-                                                <div className="lcuDetailsHeader">
-                                                    Max-Volt-Amps
-                                                </div>
-                                                {!editingMaxVoltAmps && (
-                                                    <div className="lcuDetailsText">
-                                                        {
-                                                            locationInfo.maxVoltAmps
-                                                        }
-                                                    </div>
-                                                )}
-                                                {editingMaxVoltAmps && (
-                                                    <input
-                                                        className="locationMaxVoltAmpsInput"
-                                                        value="10000"
-                                                    />
-                                                )}
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={2}
-                                                className="greyIconEdit"
-                                            >
-                                                {!editingMaxVoltAmps && (
-                                                    <EditOutlinedIcon
-                                                        onClick={
-                                                            makeMaxVoltAmpsEditable
-                                                        }
-                                                    />
-                                                )}
-                                                {editingMaxVoltAmps && (
-                                                    <Button
-                                                        className="editInfoSaveButton saveMaxVoltAmpsButton"
-                                                        variant="contained"
-                                                        onClick={
-                                                            saveMaxVoltAmps
-                                                        }
-                                                    >
-                                                        Save
-                                                    </Button>
-                                                )}
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        fullWidth
+                                        id="maxVoltAmps"
+                                        label="Max-Volt-Amps"
+                                        variant="filled"
+                                        value={locationInfo.maxVoltAmps}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
                                 </Grid>
-                            </Grid>
-                            <Grid
-                                container
-                                spacing={5}
-                                className="editLcuDetailsContainer"
-                            >
-                                <Grid
-                                    item
-                                    xs={11}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={10}>
-                                                <div className="lcuDetailsHeader">
-                                                    Notes
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {!editingNotes && (
-                                                        <div>
-                                                            Lorem ipsum dolor
-                                                            sit amet,
-                                                            consectetur
-                                                            adipiscing elit.
-                                                            Cras vitae justo
-                                                            luctus, sollicitudin
-                                                            velit in, hendrerit
-                                                            augue. Sed non
-                                                            sollicitudin quam.
-                                                            Vivamus diam tellus,
-                                                            interdum ultricies
-                                                            elementum congue,
-                                                            lacinia et justo.
-                                                            Nam gravida in ipsum
-                                                            et vehicula.
-                                                            Curabitur in odio ac
-                                                            orci pretium
-                                                            pharetra. Aenean
-                                                            mollis urna a erat
-                                                            hendrerit aliquam.
-                                                            Duis sit amet sem
-                                                            tristique, cursus
-                                                            erat a, bibendum
-                                                            lacus. Sed iaculis
-                                                            diam lacus, nec
-                                                            mollis enim
-                                                            porttitor non. Nam
-                                                            consequat viverra
-                                                            lacus et faucibus.
-                                                            Nunc ac tellus ac
-                                                            sapien dapibus
-                                                            imperdiet. Mauris in
-                                                            arcu mauris. Proin
-                                                            sed nunc ipsum.
-                                                            Donec ex erat,
-                                                            vulputate vel ex in,
-                                                            pellentesque luctus
-                                                            mi.
-                                                        </div>
-                                                    )}
-                                                    {editingNotes && (
-                                                        <textarea
-                                                            className="editableLocationCardField"
-                                                            value="Lorem ipsum dolor sit amet,
-                                                    consectetur adipiscing elit.
-                                                    Cras vitae justo luctus,
-                                                    sollicitudin velit in,
-                                                    hendrerit augue. Sed non
-                                                    sollicitudin quam. Vivamus
-                                                    diam tellus, interdum
-                                                    ultricies elementum congue,
-                                                    lacinia et justo. Nam
-                                                    gravida in ipsum et
-                                                    vehicula. Curabitur in odio
-                                                    ac orci pretium pharetra.
-                                                    Aenean mollis urna a erat
-                                                    hendrerit aliquam. Duis sit
-                                                    amet sem tristique, cursus
-                                                    erat a, bibendum lacus. Sed
-                                                    iaculis diam lacus, nec
-                                                    mollis enim porttitor non.
-                                                    Nam consequat viverra lacus
-                                                    et faucibus. Nunc ac tellus
-                                                    ac sapien dapibus imperdiet.
-                                                    Mauris in arcu mauris. Proin
-                                                    sed nunc ipsum. Donec ex
-                                                    erat, vulputate vel ex in,
-                                                    pellentesque luctus mi."
-                                                        />
-                                                    )}
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                {!editingNotes && (
-                                                    <EditOutlinedIcon
-                                                        onClick={
-                                                            makeNotesEditable
-                                                        }
-                                                    />
-                                                )}
-                                                {editingNotes && (
-                                                    <Button
-                                                        className="editInfoSaveButton saveNotesButton"
-                                                        variant="contained"
-                                                        onClick={saveNotes}
-                                                    >
-                                                        Save
-                                                    </Button>
-                                                )}
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="notes"
+                                        label="Notes"
+                                        variant="filled"
+                                        value={locationInfo.notes}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>

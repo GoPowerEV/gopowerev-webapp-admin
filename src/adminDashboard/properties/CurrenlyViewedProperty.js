@@ -129,48 +129,8 @@ const CurrentlyViewedProperty = (props) => {
         }
     }
 
-    const savePropertyContactName = () => {
-        setEditingPropertyContactName(false)
-    }
-
-    const makePropertyContactNameEditable = () => {
-        setEditingPropertyContactName(true)
-    }
-
-    const savePropertyContactEmail = () => {
-        setEditingPropertyContactEmail(false)
-    }
-
-    const makePropertyContactEmailEditable = () => {
-        setEditingPropertyContactEmail(true)
-    }
-
-    const savePropertyPhoneNumber = () => {
-        setEditingPropertyPhoneNumber(false)
-    }
-
-    const makePropertyPhoneNumberEditable = () => {
-        setEditingPropertyPhoneNumber(true)
-    }
-
-    const savePropertyAssignedInstaller = () => {
-        setEditingPropertyAssignedInstaller(false)
-    }
-
-    const makePropertyAssignedInstallerEditable = () => {
-        setEditingPropertyAssignedInstaller(true)
-    }
-
-    const savePropertyNotes = () => {
-        setEditingPropertNotes(false)
-    }
-
-    const makePropertyNotesEditable = () => {
-        setEditingPropertNotes(true)
-    }
-
     useEffect(() => {
-        window.scrollTo(0, 0)
+        document.querySelector('body').scrollTo(0, 0)
         console.log('prop details', props.property)
         setPropertyContactName(props.property.contactName)
         setProperty(props.property)
@@ -251,49 +211,7 @@ const CurrentlyViewedProperty = (props) => {
                             )}
                             {!isLoading && (
                                 <div className="editInfoContainer">
-                                    <Grid container xs={12} spacing={1}>
-                                        <Grid item xs={12}>
-                                            <div className="editInfoItem">
-                                                Property Name:
-                                                <span>{property.name}</span>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <div className="editInfoItem">
-                                                Street Address:
-                                                <span>
-                                                    {property.streetAddress1 ??
-                                                        'No Address Available'}
-                                                </span>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <div className="editInfoItem">
-                                                City:
-                                                <span>
-                                                    {property.city ??
-                                                        'No City Available'}
-                                                </span>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <div className="editInfoItem">
-                                                Zip:
-                                                <span>
-                                                    {property.zip ??
-                                                        'No Zip Code Available'}
-                                                </span>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <div className="editInfoItem">
-                                                State:
-                                                <span>
-                                                    {property.state ??
-                                                        'No State Available'}
-                                                </span>
-                                            </div>
-                                        </Grid>
+                                    <Grid container xs={12} spacing={3}>
                                         <Grid item xs={6}>
                                             <div className="editInfoItem">
                                                 <FlashOnOutlinedIcon />
@@ -323,8 +241,78 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item xs={6}>
                                             <div className="editInfoItem">
                                                 Type Of Power Service:
-                                                <span>1P-240</span>
+                                                <span> 1P-240</span>
                                             </div>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                fullWidth
+                                                id="filled-basic"
+                                                label="Property Name"
+                                                variant="filled"
+                                                value={property.name}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                fullWidth
+                                                id="filled-basic"
+                                                label="Street"
+                                                variant="filled"
+                                                value={property.streetAddress1}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                fullWidth
+                                                id="filled-basic"
+                                                label="City"
+                                                variant="filled"
+                                                value={property.city}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                fullWidth
+                                                id="filled-basic"
+                                                label="Zip Code"
+                                                variant="filled"
+                                                value={property.zip}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                fullWidth
+                                                id="filled-basic"
+                                                label="State"
+                                                variant="filled"
+                                                value={property.state}
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
                                         </Grid>
                                         {!updateIsLoading && !updateSuccess && (
                                             <Grid item xs={6}>
@@ -365,7 +353,12 @@ const CurrentlyViewedProperty = (props) => {
                         </div>
                     </Grid>
                 </Grid>
-                <Grid container className="singlePropertyContainer" xs={12}>
+                <Grid
+                    container
+                    className="singlePropertyContainer"
+                    xs={12}
+                    spacing={3}
+                >
                     <Grid item xs={12}>
                         <div className="viewedPropertyContactInfoContainer">
                             <div className="propertyContactDetailsHeader">
@@ -380,250 +373,65 @@ const CurrentlyViewedProperty = (props) => {
                             )}
                         </div>
                     </Grid>
-                    <Grid item xs={4} className="lcuDetailsContainer">
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center"
-                        >
-                            <Grid
-                                item
-                                xs={10}
-                                className="propertyDetailsContainer"
-                            >
-                                <div>Property Contact Name</div>
-                                {!editingPropertyContactName && (
-                                    <div className="propertyDetailsText">
-                                        {propertyContactName}
-                                    </div>
-                                )}
-                                {editingPropertyContactName && (
-                                    <input
-                                        className="propertyInfoInput"
-                                        value={propertyContactName}
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item xs={2} className="greyIconEdit">
-                                {!editingPropertyContactName && (
-                                    <EditOutlinedIcon
-                                        onClick={
-                                            makePropertyContactNameEditable
-                                        }
-                                    />
-                                )}
-                                {editingPropertyContactName && (
-                                    <Button
-                                        className="editInfoSaveButton saveMaxVoltAmpsButton"
-                                        variant="contained"
-                                        onClick={savePropertyContactName}
-                                    >
-                                        Save
-                                    </Button>
-                                )}
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            id="filled-basic"
+                            fullWidth
+                            label="Property Contact Name"
+                            variant="filled"
+                            value={propertyContactName}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
-                    <Grid item xs={4} className="lcuDetailsContainer">
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center"
-                        >
-                            <Grid
-                                item
-                                xs={10}
-                                className="propertyDetailsContainer"
-                            >
-                                <div>Property Contact Email</div>
-                                {!editingPropertyContactEmail && (
-                                    <div className="propertyDetailsText">
-                                        {property.contactEmail}
-                                    </div>
-                                )}
-                                {editingPropertyContactEmail && (
-                                    <input
-                                        className="propertyInfoInput"
-                                        value={property.contactEmail}
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item xs={2} className="greyIconEdit">
-                                {!editingPropertyContactEmail && (
-                                    <EditOutlinedIcon
-                                        onClick={
-                                            makePropertyContactEmailEditable
-                                        }
-                                    />
-                                )}
-                                {editingPropertyContactEmail && (
-                                    <Button
-                                        className="editInfoSaveButton saveMaxVoltAmpsButton"
-                                        variant="contained"
-                                        onClick={savePropertyContactEmail}
-                                    >
-                                        Save
-                                    </Button>
-                                )}
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            id="filled-basic"
+                            fullWidth
+                            label="Property Contact Email"
+                            variant="filled"
+                            value={property.contactEmail}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
-                    <Grid item xs={4} className="lcuDetailsContainer">
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center"
-                        >
-                            <Grid
-                                item
-                                xs={10}
-                                className="propertyDetailsContainer"
-                            >
-                                <div>Office Phone</div>
-                                {!editingPropertyPhoneNumber && (
-                                    <div className="propertyDetailsText">
-                                        {property.contactPhone1}
-                                    </div>
-                                )}
-                                {editingPropertyPhoneNumber && (
-                                    <input
-                                        className="propertyInfoInput"
-                                        value={property.contactPhone1}
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item xs={2} className="greyIconEdit">
-                                {!editingPropertyPhoneNumber && (
-                                    <EditOutlinedIcon
-                                        onClick={
-                                            makePropertyPhoneNumberEditable
-                                        }
-                                    />
-                                )}
-                                {editingPropertyPhoneNumber && (
-                                    <Button
-                                        className="editInfoSaveButton saveMaxVoltAmpsButton"
-                                        variant="contained"
-                                        onClick={savePropertyPhoneNumber}
-                                    >
-                                        Save
-                                    </Button>
-                                )}
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label="Property Contact Phone"
+                            variant="filled"
+                            value={property.contactPhone1}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
-                    <Grid item xs={4} className="lcuDetailsContainer">
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center"
-                        >
-                            <Grid
-                                item
-                                xs={10}
-                                className="propertyDetailsContainer"
-                            >
-                                <div>Current Assigned Installer</div>
-                                {!editingPropertyAssignedInstaller && (
-                                    <div className="propertyDetailsText">
-                                        {property.installerUUID}
-                                    </div>
-                                )}
-                                {editingPropertyAssignedInstaller && (
-                                    <input
-                                        className="propertyInfoInput"
-                                        value={property.installerUUID}
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item xs={2} className="greyIconEdit">
-                                {!editingPropertyAssignedInstaller && (
-                                    <EditOutlinedIcon
-                                        onClick={
-                                            makePropertyAssignedInstallerEditable
-                                        }
-                                    />
-                                )}
-                                {editingPropertyAssignedInstaller && (
-                                    <Button
-                                        className="editInfoSaveButton saveMaxVoltAmpsButton"
-                                        variant="contained"
-                                        onClick={savePropertyAssignedInstaller}
-                                    >
-                                        Save
-                                    </Button>
-                                )}
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label="Current Assigned Installer"
+                            variant="filled"
+                            value={property.installerUUID}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
-                    <Grid item xs={10} className="lcuDetailsContainer">
-                        <Grid
-                            container
-                            direction="row"
-                            justify="space-between"
-                            alignItems="center"
-                        >
-                            <Grid
-                                item
-                                xs={11}
-                                className="propertyDetailsContainer"
-                            >
-                                <div>Notes</div>
-                                {!editingPropertNotes && (
-                                    <div className="propertyDetailsText">-</div>
-                                )}
-                                {editingPropertNotes && (
-                                    <textarea
-                                        className="editablePropertyNotes"
-                                        value="Lorem ipsum dolor sit amet,
-                                                      consectetur adipiscing elit.
-                                                      Cras vitae justo luctus,
-                                                      sollicitudin velit in,
-                                                      hendrerit augue. Sed non
-                                                      sollicitudin quam. Vivamus
-                                                      diam tellus, interdum
-                                                      ultricies elementum congue,
-                                                      lacinia et justo. Nam
-                                                      gravida in ipsum et
-                                                      vehicula. Curabitur in odio
-                                                      ac orci pretium pharetra.
-                                                      Aenean mollis urna a erat
-                                                      hendrerit aliquam. Duis sit
-                                                      amet sem tristique, cursus
-                                                      erat a, bibendum lacus. Sed
-                                                      iaculis diam lacus, nec
-                                                      mollis enim porttitor non.
-                                                      Nam consequat viverra lacus
-                                                      et faucibus. Nunc ac tellus
-                                                      ac sapien dapibus imperdiet.
-                                                      Mauris in arcu mauris. Proin
-                                                      sed nunc ipsum. Donec ex
-                                                      erat, vulputate vel ex in,
-                                                      pellentesque luctus mi."
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item xs={1} className="greyIconEdit">
-                                {!editingPropertNotes && (
-                                    <EditOutlinedIcon
-                                        onClick={makePropertyNotesEditable}
-                                    />
-                                )}
-                                {editingPropertNotes && (
-                                    <Button
-                                        className="editInfoSaveButton saveMaxVoltAmpsButton"
-                                        variant="contained"
-                                        onClick={savePropertyNotes}
-                                    >
-                                        Save
-                                    </Button>
-                                )}
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label="Notes"
+                            variant="filled"
+                            value={property.notes}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
                 </Grid>
             </Collapse>
