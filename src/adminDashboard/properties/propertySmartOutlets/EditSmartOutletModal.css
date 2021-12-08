@@ -24,14 +24,6 @@ f
     border-right: 1px solid #adaeaf;
 }
 
-.smartOutletDetailsContainer {
-    background-color: #bababa4a;
-    color: black;
-    border-radius: 9px;
-    padding-left: 10px !important;
-    margin: 5px !important;
-}
-
 .smartOutletDetailsText {
     font-weight: bold;
     font-size: 14px;

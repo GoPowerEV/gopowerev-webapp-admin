@@ -7,16 +7,14 @@ import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import Grid from '@material-ui/core/Grid'
 import { API_URL_ADMIN } from '../../constants'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
-import PersonOutlineOutlinedIcon from '@material-ui/icons/PersonOutlineOutlined'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
+import TextField from '@material-ui/core/TextField'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import TextField from '@material-ui/core/TextField'
 import SmartOutlets from './propertySmartOutlets/SmartOutlets'
-import ApartmentOutlinedIcon from '@material-ui/icons/ApartmentOutlined'
 import './Properties.css'
 import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
 import LocationCard from './LocationCard'
@@ -498,390 +496,56 @@ const CurrentlyViewedProperty = (props) => {
                         <Collapse in={lcuInfoOpened}>
                             <Grid
                                 container
-                                spacing={3}
+                                spacing={1}
                                 className="editLcuDetailsContainer"
                             >
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={9}>
-                                                <div className="lcuDetailsHeader">
-                                                    LCU Name
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {lcu.name}
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        fullWidth
+                                        id="filled-basic"
+                                        label="LCU Name"
+                                        variant="filled"
+                                        value={lcu.name}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
                                 </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    IMEI
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    XXXXXXXXXXXXXXXXXXX
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        fullWidth
+                                        id="filled-basic"
+                                        label="IMEI"
+                                        variant="filled"
+                                        value="XXXXXXXXXXXXXXXXXXX"
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
                                 </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Confirmation Code
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {lcu.cellConfirmationCode ??
-                                                        '-'}
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        fullWidth
+                                        id="filled-basic"
+                                        label="SIM"
+                                        variant="filled"
+                                        value="XXXXXXXXXXXXXXXXXXX"
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
                                 </Grid>
-                            </Grid>
-                            <Grid
-                                container
-                                spacing={3}
-                                className="editLcuDetailsContainer"
-                            >
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Admin State
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    Pre-Config
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    SIM
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    XXXXXXXXXXXXXXXXXXX
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Carrier
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {lcu.cellCarrier ?? '-'}
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid
-                                container
-                                spacing={3}
-                                className="editLcuDetailsContainer"
-                            >
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={9}>
-                                                <div className="lcuDetailsHeader">
-                                                    Model
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {lcu.modelNumber ?? '-'}
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Serial
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    XXXXXXXXXXXXXXXXXXX
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Line
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    555-555-5555
-                                                </div>
-                                            </Grid>
-                                            <Grid
-                                                item
-                                                xs={1}
-                                                className="greyIconEdit"
-                                            >
-                                                <EditOutlinedIcon />
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid
-                                container
-                                spacing={3}
-                                className="editLcuDetailsContainer"
-                            >
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={6}>
-                                                <div className="lcuDetailsHeader">
-                                                    Hardware Version
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {lcu.hwVersion ?? '-'}
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Last Updated
-                                                </div>
-                                                <div className="lcuDetailsTextSmall">
-                                                    11:20:10PM PST 09/20/2021
-                                                </div>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Software Version
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {lcu.swVersion ?? '-'}
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Last Updated
-                                                </div>
-                                                <div className="lcuDetailsTextSmall">
-                                                    11:20:10PM PST 09/20/2021
-                                                </div>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    className="lcuDetailsContainer"
-                                >
-                                    <Grid container>
-                                        <Grid
-                                            container
-                                            direction="row"
-                                            justify="space-between"
-                                            alignItems="center"
-                                        >
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Firmware Version
-                                                </div>
-                                                <div className="lcuDetailsText">
-                                                    {lcu.fwVersion ?? '-'}
-                                                </div>
-                                            </Grid>
-                                            <Grid item xs={5}>
-                                                <div className="lcuDetailsHeader">
-                                                    Last Updated
-                                                </div>
-                                                <div className="lcuDetailsTextSmall">
-                                                    11:20:10PM PST 09/20/2021
-                                                </div>
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        fullWidth
+                                        id="filled-basic"
+                                        label="Line"
+                                        variant="filled"
+                                        value="XXXXXXXXXXXXXXXXXXX"
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
                                 </Grid>
                             </Grid>
                         </Collapse>

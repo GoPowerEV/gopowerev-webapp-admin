@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import Grid from '@material-ui/core/Grid'
+import TextField from '@material-ui/core/TextField'
 import './EditSmartOutletModal.css'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import moment from 'moment'
@@ -98,102 +99,57 @@ export default function EditSmartOutletModal(props) {
                         </div>
                     </Grid>
                 </Grid>
-                <Grid container xs={12} spacing={1}>
-                    <Grid item xs={5} className="smartOutletDetailsContainer">
-                        <Grid container>
-                            <Grid
-                                container
-                                direction="row"
-                                justify="space-between"
-                                alignItems="center"
-                            >
-                                <Grid item xs={5}>
-                                    <div className="smartOutletDetailsHeader">
-                                        LCU Name
-                                    </div>
-                                    <div className="smartOutletDetailsText">
-                                        Main Office
-                                    </div>
-                                </Grid>
-                                <Grid item xs={1} className="greyIconEdit">
-                                    <EditOutlinedIcon />
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                <Grid container xs={12} spacing={3}>
+                    <Grid item xs={5}>
+                        <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label="Property Name"
+                            variant="filled"
+                            value="Main Office"
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
-                    <Grid item xs={5} className="smartOutletDetailsContainer">
-                        <Grid container>
-                            <Grid
-                                container
-                                direction="row"
-                                justify="space-between"
-                                alignItems="center"
-                            >
-                                <Grid item xs={5}>
-                                    <div className="smartOutletDetailsHeader">
-                                        MAC Address
-                                    </div>
-                                    <div className="smartOutletDetailsText">
-                                        XXXXXXXXXXXXXXXXXXX
-                                    </div>
-                                </Grid>
-                                <Grid item xs={1} className="greyIconEdit">
-                                    <EditOutlinedIcon />
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={5}>
+                        <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label="MAC Address"
+                            variant="filled"
+                            value="XXXXXXXXXXXXXXXXXXX"
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
-                    <Grid item xs={5} className="smartOutletDetailsContainer">
-                        <Grid container>
-                            <Grid
-                                container
-                                direction="row"
-                                justify="space-between"
-                                alignItems="center"
-                            >
-                                <Grid item xs={5}>
-                                    <div className="smartOutletDetailsHeader">
-                                        Hardware Version
-                                    </div>
-                                    <div className="smartOutletDetailsText">
-                                        {outletData?.hwVersion}
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={5}>
+                        <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label="Hardware Version"
+                            variant="filled"
+                            value={outletData?.hwVersion}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
-                    <Grid item xs={5} className="smartOutletDetailsContainer">
-                        <Grid container>
-                            <Grid
-                                container
-                                direction="row"
-                                justify="space-between"
-                                alignItems="center"
-                            >
-                                <Grid item xs={5}>
-                                    <div className="smartOutletDetailsHeader">
-                                        Firmware Version
-                                    </div>
-                                    <div className="smartOutletDetailsText">
-                                        {outletData?.fwVersion}
-                                    </div>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <div className="smartOutletDetailsHeader">
-                                        Last Updated
-                                    </div>
-                                    <div className="smartOutletDetailsTextSmall">
-                                        {moment(
-                                            outletData?.fwLastUpdated
-                                        ).format('MMM Do YYYY')}
-                                    </div>
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                    <Grid item xs={5}>
+                        <TextField
+                            fullWidth
+                            id="filled-basic"
+                            label="Firmware Version"
+                            variant="filled"
+                            value={outletData?.fwVersion}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
                     </Grid>
                 </Grid>
             </div>
-            <EditSmartOutletModal />
         </div>
     )
 
