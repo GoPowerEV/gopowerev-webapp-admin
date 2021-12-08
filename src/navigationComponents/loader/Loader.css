@@ -1,0 +1,19 @@
+.loader-container {
+    height: 900px;
+    background: black;
+    border-radius: 25px;
+    color: #12bfa2;
+    text-align: center;
+    padding-top: 300px;
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
+@media only screen and (max-width: 960px) {
+    .loader-container {
+        height: 500px;
+        padding-top: 200px;
+        margin-left: 80px;
+        margin-right: 80px;
+    }
+}

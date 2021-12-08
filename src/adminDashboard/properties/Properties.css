@@ -1,0 +1,378 @@
+.addressRow {
+    margin-bottom: 21px;
+}
+
+.topButtonProperties {
+    background-color: #12bfa2 !important;
+    margin-top: 20px;
+    margin-right: 20px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    font-size: 15px !important;
+    border-radius: 5px !important;
+    float: left;
+}
+
+.topButtonPropertiesNotActive {
+    background-color: #d6d6d7 !important;
+    margin-top: 20px;
+    margin-right: 20px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    font-size: 15px !important;
+    border-radius: 5px !important;
+    float: left;
+}
+
+.boldTex {
+    font-weight: bold;
+    color: black;
+}
+
+.expandIconFirstPortion {
+    font-size: 45px !important;
+    cursor: pointer;
+    margin-left: -2px;
+}
+
+.expandIcon {
+    font-size: 45px !important;
+    cursor: pointer;
+}
+
+.expandIconFirstPortionOpened {
+    font-size: 45px !important;
+    cursor: pointer;
+    margin-left: -15px;
+}
+
+.propertiesMainBody {
+    padding-left: 15px;
+    width: 100%;
+    text-align: left;
+}
+
+.propertiesTabHeader {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    color: #bababa;
+    font-size: 19px;
+}
+
+.no-properties-warning {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.greyHeader {
+    font-weight: bold;
+    color: #bababa;
+    font-size: 21px;
+    display: inline-flex;
+}
+
+.propertyCountLoader {
+    margin-left: 35%;
+}
+
+.lcuContainer {
+    margin-top: 25px !important;
+}
+
+.lcuLocation {
+    margin-left: 15px;
+    font-size: 19px;
+    font-weight: bold;
+    color: black;
+}
+
+.lcuHeaderColumn {
+    display: inline-flex;
+}
+
+.lcuHeader {
+    font-weight: bold;
+}
+
+.lcuRowText {
+    font-weight: bold;
+    color: black;
+}
+
+.greyIconEdit {
+    color: grey;
+    cursor: pointer;
+}
+
+.editLcuDetailsContainer {
+    margin-top: 25px !important;
+}
+
+.lcuDetailsContainer {
+    background-color: #bababa4a;
+    color: black;
+    border-radius: 9px;
+    margin: 5px !important;
+}
+
+.lcuDetailsText {
+    font-weight: bold;
+}
+
+.lcuDetailsTextSmall {
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.textAsLink {
+    cursor: pointer;
+}
+
+.textAsLink:hover {
+    color: #756c6c;
+}
+
+.propertiesPageHr {
+    margin-top: 40px;
+    margin-bottom: 30px;
+    border-top: 1px dashed #bababa;
+}
+
+.propertiesHrLcu {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-top: 1px dashed #bababa;
+}
+
+.allPropertiesContainer {
+    margin-top: 25px;
+}
+
+.propertyImage {
+    height: 100px;
+    width: 100%;
+}
+
+.badge {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 2px;
+    padding: 5px 11px;
+    margin-bottom: 6px;
+    border-radius: 7px;
+    width: fit-content;
+}
+
+.badgeBox {
+    display: inline-flex;
+}
+
+.badgeText {
+    margin-top: 3px;
+    margin-left: 4px;
+}
+
+.loaderContainer {
+    margin-top: 45px;
+    padding-left: 45%;
+}
+
+.viewedPropertyMainImage {
+    margin-top: 20px;
+    border-radius: 13px;
+    width: 100%;
+    height: auto;
+}
+
+.viewedPropertyTitle {
+    font-size: 26px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.viewedPropertyTitleCollapsed {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.collapsedPropertyInfo {
+    margin-top: 25px;
+}
+
+.splitter {
+    font-size: 19px;
+    margin-left: 12px;
+    margin-right: 12px;
+    color: #adaeaf;
+    font-weight: 0;
+}
+
+.viewedPropertyLocation {
+    font-size: 18px;
+    font-weight: bold;
+    color: #bababa;
+    display: inline-flex;
+}
+
+.viewedPropertyInfoContainer {
+    padding-left: 25px;
+    padding-right: 50px;
+}
+
+.viewedPropertyContactInfoContainer {
+    padding-left: 25px;
+    padding-right: 50px;
+    margin-top: 40px;
+}
+
+.propertyDetailsHeader {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 10px;
+}
+
+.propertyContactDetailsHeader {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 10px;
+    margin-left: -15px;
+}
+
+.propertyEditIcon {
+    cursor: pointer;
+    background-color: #12bfa2 !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: 13px !important;
+    margin-left: -20px !important;
+}
+
+.editablePropertyNotes {
+    width: 90%;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+.editInfoContainer {
+    margin-top: 25px;
+}
+
+.editInfoItem {
+    font-size: 18px;
+    font-weight: bold;
+    color: #bababa;
+    display: inline-flex;
+}
+
+.editInfoItemFullWidth {
+    width: 91%;
+    font-size: 18px;
+    font-weight: bold;
+    color: #bababa;
+    display: inline-flex;
+}
+
+.editInfoItem span {
+    margin-left: 10px;
+}
+
+.editInfoItem div {
+    margin-left: 5px;
+    margin-top: -2px;
+}
+
+.updateOutletSoftwareBtn {
+    background-color: #12bfa2 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+.editInfoSaveButton {
+    margin-top: 20px !important;
+    background-color: #12bfa2 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: 'none' !important;
+}
+
+.updateLoaderContainer {
+    margin-left: 50px;
+}
+
+.update-success {
+    font-weight: bold;
+    color: #12bfa2;
+}
+
+.propertiesLoader {
+    margin-top: 20%;
+}
+
+.locationNotes {
+    margin-bottom: 45px;
+}
+
+.noPropertiesWithThisStatus {
+    font-size: 19px;
+}
+
+.propertyDetailsText {
+    font-weight: bold;
+}
+
+.propertyDetailsContainer {
+    padding: 14px;
+}
+
+.top-button-group {
+    height: auto;
+}
+
+.grey {
+    background-color: #323438;
+}
+
+.yellow {
+    background-color: #ffb72b;
+}
+
+.brightGreen {
+    background-color: #16d76f;
+}
+
+.pink {
+    background-color: #ef5da8;
+}
+
+.purple {
+    background-color: #5d5fef;
+}
+
+.blue {
+    background-color: #12bfa2;
+}
+
+@media only screen and (max-width: 1500px) {
+    .top-button-group {
+        height: 30px;
+    }
+
+    .topButtonProperties {
+        font-size: 12px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .topButtonPropertiesNotActive {
+        font-size: 12px !important;
+        margin-bottom: 15px !important;
+    }
+}

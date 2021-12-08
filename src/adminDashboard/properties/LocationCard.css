@@ -1,0 +1,37 @@
+.locationDetails {
+    background-color: #bababa4a;
+    color: black;
+    border-radius: 9px;
+    padding: 10px;
+}
+
+.locationDetailsContainer {
+    margin-bottom: 20px !important;
+}
+
+.editableLocationCardField {
+    width: 100%;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+.locationNameInput {
+    width: 100%;
+}
+
+.locationMaxVoltAmpsInput {
+    width: 100px;
+}
+
+.saveMaxVoltAmpsButton {
+    margin-left: -40px !important;
+}
+
+.saveNameButton {
+    margin-left: -50px !important;
+}
+
+.saveNotesButton {
+    margin-left: -20px !important;
+}

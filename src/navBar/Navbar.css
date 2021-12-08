@@ -1,0 +1,37 @@
+.main-logo {
+    width: 14rem;
+    height: auto;
+    cursor: pointer;
+}
+
+.appBar {
+    background-color: #000000 !important;
+    padding-left: 75px;
+    padding-right: 70px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 700;
+}
+
+@media only screen and (max-width: 1600px) {
+    .main-logo {
+        width: 12rem;
+        height: auto;
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .main-logo {
+        width: 12rem;
+        height: auto;
+    }
+
+    .appBar {
+        background-color: #000000 !important;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+}
