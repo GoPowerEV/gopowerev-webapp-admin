@@ -148,7 +148,7 @@ const CurrentlyViewedProperty = (props) => {
                 >
                     My Properties
                 </span>
-                <span className="boldTex"> > Property</span>
+                <span className="boldTex"> - Property</span>
             </div>
             {!propertyInfoOpened && (
                 <Grid container xs={12} spacing={3} className="lcuContainer">

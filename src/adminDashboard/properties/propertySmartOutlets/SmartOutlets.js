@@ -316,7 +316,7 @@ const SmartOutlets = (props) => {
             <Grid container xs={12} spacing={2}>
                 {props.smartOutlets?.map((outlet, index) => (
                     <React.Fragment>
-                        <Grid item xs={3}>
+                        <Grid item lg={3} md={6} xs={12}>
                             <Card
                                 className={classes.root}
                                 onClick={() => handleOpen(outlet, index)}
