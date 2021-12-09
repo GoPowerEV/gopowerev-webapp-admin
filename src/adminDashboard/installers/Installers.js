@@ -36,7 +36,7 @@ const Installers = (props) => {
 
     useEffect(() => {
         getAllInstallers()
-    }, [])
+    }, [props.token])
 
     return (
         <React.Fragment>

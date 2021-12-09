@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { API_URL } from '../../constants'
+import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import './Properties.css'
 import PropertyCard from './PropertyCard'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import CurrentlyViewedProperty from './CurrenlyViewedProperty'
+import CurrentlyViewedProperty from './CurrentlyViewedProperty'
+import {
+    getAllProperties,
+    getPropertyLocations,
+    getPropertyLcus,
+    getLocationSmartOutlets,
+} from './../dashboardService'
 
 const Properties = (props) => {
     const [isLoading, setIsLoading] = useState(false)
@@ -21,33 +28,16 @@ const Properties = (props) => {
     const [activeFilter, setActiveFilter] = useState()
     const [activeFilterFull, setActiveFilterFull] = useState()
 
-    const getAllProperties = () => {
+    const history = useHistory()
+
+    const getAllOfTheProperties = async () => {
         setActiveFilterFull('All')
-        setIsLoading(true)
-        if (props.token) {
-            fetch(API_URL + 'properties', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        console.log('all properties', result.properties)
-                        setAllProperties(result.properties)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
+        getAllProperties(props.token, setIsLoading, setAllProperties)
     }
 
     const getAllPropertiesByStatus = (status) => {
         setIsLoading(true)
+        console.log('token', props.token)
         if (props.token) {
             fetch(API_URL + 'properties', {
                 method: 'GET',
@@ -73,13 +63,58 @@ const Properties = (props) => {
         }
     }
 
+    const getLcus = async (token, id, setOpenedPropertyLcus) => {
+        await getPropertyLcus(token, id, setOpenedPropertyLcus)
+    }
+
+    const getLocations = async (token, id, setOpenedPropertyLocations) => {
+        await getPropertyLocations(token, id, setOpenedPropertyLocations)
+    }
+
+    const getPropertyInfo = (id) => {
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL + 'properties/' + id, {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        console.log('new stuff', result)
+                        setOpenedPropertyData(result)
+                        getLcus(props.token, id, setOpenedPropertyLcus)
+                        getLocations(
+                            props.token,
+                            id,
+                            setOpenedPropertyLocations
+                        )
+                        setPropertyOpened(true)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
     const openPropertyDetails = (property, lcus, locations, smartOutlets) => {
+        history.push('/property/' + property.propertyUUID)
         setOpenedPropertyData(property)
         setOpenedPropertyLcus(lcus)
         setOpenedPropertyLocations(locations)
         setOpenedPropertySmartOutlets(smartOutlets)
         console.log('property data', property)
         setPropertyOpened(true)
+    }
+
+    const openPropertyDetailsOnLoad = (propertyId) => {
+        history.push('/property/' + propertyId)
+        getPropertyInfo(propertyId)
     }
 
     const closeOpenedProperty = () => {
@@ -101,17 +136,38 @@ const Properties = (props) => {
         }
         setActiveFilter(status)
         if (status === 'all') {
-            getAllProperties()
+            getAllProperties(props.token, setIsLoading, setAllProperties)
         } else {
             getAllPropertiesByStatus(status)
         }
     }
 
     useEffect(() => {
-        getAllProperties()
-        setActiveFilter('all')
-        setActiveFilterFull('All')
-    }, [])
+        if (props.viewThisProperty !== null) {
+            console.log('HERE LOADING')
+            openPropertyDetailsOnLoad(props.viewThisProperty)
+        } else {
+            console.log('here its null')
+            getAllOfTheProperties()
+            setActiveFilter('all')
+            setActiveFilterFull('All')
+        }
+    }, [props.token])
+
+    useEffect(() => {
+        if (openedPropertyLocations?.length > 0) {
+            openedPropertyLocations.forEach((location) => {
+                getLocationSmartOutlets(
+                    props.token,
+                    location.locationUUID,
+                    setOpenedPropertySmartOutlets
+                )
+            })
+        } else {
+            console.log('here it is null')
+            setOpenedPropertySmartOutlets([])
+        }
+    }, [openedPropertyLocations])
 
     return (
         <React.Fragment>

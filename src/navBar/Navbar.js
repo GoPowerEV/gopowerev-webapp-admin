@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     AppBar,
     Toolbar,
@@ -74,7 +74,7 @@ function Navbar(props) {
     }
 
     const goToDashboard = () => {
-        history.push('/dashboard')
+        history.push('/admin-dashboard')
     }
 
     return (

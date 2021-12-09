@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { API_URL } from '../../constants'
 import './DashboardTab.css'
 import PropertyCardInInstall from './PropertyCardInInstall'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { getAllProperties } from './../dashboardService'
 
 const DashboardTab = (props) => {
     const [isLoading, setIsLoading] = useState(false)
@@ -13,70 +13,55 @@ const DashboardTab = (props) => {
     const [newPropertyCount, setNewPropertyCount] = useState(0)
     const [activePropertyCount, setActivePropertyCount] = useState(0)
     const [propertiesInInstall, setPropertiesInInstall] = useState([])
-
-    const getPropertyCount = (status) => {
-        setIsLoading(true)
-        if (props.token) {
-            fetch(API_URL + 'properties', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        if (status === 'operational') {
-                            setActivePropertyCount(
-                                result.properties.filter(
-                                    (property) => property.status === status
-                                ).length
-                            )
-                        } else if (status === 'new') {
-                            setNewPropertyCount(
-                                result.properties.filter(
-                                    (property) => property.status === status
-                                ).length
-                            )
-                        } else if (status === 'pending') {
-                            setPendingPropertyCount(
-                                result.properties.filter(
-                                    (property) => property.status === status
-                                ).length
-                            )
-                        } else if (status === 'in-install') {
-                            setPropertiesInInstall(
-                                result.properties
-                                    .filter(
-                                        (property) => property.status === status
-                                    )
-                                    .slice(0, 4)
-                            )
-                        } else {
-                            setReadyPropertyCount(
-                                result.properties.filter(
-                                    (property) => property.status === status
-                                ).length
-                            )
-                        }
-                        console.log('all properties', result.properties)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
+    const [allProperties, setAllProperties] = useState([])
 
     useEffect(() => {
-        getPropertyCount('operational')
-        getPropertyCount('new')
-        getPropertyCount('pending')
-        getPropertyCount('ready-for-installation')
-        getPropertyCount('in-install')
+        getAllProperties(props.token, setIsLoading, setAllProperties)
     }, [])
+
+    useEffect(() => {
+        function getPropertyCount(status) {
+            console.log('here all props', allProperties)
+            if (status === 'operational') {
+                setActivePropertyCount(
+                    allProperties.filter(
+                        (property) => property.status === status
+                    ).length
+                )
+            } else if (status === 'new') {
+                setNewPropertyCount(
+                    allProperties.filter(
+                        (property) => property.status === status
+                    ).length
+                )
+            } else if (status === 'pending') {
+                setPendingPropertyCount(
+                    allProperties.filter(
+                        (property) => property.status === status
+                    ).length
+                )
+            } else if (status === 'in-install') {
+                setPropertiesInInstall(
+                    allProperties
+                        .filter((property) => property.status === status)
+                        .slice(0, 4)
+                )
+            } else {
+                setReadyPropertyCount(
+                    allProperties.filter(
+                        (property) => property.status === status
+                    ).length
+                )
+            }
+        }
+        if (allProperties && allProperties.length > 0) {
+            getPropertyCount('operational')
+            getPropertyCount('new')
+            getPropertyCount('pending')
+            getPropertyCount('ready-for-installation')
+            getPropertyCount('in-install')
+        }
+    }, [allProperties])
 
     return (
         <React.Fragment>

@@ -50,7 +50,7 @@ const Login = (props) => {
                 setEmail('')
                 setPassword('')
                 setIsLoading(false)
-                history.push('/dashboard')
+                history.push('/admin-dashboard')
             })
             .catch((err) => {
                 console.log(err)

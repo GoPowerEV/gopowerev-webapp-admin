@@ -12,7 +12,7 @@ import './App.css'
 function App() {
     const [loggedIn, setLoggedIn] = useState(true)
     const [openModal, setOpenModal] = useState(false)
-    const [token, setToken] = useState('')
+    const [token, setToken] = useState(null)
 
     const history = useHistory()
 
@@ -39,10 +39,9 @@ function App() {
         })
     }
 
-    const getToken = () => {
-        Auth.currentSession()
-            .then((response) => {
-                setToken(response.idToken.jwtToken)
+    const checkIfUserIsLoggedIn = () => {
+        Auth.currentAuthenticatedUser()
+            .then((user) => {
                 setLoggedIn(true)
             })
             .catch((err) => {
@@ -51,20 +50,18 @@ function App() {
             })
     }
 
-    const checkIfUserIsLoggedIn = () => {
-        Auth.currentAuthenticatedUser()
-            .then((user) => {
-                getToken()
-                setLoggedIn(true)
+    const getToken = () => {
+        Auth.currentSession()
+            .then((response) => {
+                setToken(response.idToken.jwtToken)
+                console.log('app token set', response.idToken.jwtToken)
             })
             .catch((err) => {
-                setLoggedIn(false)
                 console.log('ERROR', err)
             })
     }
 
     useEffect(() => {
-        // Configure Amplify
         Amplify.configure({
             Auth: {
                 region: process.env.REACT_APP_REGION,
@@ -77,6 +74,10 @@ function App() {
         checkIfUserIsLoggedIn()
     }, [])
 
+    useEffect(() => {
+        getToken()
+    }, [loggedIn])
+
     return (
         <Router>
             <div className="App">
@@ -85,15 +86,36 @@ function App() {
                 <Navbar loggedIn={loggedIn} logout={logout} />
                 <Switch>
                     <Route exact path="/" component={Login} />
-                    <Route exact path="/dashboard" component={AdminDashboard} />
+                    <Route
+                        path="/admin-dashboard"
+                        render={() => (
+                            <AdminDashboard
+                                loggedIn={loggedIn}
+                                history={history}
+                                token={token}
+                                path="admin-dashboard"
+                            />
+                        )}
+                    />
                     <Route
                         path="/dashboard/:menuItem"
-                        render={(properties) => (
+                        render={(props) => (
                             <AdminDashboard
-                                path={properties.match.params.menuItem}
+                                path={props.match.params.menuItem}
                                 loggedIn={loggedIn}
-                                token={token}
                                 history={history}
+                                token={token}
+                            />
+                        )}
+                    />
+                    <Route
+                        path="/property/:propertyId"
+                        render={(props) => (
+                            <AdminDashboard
+                                path={props.match.params.propertyId}
+                                loggedIn={loggedIn}
+                                history={history}
+                                token={token}
                             />
                         )}
                     />

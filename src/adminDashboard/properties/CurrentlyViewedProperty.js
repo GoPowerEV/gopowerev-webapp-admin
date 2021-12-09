@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { API_URL } from '../../constants'
 import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
-import { makeStyles } from '@material-ui/core/styles'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import Grid from '@material-ui/core/Grid'
 import { API_URL_ADMIN } from '../../constants'
@@ -18,43 +17,29 @@ import SmartOutlets from './propertySmartOutlets/SmartOutlets'
 import './Properties.css'
 import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
 import LocationCard from './LocationCard'
-
-const useStyles = makeStyles(() => ({
-    editPropertyField: { fontWeight: '700', height: '3px' },
-}))
+import { useHistory } from 'react-router-dom'
 
 const CurrentlyViewedProperty = (props) => {
-    const classes = useStyles()
-
     const [isLoading, setIsLoading] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState(false)
     const [updateIsLoading, setUpdateIsLoading] = useState(false)
     const [property, setProperty] = useState({})
+    const [propertyName, setPropertyName] = useState('')
+    const [propertyAddress, setPropertyAddress] = useState('')
+    const [propertyCity, setPropertyCity] = useState('')
+    const [propertyState, setPropertyState] = useState('')
+    const [propertyZip, setPropertyZip] = useState('')
     const [propertyContactName, setPropertyContactName] = useState('')
+    const [propertyContactEmail, setPropertyContactEmail] = useState('')
+    const [propertyContactPhone, setPropertyContactPhone] = useState('')
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
     const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
     const [lcuInfoOpened2, setLcuInfoOpened2] = useState(false)
-    const locations = props.locations
-    const lcus = props.lcus
-    const smartOutlets = props.smartOutlets
+    const locations = props.locations ?? null
+    const lcus = props.lcus ?? null
+    const smartOutlets = props.smartOutlets ?? null
 
-    const [
-        editingPropertyContactName,
-        setEditingPropertyContactName,
-    ] = useState(false)
-    const [
-        editingPropertyContactEmail,
-        setEditingPropertyContactEmail,
-    ] = useState(false)
-    const [
-        editingPropertyPhoneNumber,
-        setEditingPropertyPhoneNumber,
-    ] = useState(false)
-    const [
-        editingPropertyAssignedInstaller,
-        setEditingPropertyAssignedInstaller,
-    ] = useState(false)
-    const [editingPropertNotes, setEditingPropertNotes] = useState(false)
+    const history = useHistory()
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -65,16 +50,25 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     const savePropertyInfo = () => {
-        console.log('about to save this info', property)
         setIsLoading(true)
         if (props.token) {
+            let tempPropertyData = property
+            Object.keys(tempPropertyData).forEach(function (key, index) {
+                console.log('here it is', key)
+                console.log('here it is', tempPropertyData[key])
+                if (tempPropertyData[key] === 'None') {
+                    tempPropertyData[key] = null
+                    setProperty(tempPropertyData)
+                }
+            })
+            console.log('about to save this info', tempPropertyData)
             fetch(API_URL + 'properties/' + property.propertyUUID, {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'image/jpg',
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(property),
+                body: JSON.stringify(tempPropertyData),
             })
                 .then((res) => res.json())
                 .then(
@@ -89,12 +83,28 @@ const CurrentlyViewedProperty = (props) => {
         }
     }
 
-    const handleContactNameEditChange = (value) => {
-        console.log(value)
+    const handlePropertyFieldChange = (value, field) => {
+        if (field === 'name') {
+            setPropertyName(value)
+        } else if (field === 'contactName') {
+            setPropertyContactName(value)
+        } else if (field === 'contactEmail') {
+            setPropertyContactEmail(value)
+        } else if (field === 'contactPhone1') {
+            setPropertyContactPhone(value)
+        } else if (field === 'streetAddress1') {
+            setPropertyAddress(value)
+        } else if (field === 'city') {
+            setPropertyCity(value)
+        } else if (field === 'state') {
+            setPropertyState(value)
+        } else if (field === 'zipcode') {
+            setPropertyZip(value)
+        }
+        console.log('changing name of the property to ', value)
         let tempPropertyData = property
-        tempPropertyData['contactName'] = value
+        tempPropertyData[field] = value
         setProperty(tempPropertyData)
-        setPropertyContactName(value)
         console.log(tempPropertyData)
     }
 
@@ -128,13 +138,20 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     useEffect(() => {
-        document.querySelector('body').scrollTo(0, 0)
         console.log('prop details', props.property)
-        setPropertyContactName(props.property.contactName)
         setProperty(props.property)
+        setPropertyName(props.property.name)
+        setPropertyAddress(props.property.address1)
+        setPropertyCity(props.property.city)
+        setPropertyState(props.property.state)
+        setPropertyZip(props.property.zipcode)
+        setPropertyContactName(props.property.contactName)
+        setPropertyContactEmail(props.property.contactEmail)
+        setPropertyContactPhone(props.property.contactPhone1)
         console.log('locations', locations)
         console.log('lcus', lcus)
         console.log('smart outlets', smartOutlets)
+        document.querySelector('body').scrollTo(0, 0)
     }, [])
 
     return (
@@ -210,7 +227,7 @@ const CurrentlyViewedProperty = (props) => {
                             {!isLoading && (
                                 <div className="editInfoContainer">
                                     <Grid container xs={12} spacing={3}>
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} xs={12}>
                                             <div className="editInfoItem">
                                                 <FlashOnOutlinedIcon />
                                                 <span>
@@ -219,24 +236,27 @@ const CurrentlyViewedProperty = (props) => {
                                                 </span>
                                             </div>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} xs={12}>
                                             <div className="editInfoItem">
                                                 <WifiOutlinedIcon />
                                                 <span>
-                                                    {smartOutlets.length} Smart
-                                                    Outlets
+                                                    {smartOutlets
+                                                        ? smartOutlets.length
+                                                        : '0'}{' '}
+                                                    Smart Outlets
                                                 </span>
                                             </div>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} xs={12}>
                                             <div className="editInfoItem">
                                                 <EvStationOutlinedIcon />
                                                 <span>
-                                                    {lcus.length} LCU(s)
+                                                    {lcus ? lcus.length : '0'}{' '}
+                                                    LCU(s)
                                                 </span>
                                             </div>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} xs={12}>
                                             <div className="editInfoItem">
                                                 Type Of Power Service:
                                                 <span> 1P-240</span>
@@ -248,7 +268,16 @@ const CurrentlyViewedProperty = (props) => {
                                                 id="filled-basic"
                                                 label="Property Name"
                                                 variant="filled"
-                                                value={property.name}
+                                                value={propertyName}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'name'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
                                                 InputProps={{
                                                     endAdornment: (
                                                         <EditOutlinedIcon />
@@ -262,7 +291,16 @@ const CurrentlyViewedProperty = (props) => {
                                                 id="filled-basic"
                                                 label="Street"
                                                 variant="filled"
-                                                value={property.streetAddress1}
+                                                value={propertyAddress}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'streetAddress1'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
                                                 InputProps={{
                                                     endAdornment: (
                                                         <EditOutlinedIcon />
@@ -270,13 +308,22 @@ const CurrentlyViewedProperty = (props) => {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} xs={12}>
                                             <TextField
                                                 fullWidth
                                                 id="filled-basic"
                                                 label="City"
                                                 variant="filled"
-                                                value={property.city}
+                                                value={propertyCity}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'city'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
                                                 InputProps={{
                                                     endAdornment: (
                                                         <EditOutlinedIcon />
@@ -284,13 +331,22 @@ const CurrentlyViewedProperty = (props) => {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} xs={12}>
                                             <TextField
                                                 fullWidth
                                                 id="filled-basic"
                                                 label="Zip Code"
                                                 variant="filled"
-                                                value={property.zip}
+                                                value={propertyZip}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'zipcode'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
                                                 InputProps={{
                                                     endAdornment: (
                                                         <EditOutlinedIcon />
@@ -298,13 +354,13 @@ const CurrentlyViewedProperty = (props) => {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item lg={6} xs={12}>
                                             <TextField
                                                 fullWidth
                                                 id="filled-basic"
                                                 label="State"
                                                 variant="filled"
-                                                value={property.state}
+                                                value={propertyState}
                                                 InputProps={{
                                                     endAdornment: (
                                                         <EditOutlinedIcon />
@@ -313,9 +369,9 @@ const CurrentlyViewedProperty = (props) => {
                                             />
                                         </Grid>
                                         {!updateIsLoading && !updateSuccess && (
-                                            <Grid item xs={6}>
+                                            <Grid item lg={6} xs={12}>
                                                 <Button
-                                                    className="updateOutletSoftwareBtn"
+                     x                               className="updateOutletSoftwareBtn"
                                                     variant="contained"
                                                     onClick={() =>
                                                         updateSmartOutletSoftware()
@@ -351,87 +407,110 @@ const CurrentlyViewedProperty = (props) => {
                         </div>
                     </Grid>
                 </Grid>
-                <Grid
-                    container
-                    className="singlePropertyContainer"
-                    xs={12}
-                    spacing={3}
-                >
-                    <Grid item xs={12}>
-                        <div className="viewedPropertyContactInfoContainer">
-                            <div className="propertyContactDetailsHeader">
-                                <span>Property Contact Details</span>
-                            </div>
-                            {isLoading && (
-                                <div className="loaderContainer">
-                                    <CircularProgress
-                                        style={{ color: '#12BFA2' }}
-                                    />
+                {!isLoading && (
+                    <Grid
+                        container
+                        className="singlePropertyContainer"
+                        xs={12}
+                        spacing={3}
+                    >
+                        <Grid item xs={12}>
+                            <div className="viewedPropertyContactInfoContainer">
+                                <div className="propertyContactDetailsHeader">
+                                    <span>Property Contact Details</span>
                                 </div>
-                            )}
-                        </div>
+                                {isLoading && (
+                                    <div className="loaderContainer">
+                                        <CircularProgress
+                                            style={{ color: '#12BFA2' }}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                id="filled-basic"
+                                fullWidth
+                                label="Property Contact Name"
+                                variant="filled"
+                                value={propertyContactName}
+                                onChange={(e) =>
+                                    handlePropertyFieldChange(
+                                        e.target.value,
+                                        'contactName'
+                                    )
+                                }
+                                onBlur={() => savePropertyInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                id="filled-basic"
+                                fullWidth
+                                label="Property Contact Email"
+                                variant="filled"
+                                value={propertyContactEmail}
+                                onChange={(e) =>
+                                    handlePropertyFieldChange(
+                                        e.target.value,
+                                        'contactEmail'
+                                    )
+                                }
+                                onBlur={() => savePropertyInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                fullWidth
+                                id="filled-basic"
+                                label="Property Contact Phone"
+                                variant="filled"
+                                value={propertyContactPhone}
+                                onChange={(e) =>
+                                    handlePropertyFieldChange(
+                                        e.target.value,
+                                        'contactPhone1'
+                                    )
+                                }
+                                onBlur={() => savePropertyInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <TextField
+                                fullWidth
+                                id="filled-basic"
+                                label="Current Assigned Installer"
+                                variant="filled"
+                                value={property.installerUUID}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                id="filled-basic"
+                                label="Notes"
+                                variant="filled"
+                                value={property.notes}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            id="filled-basic"
-                            fullWidth
-                            label="Property Contact Name"
-                            variant="filled"
-                            value={propertyContactName}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            id="filled-basic"
-                            fullWidth
-                            label="Property Contact Email"
-                            variant="filled"
-                            value={property.contactEmail}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            id="filled-basic"
-                            label="Property Contact Phone"
-                            variant="filled"
-                            value={property.contactPhone1}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            fullWidth
-                            id="filled-basic"
-                            label="Current Assigned Installer"
-                            variant="filled"
-                            value={property.installerUUID}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            id="filled-basic"
-                            label="Notes"
-                            variant="filled"
-                            value={property.notes}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
+                )}
             </Collapse>
             {lcus &&
                 lcus.map((lcu, index) => (
@@ -499,7 +578,7 @@ const CurrentlyViewedProperty = (props) => {
                                 spacing={1}
                                 className="editLcuDetailsContainer"
                             >
-                                <Grid item xs={3}>
+                                <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
                                         id="filled-basic"
@@ -511,7 +590,7 @@ const CurrentlyViewedProperty = (props) => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
                                         id="filled-basic"
@@ -523,7 +602,7 @@ const CurrentlyViewedProperty = (props) => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
                                         id="filled-basic"
@@ -535,7 +614,7 @@ const CurrentlyViewedProperty = (props) => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
                                         id="filled-basic"

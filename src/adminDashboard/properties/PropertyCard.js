@@ -3,13 +3,17 @@ import Typography from '@material-ui/core/Typography'
 import CardContent from '@material-ui/core/CardContent'
 import Card from '@material-ui/core/Card'
 import './Properties.css'
-import { API_URL } from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
 import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import { getBadgeClass } from './utils/PropertyUtils'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
+import {
+    getPropertyLcus,
+    getPropertyLocations,
+    getLocationSmartOutlets,
+} from './../dashboardService'
 
 const useStyles = makeStyles({
     root: {
@@ -52,91 +56,47 @@ const PropertyCard = (props) => {
     const classes = useStyles()
     const propertyInfo = props.property
 
-    const getLocationSmartOutlets = (locationId) => {
+    const getSmartOutlets = (locationId) => {
         if (props.token) {
-            fetch(API_URL + 'smart-outlets?soUUID=' + locationId, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        console.log(
-                            'all smart outlets for this location',
-                            result.smartOutlets
-                        )
-                        setSmartOutletsOfThisProperty(result.smartOutlets)
-                    },
-                    (error) => {}
-                )
+            getLocationSmartOutlets(
+                props.token,
+                locationId,
+                setSmartOutletsOfThisProperty
+            )
         }
     }
 
-    const getPropertyLocations = () => {
+    const getLocations = () => {
         if (props.token) {
-            fetch(
-                API_URL +
-                    'locations?propertyUUID=' +
-                    props.property.propertyUUID,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: 'Bearer ' + props.token,
-                        'Content-Type': 'application/json',
-                    },
-                }
+            getPropertyLocations(
+                props.token,
+                props.property.propertyUUID,
+                setLocationsOfThisProperty
             )
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        console.log(
-                            'all locations for this property',
-                            result.locations
-                        )
-                        setLocationsOfThisProperty(result.locations)
-                        if (result.locations.length > 0) {
-                            result.locations.forEach((location) => {
-                                getLocationSmartOutlets(location.locationUUID)
-                            })
-                            getLocationSmartOutlets()
-                        } else {
-                            setSmartOutletsOfThisProperty([])
-                        }
-                    },
-                    (error) => {}
-                )
+
+            if (locationsOfThisProperty?.length > 0) {
+                locationsOfThisProperty.forEach((location) => {
+                    getSmartOutlets(location.locationUUID)
+                })
+            } else {
+                setSmartOutletsOfThisProperty([])
+            }
         }
     }
 
-    const getPropertyLcus = () => {
+    const getLcus = () => {
         if (props.token) {
-            fetch(
-                API_URL + 'lcus?propertyUUID=' + props.property.propertyUUID,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: 'Bearer ' + props.token,
-                        'Content-Type': 'application/json',
-                    },
-                }
+            getPropertyLcus(
+                props.token,
+                props.property.propertyUUID,
+                setLcusOfThisProperty
             )
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        console.log('all lcus for this property', result.lcus)
-                        setLcusOfThisProperty(result.lcus)
-                    },
-                    (error) => {}
-                )
         }
     }
 
     useEffect(() => {
-        getPropertyLcus()
-        getPropertyLocations()
+        getLcus()
+        getLocations()
     }, [])
 
     return (
@@ -173,7 +133,10 @@ const PropertyCard = (props) => {
                         <div className="badgeBox">
                             <EvStationOutlinedIcon />
                             <span className="badgeText">
-                                {lcusOfThisProperty.length} LCUs
+                                {lcusOfThisProperty
+                                    ? lcusOfThisProperty.length
+                                    : '0'}{' '}
+                                LCUs
                             </span>
                         </div>
                     </div>

@@ -172,6 +172,7 @@ export default function AdminDashboard(props) {
     const classes = useStyles()
     const [value, setValue] = React.useState(0)
     const [isLoading, setIsLoading] = useState(false)
+    const [viewThisProperty, setViewThisProperty] = useState(null)
     const [
         displaySetupNewProperty,
         setDisplaySetupNewProperty,
@@ -186,7 +187,7 @@ export default function AdminDashboard(props) {
         if (newValue === 1) {
             history.push('/dashboard/properties')
         } else if (newValue === 0) {
-            history.push('/dashboard/dashboard')
+            history.push('/admin-dashboard')
         } else if (newValue === 2) {
             history.push('/dashboard/installers')
         }
@@ -238,32 +239,46 @@ export default function AdminDashboard(props) {
             )
         } else {
             const urlLocation = props.path
-            console.log('location', urlLocation)
-            history.push('/dashboard/' + urlLocation)
-            if (urlLocation === 'dashboard') {
+            if (urlLocation === 'admin-dashboard') {
+                setViewThisProperty(null)
+                history.push('/' + urlLocation)
                 setDisplaySetupNewProperty(false)
                 setDisplayAddNewInstaller(false)
                 setValue(0)
             } else if (urlLocation === 'properties') {
+                setViewThisProperty(null)
+                history.push('/dashboard/' + urlLocation)
                 setDisplaySetupNewProperty(false)
                 setDisplayAddNewInstaller(false)
                 setValue(1)
             } else if (urlLocation === 'installers') {
+                setViewThisProperty(null)
+                history.push('/dashboard/' + urlLocation)
                 setDisplaySetupNewProperty(false)
                 setDisplayAddNewInstaller(false)
                 setValue(2)
             } else if (urlLocation === 'setup-new-property') {
+                setViewThisProperty(null)
+                history.push('/dashboard/' + urlLocation)
                 setValue(7)
                 setDisplaySetupNewProperty(true)
                 setDisplayAddNewInstaller(false)
-            } else {
+            } else if (urlLocation === 'add-new-installer') {
+                setViewThisProperty(null)
+                history.push('/dashboard/' + urlLocation)
                 setValue(8)
                 setDisplaySetupNewProperty(false)
                 setDisplayAddNewInstaller(true)
+            } else {
+                history.push('/property/' + urlLocation)
+                setViewThisProperty(urlLocation)
+                setDisplaySetupNewProperty(false)
+                setDisplayAddNewInstaller(false)
+                setValue(1)
             }
             setIsLoading(false)
         }
-    }, [])
+    }, [props.path])
 
     return (
         <div className={classes.root}>
@@ -377,7 +392,10 @@ export default function AdminDashboard(props) {
                                     />
                                 </TabPanel>
                                 <TabPanel value={value} index={1}>
-                                    <Properties token={props.token} />
+                                    <Properties
+                                        token={props.token}
+                                        viewThisProperty={viewThisProperty}
+                                    />
                                 </TabPanel>
                                 <TabPanel value={value} index={2}>
                                     <Installers token={props.token} />
