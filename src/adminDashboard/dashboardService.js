@@ -1,4 +1,4 @@
-import { API_URL } from './../constants'
+import { API_URL, API_URL_ADMIN } from './../constants'
 
 export function getAllProperties(token, setIsLoading, setAllProperties) {
     console.log('here token', token)
@@ -60,7 +60,11 @@ export function getPropertyLocations(token, id, setLocationsOfThisProperty) {
         )
 }
 
-export function getLocationSmartOutlets(token, id, setSmartOutletsOfThisProperty) {
+export function getLocationSmartOutlets(
+    token,
+    id,
+    setSmartOutletsOfThisProperty
+) {
     fetch(API_URL + 'smart-outlets?soUUID=' + id, {
         method: 'GET',
         headers: {
@@ -76,6 +80,26 @@ export function getLocationSmartOutlets(token, id, setSmartOutletsOfThisProperty
                     result.smartOutlets
                 )
                 setSmartOutletsOfThisProperty(result.smartOutlets)
+            },
+            (error) => {}
+        )
+}
+
+export function getAllInstallers(token, setIsLoading, setAllInstallers) {
+    setIsLoading(true)
+    fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                setIsLoading(false)
+                console.log('here all installers', result)
+                setAllInstallers(result)
             },
             (error) => {}
         )

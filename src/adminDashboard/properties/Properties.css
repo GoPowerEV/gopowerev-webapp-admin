@@ -2,6 +2,27 @@
     margin-bottom: 21px;
 }
 
+.editableFieldSelectContainer div {
+    background-color: #e8e8e8;
+    border-radius: 10px;
+}
+
+.editableFieldSelectContainer div div {
+    background-color: #e8e8e8;
+    border-radius: 10px;
+}
+
+.editableFieldSelectContainer label {
+    z-index: 1;
+    left: 13px;
+    top: -9px;
+}
+
+.editableField div {
+    background-color: #e8e8e8;
+    border-radius: 10px;
+}
+
 .topButtonProperties {
     background-color: #12bfa2 !important;
     margin-top: 20px;

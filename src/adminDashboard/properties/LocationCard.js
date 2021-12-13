@@ -95,9 +95,10 @@ const LocationCard = (props) => {
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
+                                        className="editableField"
                                         id="locationName"
                                         label="Location Name"
-                                        variant="filled"
+                                        variant="outlined"
                                         value={locationInfo.name}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
@@ -107,9 +108,10 @@ const LocationCard = (props) => {
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
+                                        className="editableField"
                                         id="maxVoltAmps"
                                         label="Max-Volt-Amps"
-                                        variant="filled"
+                                        variant="outlined"
                                         value={locationInfo.maxVoltAmps}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
@@ -119,9 +121,10 @@ const LocationCard = (props) => {
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
+                                        className="editableField"
                                         id="notes"
                                         label="Notes"
-                                        variant="filled"
+                                        variant="outlined"
                                         value={locationInfo.notes}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,

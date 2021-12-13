@@ -103,10 +103,11 @@ export default function EditSmartOutletModal(props) {
                     <Grid item xs={5}>
                         <TextField
                             fullWidth
-                            id="filled-basic"
-                            label="Property Name"
+                            className="editableField"
+                            id="soName"
+                            label="Smart Outlet Name"
                             variant="filled"
-                            value="Main Office"
+                            value={outletData?.name}
                             InputProps={{
                                 endAdornment: <EditOutlinedIcon />,
                             }}
@@ -115,7 +116,21 @@ export default function EditSmartOutletModal(props) {
                     <Grid item xs={5}>
                         <TextField
                             fullWidth
-                            id="filled-basic"
+                            className="editableField"
+                            id="soSerial"
+                            label="Serial Number"
+                            variant="filled"
+                            value={outletData?.serialNumber}
+                            InputProps={{
+                                endAdornment: <EditOutlinedIcon />,
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={5}>
+                        <TextField
+                            fullWidth
+                            className="editableField"
+                            id="soMac"
                             label="MAC Address"
                             variant="filled"
                             value="XXXXXXXXXXXXXXXXXXX"
@@ -127,7 +142,8 @@ export default function EditSmartOutletModal(props) {
                     <Grid item xs={5}>
                         <TextField
                             fullWidth
-                            id="filled-basic"
+                            className="editableField"
+                            id="soHwVersion"
                             label="Hardware Version"
                             variant="filled"
                             value={outletData?.hwVersion}
@@ -139,7 +155,8 @@ export default function EditSmartOutletModal(props) {
                     <Grid item xs={5}>
                         <TextField
                             fullWidth
-                            id="filled-basic"
+                            className="editableField"
+                            id="soFwVersion"
                             label="Firmware Version"
                             variant="filled"
                             value={outletData?.fwVersion}

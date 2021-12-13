@@ -137,6 +137,8 @@ const Properties = (props) => {
         setActiveFilter(status)
         if (status === 'all') {
             getAllProperties(props.token, setIsLoading, setAllProperties)
+        } else if (status === 'installed') {
+            getAllPropertiesByStatus('operational')
         } else {
             getAllPropertiesByStatus(status)
         }
@@ -144,10 +146,8 @@ const Properties = (props) => {
 
     useEffect(() => {
         if (props.viewThisProperty !== null) {
-            console.log('HERE LOADING')
             openPropertyDetailsOnLoad(props.viewThisProperty)
         } else {
-            console.log('here its null')
             getAllOfTheProperties()
             setActiveFilter('all')
             setActiveFilterFull('All')

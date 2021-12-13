@@ -14,12 +14,14 @@ import TextField from '@material-ui/core/TextField'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import SmartOutlets from './propertySmartOutlets/SmartOutlets'
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import './Properties.css'
 import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
 import LocationCard from './LocationCard'
-import { useHistory } from 'react-router-dom'
+import { getAllInstallers } from './../dashboardService'
 
 const CurrentlyViewedProperty = (props) => {
+    const [allInstallers, setAllInstallers] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState(false)
     const [updateIsLoading, setUpdateIsLoading] = useState(false)
@@ -33,13 +35,12 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyContactEmail, setPropertyContactEmail] = useState('')
     const [propertyContactPhone, setPropertyContactPhone] = useState('')
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
+    const [propertyInstaller, setPropertyInstaller] = useState(null)
     const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
     const [lcuInfoOpened2, setLcuInfoOpened2] = useState(false)
     const locations = props.locations ?? null
-    const lcus = props.lcus ?? null
+    const [lcus, setLcus] = useState(props.lcus ?? null)
     const smartOutlets = props.smartOutlets ?? null
-
-    const history = useHistory()
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -47,6 +48,31 @@ const CurrentlyViewedProperty = (props) => {
 
     const toggleLcuInfo = () => {
         setLcuInfoOpened(!lcuInfoOpened)
+    }
+
+    const saveLCUInfo = (lcu) => {
+        setIsLoading(true)
+        if (props.token) {
+            console.log('about to save this  LCU info', lcu)
+            fetch(API_URL + 'lcus/' + lcu.lcuUUID, {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(lcu),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        console.log('save lcu success', result)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
     }
 
     const savePropertyInfo = () => {
@@ -83,6 +109,19 @@ const CurrentlyViewedProperty = (props) => {
         }
     }
 
+    const handleLCUFieldChange = (lcu, value, field) => {
+        let tempLcu = lcu
+        let tempLcus = lcus
+        tempLcu[field] = value
+
+        for (let i = 0; i < lcus.length; i++) {
+            if (lcus[i].lcuUUID === lcu.lcuUUID) {
+                tempLcus[i] = tempLcu
+            }
+        }
+        setLcus(tempLcus)
+    }
+
     const handlePropertyFieldChange = (value, field) => {
         if (field === 'name') {
             setPropertyName(value)
@@ -100,6 +139,8 @@ const CurrentlyViewedProperty = (props) => {
             setPropertyState(value)
         } else if (field === 'zipcode') {
             setPropertyZip(value)
+        } else if (field === 'installerUUID') {
+            setPropertyInstaller(value)
         }
         console.log('changing name of the property to ', value)
         let tempPropertyData = property
@@ -148,10 +189,12 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyContactName(props.property.contactName)
         setPropertyContactEmail(props.property.contactEmail)
         setPropertyContactPhone(props.property.contactPhone1)
+        setPropertyInstaller(props.property.installerUUID)
         console.log('locations', locations)
         console.log('lcus', lcus)
         console.log('smart outlets', smartOutlets)
         document.querySelector('body').scrollTo(0, 0)
+        getAllInstallers(props.token, setIsLoading, setAllInstallers)
     }, [])
 
     return (
@@ -265,9 +308,10 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item xs={12}>
                                             <TextField
                                                 fullWidth
-                                                id="filled-basic"
+                                                className="editableField"
+                                                id="propertyName"
                                                 label="Property Name"
-                                                variant="filled"
+                                                variant="outlined"
                                                 value={propertyName}
                                                 onChange={(e) =>
                                                     handlePropertyFieldChange(
@@ -288,9 +332,9 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item xs={12}>
                                             <TextField
                                                 fullWidth
-                                                id="filled-basic"
+                                                id="propertyAddress"
                                                 label="Street"
-                                                variant="filled"
+                                                variant="outlined"
                                                 value={propertyAddress}
                                                 onChange={(e) =>
                                                     handlePropertyFieldChange(
@@ -311,9 +355,10 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item lg={6} xs={12}>
                                             <TextField
                                                 fullWidth
-                                                id="filled-basic"
+                                                className="editableField"
+                                                id="propertyCity"
                                                 label="City"
-                                                variant="filled"
+                                                variant="outlined"
                                                 value={propertyCity}
                                                 onChange={(e) =>
                                                     handlePropertyFieldChange(
@@ -334,9 +379,10 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item lg={6} xs={12}>
                                             <TextField
                                                 fullWidth
-                                                id="filled-basic"
+                                                className="editableField"
+                                                id="propertyZip"
                                                 label="Zip Code"
-                                                variant="filled"
+                                                variant="outlined"
                                                 value={propertyZip}
                                                 onChange={(e) =>
                                                     handlePropertyFieldChange(
@@ -357,9 +403,10 @@ const CurrentlyViewedProperty = (props) => {
                                         <Grid item lg={6} xs={12}>
                                             <TextField
                                                 fullWidth
-                                                id="filled-basic"
+                                                className="editableField"
+                                                id="propertyState"
                                                 label="State"
-                                                variant="filled"
+                                                variant="outlined"
                                                 value={propertyState}
                                                 InputProps={{
                                                     endAdornment: (
@@ -371,7 +418,7 @@ const CurrentlyViewedProperty = (props) => {
                                         {!updateIsLoading && !updateSuccess && (
                                             <Grid item lg={6} xs={12}>
                                                 <Button
-                     x                               className="updateOutletSoftwareBtn"
+                                                    className="updateOutletSoftwareBtn"
                                                     variant="contained"
                                                     onClick={() =>
                                                         updateSmartOutletSoftware()
@@ -430,10 +477,11 @@ const CurrentlyViewedProperty = (props) => {
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
-                                id="filled-basic"
+                                id="propertyContactName"
+                                className="editableField"
                                 fullWidth
                                 label="Property Contact Name"
-                                variant="filled"
+                                variant="outlined"
                                 value={propertyContactName}
                                 onChange={(e) =>
                                     handlePropertyFieldChange(
@@ -449,10 +497,11 @@ const CurrentlyViewedProperty = (props) => {
                         </Grid>
                         <Grid item xs={4}>
                             <TextField
-                                id="filled-basic"
+                                id="propertyContactEmail"
+                                className="editableField"
                                 fullWidth
                                 label="Property Contact Email"
-                                variant="filled"
+                                variant="outlined"
                                 value={propertyContactEmail}
                                 onChange={(e) =>
                                     handlePropertyFieldChange(
@@ -469,9 +518,10 @@ const CurrentlyViewedProperty = (props) => {
                         <Grid item xs={4}>
                             <TextField
                                 fullWidth
-                                id="filled-basic"
+                                className="editableField"
+                                id="propertyContactPhone"
                                 label="Property Contact Phone"
-                                variant="filled"
+                                variant="outlined"
                                 value={propertyContactPhone}
                                 onChange={(e) =>
                                     handlePropertyFieldChange(
@@ -486,23 +536,43 @@ const CurrentlyViewedProperty = (props) => {
                             />
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField
+                            <FormControl
                                 fullWidth
-                                id="filled-basic"
-                                label="Current Assigned Installer"
-                                variant="filled"
-                                value={property.installerUUID}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
+                                className="editableFieldSelectContainer"
+                            >
+                                <InputLabel id="assigned-installer">
+                                    Assigned Installer
+                                </InputLabel>
+                                <Select
+                                    labelId="assigned-installer"
+                                    className="editableFieldSelect"
+                                    variant="outlined"
+                                    id="assigned-installer"
+                                    value={propertyInstaller}
+                                    label="Assigned Installer"
+                                    onChange={(e) =>
+                                        handlePropertyFieldChange(
+                                            e.target.value,
+                                            'installerUUID'
+                                        )
+                                    }
+                                    onBlur={() => savePropertyInfo()}
+                                >
+                                    {allInstallers?.map((installer) => (
+                                        <MenuItem value={installer.cognitoUUID}>
+                                            {installer.email}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
-                                id="filled-basic"
+                                id="propNotes"
+                                className="editableField"
                                 label="Notes"
-                                variant="filled"
+                                variant="outlined"
                                 value={property.notes}
                                 InputProps={{
                                     endAdornment: <EditOutlinedIcon />,
@@ -572,19 +642,88 @@ const CurrentlyViewedProperty = (props) => {
                                 )}
                             </Grid>
                         </Grid>
+                        <Grid
+                            container
+                            spacing={3}
+                            xs={12}
+                            className="editLcuDetailsContainer"
+                        >
+                            <Grid item lg={3} md={6} s={12} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    className="editableField"
+                                    id="lcuName"
+                                    label="LCU Name"
+                                    variant="outlined"
+                                    value={lcu.name}
+                                    onChange={(e) =>
+                                        handleLCUFieldChange(
+                                            lcu,
+                                            e.target.value,
+                                            'name'
+                                        )
+                                    }
+                                    onBlur={() => saveLCUInfo(lcu)}
+                                    InputProps={{
+                                        endAdornment: <EditOutlinedIcon />,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item lg={3} md={6} s={12} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    className="editableField"
+                                    id="imei"
+                                    label="IMEI"
+                                    variant="outlined"
+                                    value={lcu.imeiNumber}
+                                    InputProps={{
+                                        endAdornment: <EditOutlinedIcon />,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item lg={3} md={6} s={12} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    className="editableField"
+                                    id="sim"
+                                    label="SIM"
+                                    variant="outlined"
+                                    value={lcu.simNumber}
+                                    InputProps={{
+                                        endAdornment: <EditOutlinedIcon />,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item lg={3} md={6} s={12} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    className="editableField"
+                                    id="line"
+                                    label="Line"
+                                    variant="outlined"
+                                    value={lcu.lineNumber}
+                                    InputProps={{
+                                        endAdornment: <EditOutlinedIcon />,
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
                         <Collapse in={lcuInfoOpened}>
                             <Grid
                                 container
-                                spacing={1}
+                                spacing={3}
+                                xs={12}
                                 className="editLcuDetailsContainer"
                             >
                                 <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
-                                        id="filled-basic"
-                                        label="LCU Name"
-                                        variant="filled"
-                                        value={lcu.name}
+                                        className="editableField"
+                                        id="adminState"
+                                        label="Admin State"
+                                        variant="outlined"
+                                        value={lcu.adminStatus}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
                                         }}
@@ -593,9 +732,36 @@ const CurrentlyViewedProperty = (props) => {
                                 <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
-                                        id="filled-basic"
-                                        label="IMEI"
-                                        variant="filled"
+                                        className="editableField"
+                                        id="carrier"
+                                        label="Carrier"
+                                        value={lcu.cellCarrier}
+                                        variant="outlined"
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item lg={3} md={6} s={12} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        className="editableField"
+                                        id="model"
+                                        label="Model"
+                                        value={lcu.modelNumber}
+                                        variant="outlined"
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item lg={3} md={6} s={12} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        className="editableField"
+                                        id="serial"
+                                        label="Serial"
+                                        variant="outlined"
                                         value="XXXXXXXXXXXXXXXXXXX"
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
@@ -605,9 +771,10 @@ const CurrentlyViewedProperty = (props) => {
                                 <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
-                                        id="filled-basic"
-                                        label="SIM"
-                                        variant="filled"
+                                        className="editableField"
+                                        id="hwVersion"
+                                        label="Hardware Version"
+                                        variant="outlined"
                                         value="XXXXXXXXXXXXXXXXXXX"
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
@@ -617,10 +784,37 @@ const CurrentlyViewedProperty = (props) => {
                                 <Grid item lg={3} md={6} s={12} xs={12}>
                                     <TextField
                                         fullWidth
-                                        id="filled-basic"
-                                        label="Line"
-                                        variant="filled"
+                                        className="editableField"
+                                        id="softwareVersion"
+                                        label="Software Version"
+                                        variant="outlined"
                                         value="XXXXXXXXXXXXXXXXXXX"
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item lg={3} md={6} s={12} xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        className="editableField"
+                                        id="fwVersion"
+                                        label="Firmware Version"
+                                        variant="outlined"
+                                        value="XXXXXXXXXXXXXXXXXXX"
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="lcuNotes"
+                                        className="editableField"
+                                        label="Notes"
+                                        variant="outlined"
+                                        value={property.notes}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
                                         }}
