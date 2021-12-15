@@ -278,7 +278,7 @@ export default function AdminDashboard(props) {
             }
             setIsLoading(false)
         }
-    }, [props.path])
+    }, [props.loggedIn])
 
     return (
         <div className={classes.root}>

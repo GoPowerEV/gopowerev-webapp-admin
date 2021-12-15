@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Redirect,
+} from 'react-router-dom'
 import Amplify, { Auth, Hub } from 'aws-amplify'
 import Navbar from './navBar/Navbar'
 import Footer from './footer/Footer'
@@ -10,7 +15,7 @@ import { useHistory } from 'react-router-dom'
 import './App.css'
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(true)
+    const [loggedIn, setLoggedIn] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [token, setToken] = useState(null)
 
@@ -45,8 +50,8 @@ function App() {
                 setLoggedIn(true)
             })
             .catch((err) => {
-                setLoggedIn(false)
                 console.log('ERROR', err)
+                setLoggedIn(false)
             })
     }
 
@@ -54,7 +59,7 @@ function App() {
         Auth.currentSession()
             .then((response) => {
                 setToken(response.idToken.jwtToken)
-                console.log('app token set', response.idToken.jwtToken)
+                console.log('here app token set', response.idToken.jwtToken)
             })
             .catch((err) => {
                 console.log('ERROR', err)
@@ -72,11 +77,8 @@ function App() {
         })
         setAuthListener()
         checkIfUserIsLoggedIn()
-    }, [])
-
-    useEffect(() => {
         getToken()
-    }, [loggedIn])
+    }, [])
 
     return (
         <Router>
@@ -85,8 +87,20 @@ function App() {
                 <LogoutModal handleClose={handleClose} open={openModal} />
                 <Navbar loggedIn={loggedIn} logout={logout} />
                 <Switch>
-                    <Route exact path="/" component={Login} />
                     <Route
+                        exact
+                        path="/"
+                        render={() => {
+                            console.log('here you go', loggedIn)
+                            return loggedIn === true ? (
+                                <Redirect to="/admin-dashboard" />
+                            ) : (
+                                <Redirect to="/login" />
+                            )
+                        }}
+                    />
+                    <Route
+                        exact
                         path="/admin-dashboard"
                         render={() => (
                             <AdminDashboard
@@ -119,7 +133,7 @@ function App() {
                             />
                         )}
                     />
-                    <Route path="/login" component={Login} />
+                    <Route exact path="/login" component={Login} />
                 </Switch>
                 <Footer />
             </div>
