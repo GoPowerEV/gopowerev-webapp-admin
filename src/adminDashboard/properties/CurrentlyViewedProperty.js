@@ -833,25 +833,37 @@ const CurrentlyViewedProperty = (props) => {
                             spacing={2}
                         >
                             <Grid item xs={12}>
-                                {locations?.map((location, index) => (
-                                    <div className="status-card-ininstall">
-                                        <Grid
-                                            container
-                                            className="allPropertiesContainer"
-                                            xs={12}
-                                            spacing={2}
-                                        >
-                                            <Grid item xs={12} key={index}>
-                                                <LocationCard
-                                                    location={location}
-                                                />
+                                {!isLoading &&
+                                    locations?.map((location, index) => (
+                                        <div className="status-card-ininstall">
+                                            <Grid
+                                                container
+                                                className="allPropertiesContainer"
+                                                xs={12}
+                                                spacing={2}
+                                            >
+                                                <Grid item xs={12} key={index}>
+                                                    <LocationCard
+                                                        token={props.token}
+                                                        location={location}
+                                                        setIsLoading={
+                                                            setIsLoading
+                                                        }
+                                                    />
+                                                </Grid>
                                             </Grid>
-                                        </Grid>
-                                        <SmartOutlets
-                                            smartOutlets={smartOutlets}
+                                            <SmartOutlets
+                                                smartOutlets={smartOutlets}
+                                            />
+                                        </div>
+                                    ))}
+                                {isLoading && (
+                                    <div className="loaderContainer">
+                                        <CircularProgress
+                                            style={{ color: '#12BFA2' }}
                                         />
                                     </div>
-                                ))}
+                                )}
                                 {!locations && (
                                     <div>No Locations Available</div>
                                 )}

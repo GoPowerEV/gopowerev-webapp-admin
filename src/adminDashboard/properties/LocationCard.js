@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { API_URL } from '../../constants'
 import CardContent from '@material-ui/core/CardContent'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
@@ -8,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import './LocationCard.css'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
-import Button from '@material-ui/core/Button'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 
 const useStyles = makeStyles({
@@ -38,34 +38,53 @@ const useStyles = makeStyles({
 })
 
 const LocationCard = (props) => {
+    const [locationInfo, setLocationInfo] = useState(props.location)
+    const [locationName, setLocationName] = useState(props.location.name)
+    const [locationVoltAmps, setLocationVoltAmps] = useState(
+        props.location.maxVoltAmps
+    )
+    const [locationNotes, setLocationNotes] = useState(
+        props.location.description
+    )
     const classes = useStyles()
-    const locationInfo = props.location
-    const [editingNotes, setEditingNotes] = useState(false)
-    const [editingName, setEditingName] = useState(false)
-    const [editingMaxVoltAmps, setEditingMaxVoltAmps] = useState(false)
 
-    const makeNameEditable = () => {
-        setEditingName(true)
+    const saveLocationInfo = () => {
+        props.setIsLoading(true)
+        if (props.token) {
+            console.log('about to save this  Location info', locationInfo)
+            fetch(API_URL + 'locations/' + locationInfo.locationUUID, {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(locationInfo),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        props.setIsLoading(false)
+                        console.log('save location success', result)
+                    },
+                    (error) => {
+                        props.setIsLoading(false)
+                    }
+                )
+        }
     }
 
-    const saveName = () => {
-        setEditingName(false)
-    }
+    const handleLocationFieldChange = (value, field) => {
+        if (field === 'name') {
+            setLocationName(value)
+        } else if (field === 'description') {
+            setLocationNotes(value)
+        } else {
+            setLocationVoltAmps(value)
+        }
+        let tempLocation = locationInfo
+        tempLocation[field] = value
 
-    const saveMaxVoltAmps = () => {
-        setEditingMaxVoltAmps(false)
-    }
-
-    const makeMaxVoltAmpsEditable = () => {
-        setEditingMaxVoltAmps(true)
-    }
-
-    const makeNotesEditable = () => {
-        setEditingNotes(true)
-    }
-
-    const saveNotes = () => {
-        setEditingNotes(false)
+        setLocationInfo(tempLocation)
     }
 
     return (
@@ -99,7 +118,14 @@ const LocationCard = (props) => {
                                         id="locationName"
                                         label="Location Name"
                                         variant="outlined"
-                                        value={locationInfo.name}
+                                        value={locationName}
+                                        onChange={(e) =>
+                                            handleLocationFieldChange(
+                                                e.target.value,
+                                                'name'
+                                            )
+                                        }
+                                        onBlur={() => saveLocationInfo()}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
                                         }}
@@ -112,7 +138,14 @@ const LocationCard = (props) => {
                                         id="maxVoltAmps"
                                         label="Max-Volt-Amps"
                                         variant="outlined"
-                                        value={locationInfo.maxVoltAmps}
+                                        value={locationVoltAmps}
+                                        onChange={(e) =>
+                                            handleLocationFieldChange(
+                                                e.target.value,
+                                                'maxVoltAmps'
+                                            )
+                                        }
+                                        onBlur={() => saveLocationInfo()}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
                                         }}
@@ -125,7 +158,14 @@ const LocationCard = (props) => {
                                         id="notes"
                                         label="Notes"
                                         variant="outlined"
-                                        value={locationInfo.notes}
+                                        value={locationNotes}
+                                        onChange={(e) =>
+                                            handleLocationFieldChange(
+                                                e.target.value,
+                                                'description'
+                                            )
+                                        }
+                                        onBlur={() => saveLocationInfo()}
                                         InputProps={{
                                             endAdornment: <EditOutlinedIcon />,
                                         }}
