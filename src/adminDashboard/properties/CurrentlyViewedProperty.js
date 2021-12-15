@@ -13,12 +13,11 @@ import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import TextField from '@material-ui/core/TextField'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import SmartOutlets from './propertySmartOutlets/SmartOutlets'
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import './Properties.css'
-import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
-import LocationCard from './LocationCard'
+import { getBadgeClass } from './utils/PropertyUtils'
 import { getAllInstallers } from './../dashboardService'
+import LcuCard from './LcuCard'
 
 const CurrentlyViewedProperty = (props) => {
     const [allInstallers, setAllInstallers] = useState([])
@@ -36,43 +35,12 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyContactPhone, setPropertyContactPhone] = useState('')
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
     const [propertyInstaller, setPropertyInstaller] = useState(null)
-    const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
-    const [lcuInfoOpened2, setLcuInfoOpened2] = useState(false)
     const [locations, setLocations] = useState(props.locations)
     const [lcus, setLcus] = useState(props.lcus)
     const [smartOutlets, setSmartOutlets] = useState(props.locations)
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
-    }
-
-    const toggleLcuInfo = () => {
-        setLcuInfoOpened(!lcuInfoOpened)
-    }
-
-    const saveLCUInfo = (lcu) => {
-        setIsLoading(true)
-        if (props.token) {
-            console.log('about to save this  LCU info', lcu)
-            fetch(API_URL + 'lcus/' + lcu.lcuUUID, {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(lcu),
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        console.log('save lcu success', result)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
     }
 
     const savePropertyInfo = () => {
@@ -107,19 +75,6 @@ const CurrentlyViewedProperty = (props) => {
                     }
                 )
         }
-    }
-
-    const handleLCUFieldChange = (lcu, value, field) => {
-        let tempLcu = lcu
-        let tempLcus = lcus
-        tempLcu[field] = value
-
-        for (let i = 0; i < lcus.length; i++) {
-            if (lcus[i].lcuUUID === lcu.lcuUUID) {
-                tempLcus[i] = tempLcu
-            }
-        }
-        setLcus(tempLcus)
     }
 
     const handlePropertyFieldChange = (value, field) => {
@@ -594,295 +549,23 @@ const CurrentlyViewedProperty = (props) => {
                     </Grid>
                 )}
             </Collapse>
+            <React.Fragment>
+                <hr className="propertiesHrLcu" />
+                <div className="greyHeader">
+                    <EvStationOutlinedIcon />
+                    LCUs
+                </div>
+            </React.Fragment>
             {lcus &&
                 lcus.map((lcu, index) => (
-                    <React.Fragment>
-                        <hr className="propertiesHrLcu" />
-                        <div className="greyHeader">
-                            <EvStationOutlinedIcon />
-                            LCUs
-                        </div>
-                        <Grid
-                            container
-                            xs={12}
-                            spacing={2}
-                            className="lcuContainer"
-                        >
-                            <Grid item xs={2} className="lcuHeaderColumn">
-                                <div className="lcuLocation">
-                                    {lcu.name ?? 'No LCU Name'}
-                                </div>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <div className={getBadgeClass(lcu.adminStatus)}>
-                                    {getBadgeText(lcu.adminStatus)}
-                                </div>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <div className="lcuHeader">
-                                    Operational Status
-                                </div>
-                                <div className="lcuRowText">
-                                    {lcu.operationalStatus &&
-                                        lcu.operationalStatus[0].toUpperCase() +
-                                            lcu.operationalStatus.slice(1)}
-                                </div>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <div className="lcuHeader">Heartbeat</div>
-                                <div className="lcuRowText">
-                                    {lcu.heartbeat ?? '-'}
-                                </div>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <div className="lcuHeader">Installed</div>
-                                <div className="lcuRowText">
-                                    {lcu.installedDate ?? '-'}
-                                </div>
-                            </Grid>
-                            <Grid item xs={1}>
-                                {!lcuInfoOpened ? (
-                                    <ExpandMoreIcon
-                                        className="expandIcon"
-                                        onClick={toggleLcuInfo}
-                                    />
-                                ) : (
-                                    <ExpandLessIcon
-                                        className="expandIcon"
-                                        onClick={toggleLcuInfo}
-                                    />
-                                )}
-                            </Grid>
-                        </Grid>
-                        <Grid
-                            container
-                            spacing={3}
-                            xs={12}
-                            className="editLcuDetailsContainer"
-                        >
-                            <Grid item lg={3} md={6} s={12} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    className="editableField"
-                                    id="lcuName"
-                                    label="LCU Name"
-                                    variant="outlined"
-                                    value={lcu.name}
-                                    onChange={(e) =>
-                                        handleLCUFieldChange(
-                                            lcu,
-                                            e.target.value,
-                                            'name'
-                                        )
-                                    }
-                                    onBlur={() => saveLCUInfo(lcu)}
-                                    InputProps={{
-                                        endAdornment: <EditOutlinedIcon />,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item lg={3} md={6} s={12} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    className="editableField"
-                                    id="imei"
-                                    label="IMEI"
-                                    variant="outlined"
-                                    value={lcu.imeiNumber}
-                                    InputProps={{
-                                        endAdornment: <EditOutlinedIcon />,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item lg={3} md={6} s={12} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    className="editableField"
-                                    id="sim"
-                                    label="SIM"
-                                    variant="outlined"
-                                    value={lcu.simNumber}
-                                    InputProps={{
-                                        endAdornment: <EditOutlinedIcon />,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item lg={3} md={6} s={12} xs={12}>
-                                <TextField
-                                    fullWidth
-                                    className="editableField"
-                                    id="line"
-                                    label="Line"
-                                    variant="outlined"
-                                    value={lcu.lineNumber}
-                                    InputProps={{
-                                        endAdornment: <EditOutlinedIcon />,
-                                    }}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Collapse in={lcuInfoOpened}>
-                            <Grid
-                                container
-                                spacing={3}
-                                xs={12}
-                                className="editLcuDetailsContainer"
-                            >
-                                <Grid item lg={3} md={6} s={12} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="adminState"
-                                        label="Admin State"
-                                        variant="outlined"
-                                        value={lcu.adminStatus}
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item lg={3} md={6} s={12} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="carrier"
-                                        label="Carrier"
-                                        value={lcu.cellCarrier}
-                                        variant="outlined"
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item lg={3} md={6} s={12} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="model"
-                                        label="Model"
-                                        value={lcu.modelNumber}
-                                        variant="outlined"
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item lg={3} md={6} s={12} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="serial"
-                                        label="Serial"
-                                        variant="outlined"
-                                        value="XXXXXXXXXXXXXXXXXXX"
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item lg={3} md={6} s={12} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="hwVersion"
-                                        label="Hardware Version"
-                                        variant="outlined"
-                                        value="XXXXXXXXXXXXXXXXXXX"
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item lg={3} md={6} s={12} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="softwareVersion"
-                                        label="Software Version"
-                                        variant="outlined"
-                                        value="XXXXXXXXXXXXXXXXXXX"
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item lg={3} md={6} s={12} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="fwVersion"
-                                        label="Firmware Version"
-                                        variant="outlined"
-                                        value="XXXXXXXXXXXXXXXXXXX"
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        id="lcuNotes"
-                                        className="editableField"
-                                        label="Notes"
-                                        variant="outlined"
-                                        value={property.notes}
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Collapse>
-                        <hr className="propertiesHrLcu" />
-                        <div className="tabHeader inInstallHeader">
-                            Locations
-                        </div>
-                        <Grid
-                            container
-                            className="allDashboardItemsContainer"
-                            xs={12}
-                            spacing={2}
-                        >
-                            <Grid item xs={12}>
-                                {!isLoading &&
-                                    locations?.map((location, index) => (
-                                        <div className="status-card-ininstall">
-                                            <Grid
-                                                container
-                                                className="allPropertiesContainer"
-                                                xs={12}
-                                                spacing={2}
-                                            >
-                                                <Grid item xs={12} key={index}>
-                                                    <LocationCard
-                                                        token={props.token}
-                                                        location={location}
-                                                        setIsLoading={
-                                                            setIsLoading
-                                                        }
-                                                    />
-                                                </Grid>
-                                            </Grid>
-                                            <SmartOutlets
-                                                smartOutlets={smartOutlets}
-                                            />
-                                        </div>
-                                    ))}
-                                {isLoading && (
-                                    <div className="loaderContainer">
-                                        <CircularProgress
-                                            style={{ color: '#12BFA2' }}
-                                        />
-                                    </div>
-                                )}
-                                {!locations && (
-                                    <div>No Locations Available</div>
-                                )}
-                            </Grid>
-                        </Grid>
-                        <hr className="propertiesHrLcu" />
-                    </React.Fragment>
+                    <LcuCard
+                        token={props.token}
+                        lcu={lcu}
+                        setIsLoading={setIsLoading}
+                        isLoading={isLoading}
+                        smartOutlets={smartOutlets}
+                        locations={locations}
+                    />
                 ))}
         </div>
     )

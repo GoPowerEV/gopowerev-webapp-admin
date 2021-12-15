@@ -457,6 +457,7 @@ const SmartOutlets = (props) => {
                 handleOpen={handleOpen}
                 handleClose={handleClose}
                 open={openModal}
+                token={props.token}
                 outletData={currentlyViewedOutlet}
                 outletIndex={outletIndex}
             />
