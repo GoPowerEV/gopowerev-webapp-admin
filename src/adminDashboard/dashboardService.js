@@ -22,6 +22,8 @@ export function getAllProperties(token, setIsLoading, setAllProperties) {
 }
 
 export function getPropertyLcus(token, id, setLcusOfThisProperty) {
+    console.log('here is the info passed to getLCUS', token)
+    console.log('here is the info passed to getLCUS', id)
     fetch(API_URL + 'lcus?propertyUUID=' + id, {
         method: 'GET',
         headers: {

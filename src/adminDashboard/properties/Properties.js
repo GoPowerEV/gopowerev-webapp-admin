@@ -31,8 +31,8 @@ const Properties = (props) => {
     const history = useHistory()
 
     const getAllOfTheProperties = async () => {
-        setActiveFilterFull('All')
-        getAllProperties(props.token, setIsLoading, setAllProperties)
+        console.log('here getting all')
+        await getAllProperties(props.token, setIsLoading, setAllProperties)
     }
 
     const getAllPropertiesByStatus = (status) => {
@@ -63,12 +63,12 @@ const Properties = (props) => {
         }
     }
 
-    const getLcus = async (token, id, setOpenedPropertyLcus) => {
-        await getPropertyLcus(token, id, setOpenedPropertyLcus)
+    const getLcus = (token, id, setOpenedPropertyLcus) => {
+        getPropertyLcus(token, id, setOpenedPropertyLcus)
     }
 
-    const getLocations = async (token, id, setOpenedPropertyLocations) => {
-        await getPropertyLocations(token, id, setOpenedPropertyLocations)
+    const getLocations = (token, id, setOpenedPropertyLocations) => {
+        getPropertyLocations(token, id, setOpenedPropertyLocations)
     }
 
     const getPropertyInfo = (id) => {
@@ -85,7 +85,7 @@ const Properties = (props) => {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('new stuff', result)
+                        console.log('here new stuff on paste', result)
                         setOpenedPropertyData(result)
                         getLcus(props.token, id, setOpenedPropertyLcus)
                         getLocations(
@@ -103,21 +103,27 @@ const Properties = (props) => {
     }
 
     const openPropertyDetails = (property, lcus, locations, smartOutlets) => {
+        console.log('here opening propertyDetails')
         history.push('/property/' + property.propertyUUID)
         setOpenedPropertyData(property)
         setOpenedPropertyLcus(lcus)
         setOpenedPropertyLocations(locations)
         setOpenedPropertySmartOutlets(smartOutlets)
-        console.log('property data', property)
+        console.log('here property data SINGLE', property)
         setPropertyOpened(true)
     }
 
     const openPropertyDetailsOnLoad = (propertyId) => {
+        console.log('here opening ON LOAD')
         history.push('/property/' + propertyId)
         getPropertyInfo(propertyId)
     }
 
     const closeOpenedProperty = () => {
+        history.push('/dashboard/properties')
+        getAllOfTheProperties()
+        setActiveFilter('all')
+        setActiveFilterFull('All')
         setOpenedPropertyData([])
         setPropertyOpened(false)
     }
@@ -145,16 +151,19 @@ const Properties = (props) => {
     }
 
     useEffect(() => {
+        console.log('here haha', props.viewThisProperty)
         if (props.viewThisProperty !== null) {
             openPropertyDetailsOnLoad(props.viewThisProperty)
         } else {
+            history.push('/dashboard/properties')
             getAllOfTheProperties()
             setActiveFilter('all')
             setActiveFilterFull('All')
         }
-    }, [props.token])
+    }, [props.viewThisProperty, props.token])
 
     useEffect(() => {
+        console.log('here haha', openedPropertyLocations)
         if (openedPropertyLocations?.length > 0) {
             openedPropertyLocations.forEach((location) => {
                 getLocationSmartOutlets(
@@ -165,7 +174,6 @@ const Properties = (props) => {
             })
         } else {
             console.log('here it is null')
-            setOpenedPropertySmartOutlets([])
         }
     }, [openedPropertyLocations])
 

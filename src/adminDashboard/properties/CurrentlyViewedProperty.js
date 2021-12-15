@@ -38,9 +38,9 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyInstaller, setPropertyInstaller] = useState(null)
     const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
     const [lcuInfoOpened2, setLcuInfoOpened2] = useState(false)
-    const locations = props.locations ?? null
-    const [lcus, setLcus] = useState(props.lcus ?? null)
-    const smartOutlets = props.smartOutlets ?? null
+    const [locations, setLocations] = useState(props.locations)
+    const [lcus, setLcus] = useState(props.lcus)
+    const [smartOutlets, setSmartOutlets] = useState(props.locations)
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -196,6 +196,18 @@ const CurrentlyViewedProperty = (props) => {
         document.querySelector('body').scrollTo(0, 0)
         getAllInstallers(props.token, setIsLoading, setAllInstallers)
     }, [])
+
+    useEffect(() => {
+        if (props.lcus) {
+            setLcus(props.lcus)
+        }
+        if (props.smartOutlets) {
+            setSmartOutlets(props.smartOutlets)
+        }
+        if (props.locations) {
+            setLocations(props.locations)
+        }
+    }, [props.lcus, props.smartOutlets, props.locations])
 
     return (
         <div className="propertiesMainBody">

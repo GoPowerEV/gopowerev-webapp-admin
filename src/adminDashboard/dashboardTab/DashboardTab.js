@@ -17,7 +17,7 @@ const DashboardTab = (props) => {
 
     useEffect(() => {
         getAllProperties(props.token, setIsLoading, setAllProperties)
-    }, [])
+    }, [props.token])
 
     useEffect(() => {
         function getPropertyCount(status) {

@@ -239,6 +239,7 @@ export default function AdminDashboard(props) {
             )
         } else {
             const urlLocation = props.path
+            console.log('here is LOCATION', urlLocation)
             if (urlLocation === 'admin-dashboard') {
                 setViewThisProperty(null)
                 history.push('/' + urlLocation)
@@ -278,7 +279,7 @@ export default function AdminDashboard(props) {
             }
             setIsLoading(false)
         }
-    }, [props.loggedIn])
+    }, [props.loggedIn, props.token, value])
 
     return (
         <div className={classes.root}>

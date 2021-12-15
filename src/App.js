@@ -44,8 +44,8 @@ function App() {
         })
     }
 
-    const checkIfUserIsLoggedIn = () => {
-        Auth.currentAuthenticatedUser()
+    const checkIfUserIsLoggedIn = async () => {
+        await Auth.currentAuthenticatedUser()
             .then((user) => {
                 setLoggedIn(true)
             })
@@ -55,8 +55,8 @@ function App() {
             })
     }
 
-    const getToken = () => {
-        Auth.currentSession()
+    const getToken = async () => {
+        await Auth.currentSession()
             .then((response) => {
                 setToken(response.idToken.jwtToken)
                 console.log('here app token set', response.idToken.jwtToken)
@@ -77,8 +77,13 @@ function App() {
         })
         setAuthListener()
         checkIfUserIsLoggedIn()
-        getToken()
     }, [])
+
+    useEffect(() => {
+        if (loggedIn) {
+            getToken()
+        }
+    }, [loggedIn])
 
     return (
         <Router>
