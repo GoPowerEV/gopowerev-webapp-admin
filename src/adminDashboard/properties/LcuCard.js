@@ -422,6 +422,7 @@ const LcuCard = (props) => {
                                 </Grid>
                                 <SmartOutlets
                                     smartOutlets={props.smartOutlets}
+                                    token={props.token}
                                 />
                             </div>
                         ))}

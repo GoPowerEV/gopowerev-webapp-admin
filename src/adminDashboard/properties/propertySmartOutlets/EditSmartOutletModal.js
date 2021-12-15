@@ -76,7 +76,7 @@ export default function EditSmartOutletModal(props) {
         setIsLoading(true)
         if (props.token) {
             console.log('about to save this  outlet info', outletData)
-            fetch(API_URL + 'lcus/' + outletData.smartOutletUUID, {
+            fetch(API_URL + 'smart-outlets/' + outletData.soUUID, {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -88,7 +88,7 @@ export default function EditSmartOutletModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('save lcu success', result)
+                        console.log('save outlet success', result)
                     },
                     (error) => {
                         setIsLoading(false)
