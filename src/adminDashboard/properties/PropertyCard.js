@@ -99,6 +99,12 @@ const PropertyCard = (props) => {
         getLocations()
     }, [])
 
+    useEffect(() => {
+        if (locationsOfThisProperty.length > 0) {
+            getSmartOutlets()
+        }
+    }, [getSmartOutlets, locationsOfThisProperty])
+
     return (
         <React.Fragment>
             <Card
