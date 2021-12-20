@@ -57,6 +57,7 @@ export default function EditSmartOutletModal(props) {
     )
     const [firmware, setFirmware] = useState(props.outletData.fwVersion)
     const [hardware, setHardware] = useState(props.outletData.hwVersion)
+    const [parkingSpot, setParkingSpot] = useState(props.outletData.parkingSpot)
     const [mac, setMac] = useState(props.outletData.macAddr)
     const [outletData, setOutletData] = useState(props.outletData)
     const [modalStyle] = useState(getModalStyle)
@@ -67,10 +68,11 @@ export default function EditSmartOutletModal(props) {
         setFirmware(props.outletData.fwVersion)
         setHardware(props.outletData.hwVersion)
         setSerialNumber(props.outletData.serialNumber)
+        setParkingSpot(props.outletData.parkingSpot)
         setMac(props.outletData.macAddr)
     }, [props.outletData])
 
-    console.log('here yo go', outletData)
+    console.log('here is the outlet data', outletData)
 
     const saveOutletInfo = () => {
         setIsLoading(true)
@@ -104,6 +106,8 @@ export default function EditSmartOutletModal(props) {
             setFirmware(value)
         } else if (field === 'serialNumber') {
             setSerialNumber(value)
+        } else if (field === 'parkingSpot') {
+            setParkingSpot(value)
         } else {
             setMac(value)
         }
@@ -168,6 +172,26 @@ export default function EditSmartOutletModal(props) {
                 )}
                 {!isLoading && (
                     <Grid container xs={12} spacing={3}>
+                        <Grid item xs={5}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="parkingSpot"
+                                label="Parking Spot"
+                                variant="filled"
+                                value={parkingSpot}
+                                onChange={(e) =>
+                                    handleOutletFieldChange(
+                                        e.target.value,
+                                        'parkingSpot'
+                                    )
+                                }
+                                onBlur={() => saveOutletInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
                         <Grid item xs={5}>
                             <TextField
                                 fullWidth
