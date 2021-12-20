@@ -512,7 +512,6 @@ const CurrentlyViewedProperty = (props) => {
                                 </InputLabel>
                                 <Select
                                     labelId="assigned-installer"
-                                    className="editableFieldSelect"
                                     variant="outlined"
                                     id="assigned-installer"
                                     value={propertyInstaller}

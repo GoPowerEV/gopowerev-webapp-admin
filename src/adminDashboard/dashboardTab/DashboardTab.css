@@ -142,18 +142,6 @@
     cursor: pointer;
 }
 
-.editInfoContainer {
-    margin-top: 25px;
-}
-
-.editInfoSaveButton {
-    margin-top: 20px !important;
-    background-color: #12bfa2 !important;
-    color: #ffffff !important;
-    font-weight: bold !important;
-    text-transform: 'none' !important;
-}
-
 .grey {
     background-color: #323438;
 }

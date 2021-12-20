@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { API_URL } from '../../constants'
 import Grid from '@material-ui/core/Grid'
+import { Select, MenuItem, FormControl, InputLabel } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
@@ -11,6 +12,7 @@ import LocationCard from './LocationCard'
 import SmartOutlets from './propertySmartOutlets/SmartOutlets'
 import './Properties.css'
 import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
+import { adminStateOptions } from './../dashboardConstants'
 
 const LcuCard = (props) => {
     const [lcuInfo, setLcuInfo] = useState(props.lcu)
@@ -88,6 +90,8 @@ const LcuCard = (props) => {
 
         setLcuInfo(tempLcu)
     }
+
+    console.log('this lcu info', lcuInfo)
 
     return (
         <React.Fragment>
@@ -233,24 +237,37 @@ const LcuCard = (props) => {
                     className="editLcuDetailsContainer"
                 >
                     <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
+                        <FormControl
                             fullWidth
-                            className="editableField"
-                            id="adminState"
-                            label="Admin State"
-                            variant="outlined"
-                            value={adminState}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'adminStatus'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
+                            className="editableFieldSelectContainer"
+                        >
+                            <InputLabel id="adminState">Admin State</InputLabel>
+                            <Select
+                                labelId="adminState"
+                                variant="outlined"
+                                id="adminState"
+                                value={adminState}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'adminStatus'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                label="Admin State"
+                            >
+                                {adminStateOptions?.map((option) => {
+                                    return (
+                                        <MenuItem
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label ?? option.value}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item lg={3} md={6} s={12} xs={12}>
                         <TextField
