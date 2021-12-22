@@ -17,6 +17,7 @@ import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import './Properties.css'
 import { getBadgeClass } from './utils/PropertyUtils'
 import { getAllInstallers } from './../dashboardService'
+import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
 import LcuCard from './LcuCard'
 
 const CurrentlyViewedProperty = (props) => {
@@ -38,6 +39,7 @@ const CurrentlyViewedProperty = (props) => {
     const [locations, setLocations] = useState(props.locations)
     const [lcus, setLcus] = useState(props.lcus)
     const [smartOutlets, setSmartOutlets] = useState(props.locations)
+    const [openModal, setOpenModal] = useState(false)
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -131,6 +133,18 @@ const CurrentlyViewedProperty = (props) => {
                     }
                 )
         }
+    }
+
+    const handleOpen = () => {
+        setOpenModal(true)
+    }
+
+    const handleClose = () => {
+        setOpenModal(false)
+    }
+
+    const addNewLocationAndLcu = () => {
+        handleOpen()
     }
 
     useEffect(() => {
@@ -375,6 +389,15 @@ const CurrentlyViewedProperty = (props) => {
                                                 label="State"
                                                 variant="outlined"
                                                 value={propertyState}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'state'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
                                                 InputProps={{
                                                     endAdornment: (
                                                         <EditOutlinedIcon />
@@ -549,12 +572,30 @@ const CurrentlyViewedProperty = (props) => {
                 )}
             </Collapse>
             <React.Fragment>
+                {/* ADD NEW CLU MODAL */}
+                <AddNewLcuModal
+                    handleOpen={handleOpen}
+                    handleClose={handleClose}
+                    open={openModal}
+                    token={props.token}
+                />
                 <hr className="propertiesHrLcu" />
                 <div className="greyHeader">
                     <EvStationOutlinedIcon />
                     LCUs
                 </div>
+                <div>
+                    {' '}
+                    <Button
+                        className="addNewLocationButton"
+                        variant="outlined"
+                        onClick={addNewLocationAndLcu}
+                    >
+                        Add New Location & LCU
+                    </Button>
+                </div>
             </React.Fragment>
+            {!lcus && <div>None</div>}
             {lcus &&
                 lcus.map((lcu, index) => (
                     <LcuCard

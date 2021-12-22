@@ -1,0 +1,20 @@
+.newLcuModalHeader {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+.submitButton {
+    background-color: #12bfa2 !important;
+    float: right;
+    margin-top: 30px !important;
+    font-size: 15px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+}
+
+.submitButton:disabled {
+    background-color: #a1a1a1 !important;
+}
