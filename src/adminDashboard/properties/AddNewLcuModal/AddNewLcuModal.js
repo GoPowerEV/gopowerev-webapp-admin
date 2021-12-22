@@ -74,7 +74,7 @@ export default function AddNewLcuModal(props) {
             maxVoltAmps: 0,
             name: '',
             pictureUrl1: '',
-            propertyUUID: '',
+            propertyUUID: props.propertyUUID,
         },
     ])
     const [lcuName, setLcuName] = useState('')
@@ -97,7 +97,7 @@ export default function AddNewLcuModal(props) {
         maxVoltAmps: 0,
         name: '',
         pictureUrl1: '',
-        propertyUUID: '',
+        propertyUUID: props.propertyUUID,
     }
 
     const [modalStyle] = useState(getModalStyle)
@@ -253,12 +253,175 @@ export default function AddNewLcuModal(props) {
         checkIfThereAreStillErrors()
     }
 
+    const createSmartOutlets = (amountOfOutlets, locationId) => {
+        console.log('this is the amount of outlets', amountOfOutlets)
+        console.log('locationId', locationId)
+        for (var i = 0; i < amountOfOutlets; i++) {
+            setIsLoading(true)
+            let locationObject = {
+                locationUUID: locationId,
+                model: 'Proto X0-Frank',
+            }
+            if (props.token) {
+                fetch(API_URL + 'smart-outlets', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(locationObject),
+                })
+                    .then((res) => res.json())
+                    .then(
+                        async (result) => {
+                            setIsLoading(false)
+                            console.log(
+                                'created smart outlet successfully',
+                                result
+                            )
+                        },
+                        (error) => {
+                            setIsLoading(false)
+                        }
+                    )
+            }
+        }
+    }
+
+    const uploadLocationPicture = (locationId, photoBinaries, index) => {
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL + 'locations-image/' + locationId, {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'image/jpg',
+                },
+                body: photoBinaries[index],
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        console.log(
+                            'uploaded location image successfully',
+                            result
+                        )
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const createLocation = (
+        lcuId,
+        location,
+        photoBinaries,
+        index,
+        amountOfSmartOutlets
+    ) => {
+        let locationId = null
+        setIsLoading(true)
+        let locationObject = {
+            lcuUUID: lcuId,
+            maxVoltAmps: location.maxVoltAmps,
+            name: location.name,
+            propertyUUID: props.propertyUUID,
+        }
+        console.log('creating this location', locationObject)
+        if (props.token) {
+            fetch(API_URL + 'locations', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(locationObject),
+            })
+                .then((res) => res.json())
+                .then(
+                    async (result) => {
+                        setIsLoading(false)
+                        console.log('created location successfully', result)
+                        locationId = result.locationUUID
+                        if (photoBinaries.length > 0 && photoBinaries[index]) {
+                            await uploadLocationPicture(
+                                locationId,
+                                photoBinaries,
+                                index
+                            )
+                        }
+                        if (
+                            amountOfSmartOutlets.length > 0 &&
+                            amountOfSmartOutlets[index]
+                        ) {
+                            await createSmartOutlets(
+                                amountOfSmartOutlets[index],
+                                locationId
+                            )
+                        }
+                        props.close()
+                        props.openPropertyDetailsOnLoad(props.propertyUUID)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const createLcu = (
+        lcuName,
+        lcuModel,
+        locations,
+        photoBinaries,
+        amountOfSmartOutlets
+    ) => {
+        setIsLoading(true)
+        let lcuObject = {
+            modelNumber: lcuModel,
+            name: lcuName,
+        }
+        if (props.token) {
+            fetch(API_URL + 'lcus', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(lcuObject),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        console.log('created lcu successfully', result)
+                        console.log('here photo binaries', photoBinaries)
+                        locations.forEach((location, index) => {
+                            createLocation(
+                                result.lcuUUID,
+                                location,
+                                photoBinaries,
+                                index,
+                                amountOfSmartOutlets
+                            )
+                        })
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
     const validateAndSubmit = () => {
         checkLocationsNames()
         // checkLcuName()
         console.log('here does it have errors? ' + hasErrors)
-        if (!checkIfThereAreStillErrors) {
-            props.handleSubmitForInstallation(
+        if (!hasErrors) {
+            createLcu(
                 lcuName,
                 lcuModel,
                 locations,
@@ -291,14 +454,20 @@ export default function AddNewLcuModal(props) {
 
     useEffect(() => {
         if (
-            lcuName.length > 0 &&
-            locations[0].name.length > 0 &&
-            locations[0].maxVoltAmps.toString().length > 0 &&
-            amountOfSmartOutlets[0].toString().length > 0
+            locations[0].name &&
+            locations[0].maxVoltAmps &&
+            amountOfSmartOutlets[0]
         ) {
-            setDisableSubmitButton(false)
-        } else {
-            setDisableSubmitButton(true)
+            if (
+                lcuName.length > 0 &&
+                locations[0].name.length > 0 &&
+                locations[0].maxVoltAmps.toString().length > 0 &&
+                amountOfSmartOutlets[0].toString().length > 0
+            ) {
+                setDisableSubmitButton(false)
+            } else {
+                setDisableSubmitButton(true)
+            }
         }
     }, [lcuName, locations])
 
@@ -454,6 +623,7 @@ export default function AddNewLcuModal(props) {
                                 <Button
                                     className="submitButton"
                                     disabled={disableSubmitButton}
+                                    onClick={() => validateAndSubmit()}
                                 >
                                     Submit For Installation
                                 </Button>

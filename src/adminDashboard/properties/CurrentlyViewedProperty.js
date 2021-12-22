@@ -38,7 +38,7 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyInstaller, setPropertyInstaller] = useState(null)
     const [locations, setLocations] = useState(props.locations)
     const [lcus, setLcus] = useState(props.lcus)
-    const [smartOutlets, setSmartOutlets] = useState(props.locations)
+    const [smartOutlets, setSmartOutlets] = useState(props.smartOutlets)
     const [openModal, setOpenModal] = useState(false)
 
     const togglePropertyInfo = () => {
@@ -577,13 +577,17 @@ const CurrentlyViewedProperty = (props) => {
                     handleOpen={handleOpen}
                     handleClose={handleClose}
                     open={openModal}
+                    close={handleClose}
                     token={props.token}
+                    propertyUUID={property.propertyUUID}
+                    openPropertyDetailsOnLoad={props.openPropertyDetailsOnLoad}
                 />
                 <hr className="propertiesHrLcu" />
                 <div className="greyHeader">
                     <EvStationOutlinedIcon />
                     LCUs
                 </div>
+                {lcus.length === 0 && <div>No LCUs</div>}
                 <div>
                     {' '}
                     <Button
@@ -595,7 +599,6 @@ const CurrentlyViewedProperty = (props) => {
                     </Button>
                 </div>
             </React.Fragment>
-            {!lcus && <div>None</div>}
             {lcus &&
                 lcus.map((lcu, index) => (
                     <LcuCard

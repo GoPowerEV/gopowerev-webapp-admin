@@ -108,6 +108,7 @@ const Properties = (props) => {
         setOpenedPropertyData(property)
         setOpenedPropertyLcus(lcus)
         setOpenedPropertyLocations(locations)
+        console.log('here are the smart outlets', smartOutlets)
         setOpenedPropertySmartOutlets(smartOutlets)
         console.log('here property data SINGLE', property)
         setPropertyOpened(true)
@@ -327,6 +328,7 @@ const Properties = (props) => {
                     locations={openedPropertyLocations}
                     smartOutlets={openedPropertySmartOutlets}
                     closeOpenedProperty={closeOpenedProperty}
+                    openPropertyDetailsOnLoad={openPropertyDetailsOnLoad}
                     token={props.token}
                 />
             )}
