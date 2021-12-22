@@ -343,13 +343,15 @@ export default function UpdateLcuAndLocation(props) {
         e.preventDefault()
     }
 
-    const handlePhotoChange = (e) => {
-        if (e.target.files.length) {
-            //   setImage({
-            //     preview: URL.createObjectURL(e.target.files[0]),
-            //     raw: e.target.files[0]
-            //   });
-        }
+    const handlePhotoChange = (event, locationIndex) => {
+        event.preventDefault()
+        const files = event.target.files
+        setPhotoAdded(true)
+        setPhotoFile(files[0])
+        getBinaryFromImg(files[0], locationIndex)
+        let tempFileNames = photoFileNames
+        tempFileNames[locationIndex] = files[0].name
+        setPhotoFileNames(tempFileNames)
     }
 
     const checkLocationsNames = () => {
@@ -627,7 +629,12 @@ export default function UpdateLcuAndLocation(props) {
                                                     style={{
                                                         display: 'none',
                                                     }}
-                                                    onChange={handlePhotoChange}
+                                                    onChange={(e) =>
+                                                        handlePhotoChange(
+                                                            e,
+                                                            index
+                                                        )
+                                                    }
                                                 />
                                             </Grid>
                                         </Grid>

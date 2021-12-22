@@ -201,12 +201,12 @@ export default function AddNewLcuModal(props) {
 
     const fileDrop = (event, locationIndex) => {
         event.preventDefault()
-        const files = event.dataTransfer.files
+        const file = event.dataTransfer.files[0]
         setPhotoAdded(true)
-        setPhotoFile(files[0])
-        getBinaryFromImg(files[0], locationIndex)
+        setPhotoFile(file)
+        getBinaryFromImg(file, locationIndex)
         let tempFileNames = photoFileNames
-        tempFileNames[locationIndex] = files[0].name
+        tempFileNames[locationIndex] = file.name
         setPhotoFileNames(tempFileNames)
     }
 
@@ -214,6 +214,17 @@ export default function AddNewLcuModal(props) {
 
     const handlePhotoClick = (event) => {
         hiddenFileInput.current.click()
+    }
+
+    const handlePhotoChange = (event) => {
+        event.preventDefault()
+        const files = event.target.files
+        setPhotoAdded(true)
+        setPhotoFile(files[0])
+        getBinaryFromImg(files[0], 0)
+        let tempFileNames = photoFileNames
+        tempFileNames[0] = files[0].name
+        setPhotoFileNames(tempFileNames)
     }
 
     const dragOver = (e) => {
@@ -226,15 +237,6 @@ export default function AddNewLcuModal(props) {
 
     const dragLeave = (e) => {
         e.preventDefault()
-    }
-
-    const handlePhotoChange = (e) => {
-        if (e.target.files.length) {
-            //   setImage({
-            //     preview: URL.createObjectURL(e.target.files[0]),
-            //     raw: e.target.files[0]
-            //   });
-        }
     }
 
     const checkLocationsNames = () => {

@@ -527,13 +527,13 @@ export default function SetupNewProperty(props) {
         e.preventDefault()
     }
 
-    const handlePhotoChange = (e) => {
-        if (e.target.files.length) {
-            //   setImage({
-            //     preview: URL.createObjectURL(e.target.files[0]),
-            //     raw: e.target.files[0]
-            //   });
-        }
+    const handlePhotoChange = (event) => {
+        event.preventDefault()
+        const files = event.target.files
+        setPhotoAdded(true)
+        setPhotoFile(files[0])
+        getBinaryFromImg(files[0])
+        setPhotoFileName(files[0].name)
     }
 
     const fileDrop = (e) => {
