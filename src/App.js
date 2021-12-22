@@ -15,7 +15,7 @@ import { useHistory } from 'react-router-dom'
 import './App.css'
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(false)
+    const [loggedIn, setLoggedIn] = useState(true)
     const [openModal, setOpenModal] = useState(false)
     const [token, setToken] = useState(null)
 
