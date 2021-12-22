@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formHeader: {
         marginBottom: '20px',
+        color: 'black',
     },
     formHeaderGrey: {
         color: '#ADAEAF',

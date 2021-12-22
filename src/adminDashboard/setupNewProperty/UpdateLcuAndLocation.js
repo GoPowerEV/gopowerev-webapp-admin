@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formHeader: {
         marginBottom: '20px',
+        color: 'black',
     },
     formHeaderGrey: {
         color: '#ADAEAF',
@@ -105,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
     installerDetailsStep2: {
         fontSize: '20px',
         marginBottom: '20px',
+        color: 'black',
     },
     splitter: {
         fontSize: '19px',
@@ -120,6 +122,7 @@ const useStyles = makeStyles((theme) => ({
     removeLocationIcon: {
         fontSize: '30px',
         cursor: 'pointer',
+        color: '#323438',
     },
     dottedHr: {
         borderTop: '1px dashed #ADAEAF',
@@ -175,9 +178,13 @@ export default function UpdateLcuAndLocation(props) {
 
     const handleNumberOfLocationsChange = () => {
         let tempLocations = locations
-        tempLocations.push(sampleLocationObject)
-        setLocations(tempLocations)
-        setNumberOfLocations(tempLocations.length)
+        if (tempLocations.length === 10) {
+            alert('10 is the max amount of locations allowed.')
+        } else {
+            tempLocations.push(sampleLocationObject)
+            setLocations(tempLocations)
+            setNumberOfLocations(tempLocations.length)
+        }
     }
 
     const removeThisLocation = (index) => {
