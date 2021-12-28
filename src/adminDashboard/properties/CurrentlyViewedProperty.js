@@ -18,6 +18,7 @@ import './Properties.css'
 import { getBadgeClass } from './utils/PropertyUtils'
 import { getAllInstallers } from './../dashboardService'
 import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
+import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
 import LcuCard from './LcuCard'
 
 const CurrentlyViewedProperty = (props) => {
@@ -40,6 +41,7 @@ const CurrentlyViewedProperty = (props) => {
     const [lcus, setLcus] = useState(props.lcus)
     const [smartOutlets, setSmartOutlets] = useState(props.smartOutlets)
     const [openModal, setOpenModal] = useState(false)
+    const [openUpdateModal, setOpenUpdateModal] = useState(false)
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -145,6 +147,18 @@ const CurrentlyViewedProperty = (props) => {
 
     const addNewLocationAndLcu = () => {
         handleOpen()
+    }
+
+    const handleOpenUpdateModal = () => {
+        setOpenUpdateModal(true)
+    }
+
+    const handleCloseUpdateModal = () => {
+        setOpenUpdateModal(false)
+    }
+
+    const openUpdateSmartOutletSoftwareModal = () => {
+        handleOpenUpdateModal()
     }
 
     useEffect(() => {
@@ -411,7 +425,7 @@ const CurrentlyViewedProperty = (props) => {
                                                     className="updateOutletSoftwareBtn"
                                                     variant="contained"
                                                     onClick={() =>
-                                                        updateSmartOutletSoftware()
+                                                        openUpdateSmartOutletSoftwareModal()
                                                     }
                                                 >
                                                     Update Smart Outlet Software
@@ -598,6 +612,14 @@ const CurrentlyViewedProperty = (props) => {
                     </Button>
                 </div>
             </React.Fragment>
+            {/* UPDATE OUTLET MODAL */}
+            <UpdateSoftwareModal
+                handleOpen={handleOpenUpdateModal}
+                handleClose={handleCloseUpdateModal}
+                open={openUpdateModal}
+                close={handleCloseUpdateModal}
+                token={props.token}
+            />
             {lcus &&
                 lcus.map((lcu, index) => (
                     <LcuCard
