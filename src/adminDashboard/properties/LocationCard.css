@@ -35,3 +35,15 @@
 .saveNotesButton {
     margin-left: -20px !important;
 }
+
+.smartOutletsArea {
+    background-color: #bababa4a;
+    border-radius: 9px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.smartOutletsCountHidden {
+    font-weight: bold;
+    margin-left: 7px;
+}

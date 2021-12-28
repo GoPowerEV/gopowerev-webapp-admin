@@ -12,7 +12,7 @@ import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import {
     getPropertyLcus,
     getPropertyLocations,
-    getLocationSmartOutlets,
+    getAllLocationSmartOutlets,
 } from './../dashboardService'
 
 const useStyles = makeStyles({
@@ -58,7 +58,7 @@ const PropertyCard = (props) => {
 
     const getSmartOutlets = (locationId) => {
         if (props.token) {
-            getLocationSmartOutlets(
+            getAllLocationSmartOutlets(
                 props.token,
                 locationId,
                 setSmartOutletsOfThisProperty

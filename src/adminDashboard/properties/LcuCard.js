@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { API_URL } from '../../constants'
 import Grid from '@material-ui/core/Grid'
-import { Select, MenuItem, FormControl, InputLabel } from '@material-ui/core'
+import {
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+} from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
@@ -9,10 +15,10 @@ import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Collapse from '@material-ui/core/Collapse'
 import LocationCard from './LocationCard'
-import SmartOutlets from './propertySmartOutlets/SmartOutlets'
 import './Properties.css'
 import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
 import { adminStateOptions } from './../dashboardConstants'
+import AddNewLocationModal from './AddNewLocationModal/AddNewLocationModal'
 
 const LcuCard = (props) => {
     const [lcuInfo, setLcuInfo] = useState(props.lcu)
@@ -29,6 +35,7 @@ const LcuCard = (props) => {
     const [notes, setNotes] = useState(props.lcu.description)
     const [lcuName, setLcuName] = useState(props.lcu.name)
     const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
+    const [openModal, setOpenModal] = useState(false)
 
     const toggleLcuInfo = () => {
         setLcuInfoOpened(!lcuInfoOpened)
@@ -89,6 +96,18 @@ const LcuCard = (props) => {
         tempLcu[field] = value
 
         setLcuInfo(tempLcu)
+    }
+
+    const handleOpen = () => {
+        setOpenModal(true)
+    }
+
+    const handleClose = () => {
+        setOpenModal(false)
+    }
+
+    const addNewLocation = () => {
+        handleOpen()
     }
 
     console.log('this lcu info', lcuInfo)
@@ -410,48 +429,65 @@ const LcuCard = (props) => {
                         />
                     </Grid>
                 </Grid>
-            </Collapse>
-            <hr className="propertiesHrLcu" />
-            <div className="tabHeader inInstallHeader">Locations</div>
-            <Grid
-                container
-                className="allDashboardItemsContainer"
-                xs={12}
-                spacing={2}
-            >
-                <Grid item xs={12}>
-                    {!props.isLoading &&
-                        props.locations?.map((location, index) => (
-                            <div className="status-card-ininstall">
-                                <Grid
-                                    container
-                                    className="allPropertiesContainer"
-                                    xs={12}
-                                    spacing={2}
-                                >
-                                    <Grid item xs={12} key={index}>
-                                        <LocationCard
-                                            token={props.token}
-                                            location={location}
-                                            setIsLoading={props.setIsLoading}
-                                        />
+                <hr className="propertiesHrLcu" />
+                <div className="tabHeader inInstallHeader">Locations</div>
+                <Button
+                    className="addNewLocButton"
+                    variant="outlined"
+                    onClick={addNewLocation}
+                >
+                    Add New Location
+                </Button>
+                {/* ADD NEW LOCATION MODAL */}
+                <AddNewLocationModal
+                    handleOpen={handleOpen}
+                    handleClose={handleClose}
+                    open={openModal}
+                    close={handleClose}
+                    token={props.token}
+                    openPropertyDetailsOnLoad={props.openPropertyDetailsOnLoad}
+                />
+                <Grid
+                    container
+                    className="allDashboardItemsContainer"
+                    xs={12}
+                    spacing={2}
+                >
+                    <Grid item xs={12}>
+                        {!props.isLoading &&
+                            props.locations?.map((location, index) => (
+                                <div className="status-card-ininstall">
+                                    <Grid
+                                        container
+                                        className="allPropertiesContainer"
+                                        xs={12}
+                                        spacing={2}
+                                    >
+                                        <Grid item xs={12} key={index}>
+                                            <LocationCard
+                                                token={props.token}
+                                                location={location}
+                                                setIsLoading={
+                                                    props.setIsLoading
+                                                }
+                                            />
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                                <SmartOutlets
-                                    smartOutlets={props.smartOutlets}
-                                    token={props.token}
+                                </div>
+                            ))}
+                        {props.isLoading && (
+                            <div className="loaderContainer">
+                                <CircularProgress
+                                    style={{ color: '#12BFA2' }}
                                 />
                             </div>
-                        ))}
-                    {props.isLoading && (
-                        <div className="loaderContainer">
-                            <CircularProgress style={{ color: '#12BFA2' }} />
-                        </div>
-                    )}
-                    {!props.locations && <div>No Locations Available</div>}
+                        )}
+                        {!props.locations && <div>No Locations Available</div>}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Collapse>
             <hr className="propertiesHrLcu" />
+            <div className="bottom-margin-container"></div>
         </React.Fragment>
     )
 }

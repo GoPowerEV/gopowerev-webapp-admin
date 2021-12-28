@@ -1,5 +1,5 @@
 .smartOutletsContainer {
-    margin-top: 20px;
+    width: 100%;
 }
 
 .smartSo {
@@ -19,7 +19,7 @@
 }
 
 .outletHeader {
-    margin-top: 75px;
+    margin-top: 5px;
     margin-bottom: 25px;
     font-size: 17px;
     font-weight: 600;

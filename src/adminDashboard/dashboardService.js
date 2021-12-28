@@ -62,12 +62,34 @@ export function getPropertyLocations(token, id, setLocationsOfThisProperty) {
         )
 }
 
-export function getLocationSmartOutlets(
+export function getAllLocationSmartOutlets(
     token,
     id,
     setSmartOutletsOfThisProperty
 ) {
     fetch(API_URL + 'smart-outlets?soUUID=' + id, {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                console.log('here all smart outlets', result.smartOutlets)
+                setSmartOutletsOfThisProperty(result.smartOutlets)
+            },
+            (error) => {}
+        )
+}
+
+export function getALocationSmartOutletsById(
+    token,
+    id,
+    setSmartOutletsOfThisProperty
+) {
+    fetch(API_URL + 'smart-outlets?locationUUID=' + id, {
         method: 'GET',
         headers: {
             Authorization: 'Bearer ' + token,

@@ -589,13 +589,12 @@ const CurrentlyViewedProperty = (props) => {
                 </div>
                 {lcus.length === 0 && <div>No LCUs</div>}
                 <div>
-                    {' '}
                     <Button
                         className="addNewLocationButton"
                         variant="outlined"
                         onClick={addNewLocationAndLcu}
                     >
-                        Add New Location & LCU
+                        Add New LCU & Location
                     </Button>
                 </div>
             </React.Fragment>
@@ -606,7 +605,6 @@ const CurrentlyViewedProperty = (props) => {
                         lcu={lcu}
                         setIsLoading={setIsLoading}
                         isLoading={isLoading}
-                        smartOutlets={smartOutlets}
                         locations={locations}
                     />
                 ))}

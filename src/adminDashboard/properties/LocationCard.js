@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { API_URL } from '../../constants'
 import CardContent from '@material-ui/core/CardContent'
+import Collapse from '@material-ui/core/Collapse'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import './../../adminDashboard/dashboardTab/DashboardTab.css'
 import { makeStyles } from '@material-ui/core/styles'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
+import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import './LocationCard.css'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
+import SmartOutlets from './propertySmartOutlets/SmartOutlets'
+import { getALocationSmartOutletsById } from './../dashboardService'
 
 const useStyles = makeStyles({
     root: {
@@ -40,12 +45,14 @@ const useStyles = makeStyles({
 const LocationCard = (props) => {
     const [locationInfo, setLocationInfo] = useState(props.location)
     const [locationName, setLocationName] = useState(props.location.name)
+    const [locationInfoOpened, setlLocationInfoOpened] = useState(true)
     const [locationVoltAmps, setLocationVoltAmps] = useState(
         props.location.maxVoltAmps
     )
     const [locationNotes, setLocationNotes] = useState(
         props.location.description
     )
+    const [smartOutlets, setSmartOutlets] = useState([])
     const classes = useStyles()
 
     const saveLocationInfo = () => {
@@ -87,95 +94,158 @@ const LocationCard = (props) => {
         setLocationInfo(tempLocation)
     }
 
+    const toggleLocationInfo = () => {
+        setlLocationInfoOpened(!locationInfoOpened)
+    }
+
+    useEffect(() => {
+        getALocationSmartOutletsById(
+            props.token,
+            locationInfo.locationUUID,
+            setSmartOutlets
+        )
+    }, [])
+
+    useEffect(() => {
+        console.log('here ARE THE ACTUAL SMART OUTLETS', smartOutlets)
+    }, [smartOutlets])
+
     return (
         <React.Fragment>
-            <div className={classes.locationCardHeader}>
-                <LocationOnOutlinedIcon />
-                {locationInfo.name ?? 'No Location Name Available'}
-            </div>
-            <Card className={classes.root}>
-                <CardContent className={classes.content}>
-                    <Grid container xs={12} spacing={3}>
-                        <Grid item xs={4}>
-                            <img
-                                alt="Property Img"
-                                src={
-                                    locationInfo.pictureUrl1 ?? NoImageAvailable
-                                }
-                                className="viewedPropertyMainImage"
-                            />
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Grid
-                                container
-                                spacing={3}
-                                className="editLcuDetailsContainer"
-                            >
-                                <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="locationName"
-                                        label="Location Name"
-                                        variant="outlined"
-                                        value={locationName}
-                                        onChange={(e) =>
-                                            handleLocationFieldChange(
-                                                e.target.value,
-                                                'name'
-                                            )
+            <Grid container>
+                <Grid item xs={11}>
+                    <div className={classes.locationCardHeader}>
+                        <LocationOnOutlinedIcon />
+                        {locationInfo.name ?? 'No Location Name Available'}
+                    </div>
+                    {!locationInfoOpened && (
+                        <div className="smartOutletsCountHidden">
+                            {smartOutlets.length} Smart Outlets (Expend to see
+                            more information)
+                        </div>
+                    )}
+                </Grid>
+                <Grid item xs={1}>
+                    {locationInfoOpened && (
+                        <ExpandMoreIcon
+                            className="expandIconFirstPortion"
+                            onClick={toggleLocationInfo}
+                        />
+                    )}
+                    {!locationInfoOpened && (
+                        <ExpandLessIcon
+                            className="expandIconFirstPortion"
+                            onClick={toggleLocationInfo}
+                        />
+                    )}
+                </Grid>
+                <Collapse in={locationInfoOpened}>
+                    <Card className={classes.root}>
+                        <CardContent className={classes.content}>
+                            <Grid container xs={12} spacing={3}>
+                                <Grid item xs={4}>
+                                    <img
+                                        alt="Property Img"
+                                        src={
+                                            locationInfo.pictureUrl1 ??
+                                            NoImageAvailable
                                         }
-                                        onBlur={() => saveLocationInfo()}
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
+                                        className="viewedPropertyMainImage"
                                     />
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="maxVoltAmps"
-                                        label="Max-Volt-Amps"
-                                        variant="outlined"
-                                        value={locationVoltAmps}
-                                        onChange={(e) =>
-                                            handleLocationFieldChange(
-                                                e.target.value,
-                                                'maxVoltAmps'
-                                            )
-                                        }
-                                        onBlur={() => saveLocationInfo()}
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        className="editableField"
-                                        id="notes"
-                                        label="Notes"
-                                        variant="outlined"
-                                        value={locationNotes}
-                                        onChange={(e) =>
-                                            handleLocationFieldChange(
-                                                e.target.value,
-                                                'description'
-                                            )
-                                        }
-                                        onBlur={() => saveLocationInfo()}
-                                        InputProps={{
-                                            endAdornment: <EditOutlinedIcon />,
-                                        }}
-                                    />
+                                <Grid item xs={8}>
+                                    <Grid
+                                        container
+                                        spacing={3}
+                                        className="editLcuDetailsContainer"
+                                    >
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                fullWidth
+                                                className="editableField"
+                                                id="locationName"
+                                                label="Location Name"
+                                                variant="outlined"
+                                                value={locationName}
+                                                onChange={(e) =>
+                                                    handleLocationFieldChange(
+                                                        e.target.value,
+                                                        'name'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    saveLocationInfo()
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                fullWidth
+                                                className="editableField"
+                                                id="maxVoltAmps"
+                                                label="Max-Volt-Amps"
+                                                variant="outlined"
+                                                value={locationVoltAmps}
+                                                onChange={(e) =>
+                                                    handleLocationFieldChange(
+                                                        e.target.value,
+                                                        'maxVoltAmps'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    saveLocationInfo()
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                fullWidth
+                                                className="editableField"
+                                                id="notes"
+                                                label="Notes"
+                                                variant="outlined"
+                                                value={locationNotes}
+                                                onChange={(e) =>
+                                                    handleLocationFieldChange(
+                                                        e.target.value,
+                                                        'description'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    saveLocationInfo()
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
+                        </CardContent>
+                    </Card>
+                </Collapse>
+            </Grid>
+            <Collapse in={locationInfoOpened}>
+                <Grid container className="smartOutletsArea">
+                    <SmartOutlets
+                        smartOutlets={smartOutlets}
+                        token={props.token}
+                    />
+                </Grid>
+            </Collapse>
         </React.Fragment>
     )
 }

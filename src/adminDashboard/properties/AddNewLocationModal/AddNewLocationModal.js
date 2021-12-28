@@ -3,11 +3,12 @@ import { makeStyles } from '@material-ui/core/styles'
 import { API_URL } from '../../../constants'
 import Modal from '@material-ui/core/Modal'
 import Grid from '@material-ui/core/Grid'
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined'
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined'
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined'
 import { Button, CircularProgress, TextField } from '@material-ui/core'
 import { green } from '@material-ui/core/colors'
-import './AddNewLcuModal.css'
+import './AddNewLocationModal.css'
 
 function getModalStyle() {
     const top = 50
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function AddNewLcuModal(props) {
+export default function AddNewLocationModal(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [locations, setLocations] = useState([
         {
@@ -76,8 +77,6 @@ export default function AddNewLcuModal(props) {
             propertyUUID: props.propertyUUID,
         },
     ])
-    const [lcuName, setLcuName] = useState('')
-    const [lcuModel, setLcuModel] = useState('LCU10')
     const [numberOfLocations, setNumberOfLocations] = useState(1)
     const [amountOfSmartOutlets, setAmountOfSmartOutlets] = React.useState([])
     const [smartOutletsErrors, setSmartOutletsErrors] = React.useState([])
@@ -117,10 +116,6 @@ export default function AddNewLcuModal(props) {
         let tempLocations = locations.splice(1, index)
         setLocations(tempLocations)
         setNumberOfLocations(tempLocations.length)
-    }
-
-    const handleLcuNameChange = (event) => {
-        setLcuName(event.target.value)
     }
 
     const handleThisLocationNameChange = (value, index) => {
@@ -371,59 +366,14 @@ export default function AddNewLcuModal(props) {
         }
     }
 
-    const createLcu = (
-        lcuName,
-        lcuModel,
-        locations,
-        photoBinaries,
-        amountOfSmartOutlets
-    ) => {
-        setIsLoading(true)
-        let lcuObject = {
-            modelNumber: lcuModel,
-            name: lcuName,
-        }
-        if (props.token) {
-            fetch(API_URL + 'lcus', {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(lcuObject),
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        console.log('created lcu successfully', result)
-                        console.log('here photo binaries', photoBinaries)
-                        locations.forEach((location, index) => {
-                            createLocation(
-                                result.lcuUUID,
-                                location,
-                                photoBinaries,
-                                index,
-                                amountOfSmartOutlets
-                            )
-                        })
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
-
     const validateAndSubmit = () => {
         checkLocationsNames()
         // checkLcuName()
         console.log('here does it have errors? ' + hasErrors)
         if (!hasErrors) {
-            createLcu(
-                lcuName,
-                lcuModel,
-                locations,
+            createLocation(
+                props.lcuId,
+                locations[0],
                 photoBinaries,
                 amountOfSmartOutlets
             )
@@ -458,7 +408,6 @@ export default function AddNewLcuModal(props) {
             amountOfSmartOutlets[0]
         ) {
             if (
-                lcuName.length > 0 &&
                 locations[0].name.length > 0 &&
                 locations[0].maxVoltAmps.toString().length > 0 &&
                 amountOfSmartOutlets[0].toString().length > 0
@@ -468,11 +417,11 @@ export default function AddNewLcuModal(props) {
                 setDisableSubmitButton(true)
             }
         }
-    }, [lcuName, locations])
+    }, [locations])
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
-            <div className="newLcuModalHeader">Add New LCU & Location</div>
+            <div className="newLcuModalHeader">Add New Location</div>
             <div id="simple-modal-description">
                 {isLoading && (
                     <div className="loaderContainer">
@@ -483,46 +432,6 @@ export default function AddNewLcuModal(props) {
                 )}
                 {!isLoading && (
                     <>
-                        <Grid container xs={12} spacing={3}>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    className="editableField"
-                                    id="lcuName"
-                                    label="Add LCU Name"
-                                    variant="filled"
-                                    value={lcuName}
-                                    onChange={(e) => handleLcuNameChange(e)}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    className="editableField"
-                                    id="lcuModel"
-                                    label="Add LCU Model"
-                                    variant="filled"
-                                    value={lcuModel}
-                                    disabled
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    className="editableField"
-                                    id="numberOfLocations"
-                                    label="Number Of Locations"
-                                    variant="filled"
-                                    value={numberOfLocations}
-                                    disabled
-                                />
-                            </Grid>
-                        </Grid>
-
-                        <div className="newLcuModalHeader">
-                            Location Details
-                        </div>
-
                         <Grid container xs={12} spacing={3}>
                             <Grid item xs={6}>
                                 <TextField
@@ -624,7 +533,7 @@ export default function AddNewLcuModal(props) {
                                     disabled={disableSubmitButton}
                                     onClick={() => validateAndSubmit()}
                                 >
-                                    Submit For Installation
+                                    Create
                                 </Button>
                             </Grid>
                         </Grid>
