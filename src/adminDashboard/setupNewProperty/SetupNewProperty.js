@@ -15,8 +15,6 @@ import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined'
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined'
 import { getAllStates } from './../properties/utils/PropertyUtils'
 import { green } from '@material-ui/core/colors'
-import { Formik, Form } from 'formik'
-import * as Yup from 'yup'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import AddInstaller from './AddInstaller'
 import UpdateLcuAndLocation from './UpdateLcuAndLocation'
@@ -124,9 +122,29 @@ function getSteps() {
 }
 
 export default function SetupNewProperty(props) {
+    const formInitialValues = {
+        address1: '',
+        address2: '',
+        city: '',
+        contactEmail: '',
+        contactName: '',
+        contactPhone1: '',
+        contactPhone2: '',
+        createdAt: '',
+        // installerUUID: '',
+        maxAmps: 0,
+        maxVoltAmps: 0,
+        name: '',
+        pictureUrl1: '',
+        state: '',
+        status: 'NEW',
+        updatedAt: '',
+        zipcode: '',
+    }
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
     const [activeStep, setActiveStep] = React.useState(0)
+    const [installerUuid, setInstallerUuid] = React.useState('')
     const [installerName, setInstallerName] = React.useState('')
     const [completed, setCompleted] = React.useState({})
     const [newPropertyName, setNewPropertyName] = React.useState('')
@@ -137,7 +155,7 @@ export default function SetupNewProperty(props) {
     const [photoFile, setPhotoFile] = React.useState(null)
     const [photoBinary, setPhotoBinary] = React.useState(null)
     const [photoFileName, setPhotoFileName] = React.useState('')
-    const [propertyInfo, setPropertyInfo] = React.useState({})
+    const [propertyInfo, setPropertyInfo] = React.useState(formInitialValues)
     const allStates = getAllStates()
 
     const steps = getSteps()
@@ -204,6 +222,25 @@ export default function SetupNewProperty(props) {
         handleNext()
     }
 
+    const handleCompleteFirstStep = (formValues) => {
+        const newCompleted = completed
+        newCompleted[activeStep] = true
+        setCompleted(newCompleted)
+        // setNewPropertyName(formValues.name)
+        // setNewPropertyAdminName(formValues.contactName)
+        setNewPropertyAddress(
+            formValues.address1 +
+                ', ' +
+                formValues.city +
+                ', ' +
+                formValues.state +
+                ' ' +
+                formValues.zipcode
+        )
+
+        handleNext()
+    }
+
     const uploadLocationPicture = (locationId, photoBinaries, index) => {
         setIsLoading(true)
         if (props.token) {
@@ -252,6 +289,12 @@ export default function SetupNewProperty(props) {
                 )
         }
     }, [])
+
+    useEffect(() => {
+        if (activeStep === 0) {
+            console.log('here it is BITCH', propertyInfo)
+        }
+    }, [activeStep])
 
     const createSmartOutlets = (amountOfOutlets, locationId) => {
         console.log('this is the amount of outlets', amountOfOutlets)
@@ -484,9 +527,14 @@ export default function SetupNewProperty(props) {
         }
     }
 
+    const goToStepTwo = (propertyInfo) => {
+        console.log('here is the property info', propertyInfo)
+        handleCompleteFirstStep(propertyInfo)
+    }
+
     const addInstaller = () => {
         let tempPropertyInfo = propertyInfo
-        tempPropertyInfo.installerUUID = installerName
+        tempPropertyInfo.installerUUID = installerUuid
         console.log(
             'step 2. Installer being added.' + JSON.stringify(tempPropertyInfo)
         )
@@ -556,39 +604,6 @@ export default function SetupNewProperty(props) {
         setFieldValue(id, parsed)
     }
 
-    const validationSchema = Yup.object().shape({
-        name: Yup.string().required(),
-        address1: Yup.string().required(),
-        city: Yup.string().required(),
-        state: Yup.string().required(),
-        zipcode: Yup.string().required(),
-        contactEmail: Yup.string().required(),
-        contactName: Yup.string().required(),
-        contactPhone1: Yup.string().required(),
-        maxVoltAmps: Yup.string().required(),
-    })
-
-    const initialValues = {
-        address1: '',
-        address2: '',
-        city: '',
-        contactEmail: '',
-        contactName: '',
-        contactPhone1: '',
-        contactPhone2: '',
-        createdAt: '',
-        // installerUUID: '',
-        maxAmps: 0,
-        maxVoltAmps: 0,
-        name: '',
-        pictureUrl1:
-            'https://images1.apartments.com/i2/i4D0nFh0v5R9HeXnm7lA1l9lG2yR-94eCx7kGtYCvBM/117/boulders-at-overland-park-overland-park-ks-building-photo.jpg',
-        state: '',
-        status: 'NEW',
-        updatedAt: '',
-        zipcode: '',
-    }
-
     return (
         <div className={classes.root}>
             {activeStep === 0 && (
@@ -626,456 +641,342 @@ export default function SetupNewProperty(props) {
                         ))}
                     </Stepper>
                     {!isLoading && (
-                        <Formik
-                            initialValues={initialValues}
-                            validationSchema={validationSchema}
-                            onSubmit={async (values) => {
-                                createProperty(values)
-                            }}
-                        >
-                            {(props) => (
-                                <Form
-                                    onSubmit={props.handleSubmit}
-                                    autocomplete="on"
-                                >
-                                    <Grid
-                                        className={classes.headerContainer}
-                                        container
-                                        spacing={3}
-                                    >
-                                        <Grid item lg={6} md={12} sm={12}>
-                                            <div
-                                                className={
-                                                    classes.formContainer
-                                                }
-                                            >
-                                                <div
+                        <React.Fragment>
+                            <Grid
+                                className={classes.headerContainer}
+                                container
+                                spacing={3}
+                            >
+                                <Grid item lg={6} md={12} sm={12}>
+                                    <div className={classes.formContainer}>
+                                        <div className={classes.formHeader}>
+                                            Property Details*
+                                        </div>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    value={newPropertyName}
+                                                    onChange={(e) => {
+                                                        let propertyTemp = propertyInfo
+                                                        propertyTemp.name =
+                                                            e.target.value
+                                                        setPropertyInfo(
+                                                            propertyTemp
+                                                        )
+                                                        setNewPropertyName(
+                                                            e.target.value
+                                                        )
+                                                    }}
                                                     className={
-                                                        classes.formHeader
+                                                        classes.textField
                                                     }
-                                                >
-                                                    Property Details*
-                                                </div>
-                                                <Grid container spacing={3}>
-                                                    <Grid item xs={12}>
-                                                        <TextField
-                                                            name="name"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Add Property name"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={12}>
-                                                        <TextField
-                                                            name="address1"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Street"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={12}>
-                                                        <TextField
-                                                            name="city"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="City"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={3}>
-                                                    <Grid item xs={6}>
-                                                        <FormControl
-                                                            variant="filled"
-                                                            fullWidth
-                                                        >
-                                                            <InputLabel id="demo-simple-select-filled-label">
-                                                                State
-                                                            </InputLabel>
-                                                            <Select
-                                                                className={
-                                                                    classes.textField
-                                                                }
-                                                                label="State"
-                                                                variant="outlined"
-                                                                fullWidth
-                                                                labelId="demo-simple-select-filled-label"
-                                                                name="state"
-                                                                onChange={
-                                                                    props.handleChange
-                                                                }
-                                                                onBlur={
-                                                                    props.handleBlur
-                                                                }
-                                                            >
-                                                                {allStates.map(
-                                                                    (
-                                                                        item,
-                                                                        index
-                                                                    ) => (
-                                                                        <MenuItem
-                                                                            value={
-                                                                                item.name
-                                                                            }
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                        >
-                                                                            <em
-                                                                                className={
-                                                                                    classes.formControlState
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    item.abbreviation
-                                                                                }
-                                                                            </em>
-                                                                        </MenuItem>
-                                                                    )
-                                                                )}
-                                                            </Select>
-                                                        </FormControl>
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <TextField
-                                                            name="zipcode"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Zip"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                            </div>
+                                                    label="Add Property name"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Street"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="City"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item lg={6} md={12} sm={12}>
-                                            <div
-                                                className={
-                                                    classes.formContainer
-                                                }
-                                            >
-                                                <div
-                                                    className={
-                                                        classes.formHeader
-                                                    }
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={6}>
+                                                <FormControl
+                                                    variant="filled"
+                                                    fullWidth
                                                 >
-                                                    Contact Information
-                                                </div>
-                                                <Grid container spacing={3}>
-                                                    <Grid item xs={12}>
-                                                        <TextField
-                                                            name="contactName"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            label="Property Manager's Name"
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={3}>
-                                                    <Grid item xs={6}>
-                                                        <TextField
-                                                            name="contactPhone1"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Office Phone"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <TextField
-                                                            name="contactPhone2"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Cell Phone"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container spacing={3}>
-                                                    <Grid item xs={12}>
-                                                        <TextField
-                                                            name="contactEmail"
-                                                            onChange={
-                                                                props.handleChange
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Email Address"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid
-                                        className={classes.headerContainer}
-                                        container
-                                        spacing={3}
-                                    >
-                                        <Grid item lg={6} md={12} sm={12}>
-                                            <div
-                                                className={
-                                                    classes.formContainer
-                                                }
-                                            >
-                                                <div
-                                                    className={
-                                                        classes.formHeader
-                                                    }
-                                                >
-                                                    Electric Details
-                                                </div>
-
-                                                <Grid container spacing={3}>
-                                                    <Grid item xs={6}>
-                                                        <TextField
-                                                            name="maxVoltAmps"
-                                                            onChange={(e) =>
-                                                                parseAndHandleChange(
-                                                                    e.target
-                                                                        .value,
-                                                                    props.setFieldValue,
-                                                                    'maxVoltAmps'
-                                                                )
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Property Max Volt-Amps"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <TextField
-                                                            name="maxAmps"
-                                                            onChange={(e) =>
-                                                                parseAndHandleChange(
-                                                                    e.target
-                                                                        .value,
-                                                                    props.setFieldValue,
-                                                                    'maxAmps'
-                                                                )
-                                                            }
-                                                            onBlur={
-                                                                props.handleBlur
-                                                            }
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Property Max Amps"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                            </div>
-                                        </Grid>
-                                        <Grid item lg={6} md={12} sm={12}>
-                                            <div
-                                                className={
-                                                    classes.formContainerPhoto
-                                                }
-                                            >
-                                                <div
-                                                    className={
-                                                        classes.formHeader
-                                                    }
-                                                >
-                                                    Property Photo
-                                                </div>
-                                                <Grid container spacing={3}>
-                                                    {!photoAdded && (
-                                                        <Button
-                                                            className={
-                                                                classes.photoUploadButton
-                                                            }
-                                                            variant="contained"
-                                                            onClick={
-                                                                handlePhotoClick
-                                                            }
-                                                            onDragOver={
-                                                                dragOver
-                                                            }
-                                                            onDragEnter={
-                                                                dragEnter
-                                                            }
-                                                            onDragLeave={
-                                                                dragLeave
-                                                            }
-                                                            onDrop={fileDrop}
-                                                            startIcon={
-                                                                <ImageOutlinedIcon />
-                                                            }
-                                                            fullWidth
-                                                        >
-                                                            Click here or drag
-                                                            and drop photo
-                                                        </Button>
-                                                    )}
-                                                    {photoAdded && (
-                                                        <div
-                                                            className={
-                                                                classes.photoSelectedName
-                                                            }
-                                                        >
-                                                            <DoneOutlineOutlinedIcon
-                                                                style={{
-                                                                    marginRight:
-                                                                        '10px',
-                                                                    color:
-                                                                        green[500],
-                                                                }}
-                                                            />
-                                                            Photo selected:
-                                                            {photoFileName}
-                                                        </div>
-                                                    )}
-                                                    <input
-                                                        type="file"
-                                                        ref={hiddenFileInput}
-                                                        style={{
-                                                            display: 'none',
-                                                        }}
-                                                        onChange={
-                                                            handlePhotoChange
+                                                    <InputLabel id="demo-simple-select-filled-label">
+                                                        State
+                                                    </InputLabel>
+                                                    <Select
+                                                        className={
+                                                            classes.textField
                                                         }
-                                                    />
-                                                </Grid>
-                                            </div>
+                                                        label="State"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        labelId="demo-simple-select-filled-label"
+                                                        name="state"
+                                                        onChange={
+                                                            props.handleChange
+                                                        }
+                                                    >
+                                                        {allStates.map(
+                                                            (item, index) => (
+                                                                <MenuItem
+                                                                    value={
+                                                                        item.name
+                                                                    }
+                                                                    key={index}
+                                                                >
+                                                                    <em
+                                                                        className={
+                                                                            classes.formControlState
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.abbreviation
+                                                                        }
+                                                                    </em>
+                                                                </MenuItem>
+                                                            )
+                                                        )}
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Zip"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                    <Grid
-                                        className={classes.headerContainer}
-                                        container
-                                        spacing={3}
-                                    >
-                                        <Grid item lg={6} md={12} sm={12}>
-                                            <div
-                                                className={
-                                                    classes.formContainerNotes
-                                                }
-                                            >
+                                    </div>
+                                </Grid>
+                                <Grid item lg={6} md={12} sm={12}>
+                                    <div className={classes.formContainer}>
+                                        <div className={classes.formHeader}>
+                                            Contact Information
+                                        </div>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    label="Property Manager's Name"
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Office Phone"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Cell Phone"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Email Address"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <Grid
+                                className={classes.headerContainer}
+                                container
+                                spacing={3}
+                            >
+                                <Grid item lg={6} md={12} sm={12}>
+                                    <div className={classes.formContainer}>
+                                        <div className={classes.formHeader}>
+                                            Electric Details
+                                        </div>
+
+                                        <Grid container spacing={3}>
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    onChange={(e) =>
+                                                        parseAndHandleChange(
+                                                            e.target.value,
+                                                            props.setFieldValue,
+                                                            'maxVoltAmps'
+                                                        )
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Property Max Volt-Amps"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    onChange={(e) =>
+                                                        parseAndHandleChange(
+                                                            e.target.value,
+                                                            props.setFieldValue,
+                                                            'maxAmps'
+                                                        )
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Property Max Amps"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                </Grid>
+                                <Grid item lg={6} md={12} sm={12}>
+                                    <div className={classes.formContainerPhoto}>
+                                        <div className={classes.formHeader}>
+                                            Property Photo
+                                        </div>
+                                        <Grid container spacing={3}>
+                                            {!photoAdded && (
+                                                <Button
+                                                    className={
+                                                        classes.photoUploadButton
+                                                    }
+                                                    variant="contained"
+                                                    onClick={handlePhotoClick}
+                                                    onDragOver={dragOver}
+                                                    onDragEnter={dragEnter}
+                                                    onDragLeave={dragLeave}
+                                                    onDrop={fileDrop}
+                                                    startIcon={
+                                                        <ImageOutlinedIcon />
+                                                    }
+                                                    fullWidth
+                                                >
+                                                    Click here or drag and drop
+                                                    photo
+                                                </Button>
+                                            )}
+                                            {photoAdded && (
                                                 <div
                                                     className={
-                                                        classes.formHeader
+                                                        classes.photoSelectedName
                                                     }
                                                 >
-                                                    Property Notes
+                                                    <DoneOutlineOutlinedIcon
+                                                        style={{
+                                                            marginRight: '10px',
+                                                            color: green[500],
+                                                        }}
+                                                    />
+                                                    Photo selected:
+                                                    {photoFileName}
                                                 </div>
-                                                <Grid container>
-                                                    <Grid item xs={12}>
-                                                        <TextField
-                                                            id="outlined-basic"
-                                                            className={
-                                                                classes.textField
-                                                            }
-                                                            label="Add Notes"
-                                                            variant="outlined"
-                                                            fullWidth
-                                                        />
-                                                    </Grid>
-                                                </Grid>
-                                            </div>
+                                            )}
+                                            <input
+                                                type="file"
+                                                ref={hiddenFileInput}
+                                                style={{
+                                                    display: 'none',
+                                                }}
+                                                onChange={handlePhotoChange}
+                                            />
                                         </Grid>
-                                        <Grid
-                                            item
-                                            lg={6}
-                                            md={12}
-                                            sm={12}
-                                        ></Grid>
-                                    </Grid>
-                                    <Grid
-                                        className={classes.headerContainer}
-                                        container
-                                        spacing={1}
+                                    </div>
+                                </Grid>
+                            </Grid>
+                            <Grid
+                                className={classes.headerContainer}
+                                container
+                                spacing={3}
+                            >
+                                <Grid item lg={6} md={12} sm={12}>
+                                    <div className={classes.formContainerNotes}>
+                                        <div className={classes.formHeader}>
+                                            Property Notes
+                                        </div>
+                                        <Grid container>
+                                            <Grid item xs={12}>
+                                                <TextField
+                                                    id="outlined-basic"
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Add Notes"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                </Grid>
+                                <Grid item lg={6} md={12} sm={12}></Grid>
+                            </Grid>
+                            <Grid
+                                className={classes.headerContainer}
+                                container
+                                spacing={1}
+                            >
+                                <Grid item xs={11}>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        className={classes.createButton}
+                                        onClick={() => goToStepTwo()}
                                     >
-                                        <Grid item xs={11}>
-                                            <Button
-                                                type="submit"
-                                                disabled={
-                                                    !props.isValid ||
-                                                    !props.dirty
-                                                }
-                                                fullWidth
-                                                variant="contained"
-                                                className={classes.createButton}
-                                            >
-                                                Continue & Select Installer
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </Form>
-                            )}
-                        </Formik>
+                                        Continue & Select Installer
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </React.Fragment>
                     )}
                     {isLoading && (
                         <div className="loaderContainer">
@@ -1099,6 +1000,8 @@ export default function SetupNewProperty(props) {
                         handleComplete={handleComplete}
                         installerName={installerName}
                         setInstallerName={setInstallerName}
+                        installerUuid={installerUuid}
+                        setInstallerUuid={setInstallerUuid}
                         token={props.token}
                     />
                 </React.Fragment>
@@ -1113,8 +1016,8 @@ export default function SetupNewProperty(props) {
                         newPropertyName={newPropertyName}
                         newPropertyAdminName={newPropertyAdminName}
                         newPropertyAddress={newPropertyAddress}
-                        installerName={installerName}
-                        setInstallerName={setInstallerName}
+                        installerUuid={installerUuid}
+                        setInstallerUuid={setInstallerUuid}
                         handleBack={handleBack}
                         handleTwoBack={handleTwoBack}
                         token={props.token}

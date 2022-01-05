@@ -131,8 +131,7 @@ export default function AddInstaller(props) {
 
     const handleSelectInstaller = (installerId) => {
         setSelectedInstaller(installerId)
-        console.log('selecting this installer', installerId)
-        props.setInstallerName(installerId)
+        props.setInstallerUuid(installerId)
     }
 
     const getAllInstallers = () => {
@@ -263,13 +262,16 @@ export default function AddInstaller(props) {
                                     value={selectedInstaller}
                                     onChange={(event) =>
                                         handleSelectInstaller(
-                                            event.target.value,
+                                            event.target.value
                                         )
                                     }
                                     label="Company Installers"
                                 >
                                     {installers?.map((installer) => (
                                         <MenuItem
+                                            onClick={props.setInstallerName(
+                                                installer.email
+                                            )}
                                             value={installer.cognitoUUID}
                                             key={installer.cognitoUUID}
                                         >

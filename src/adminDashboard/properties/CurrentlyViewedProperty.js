@@ -615,6 +615,7 @@ const CurrentlyViewedProperty = (props) => {
             {/* UPDATE OUTLET MODAL */}
             <UpdateSoftwareModal
                 handleOpen={handleOpenUpdateModal}
+                propertyUUID={property.propertyUUID}
                 handleClose={handleCloseUpdateModal}
                 open={openUpdateModal}
                 close={handleCloseUpdateModal}

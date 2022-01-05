@@ -57,8 +57,35 @@ export default function UpdateSoftwareModal(props) {
     const [soModels, setSoModels] = useState([])
     const classes = useStyles()
 
-    const updateThisModel = () => {
-        alert('Updating')
+    const updateThisModel = (model) => {
+        setIsLoading(true)
+        if (props.token) {
+            let objectToSend = {
+                modelName: model,
+                propertyUUID: props.propertyUUID,
+            }
+            fetch(API_URL_ADMIN + 'admin/trigger-so-update', {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(objectToSend),
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        if (result.code) {
+                            setIsLoading(false)
+                        } else {
+                            setIsLoading(false)
+                        }
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
     }
 
     const body = (
@@ -85,7 +112,7 @@ export default function UpdateSoftwareModal(props) {
                                 <Grid item xs={3}>
                                     <Button
                                         className="updateSoButton"
-                                        onClick={() => updateThisModel()}
+                                        onClick={() => updateThisModel(model.model)}
                                     >
                                         Update
                                     </Button>
