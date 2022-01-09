@@ -331,7 +331,8 @@ export default function SetupNewProperty(props) {
         location,
         photoBinaries,
         index,
-        amountOfSmartOutlets
+        amountOfSmartOutlets,
+        propertyId
     ) => {
         let locationId = null
         setIsLoading(true)
@@ -339,9 +340,9 @@ export default function SetupNewProperty(props) {
             lcuUUID: lcuId,
             maxVoltAmps: location.maxVoltAmps,
             name: location.name,
-            propertyUUID: propertyUUID,
+            propertyUUID: propertyId,
         }
-        console.log('creating this location', locationObject)
+        console.log('here creating this location', locationObject)
         if (props.token) {
             await fetch(API_URL + 'locations', {
                 method: 'POST',
@@ -354,7 +355,7 @@ export default function SetupNewProperty(props) {
                 .then((res) => res.json())
                 .then(
                     async (result) => {
-                        setIsLoading(false)
+                        setIsLoading(true)
                         console.log('created location successfully', result)
                         locationId = result.locationUUID
                         if (photoBinaries.length > 0 && photoBinaries[index]) {
@@ -373,6 +374,7 @@ export default function SetupNewProperty(props) {
                                 locationId
                             )
                         }
+                        setIsLoading(false)
                         props.goToProperties()
                     },
                     (error) => {
@@ -382,12 +384,13 @@ export default function SetupNewProperty(props) {
         }
     }
 
-    const createLcu = (
+    const createLcu = async (
         lcuName,
         lcuModel,
         locations,
         photoBinaries,
-        amountOfSmartOutlets
+        amountOfSmartOutlets,
+        propertyUUID
     ) => {
         setIsLoading(true)
         let lcuObject = {
@@ -395,7 +398,7 @@ export default function SetupNewProperty(props) {
             name: lcuName,
         }
         if (props.token) {
-            fetch(API_URL + 'lcus', {
+            await fetch(API_URL + 'lcus', {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -406,7 +409,7 @@ export default function SetupNewProperty(props) {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        setIsLoading(false)
+                        setIsLoading(true)
                         console.log('here created lcu successfully', result)
                         locations.forEach((location, index) => {
                             createLocation(
@@ -414,7 +417,8 @@ export default function SetupNewProperty(props) {
                                 location,
                                 photoBinaries,
                                 index,
-                                amountOfSmartOutlets
+                                amountOfSmartOutlets,
+                                propertyUUID
                             )
                         })
                     },
@@ -449,20 +453,23 @@ export default function SetupNewProperty(props) {
             .then((res) => res.json())
             .then(
                 (result) => {
+                    console.log('here created peropty')
+                    console.log('here is the property id', result.propertyUUID)
                     setPropertyUUID(result.propertyUUID)
                     if (photoFile) {
                         uploadPropertyImg(result.propertyUUID, propertyInfo)
                     }
+                    createLcu(
+                        lcuName,
+                        lcuModel,
+                        locations,
+                        photoBinaries,
+                        amountOfSmartOutlets,
+                        result.propertyUUID
+                    )
                 },
                 (error) => {}
             )
-        createLcu(
-            lcuName,
-            lcuModel,
-            locations,
-            photoBinaries,
-            amountOfSmartOutlets
-        )
     }
 
     const getBinaryFromImg = (picFile) => {

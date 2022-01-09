@@ -11,7 +11,7 @@ import {
     getAllProperties,
     getPropertyLocations,
     getPropertyLcus,
-    getAllLocationSmartOutlets,
+    getPropertySmartOutletsByPropertyId,
 } from './../dashboardService'
 
 const Properties = (props) => {
@@ -171,7 +171,7 @@ const Properties = (props) => {
         console.log('here haha', openedPropertyLocations)
         if (openedPropertyLocations?.length > 0) {
             openedPropertyLocations.forEach((location) => {
-                getAllLocationSmartOutlets(
+                getPropertySmartOutletsByPropertyId(
                     props.token,
                     location.locationUUID,
                     setOpenedPropertySmartOutlets

@@ -12,7 +12,7 @@ import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import {
     getPropertyLcus,
     getPropertyLocations,
-    getAllLocationSmartOutlets,
+    getPropertySmartOutletsByPropertyId,
 } from './../dashboardService'
 
 const useStyles = makeStyles({
@@ -56,16 +56,6 @@ const PropertyCard = (props) => {
     const classes = useStyles()
     const propertyInfo = props.property
 
-    const getSmartOutlets = (locationId) => {
-        if (props.token) {
-            getAllLocationSmartOutlets(
-                props.token,
-                locationId,
-                setSmartOutletsOfThisProperty
-            )
-        }
-    }
-
     const getLocations = () => {
         if (props.token) {
             getPropertyLocations(
@@ -94,6 +84,16 @@ const PropertyCard = (props) => {
         }
     }
 
+    const getSmartOutlets = () => {
+        if (props.token) {
+            getPropertySmartOutletsByPropertyId(
+                props.token,
+                props.property.propertyUUID,
+                setSmartOutletsOfThisProperty
+            )
+        }
+    }
+
     useEffect(() => {
         getLcus()
         getLocations()
@@ -103,7 +103,7 @@ const PropertyCard = (props) => {
         if (locationsOfThisProperty.length > 0) {
             getSmartOutlets()
         }
-    }, [getSmartOutlets, locationsOfThisProperty])
+    }, [locationsOfThisProperty])
 
     return (
         <React.Fragment>
@@ -150,8 +150,8 @@ const PropertyCard = (props) => {
                         <div className="badgeBox">
                             <WifiOutlinedIcon />
                             <span className="badgeText">
-                                {smartOutletsOfThisProperty.length} Smart
-                                Outlets
+                                {smartOutletsOfThisProperty?.length} Smart
+                                Outlet(s)
                             </span>
                         </div>
                     </div>

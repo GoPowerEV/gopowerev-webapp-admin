@@ -281,7 +281,9 @@ const CurrentlyViewedProperty = (props) => {
                                                     {smartOutlets
                                                         ? smartOutlets.length
                                                         : '0'}{' '}
-                                                    Smart Outlets
+                                                    {smartOutlets.length === 1
+                                                        ? 'Smart Outlets'
+                                                        : 'Smart Outlet'}
                                                 </span>
                                             </div>
                                         </Grid>

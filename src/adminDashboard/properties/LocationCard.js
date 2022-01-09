@@ -14,7 +14,7 @@ import './LocationCard.css'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import SmartOutlets from './propertySmartOutlets/SmartOutlets'
-import { getALocationSmartOutletsById } from './../dashboardService'
+import { getLocationSmartOutletsById } from './../dashboardService'
 
 const useStyles = makeStyles({
     root: {
@@ -99,7 +99,7 @@ const LocationCard = (props) => {
     }
 
     useEffect(() => {
-        getALocationSmartOutletsById(
+        getLocationSmartOutletsById(
             props.token,
             locationInfo.locationUUID,
             setSmartOutlets
