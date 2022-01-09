@@ -126,12 +126,18 @@ const useStyles = makeStyles((theme) => ({
 export default function AddInstaller(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
-    const [selectedInstaller, setSelectedInstaller] = useState('')
+    const [selectedInstaller, setSelectedInstaller] = useState()
     const [installers, setInstallers] = useState([])
 
     const handleSelectInstaller = (installerId) => {
+        let installerName = installers.filter(
+            (installer) => installer.cognitoUUID === installerId
+        )[0].email
+        console.log('here all installers', installers)
+        console.log('here isntaller email', installerName)
         setSelectedInstaller(installerId)
         props.setInstallerUuid(installerId)
+        props.setInstallerName(installerName)
     }
 
     const getAllInstallers = () => {
@@ -182,8 +188,12 @@ export default function AddInstaller(props) {
     }
 
     useEffect(() => {
+        console.log('HERE TOKEN', props.token)
         getAllLcus()
         getAllInstallers()
+        if (props.installerUuid) {
+            setSelectedInstaller(props.installerUuid)
+        }
     }, [])
 
     return (

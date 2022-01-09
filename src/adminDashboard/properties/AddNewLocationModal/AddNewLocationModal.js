@@ -377,7 +377,7 @@ export default function AddNewLocationModal(props) {
                 amountOfSmartOutlets
             )
         } else {
-            window.scrollTo(0, 0)
+            document.querySelector('body').scrollTo(0, 0)
         }
     }
 

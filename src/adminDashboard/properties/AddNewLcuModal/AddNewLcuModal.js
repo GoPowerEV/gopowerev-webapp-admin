@@ -428,7 +428,7 @@ export default function AddNewLcuModal(props) {
                 amountOfSmartOutlets
             )
         } else {
-            window.scrollTo(0, 0)
+            document.querySelector('body').scrollTo(0, 0)
         }
     }
 

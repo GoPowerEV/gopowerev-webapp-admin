@@ -147,8 +147,6 @@ export default function SetupNewProperty(props) {
     const [installerUuid, setInstallerUuid] = React.useState('')
     const [installerName, setInstallerName] = React.useState('')
     const [completed, setCompleted] = React.useState({})
-    const [newPropertyName, setNewPropertyName] = React.useState('')
-    const [newPropertyAdminName, setNewPropertyAdminName] = React.useState('')
     const [propertyUUID, setPropertyUUID] = React.useState()
     const [newPropertyAddress, setNewPropertyAddress] = React.useState('')
     const [photoAdded, setPhotoAdded] = React.useState(false)
@@ -157,6 +155,23 @@ export default function SetupNewProperty(props) {
     const [photoFileName, setPhotoFileName] = React.useState('')
     const [propertyInfo, setPropertyInfo] = React.useState(formInitialValues)
     const allStates = getAllStates()
+    // FIELD VARIABLES
+    const [newPropertyName, setNewPropertyName] = React.useState('')
+    const [newPropertyStreet, setNewPropertyStreet] = React.useState('')
+    const [newPropertyCity, setNewPropertyCity] = React.useState('')
+    const [newPropertyState, setNewPropertyState] = React.useState()
+    const [newPropertyZip, setNewPropertyZip] = React.useState()
+    const [newPropertyManageName, setNewPropertyManageName] = React.useState('')
+    const [newPropertyOfficePhone, setNewPropertyOfficePhone] = React.useState(
+        ''
+    )
+    const [newPropertyCell, setNewPropertyCell] = React.useState('')
+    const [newPropertyEmail, setNewPropertyEmail] = React.useState('')
+    const [newPropertyMaxVoltAmps, setNewPropertyMaxVoltAmps] = React.useState(
+        ''
+    )
+    const [newPropertyMaxAmps, setNewPropertyMaxAmps] = React.useState('')
+    const [newPropertyNotes, setNewPropertyNotes] = React.useState('')
 
     const steps = getSteps()
 
@@ -198,36 +213,11 @@ export default function SetupNewProperty(props) {
         setActiveStep(step)
     }
 
-    const handleComplete = (formValues) => {
-        const newCompleted = completed
-        newCompleted[activeStep] = true
-        setCompleted(newCompleted)
-        console.log('here you go', formValues)
-        if (activeStep === 0) {
-            setPropertyInfo(formValues)
-            setNewPropertyName(formValues.name)
-            setNewPropertyAdminName(formValues.contactName)
-            setNewPropertyAddress(
-                formValues.address1 +
-                    ', ' +
-                    formValues.city +
-                    ', ' +
-                    formValues.state +
-                    ' ' +
-                    formValues.zipcode
-            )
-        } else {
-            setPropertyInfo(formValues)
-        }
-        handleNext()
-    }
-
     const handleCompleteFirstStep = (formValues) => {
+        console.log('here is the property', formValues)
         const newCompleted = completed
         newCompleted[activeStep] = true
         setCompleted(newCompleted)
-        // setNewPropertyName(formValues.name)
-        // setNewPropertyAdminName(formValues.contactName)
         setNewPropertyAddress(
             formValues.address1 +
                 ', ' +
@@ -238,6 +228,13 @@ export default function SetupNewProperty(props) {
                 formValues.zipcode
         )
 
+        handleNext()
+    }
+
+    const handleCompleteSecondStep = (formValues) => {
+        const newCompleted = completed
+        newCompleted[activeStep] = true
+        setCompleted(newCompleted)
         handleNext()
     }
 
@@ -291,9 +288,7 @@ export default function SetupNewProperty(props) {
     }, [])
 
     useEffect(() => {
-        if (activeStep === 0) {
-            console.log('here it is BITCH', propertyInfo)
-        }
+        document.querySelector('body').scrollTo(0, 0)
     }, [activeStep])
 
     const createSmartOutlets = (amountOfOutlets, locationId) => {
@@ -331,7 +326,7 @@ export default function SetupNewProperty(props) {
         }
     }
 
-    const createLocation = (
+    const createLocation = async (
         lcuId,
         location,
         photoBinaries,
@@ -348,7 +343,7 @@ export default function SetupNewProperty(props) {
         }
         console.log('creating this location', locationObject)
         if (props.token) {
-            fetch(API_URL + 'locations', {
+            await fetch(API_URL + 'locations', {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -412,7 +407,7 @@ export default function SetupNewProperty(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('created lcu successfully', result)
+                        console.log('here created lcu successfully', result)
                         locations.forEach((location, index) => {
                             createLocation(
                                 result.lcuUUID,
@@ -430,18 +425,37 @@ export default function SetupNewProperty(props) {
         }
     }
 
-    const handleSubmitForInstallation = (
+    const handleSubmitForInstallation = async (
         lcuName,
         lcuModel,
         locations,
         photoBinaries,
         amountOfSmartOutlets
     ) => {
-        console.log('lcuName', lcuName)
-        console.log('lcuModel', lcuModel)
-        console.log('locations', locations)
-        console.log('photoBinaries', photoBinaries)
-        console.log('amountOfSmartOutlets', amountOfSmartOutlets)
+        console.log('here lcuName', lcuName)
+        console.log('here lcuModel', lcuModel)
+        console.log('lhere ocations', locations)
+        console.log('here photoBinaries', photoBinaries)
+        console.log('here amountOfSmartOutlets', amountOfSmartOutlets)
+        setIsLoading(true)
+        await fetch(API_URL + 'properties', {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + props.token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(propertyInfo),
+        })
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    setPropertyUUID(result.propertyUUID)
+                    if (photoFile) {
+                        uploadPropertyImg(result.propertyUUID, propertyInfo)
+                    }
+                },
+                (error) => {}
+            )
         createLcu(
             lcuName,
             lcuModel,
@@ -485,7 +499,7 @@ export default function SetupNewProperty(props) {
                     (result) => {
                         setIsLoading(false)
                         console.log('here image result', result)
-                        handleComplete(thisPropertyInfo)
+                        handleCompleteFirstStep(thisPropertyInfo)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -494,73 +508,20 @@ export default function SetupNewProperty(props) {
         }
     }
 
-    const createProperty = (propertyInfo) => {
-        console.log(
-            'step 1. Property is being created.' + JSON.stringify(propertyInfo)
-        )
-        setIsLoading(true)
-        if (props.token) {
-            console.log(JSON.stringify(propertyInfo))
-            fetch(API_URL + 'properties', {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(propertyInfo),
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setPropertyUUID(result.propertyUUID)
-                        setIsLoading(false)
-                        if (photoFile) {
-                            uploadPropertyImg(result.propertyUUID, propertyInfo)
-                        } else {
-                            handleComplete(propertyInfo)
-                        }
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
-
-    const goToStepTwo = (propertyInfo) => {
-        console.log('here is the property info', propertyInfo)
+    const goToStepTwo = () => {
+        console.log('here are the values', propertyInfo)
         handleCompleteFirstStep(propertyInfo)
     }
 
     const addInstaller = () => {
         let tempPropertyInfo = propertyInfo
         tempPropertyInfo.installerUUID = installerUuid
-        console.log(
-            'step 2. Installer being added.' + JSON.stringify(tempPropertyInfo)
-        )
         setPropertyInfo(tempPropertyInfo)
-        setIsLoading(true)
-        if (props.token) {
-            fetch(API_URL + 'properties/' + propertyUUID, {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(tempPropertyInfo),
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setPropertyUUID(result.propertyUUID)
-                        setIsLoading(false)
-                        handleComplete(tempPropertyInfo)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
+        handleCompleteSecondStep(tempPropertyInfo)
+        console.log(
+            'here step 2. Installer being added.' +
+                JSON.stringify(tempPropertyInfo)
+        )
     }
 
     const dragOver = (e) => {
@@ -599,9 +560,45 @@ export default function SetupNewProperty(props) {
         hiddenFileInput.current.click()
     }
 
-    const parseAndHandleChange = (value, setFieldValue, id) => {
-        const parsed = parseInt(value)
-        setFieldValue(id, parsed)
+    const handleFormChange = (fieldType, value) => {
+        let tempPropertyInfo = propertyInfo
+        if (fieldType === 'name') {
+            setNewPropertyName(value)
+            propertyInfo.name = value
+        } else if (fieldType === 'street') {
+            setNewPropertyStreet(value)
+            propertyInfo.address1 = value
+        } else if (fieldType === 'city') {
+            setNewPropertyCity(value)
+            propertyInfo.city = value
+        } else if (fieldType === 'state') {
+            setNewPropertyState(value)
+            propertyInfo.state = value
+        } else if (fieldType === 'zip') {
+            setNewPropertyZip(value)
+            propertyInfo.zipcode = value
+        } else if (fieldType === 'managerName') {
+            setNewPropertyManageName(value)
+            propertyInfo.contactName = value
+        } else if (fieldType === 'officePhone') {
+            setNewPropertyOfficePhone(value)
+            propertyInfo.contactPhone1 = value
+        } else if (fieldType === 'cell') {
+            setNewPropertyCell(value)
+            propertyInfo.contactPhone2 = value
+        } else if (fieldType === 'email') {
+            setNewPropertyEmail(value)
+            propertyInfo.contactEmail = value
+        } else if (fieldType === 'maxVoltAmps') {
+            setNewPropertyMaxVoltAmps(value)
+            propertyInfo.maxVoltAmps = value
+        } else if (fieldType === 'maxAmps') {
+            setNewPropertyMaxAmps(value)
+            propertyInfo.maxAmps = value
+        } else {
+            setNewPropertyNotes(value)
+        }
+        setPropertyInfo(tempPropertyInfo)
     }
 
     return (
@@ -656,17 +653,12 @@ export default function SetupNewProperty(props) {
                                             <Grid item xs={12}>
                                                 <TextField
                                                     value={newPropertyName}
-                                                    onChange={(e) => {
-                                                        let propertyTemp = propertyInfo
-                                                        propertyTemp.name =
-                                                            e.target.value
-                                                        setPropertyInfo(
-                                                            propertyTemp
-                                                        )
-                                                        setNewPropertyName(
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'name',
                                                             e.target.value
                                                         )
-                                                    }}
+                                                    }
                                                     className={
                                                         classes.textField
                                                     }
@@ -677,8 +669,12 @@ export default function SetupNewProperty(props) {
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <TextField
-                                                    onChange={
-                                                        props.handleChange
+                                                    value={newPropertyStreet}
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'street',
+                                                            e.target.value
+                                                        )
                                                     }
                                                     className={
                                                         classes.textField
@@ -690,8 +686,12 @@ export default function SetupNewProperty(props) {
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <TextField
-                                                    onChange={
-                                                        props.handleChange
+                                                    value={newPropertyCity}
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'city',
+                                                            e.target.value
+                                                        )
                                                     }
                                                     className={
                                                         classes.textField
@@ -716,12 +716,16 @@ export default function SetupNewProperty(props) {
                                                             classes.textField
                                                         }
                                                         label="State"
+                                                        value={newPropertyState}
                                                         variant="outlined"
                                                         fullWidth
                                                         labelId="demo-simple-select-filled-label"
                                                         name="state"
-                                                        onChange={
-                                                            props.handleChange
+                                                        onChange={(e) =>
+                                                            handleFormChange(
+                                                                'state',
+                                                                e.target.value
+                                                            )
                                                         }
                                                     >
                                                         {allStates.map(
@@ -749,8 +753,12 @@ export default function SetupNewProperty(props) {
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <TextField
-                                                    onChange={
-                                                        props.handleChange
+                                                    value={newPropertyZip}
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'zip',
+                                                            e.target.value
+                                                        )
                                                     }
                                                     className={
                                                         classes.textField
@@ -771,8 +779,14 @@ export default function SetupNewProperty(props) {
                                         <Grid container spacing={3}>
                                             <Grid item xs={12}>
                                                 <TextField
-                                                    onChange={
-                                                        props.handleChange
+                                                    value={
+                                                        newPropertyManageName
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'managerName',
+                                                            e.target.value
+                                                        )
                                                     }
                                                     label="Property Manager's Name"
                                                     className={
@@ -786,8 +800,14 @@ export default function SetupNewProperty(props) {
                                         <Grid container spacing={3}>
                                             <Grid item xs={6}>
                                                 <TextField
-                                                    onChange={
-                                                        props.handleChange
+                                                    value={
+                                                        newPropertyOfficePhone
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'officePhone',
+                                                            e.target.value
+                                                        )
                                                     }
                                                     className={
                                                         classes.textField
@@ -799,8 +819,12 @@ export default function SetupNewProperty(props) {
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <TextField
-                                                    onChange={
-                                                        props.handleChange
+                                                    value={newPropertyCell}
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'cell',
+                                                            e.target.value
+                                                        )
                                                     }
                                                     className={
                                                         classes.textField
@@ -814,8 +838,12 @@ export default function SetupNewProperty(props) {
                                         <Grid container spacing={3}>
                                             <Grid item xs={12}>
                                                 <TextField
-                                                    onChange={
-                                                        props.handleChange
+                                                    value={newPropertyEmail}
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'email',
+                                                            e.target.value
+                                                        )
                                                     }
                                                     className={
                                                         classes.textField
@@ -843,11 +871,15 @@ export default function SetupNewProperty(props) {
                                         <Grid container spacing={3}>
                                             <Grid item xs={6}>
                                                 <TextField
+                                                    value={
+                                                        newPropertyMaxVoltAmps
+                                                    }
                                                     onChange={(e) =>
-                                                        parseAndHandleChange(
-                                                            e.target.value,
-                                                            props.setFieldValue,
-                                                            'maxVoltAmps'
+                                                        handleFormChange(
+                                                            'maxVoltAmps',
+                                                            parseInt(
+                                                                e.target.value
+                                                            )
                                                         )
                                                     }
                                                     className={
@@ -860,11 +892,13 @@ export default function SetupNewProperty(props) {
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <TextField
+                                                    value={newPropertyMaxAmps}
                                                     onChange={(e) =>
-                                                        parseAndHandleChange(
-                                                            e.target.value,
-                                                            props.setFieldValue,
-                                                            'maxAmps'
+                                                        handleFormChange(
+                                                            'maxAmps',
+                                                            parseInt(
+                                                                e.target.value
+                                                            )
                                                         )
                                                     }
                                                     className={
@@ -945,6 +979,13 @@ export default function SetupNewProperty(props) {
                                         <Grid container>
                                             <Grid item xs={12}>
                                                 <TextField
+                                                    value={newPropertyNotes}
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'notes',
+                                                            e.target.value
+                                                        )
+                                                    }
                                                     id="outlined-basic"
                                                     className={
                                                         classes.textField
@@ -993,11 +1034,11 @@ export default function SetupNewProperty(props) {
                         handleStep={handleStep}
                         completed={completed}
                         newPropertyName={newPropertyName}
-                        newPropertyAdminName={newPropertyAdminName}
+                        newPropertyAdminName={newPropertyManageName}
                         newPropertyAddress={newPropertyAddress}
                         handleBack={handleBack}
                         addInstaller={addInstaller}
-                        handleComplete={handleComplete}
+                        handleComplete={handleCompleteSecondStep}
                         installerName={installerName}
                         setInstallerName={setInstallerName}
                         installerUuid={installerUuid}
@@ -1014,10 +1055,12 @@ export default function SetupNewProperty(props) {
                         handleStep={handleStep}
                         completed={completed}
                         newPropertyName={newPropertyName}
-                        newPropertyAdminName={newPropertyAdminName}
+                        newPropertyAdminName={newPropertyManageName}
                         newPropertyAddress={newPropertyAddress}
                         installerUuid={installerUuid}
                         setInstallerUuid={setInstallerUuid}
+                        setInstallerName={setInstallerName}
+                        installerName={installerName}
                         handleBack={handleBack}
                         handleTwoBack={handleTwoBack}
                         token={props.token}

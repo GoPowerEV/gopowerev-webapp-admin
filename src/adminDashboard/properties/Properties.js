@@ -152,6 +152,10 @@ const Properties = (props) => {
     }
 
     useEffect(() => {
+        document.querySelector('body').scrollTo(0, 0)
+    }, [])
+
+    useEffect(() => {
         console.log('here haha', props.viewThisProperty)
         if (props.viewThisProperty !== null) {
             openPropertyDetailsOnLoad(props.viewThisProperty)
