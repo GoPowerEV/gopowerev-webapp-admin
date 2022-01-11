@@ -15,7 +15,7 @@ import { useHistory } from 'react-router-dom'
 import './App.css'
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(undefined)
+    const [loggedIn, setLoggedIn] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [token, setToken] = useState(null)
 
@@ -48,11 +48,23 @@ function App() {
         await Auth.currentAuthenticatedUser()
             .then((user) => {
                 setLoggedIn(true)
+                console.log('here setting to logged in true')
             })
             .catch((err) => {
                 console.log('ERROR', err)
                 setLoggedIn(false)
             })
+    }
+
+    async function isUserLoggedIn() {
+        try {
+            await Auth.currentAuthenticatedUser()
+            console.log('here loggedIn')
+            return true
+        } catch {
+            console.log('here NOT loggedIn')
+            return false
+        }
     }
 
     const getToken = async () => {
@@ -97,7 +109,7 @@ function App() {
                         path="/"
                         render={() => {
                             console.log('here you go', loggedIn)
-                            return loggedIn === true ? (
+                            return isUserLoggedIn() ? (
                                 <Redirect to="/admin-dashboard" />
                             ) : (
                                 <Redirect to="/login" />
@@ -107,11 +119,11 @@ function App() {
                     <Route
                         exact
                         path="/admin-dashboard"
-                        render={(props) => {
+                        render={() => {
                             console.log('here you go', loggedIn)
-                            return loggedIn === true ? (
+                            return isUserLoggedIn() ? (
                                 <AdminDashboard
-                                    path={props.match.params.menuItem}
+                                    path={'admin-dashboard'}
                                     loggedIn={loggedIn}
                                     history={history}
                                     token={token}

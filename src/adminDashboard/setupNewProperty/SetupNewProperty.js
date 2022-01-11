@@ -143,6 +143,10 @@ export default function SetupNewProperty(props) {
     }
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
+    const [
+        disableSelectInstallerButton,
+        setDisableSelectInstallerButton,
+    ] = useState(true)
     const [activeStep, setActiveStep] = React.useState(0)
     const [installerUuid, setInstallerUuid] = React.useState('')
     const [installerName, setInstallerName] = React.useState('')
@@ -236,6 +240,25 @@ export default function SetupNewProperty(props) {
         newCompleted[activeStep] = true
         setCompleted(newCompleted)
         handleNext()
+    }
+
+    const validateFirstStep = () => {
+        if (
+            newPropertyName &&
+            newPropertyStreet &&
+            newPropertyCity &&
+            newPropertyState &&
+            newPropertyZip &&
+            newPropertyManageName &&
+            newPropertyOfficePhone &&
+            newPropertyEmail &&
+            newPropertyMaxVoltAmps &&
+            newPropertyMaxAmps
+        ) {
+            setDisableSelectInstallerButton(false)
+        } else {
+            setDisableSelectInstallerButton(true)
+        }
     }
 
     const uploadLocationPicture = (locationId, photoBinaries, index) => {
@@ -606,6 +629,7 @@ export default function SetupNewProperty(props) {
             setNewPropertyNotes(value)
         }
         setPropertyInfo(tempPropertyInfo)
+        validateFirstStep()
     }
 
     return (
@@ -1018,6 +1042,7 @@ export default function SetupNewProperty(props) {
                                         fullWidth
                                         variant="contained"
                                         className={classes.createButton}
+                                        disabled={disableSelectInstallerButton}
                                         onClick={() => goToStepTwo()}
                                     >
                                         Continue & Select Installer

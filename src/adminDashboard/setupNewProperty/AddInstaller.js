@@ -126,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AddInstaller(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
+    const [disableAddLcuButton, setDisableAddLcuButton] = useState(true)
     const [selectedInstaller, setSelectedInstaller] = useState()
     const [installers, setInstallers] = useState([])
 
@@ -138,6 +139,11 @@ export default function AddInstaller(props) {
         setSelectedInstaller(installerId)
         props.setInstallerUuid(installerId)
         props.setInstallerName(installerName)
+        if (installerId) {
+            setDisableAddLcuButton(false)
+        } else {
+            setDisableAddLcuButton(true)
+        }
     }
 
     const getAllInstallers = () => {
@@ -193,6 +199,9 @@ export default function AddInstaller(props) {
         getAllInstallers()
         if (props.installerUuid) {
             setSelectedInstaller(props.installerUuid)
+            setDisableAddLcuButton(false)
+        } else {
+            setDisableAddLcuButton(true)
         }
     }, [])
 
@@ -301,10 +310,11 @@ export default function AddInstaller(props) {
                             <Button
                                 fullWidth
                                 variant="contained"
+                                disabled={disableAddLcuButton}
                                 onClick={() => props.addInstaller()}
                                 className={classes.createButton}
                             >
-                                Create Property & Submit to Installer
+                                Add LCU & Submit to Installer
                             </Button>
                         </Grid>
                     </Grid>
