@@ -5,8 +5,10 @@ import './DashboardTab.css'
 import PropertyCardInInstall from './PropertyCardInInstall'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { getAllProperties } from './../dashboardService'
+import { useHistory } from 'react-router-dom'
 
 const DashboardTab = (props) => {
+    const history = useHistory()
     const [isLoading, setIsLoading] = useState(false)
     const [readyPropertyCount, setReadyPropertyCount] = useState(0)
     const [pendingPropertyCount, setPendingPropertyCount] = useState(0)
@@ -92,7 +94,12 @@ const DashboardTab = (props) => {
                             <Button
                                 className="status-card-button"
                                 variant="contained"
-                                onClick={() => props.goToProperties()}
+                                onClick={() => {
+                                    history.push(
+                                        '/dashboard/properties/installed'
+                                    )
+                                    props.goToPropertiesByType('active')
+                                }}
                             >
                                 View All
                             </Button>
@@ -143,7 +150,10 @@ const DashboardTab = (props) => {
                             <Button
                                 className="status-card-button"
                                 variant="contained"
-                                onClick={() => props.goToProperties()}
+                                onClick={() => {
+                                    history.push('/dashboard/properties/new')
+                                    props.goToPropertiesByType('new')
+                                }}
                             >
                                 View All
                             </Button>
@@ -169,7 +179,12 @@ const DashboardTab = (props) => {
                             <Button
                                 className="status-card-button"
                                 variant="contained"
-                                onClick={() => props.goToProperties()}
+                                onClick={() => {
+                                    history.push(
+                                        '/dashboard/properties/pending'
+                                    )
+                                    props.goToPropertiesByType('pending')
+                                }}
                             >
                                 Resolve
                             </Button>

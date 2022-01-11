@@ -204,6 +204,14 @@ export default function AdminDashboard(props) {
         setValue(2)
     }
 
+    const goToPropertiesByType = (status) => {
+        setFilterPropertiesBy(status)
+        setViewThisProperty(null)
+        setDisplaySetupNewProperty(false)
+        setDisplayAddNewInstaller(false)
+        setValue(1)
+    }
+
     const goToProperties = () => {
         history.push('/dashboard/properties')
         setDisplaySetupNewProperty(false)
@@ -404,6 +412,9 @@ export default function AdminDashboard(props) {
                                 <TabPanel value={value} index={0}>
                                     <DashboardTab
                                         goToInstallers={goToInstallers}
+                                        goToPropertiesByType={
+                                            goToPropertiesByType
+                                        }
                                         token={props.token}
                                         goToProperties={goToProperties}
                                     />

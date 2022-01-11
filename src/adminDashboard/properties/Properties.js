@@ -131,10 +131,12 @@ const Properties = (props) => {
 
     const filterOutPropertiesByStatus = (status) => {
         if (status === 'ready') {
+            history.push('/dashboard/properties/ready')
             setActiveFilterFull(
                 status[0].toUpperCase() + status.slice(1) + ' For Install'
             )
         } else if (status === 'in') {
+            history.push('/dashboard/properties/in')
             setActiveFilterFull(
                 status[0].toUpperCase() + status.slice(1) + '-Install'
             )
@@ -149,6 +151,7 @@ const Properties = (props) => {
             history.push('/dashboard/properties/installed')
             getAllPropertiesByStatus('operational')
         } else {
+            history.push('/dashboard/properties/' + status)
             getAllPropertiesByStatus(status)
         }
     }
