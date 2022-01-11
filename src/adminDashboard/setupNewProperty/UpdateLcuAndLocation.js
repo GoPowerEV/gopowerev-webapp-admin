@@ -148,6 +148,7 @@ const useStyles = makeStyles((theme) => ({
 export default function UpdateLcuAndLocation(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
+    const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true)
     const [numberOfLocations, setNumberOfLocations] = useState(1)
     const [locations, setLocations] = useState([])
     const [locationsError, setLocationsError] = useState(false)
@@ -173,12 +174,15 @@ export default function UpdateLcuAndLocation(props) {
 
     const handleNumberOfLocationsChange = () => {
         let tempLocations = locations
+        let tempSmartOutlets = amountOfSmartOutlets
         if (tempLocations.length === 10) {
             alert('10 is the max amount of locations allowed.')
         } else {
             tempLocations.push(sampleLocationObject)
             setLocations(tempLocations)
             setNumberOfLocations(tempLocations.length)
+            tempSmartOutlets[tempSmartOutlets.length] = '1'
+            setAmountOfSmartOutlets(tempSmartOutlets)
         }
     }
 
@@ -186,6 +190,24 @@ export default function UpdateLcuAndLocation(props) {
         let tempLocations = locations.splice(1, index)
         setLocations(tempLocations)
         setNumberOfLocations(tempLocations.length)
+        // CLEANING UP VOLT AMP ERRORS
+        let voltAmpsErrorsTemp = voltAmpsErrors
+        if (voltAmpsErrors[index]) {
+            voltAmpsErrorsTemp.splice(index, 1)
+            setVoltAmpsErrors(voltAmpsErrorsTemp)
+        }
+        // CLEANING UP LOCATION ERRORS
+        let locationsNamesErrorsTemp = locationsNamesErrors
+        if (locationsNamesErrors[index]) {
+            locationsNamesErrorsTemp.splice(index, 1)
+            setLocationsNamesErrors(locationsNamesErrorsTemp)
+        }
+        // CLEANING UP SMART OUTLET ERRORS
+        let smartOutletsErrorsTemp = smartOutletsErrors
+        if (smartOutletsErrors[index]) {
+            smartOutletsErrorsTemp.splice(index, 1)
+            setSmartOutletsErrors(smartOutletsErrorsTemp)
+        }
     }
 
     const handleLcuNameChange = (event) => {
@@ -212,6 +234,7 @@ export default function UpdateLcuAndLocation(props) {
             tempErrors[index] = true
             setLocationsNamesErrors(tempErrors)
         }
+        console.log('here all locations', locations)
     }
 
     const checkIfThereAreStillErrors = () => {
@@ -234,17 +257,22 @@ export default function UpdateLcuAndLocation(props) {
             }
         })
 
+        if (!lcuName) {
+            errorCount++
+        }
+
         console.log('here is error count ' + errorCount)
 
         if (errorCount > 0) {
+            setSubmitButtonDisabled(true)
             return true
         } else {
+            setSubmitButtonDisabled(false)
             return false
         }
     }
 
     const handleThisLocationNumberOfSmartOutletsChange = (value, index) => {
-        console.log('outlets firing')
         if (isNaN(Number(value))) {
             let tempErrors = smartOutletsErrors
             tempErrors[index] = true
@@ -266,20 +294,22 @@ export default function UpdateLcuAndLocation(props) {
     }
 
     const handleThisLocationMaxVoltAmpsChange = (value, index) => {
-        console.log('volts firing')
         if (isNaN(Number(value))) {
             let tempErrors = voltAmpsErrors
             tempErrors[index] = true
             setVoltAmpsErrors(tempErrors)
+            console.log('here ErRORS1', tempErrors)
             setHasErrors(true)
         } else if (Number(value) <= 0) {
             let tempErrors = voltAmpsErrors
             tempErrors[index] = true
+            console.log('here ErRORS2', tempErrors)
             setVoltAmpsErrors(tempErrors)
             setHasErrors(true)
         } else {
             let tempErrors = voltAmpsErrors
-            tempErrors[index] = null
+            tempErrors[index] = false
+            console.log('here ErRORS3', tempErrors)
             setVoltAmpsErrors(tempErrors)
             checkIfThereAreStillErrors()
             let tempLocations = locations
@@ -319,18 +349,32 @@ export default function UpdateLcuAndLocation(props) {
                 tempErrors[index] = null
             }
         })
+        console.log('here location errors', tempErrors)
         setLocationsNamesErrors(tempErrors)
         checkIfThereAreStillErrors()
     }
 
-    // const checkLcuName = () => {}
+    const checkSmartOutlets = () => {
+        let tempErrors = smartOutletsErrors
+        amountOfSmartOutlets.forEach((outlet, index) => {
+            if (outlet === 0 || outlet === null) {
+                tempErrors[index] = true
+                setHasErrors(true)
+            } else {
+                tempErrors[index] = null
+            }
+        })
+        console.log('here smart outlet errors', tempErrors)
+        setLocationsNamesErrors(tempErrors)
+        checkIfThereAreStillErrors()
+    }
 
     const validateAndSubmit = () => {
         checkLocationsNames()
+        checkSmartOutlets()
         checkIfThereAreStillErrors()
-        // checkLcuName()
         console.log('here does it have errors? ' + hasErrors)
-        if (!hasErrors) {
+        if (!hasErrors && lcuName) {
             props.handleSubmitForInstallation(
                 lcuName,
                 lcuModel,
@@ -338,6 +382,7 @@ export default function UpdateLcuAndLocation(props) {
                 photoBinaries,
                 amountOfSmartOutlets
             )
+            // alert('no errors')
         } else {
             document.querySelector('body').scrollTo(0, 0)
         }
@@ -482,6 +527,7 @@ export default function UpdateLcuAndLocation(props) {
                                     handleThisLocationNameChange={
                                         handleThisLocationNameChange
                                     }
+                                    amountOfSmartOutlets={amountOfSmartOutlets}
                                     locationsNamesErrors={locationsNamesErrors}
                                     removeThisLocation={removeThisLocation}
                                     index={index}
@@ -490,9 +536,13 @@ export default function UpdateLcuAndLocation(props) {
                                     getBinaryFromImg={getBinaryFromImg}
                                     photoFileNames={photoFileNames}
                                     smartOutletsErrors={smartOutletsErrors}
-                                    handleThisLocationMaxVoltAmpsChange={handleThisLocationMaxVoltAmpsChange}
+                                    handleThisLocationMaxVoltAmpsChange={
+                                        handleThisLocationMaxVoltAmpsChange
+                                    }
                                     voltAmpsErrors={voltAmpsErrors}
-                                    handleThisLocationNumberOfSmartOutletsChange={handleThisLocationNumberOfSmartOutletsChange}
+                                    handleThisLocationNumberOfSmartOutletsChange={
+                                        handleThisLocationNumberOfSmartOutletsChange
+                                    }
                                 />
                             ))}
                         </React.Fragment>
@@ -517,6 +567,7 @@ export default function UpdateLcuAndLocation(props) {
                                 fullWidth
                                 variant="contained"
                                 className={classes.createButton}
+                                disabled={submitButtonDisabled}
                                 onClick={() => validateAndSubmit()}
                             >
                                 Submit for Installation

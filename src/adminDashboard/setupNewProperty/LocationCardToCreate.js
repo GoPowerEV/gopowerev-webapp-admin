@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined'
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined'
 import { green } from '@material-ui/core/colors'
@@ -153,6 +148,10 @@ export default function LocationCardToCreate(props) {
     const [photoAdded, setPhotoAdded] = React.useState(false)
     const [photoFile, setPhotoFile] = React.useState(null)
 
+    const [numberOfSmartOutlets, setNumberOfSmartOutlets] = useState(props.numberOfSmartOutlets[props.index])
+    const [locationName, setLocationName] = useState()
+    const [maxVoltAmps, setMaxVoltAmps] = useState()
+
     const fileDrop = (event, locationIndex) => {
         event.preventDefault()
         const files = event.dataTransfer.files
@@ -219,13 +218,15 @@ export default function LocationCardToCreate(props) {
                     <TextField
                         className={classes.textField}
                         label="Location name"
+                        value={locationName}
                         variant="outlined"
-                        onChange={(event) =>
+                        onChange={(event) => {
+                            setLocationName(event.target.value)
                             props.handleThisLocationNameChange(
                                 event.target.value,
                                 props.index
                             )
-                        }
+                        }}
                         fullWidth
                     />
                     {props.locationsNamesErrors[props.index] === true && (
@@ -284,12 +285,14 @@ export default function LocationCardToCreate(props) {
                                 label="Number of Smart Outlets"
                                 variant="outlined"
                                 fullWidth
-                                onChange={(event) =>
+                                value={numberOfSmartOutlets}
+                                onChange={(event) => {
+                                    setNumberOfSmartOutlets(event.target.value)
                                     props.handleThisLocationNumberOfSmartOutletsChange(
                                         event.target.value,
                                         props.index
                                     )
-                                }
+                                }}
                             />
                             {props.smartOutletsErrors[props.index] === true && (
                                 <div className={classes.locationError}>
@@ -303,11 +306,14 @@ export default function LocationCardToCreate(props) {
                                 label="Max Volt-Amps"
                                 variant="outlined"
                                 fullWidth
-                                onChange={(event) =>
+                                value={maxVoltAmps}
+                                onChange={(event) => {
+                                    setMaxVoltAmps(event.target.value)
                                     props.handleThisLocationMaxVoltAmpsChange(
                                         event.target.value,
                                         props.index
                                     )
+                                }
                                 }
                             />
                             {props.voltAmpsErrors[props.index] === true && (
