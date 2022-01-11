@@ -143,8 +143,10 @@ const Properties = (props) => {
         }
         setActiveFilter(status)
         if (status === 'all') {
+            history.push('/dashboard/properties')
             getAllProperties(props.token, setIsLoading, setAllProperties)
         } else if (status === 'installed') {
+            history.push('/dashboard/properties/installed')
             getAllPropertiesByStatus('operational')
         } else {
             getAllPropertiesByStatus(status)
@@ -156,14 +158,27 @@ const Properties = (props) => {
     }, [])
 
     useEffect(() => {
+        if (props.filterPropertiesBy) {
+            console.log(
+                'here is the status that is being passed',
+                props.filterPropertiesBy
+            )
+            filterOutPropertiesByStatus(props.filterPropertiesBy)
+        }
+        document.querySelector('body').scrollTo(0, 0)
+    }, [props.filterPropertiesBy, props.token])
+
+    useEffect(() => {
         console.log('here haha', props.viewThisProperty)
         if (props.viewThisProperty !== null) {
             openPropertyDetailsOnLoad(props.viewThisProperty)
         } else {
-            history.push('/dashboard/properties')
-            getAllOfTheProperties()
-            setActiveFilter('all')
-            setActiveFilterFull('All')
+            if (!props.filterPropertiesBy) {
+                history.push('/dashboard/properties')
+                getAllOfTheProperties()
+                setActiveFilter('all')
+                setActiveFilterFull('All')
+            }
         }
     }, [props.viewThisProperty, props.token])
 

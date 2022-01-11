@@ -76,6 +76,31 @@ const DashboardTab = (props) => {
                     <Grid item lg={3} md={6} xs={12}>
                         <div className="status-card">
                             <div className="status-card-header boldText">
+                                Active
+                            </div>
+                            <div className="status-card-amount boldText">
+                                {isLoading && (
+                                    <div className="propertyCountLoader">
+                                        <CircularProgress
+                                            style={{ color: '#12BFA2' }}
+                                        />
+                                    </div>
+                                )}
+                                {!isLoading && activePropertyCount}
+                            </div>
+                            <hr className="status-card-hr" />
+                            <Button
+                                className="status-card-button"
+                                variant="contained"
+                                onClick={() => props.goToProperties()}
+                            >
+                                View All
+                            </Button>
+                        </div>
+                    </Grid>
+                    <Grid item lg={3} md={6} xs={12}>
+                        <div className="status-card">
+                            <div className="status-card-header boldText">
                                 Ready for Install
                             </div>
                             <div className="status-card-amount boldText">
@@ -95,32 +120,6 @@ const DashboardTab = (props) => {
                                 onClick={() => props.goToInstallers()}
                             >
                                 Add Installer
-                            </Button>
-                        </div>
-                    </Grid>
-
-                    <Grid item lg={3} md={6} xs={12}>
-                        <div className="status-card">
-                            <div className="status-card-header boldText">
-                                Pending
-                            </div>
-                            <div className="status-card-amount boldText">
-                                {isLoading && (
-                                    <div className="propertyCountLoader">
-                                        <CircularProgress
-                                            style={{ color: '#12BFA2' }}
-                                        />
-                                    </div>
-                                )}
-                                {!isLoading && pendingPropertyCount}
-                            </div>
-                            <hr className="status-card-hr" />
-                            <Button
-                                className="status-card-button"
-                                variant="contained"
-                                onClick={() => props.goToProperties()}
-                            >
-                                Resolve
                             </Button>
                         </div>
                     </Grid>
@@ -154,7 +153,7 @@ const DashboardTab = (props) => {
                     <Grid item lg={3} md={6} xs={12}>
                         <div className="status-card">
                             <div className="status-card-header boldText">
-                                Active
+                                Pending
                             </div>
                             <div className="status-card-amount boldText">
                                 {isLoading && (
@@ -164,7 +163,7 @@ const DashboardTab = (props) => {
                                         />
                                     </div>
                                 )}
-                                {!isLoading && activePropertyCount}
+                                {!isLoading && pendingPropertyCount}
                             </div>
                             <hr className="status-card-hr" />
                             <Button
@@ -172,7 +171,7 @@ const DashboardTab = (props) => {
                                 variant="contained"
                                 onClick={() => props.goToProperties()}
                             >
-                                View All
+                                Resolve
                             </Button>
                         </div>
                     </Grid>

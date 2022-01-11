@@ -135,9 +135,28 @@ function App() {
                     />
                     <Route
                         path="/dashboard/:menuItem"
+                        exact
                         render={(props) => (
                             <AdminDashboard
                                 path={props.match.params.menuItem}
+                                propertyStatus={
+                                    props.match.params.propertyStatus
+                                }
+                                loggedIn={loggedIn}
+                                history={history}
+                                token={token}
+                            />
+                        )}
+                    />
+                    <Route
+                        path="/dashboard/:menuItem/:propertyStatus"
+                        exact
+                        render={(props) => (
+                            <AdminDashboard
+                                path={props.match.params.menuItem}
+                                propertyStatus={
+                                    props.match.params.propertyStatus
+                                }
                                 loggedIn={loggedIn}
                                 history={history}
                                 token={token}
