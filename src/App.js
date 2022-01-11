@@ -15,7 +15,7 @@ import { useHistory } from 'react-router-dom'
 import './App.css'
 
 function App() {
-    const [loggedIn, setLoggedIn] = useState(true)
+    const [loggedIn, setLoggedIn] = useState(undefined)
     const [openModal, setOpenModal] = useState(false)
     const [token, setToken] = useState(null)
 
@@ -107,14 +107,19 @@ function App() {
                     <Route
                         exact
                         path="/admin-dashboard"
-                        render={() => (
-                            <AdminDashboard
-                                loggedIn={loggedIn}
-                                history={history}
-                                token={token}
-                                path="admin-dashboard"
-                            />
-                        )}
+                        render={(props) => {
+                            console.log('here you go', loggedIn)
+                            return loggedIn === true ? (
+                                <AdminDashboard
+                                    path={props.match.params.menuItem}
+                                    loggedIn={loggedIn}
+                                    history={history}
+                                    token={token}
+                                />
+                            ) : (
+                                <Redirect to="/login" />
+                            )
+                        }}
                     />
                     <Route
                         path="/dashboard/:menuItem"
