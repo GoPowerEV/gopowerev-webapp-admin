@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import Grid from '@material-ui/core/Grid'
-import { API_URL_ADMIN } from '../../constants'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
@@ -52,14 +51,11 @@ const CurrentlyViewedProperty = (props) => {
         if (props.token) {
             let tempPropertyData = property
             Object.keys(tempPropertyData).forEach(function (key, index) {
-                console.log('here it is', key)
-                console.log('here it is', tempPropertyData[key])
                 if (tempPropertyData[key] === 'None') {
                     tempPropertyData[key] = null
                     setProperty(tempPropertyData)
                 }
             })
-            console.log('about to save this info', tempPropertyData)
             fetch(API_URL + 'properties/' + property.propertyUUID, {
                 method: 'PUT',
                 headers: {
@@ -72,7 +68,6 @@ const CurrentlyViewedProperty = (props) => {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('save property success', result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -90,7 +85,7 @@ const CurrentlyViewedProperty = (props) => {
             setPropertyContactEmail(value)
         } else if (field === 'contactPhone1') {
             setPropertyContactPhone(value)
-        } else if (field === 'streetAddress1') {
+        } else if (field === 'address1') {
             setPropertyAddress(value)
         } else if (field === 'city') {
             setPropertyCity(value)
@@ -101,40 +96,9 @@ const CurrentlyViewedProperty = (props) => {
         } else if (field === 'installerUUID') {
             setPropertyInstaller(value)
         }
-        console.log('changing name of the property to ', value)
         let tempPropertyData = property
         tempPropertyData[field] = value
         setProperty(tempPropertyData)
-        console.log(tempPropertyData)
-    }
-
-    const updateSmartOutletSoftware = () => {
-        setUpdateIsLoading(true)
-        if (props.token) {
-            const bodyToSend = { propertyUUID: property.propertyUUID }
-            fetch(API_URL_ADMIN + 'admin/trigger-so-update', {
-                method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(bodyToSend),
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setUpdateIsLoading(false)
-                        console.log('update firmware success', result)
-                        setUpdateSuccess(true)
-                        setTimeout(function () {
-                            setUpdateSuccess(false)
-                        }, 2000)
-                    },
-                    (error) => {
-                        setUpdateIsLoading(false)
-                    }
-                )
-        }
     }
 
     const handleOpen = () => {
@@ -162,7 +126,6 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     useEffect(() => {
-        console.log('prop details', props.property)
         setProperty(props.property)
         setPropertyName(props.property.name)
         setPropertyAddress(props.property.address1)
@@ -173,9 +136,6 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyContactEmail(props.property.contactEmail)
         setPropertyContactPhone(props.property.contactPhone1)
         setPropertyInstaller(props.property.installerUUID)
-        console.log('locations', locations)
-        console.log('lcus', lcus)
-        console.log('smart outlets', smartOutlets)
         document.querySelector('body').scrollTo(0, 0)
         getAllInstallers(props.token, setIsLoading, setAllInstallers)
     }, [])
@@ -336,7 +296,7 @@ const CurrentlyViewedProperty = (props) => {
                                                 onChange={(e) =>
                                                     handlePropertyFieldChange(
                                                         e.target.value,
-                                                        'streetAddress1'
+                                                        'address1'
                                                     )
                                                 }
                                                 onBlur={() =>
