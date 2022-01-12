@@ -549,6 +549,7 @@ const CurrentlyViewedProperty = (props) => {
                                         'detail'
                                     )
                                 }
+                                onBlur={() => savePropertyInfo()}
                                 InputProps={{
                                     endAdornment: <EditOutlinedIcon />,
                                 }}
