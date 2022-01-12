@@ -36,6 +36,7 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyContactPhone, setPropertyContactPhone] = useState('')
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
     const [propertyInstaller, setPropertyInstaller] = useState(null)
+    const [propertyNotes, setPropertyNotes] = useState('')
     const [locations, setLocations] = useState(props.locations)
     const [lcus, setLcus] = useState(props.lcus)
     const [smartOutlets, setSmartOutlets] = useState(props.smartOutlets)
@@ -95,6 +96,8 @@ const CurrentlyViewedProperty = (props) => {
             setPropertyZip(value)
         } else if (field === 'installerUUID') {
             setPropertyInstaller(value)
+        } else if (field === 'detail') {
+            setPropertyNotes(value)
         }
         let tempPropertyData = property
         tempPropertyData[field] = value
@@ -136,6 +139,7 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyContactEmail(props.property.contactEmail)
         setPropertyContactPhone(props.property.contactPhone1)
         setPropertyInstaller(props.property.installerUUID)
+        setPropertyNotes(props.property.detail)
         document.querySelector('body').scrollTo(0, 0)
         getAllInstallers(props.token, setIsLoading, setAllInstallers)
     }, [])
@@ -538,7 +542,13 @@ const CurrentlyViewedProperty = (props) => {
                                 className="editableField"
                                 label="Notes"
                                 variant="outlined"
-                                value={property.notes}
+                                value={propertyNotes}
+                                onChange={(e) =>
+                                    handlePropertyFieldChange(
+                                        e.target.value,
+                                        'detail'
+                                    )
+                                }
                                 InputProps={{
                                     endAdornment: <EditOutlinedIcon />,
                                 }}

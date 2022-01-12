@@ -627,6 +627,7 @@ export default function SetupNewProperty(props) {
             propertyInfo.maxAmps = value
         } else {
             setNewPropertyNotes(value)
+            propertyInfo.detail = value
         }
         setPropertyInfo(tempPropertyInfo)
         validateFirstStep()
