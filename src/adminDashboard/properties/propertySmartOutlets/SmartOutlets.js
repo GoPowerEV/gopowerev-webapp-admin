@@ -85,7 +85,7 @@ const SmartOutlets = (props) => {
             <Grid container xs={12} spacing={2}>
                 {props.smartOutlets?.map((outlet, index) => (
                     <React.Fragment>
-                        <Grid item lg={3} md={6} xs={12}>
+                        <Grid item lg={4} md={6} xs={12}>
                             <Card
                                 className={classes.root}
                                 onClick={() => handleOpen(outlet, index)}
@@ -211,9 +211,13 @@ const SmartOutlets = (props) => {
                                         Heartbeat
                                     </Typography>
                                     <Typography className={classes.status}>
-                                        {moment(outlet.lastHeartbeat).format(
-                                            'MMMM Do YYYY, h:mm:ss a'
-                                        ) ?? '-'}
+                                        {outlet.lastHeartbeat !== null
+                                            ? moment(
+                                                  outlet.lastHeartbeat
+                                              ).format(
+                                                  'MM/DD/YYYY, h:mm:ss a'
+                                              ) ?? '-'
+                                            : '-'}
                                     </Typography>
                                 </CardContent>
                             </Card>

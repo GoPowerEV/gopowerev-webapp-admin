@@ -239,7 +239,7 @@ const LocationCard = (props) => {
                 </Collapse>
             </Grid>
             <Collapse in={locationInfoOpened}>
-                <Grid container className="smartOutletsArea">
+                <Grid container xs={12} className="smartOutletsArea">
                     <SmartOutlets
                         smartOutlets={smartOutlets}
                         token={props.token}

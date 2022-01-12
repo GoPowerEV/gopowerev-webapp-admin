@@ -513,10 +513,10 @@ export default function SetupNewProperty(props) {
         })
     }
 
-    const uploadPropertyImg = (propertyId, thisPropertyInfo) => {
+    const uploadPropertyImg = async (propertyId, thisPropertyInfo) => {
         setIsLoading(true)
         if (props.token) {
-            fetch(API_URL + 'properties-image/' + propertyId, {
+            await fetch(API_URL + 'properties-image/' + propertyId, {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -527,9 +527,7 @@ export default function SetupNewProperty(props) {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        setIsLoading(false)
                         console.log('here image result', result)
-                        handleCompleteFirstStep(thisPropertyInfo)
                     },
                     (error) => {
                         setIsLoading(false)

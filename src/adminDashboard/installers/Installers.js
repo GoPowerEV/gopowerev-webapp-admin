@@ -53,7 +53,7 @@ const Installers = (props) => {
                     spacing={2}
                 >
                     {allInstallers &&
-                        allInstallers.map((installer, index) => (
+                        allInstallers?.map((installer, index) => (
                             <Grid item xs={3} key={index}>
                                 <InstallerCard installer={installer} />
                             </Grid>
