@@ -148,7 +148,7 @@ export default function LocationCardToCreate(props) {
     const [photoAdded, setPhotoAdded] = React.useState(false)
     const [photoFile, setPhotoFile] = React.useState(null)
 
-    const [numberOfSmartOutlets, setNumberOfSmartOutlets] = useState(props.numberOfSmartOutlets[props.index])
+    const [numberOfSmartOutlets, setNumberOfSmartOutlets] = useState([])
     const [locationName, setLocationName] = useState()
     const [maxVoltAmps, setMaxVoltAmps] = useState()
 
@@ -191,6 +191,12 @@ export default function LocationCardToCreate(props) {
         tempFileNames[locationIndex] = files[0].name
         props.setPhotoFileNames(tempFileNames)
     }
+
+    useEffect(() => {
+        if (props.numberOfSmartOutlets) {
+            setNumberOfSmartOutlets(props.numberOfSmartOutlets[props.index])
+        }
+    }, [props.index, props.numberOfSmartOutlets])
 
     return (
         <div className={classes.formContainer}>
@@ -313,8 +319,7 @@ export default function LocationCardToCreate(props) {
                                         event.target.value,
                                         props.index
                                     )
-                                }
-                                }
+                                }}
                             />
                             {props.voltAmpsErrors[props.index] === true && (
                                 <div className={classes.locationError}>
