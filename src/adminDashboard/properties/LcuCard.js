@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { API_URL } from '../../constants'
 import Grid from '@material-ui/core/Grid'
 import {
@@ -25,7 +25,7 @@ const LcuCard = (props) => {
     const [imei, setImei] = useState(props.lcu.imeiNumber)
     const [sim, setSim] = useState(props.lcu.simNumber)
     const [lineNumber, setLineNumber] = useState(props.lcu.lineNumber)
-    const [adminState, setAdminState] = useState(props.lcu.adminStatus)
+    const [adminState, setAdminState] = useState('pre-config')
     const [carrier, setCarrier] = useState(props.lcu.cellCarrier)
     const [model, setModel] = useState(props.lcu.modelNumber)
     const [serial, setSerial] = useState(props.lcu.serialNumber)
@@ -110,8 +110,12 @@ const LcuCard = (props) => {
         handleOpen()
     }
 
-    console.log('this lcu info', lcuInfo)
-
+    useEffect(() => {
+        if (props.lcu.adminStatus) {
+            setAdminState(props.lcu.adminStatus)
+        }
+    }, [props.lcu.adminStatus])
+    
     return (
         <React.Fragment>
             <Grid container xs={12} spacing={2} className="lcuContainer">
