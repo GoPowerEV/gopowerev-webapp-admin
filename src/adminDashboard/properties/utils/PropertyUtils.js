@@ -40,6 +40,13 @@ export const getDashboardBadgeClass = (status) => {
     }
 }
 
+export const getTypesOfPowerServiceOptions = () => {
+    return [
+        { label: '1P-240', value: '1P-240' },
+        { label: '3P-208', value: '3P-208' },
+    ]
+}    
+
 export const getAllStates = () => {
     return [
         {

@@ -10,11 +10,14 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import TextField from '@material-ui/core/TextField'
-import { getAllStates } from './../properties/utils/PropertyUtils'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import './Properties.css'
-import { getBadgeClass } from './utils/PropertyUtils'
+import {
+    getBadgeClass,
+    getAllStates,
+    getTypesOfPowerServiceOptions,
+} from './utils/PropertyUtils'
 import { getAllInstallers } from './../dashboardService'
 import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
 import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
@@ -37,6 +40,7 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
     const [propertyInstaller, setPropertyInstaller] = useState(null)
     const [propertyMaxVoltAmps, setPropertyMaxVoltAmps] = useState('')
+    const [propertyPowerType, setPropertyPowerType] = useState('')
     const [propertyNotes, setPropertyNotes] = useState('')
     const [locations, setLocations] = useState(props.locations)
     const [lcus, setLcus] = useState(props.lcus)
@@ -44,6 +48,7 @@ const CurrentlyViewedProperty = (props) => {
     const [openModal, setOpenModal] = useState(false)
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
     const allStates = getAllStates()
+    const allPowerTypes = getTypesOfPowerServiceOptions()
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -102,6 +107,8 @@ const CurrentlyViewedProperty = (props) => {
             setPropertyMaxVoltAmps(value)
         } else if (field === 'detail') {
             setPropertyNotes(value)
+        } else if (field === 'powerType') {
+            setPropertyPowerType(value)
         }
         let tempPropertyData = property
         tempPropertyData[field] = value
@@ -145,6 +152,7 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyInstaller(props.property.installerUUID)
         setPropertyNotes(props.property.detail)
         setPropertyMaxVoltAmps(props.property.maxVoltAmps)
+        setPropertyPowerType(props.property.powerType)
         document.querySelector('body').scrollTo(0, 0)
         getAllInstallers(props.token, setIsLoading, setAllInstallers)
     }, [])
@@ -234,7 +242,7 @@ const CurrentlyViewedProperty = (props) => {
                             {!isLoading && (
                                 <div className="editInfoContainer">
                                     <Grid container xs={12} spacing={3}>
-                                        <Grid item lg={4} xs={12}>
+                                        <Grid item lg={6} xs={12}>
                                             <div className="editInfoItem">
                                                 <WifiOutlinedIcon />
                                                 <span>
@@ -247,7 +255,7 @@ const CurrentlyViewedProperty = (props) => {
                                                 </span>
                                             </div>
                                         </Grid>
-                                        <Grid item lg={4} xs={12}>
+                                        <Grid item lg={6} xs={12}>
                                             <div className="editInfoItem">
                                                 <EvStationOutlinedIcon />
                                                 <span>
@@ -257,10 +265,66 @@ const CurrentlyViewedProperty = (props) => {
                                             </div>
                                         </Grid>
                                         <Grid item lg={6} xs={12}>
-                                            <div className="editInfoItemTypeOfPowerService">
-                                                Type Of Power Service:
-                                                <span> 1P-240</span>
-                                            </div>
+                                            <TextField
+                                                fullWidth
+                                                id="maxVoltAmps"
+                                                className="editableField"
+                                                label="Max Volt Amps"
+                                                variant="outlined"
+                                                value={propertyMaxVoltAmps}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'maxVoltAmps'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item lg={6} xs={12}>
+                                            <FormControl
+                                                fullWidth
+                                                className="editableFieldSelectContainer"
+                                            >
+                                                <InputLabel id="typeOfPowerService">
+                                                    Type Of Power Service
+                                                </InputLabel>
+                                                <Select
+                                                    labelId="typeOfPowerService"
+                                                    variant="outlined"
+                                                    id="typeOfPowerService"
+                                                    value={propertyPowerType}
+                                                    label="Type Of Power Service"
+                                                    onChange={(e) =>
+                                                        handlePropertyFieldChange(
+                                                            e.target.value,
+                                                            'powerType'
+                                                        )
+                                                    }
+                                                    onBlur={() =>
+                                                        savePropertyInfo()
+                                                    }
+                                                >
+                                                    {allPowerTypes?.map(
+                                                        (type) => (
+                                                            <MenuItem
+                                                                value={
+                                                                    type.value
+                                                                }
+                                                            >
+                                                                {type.value}
+                                                            </MenuItem>
+                                                        )
+                                                    )}
+                                                </Select>
+                                            </FormControl>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
@@ -547,26 +611,6 @@ const CurrentlyViewedProperty = (props) => {
                                     ))}
                                 </Select>
                             </FormControl>
-                        </Grid>
-                        <Grid item lg={4} xs={12}>
-                            <TextField
-                                fullWidth
-                                id="maxVoltAmps"
-                                className="editableField"
-                                label="Max Volt Amps"
-                                variant="outlined"
-                                value={propertyMaxVoltAmps}
-                                onChange={(e) =>
-                                    handlePropertyFieldChange(
-                                        e.target.value,
-                                        'maxVoltAmps'
-                                    )
-                                }
-                                onBlur={() => savePropertyInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
