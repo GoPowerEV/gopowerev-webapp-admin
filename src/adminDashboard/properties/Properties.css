@@ -328,6 +328,23 @@
     margin-top: -2px;
 }
 
+.editInfoItemTypeOfPowerService {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    display: inline-flex;
+    margin-bottom: 20px;
+}
+
+.editInfoItemTypeOfPowerService span {
+    margin-left: 10px;
+}
+
+.editInfoItemTypeOfPowerService div {
+    margin-left: 5px;
+    margin-top: -2px;
+}
+
 .updateOutletSoftwareBtn {
     background-color: #12bfa2 !important;
     color: #ffffff !important;

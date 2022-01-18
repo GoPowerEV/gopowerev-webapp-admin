@@ -249,8 +249,6 @@ export default function AdminDashboard(props) {
         } else {
             const urlLocation = props.path
             const propertyStatus = props.propertyStatus
-            console.log('here is LOCATION', urlLocation)
-            console.log('here is STATUS TO LOOK FOR', propertyStatus)
 
             if (propertyStatus) {
                 setFilterPropertiesBy(propertyStatus)

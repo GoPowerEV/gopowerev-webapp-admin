@@ -31,7 +31,6 @@ const Properties = (props) => {
     const history = useHistory()
 
     const getAllOfTheProperties = async () => {
-        console.log('here getting all')
         await getAllProperties(props.token, setIsLoading, setAllProperties)
     }
 
@@ -50,8 +49,20 @@ const Properties = (props) => {
                 .then(
                     (result) => {
                         setIsLoading(false)
+                        let sortedProperties = result.properties
+                        if (sortedProperties) {
+                            sortedProperties.sort(function (a, b) {
+                                var textA = a.name.toUpperCase()
+                                var textB = b.name.toUpperCase()
+                                return textA < textB
+                                    ? -1
+                                    : textA > textB
+                                    ? 1
+                                    : 0
+                            })
+                        }
                         setAllProperties(
-                            result.properties.filter(
+                            sortedProperties?.filter(
                                 (property) => property.status === status
                             )
                         )
@@ -64,11 +75,16 @@ const Properties = (props) => {
     }
 
     const getLcus = (token, id, setOpenedPropertyLcus) => {
-        getPropertyLcus(token, id, setOpenedPropertyLcus)
+        getPropertyLcus(token, id, setOpenedPropertyLcus, setIsLoading)
     }
 
     const getLocations = (token, id, setOpenedPropertyLocations) => {
-        getPropertyLocations(token, id, setOpenedPropertyLocations)
+        getPropertyLocations(
+            token,
+            id,
+            setOpenedPropertyLocations,
+            setIsLoading
+        )
     }
 
     const getPropertyInfo = (id) => {
@@ -192,7 +208,8 @@ const Properties = (props) => {
                 getPropertySmartOutletsByPropertyId(
                     props.token,
                     location.locationUUID,
-                    setOpenedPropertySmartOutlets
+                    setOpenedPropertySmartOutlets,
+                    setIsLoading
                 )
             })
         } else {

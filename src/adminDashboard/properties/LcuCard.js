@@ -32,7 +32,6 @@ const LcuCard = (props) => {
     const [hardware, setHardware] = useState(props.lcu.hwVersion)
     const [software, setSoftware] = useState(props.lcu.swVersion)
     const [firmware, setFirmware] = useState(props.lcu.fwVersion)
-    const [notes, setNotes] = useState(props.lcu.description)
     const [lcuName, setLcuName] = useState(props.lcu.name)
     const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
     const [openModal, setOpenModal] = useState(false)
@@ -87,8 +86,6 @@ const LcuCard = (props) => {
             setSoftware(value)
         } else if (field === 'fwVersion') {
             setFirmware(value)
-        } else if (field === 'description') {
-            setNotes(value)
         } else {
             setModel(value)
         }
@@ -115,7 +112,7 @@ const LcuCard = (props) => {
             setAdminState(props.lcu.adminStatus)
         }
     }, [props.lcu.adminStatus])
-    
+
     return (
         <React.Fragment>
             <Grid container xs={12} spacing={2} className="lcuContainer">
@@ -313,7 +310,7 @@ const LcuCard = (props) => {
                         />
                     </Grid>
                     <Grid item lg={3} md={6} s={12} xs={12}>
-                    <FormControl
+                        <FormControl
                             fullWidth
                             className="editableFieldSelectContainer"
                         >
@@ -425,84 +422,60 @@ const LcuCard = (props) => {
                             }}
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            id="lcuNotes"
-                            className="editableField"
-                            label="Notes"
-                            variant="outlined"
-                            value={notes}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'description'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-                <hr className="propertiesHrLcu" />
-                <div className="tabHeader inInstallHeader">Locations</div>
-                <Button
-                    className="addNewLocButton"
-                    variant="outlined"
-                    onClick={addNewLocation}
-                >
-                    Add New Location
-                </Button>
-                {/* ADD NEW LOCATION MODAL */}
-                <AddNewLocationModal
-                    handleOpen={handleOpen}
-                    handleClose={handleClose}
-                    open={openModal}
-                    close={handleClose}
-                    token={props.token}
-                    openPropertyDetailsOnLoad={props.openPropertyDetailsOnLoad}
-                />
-                <Grid
-                    container
-                    className="allDashboardItemsContainer"
-                    xs={12}
-                    spacing={2}
-                >
-                    <Grid item xs={12}>
-                        {!props.isLoading &&
-                            props.locations?.map((location, index) => (
-                                <div className="status-card-ininstall">
-                                    <Grid
-                                        container
-                                        className="allPropertiesContainer"
-                                        xs={12}
-                                        spacing={2}
-                                    >
-                                        <Grid item xs={12} key={index}>
-                                            <LocationCard
-                                                token={props.token}
-                                                location={location}
-                                                setIsLoading={
-                                                    props.setIsLoading
-                                                }
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </div>
-                            ))}
-                        {props.isLoading && (
-                            <div className="loaderContainer">
-                                <CircularProgress
-                                    style={{ color: '#12BFA2' }}
-                                />
-                            </div>
-                        )}
-                        {!props.locations && <div>No Locations Available</div>}
-                    </Grid>
                 </Grid>
             </Collapse>
+            <hr className="propertiesHrLcu" />
+            <div className="tabHeader inInstallHeader">Locations</div>
+            <Button
+                className="addNewLocButton"
+                variant="outlined"
+                onClick={addNewLocation}
+            >
+                Add New Location
+            </Button>
+            {/* ADD NEW LOCATION MODAL */}
+            <AddNewLocationModal
+                handleOpen={handleOpen}
+                handleClose={handleClose}
+                open={openModal}
+                close={handleClose}
+                token={props.token}
+                openPropertyDetailsOnLoad={props.openPropertyDetailsOnLoad}
+            />
+            <Grid
+                container
+                className="allDashboardItemsContainer"
+                xs={12}
+                spacing={2}
+            >
+                <Grid item xs={12}>
+                    {!props.isLoading &&
+                        props.locations?.map((location, index) => (
+                            <div className="status-card-ininstall">
+                                <Grid
+                                    container
+                                    className="allPropertiesContainer"
+                                    xs={12}
+                                    spacing={2}
+                                >
+                                    <Grid item xs={12} key={index}>
+                                        <LocationCard
+                                            token={props.token}
+                                            location={location}
+                                            setIsLoading={props.setIsLoading}
+                                        />
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        ))}
+                    {props.isLoading && (
+                        <div className="loaderContainer">
+                            <CircularProgress style={{ color: '#12BFA2' }} />
+                        </div>
+                    )}
+                    {!props.locations && <div>No Locations Available</div>}
+                </Grid>
+            </Grid>
             <hr className="propertiesHrLcu" />
             <div className="bottom-margin-container"></div>
         </React.Fragment>

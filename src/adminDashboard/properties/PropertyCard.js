@@ -9,6 +9,7 @@ import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import { getBadgeClass } from './utils/PropertyUtils'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import {
     getPropertyLcus,
     getPropertyLocations,
@@ -48,6 +49,7 @@ const useStyles = makeStyles({
 
 const PropertyCard = (props) => {
     const [lcusOfThisProperty, setLcusOfThisProperty] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
     const [locationsOfThisProperty, setLocationsOfThisProperty] = useState([])
     const [
         smartOutletsOfThisProperty,
@@ -61,7 +63,8 @@ const PropertyCard = (props) => {
             getPropertyLocations(
                 props.token,
                 props.property.propertyUUID,
-                setLocationsOfThisProperty
+                setLocationsOfThisProperty,
+                setIsLoading
             )
 
             if (locationsOfThisProperty?.length > 0) {
@@ -79,7 +82,8 @@ const PropertyCard = (props) => {
             getPropertyLcus(
                 props.token,
                 props.property.propertyUUID,
-                setLcusOfThisProperty
+                setLcusOfThisProperty,
+                setIsLoading
             )
         }
     }
@@ -89,18 +93,20 @@ const PropertyCard = (props) => {
             getPropertySmartOutletsByPropertyId(
                 props.token,
                 props.property.propertyUUID,
-                setSmartOutletsOfThisProperty
+                setSmartOutletsOfThisProperty,
+                setIsLoading
             )
         }
     }
 
     useEffect(() => {
+        setIsLoading(true)
         getLcus()
         getLocations()
     }, [])
 
     useEffect(() => {
-        if (locationsOfThisProperty.length > 0) {
+        if (locationsOfThisProperty?.length > 0) {
             getSmartOutlets()
         }
     }, [locationsOfThisProperty])
@@ -118,52 +124,62 @@ const PropertyCard = (props) => {
                     )
                 }
             >
-                <img
-                    alt="Property Img"
-                    src={
-                        propertyInfo.pictureUrl1
-                            ? propertyInfo.pictureUrl1
-                            : NoImageAvailable
-                    }
-                    className="propertyImage"
-                />
-                <CardContent className={classes.content}>
-                    <Typography className={classes.propertyCardHeader}>
-                        {propertyInfo.name}
-                    </Typography>
-                    <div className={getBadgeClass(propertyInfo.status)}>
-                        {propertyInfo.status.charAt(0).toUpperCase() +
-                            propertyInfo.status.slice(1)}
+                {isLoading && (
+                    <div className="propertyCountLoader">
+                        <CircularProgress style={{ color: '#12BFA2' }} />
                     </div>
-                    <div className="grey badge">
-                        <div className="badgeBox">
-                            <EvStationOutlinedIcon />
-                            <span className="badgeText">
-                                {lcusOfThisProperty
-                                    ? lcusOfThisProperty.length
-                                    : '0'}{' '}
-                                LCUs
-                            </span>
-                        </div>
-                    </div>
-                    <div className="grey badge">
-                        <div className="badgeBox">
-                            <WifiOutlinedIcon />
-                            <span className="badgeText">
-                                {smartOutletsOfThisProperty?.length} Smart
-                                Outlet(s)
-                            </span>
-                        </div>
-                    </div>
-                    <div className="grey badge">
-                        <div className="badgeBox">
-                            <FlashOnOutlinedIcon />
-                            <span className="badgeText">
-                                {propertyInfo.maxVoltAmps / 1000}k Max Volt-Amps
-                            </span>
-                        </div>
-                    </div>
-                </CardContent>
+                )}
+                {!isLoading && (
+                    <React.Fragment>
+                        <img
+                            alt="Property Img"
+                            src={
+                                propertyInfo.pictureUrl1
+                                    ? propertyInfo.pictureUrl1
+                                    : NoImageAvailable
+                            }
+                            className="propertyImage"
+                        />
+                        <CardContent className={classes.content}>
+                            <Typography className={classes.propertyCardHeader}>
+                                {propertyInfo.name}
+                            </Typography>
+                            <div className={getBadgeClass(propertyInfo.status)}>
+                                {propertyInfo.status.charAt(0).toUpperCase() +
+                                    propertyInfo.status.slice(1)}
+                            </div>
+                            <div className="grey badge">
+                                <div className="badgeBox">
+                                    <EvStationOutlinedIcon />
+                                    <span className="badgeText">
+                                        {lcusOfThisProperty
+                                            ? lcusOfThisProperty.length
+                                            : '0'}{' '}
+                                        LCUs
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="grey badge">
+                                <div className="badgeBox">
+                                    <WifiOutlinedIcon />
+                                    <span className="badgeText">
+                                        {smartOutletsOfThisProperty?.length}{' '}
+                                        Smart Outlet(s)
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="grey badge">
+                                <div className="badgeBox">
+                                    <FlashOnOutlinedIcon />
+                                    <span className="badgeText">
+                                        {propertyInfo.maxVoltAmps / 1000}k Max
+                                        Volt-Amps
+                                    </span>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </React.Fragment>
+                )}
             </Card>
         </React.Fragment>
     )

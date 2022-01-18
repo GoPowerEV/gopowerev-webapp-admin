@@ -14,16 +14,27 @@ export function getAllProperties(token, setIsLoading, setAllProperties) {
         .then(
             (result) => {
                 setIsLoading(false)
-                console.log('here all properties', result.properties)
-                setAllProperties(result.properties)
+                let sortedProperties = result.properties
+                if (sortedProperties) {
+                    sortedProperties.sort(function (a, b) {
+                        var textA = a.name.toUpperCase()
+                        var textB = b.name.toUpperCase()
+                        return textA < textB ? -1 : textA > textB ? 1 : 0
+                    })
+                }
+                setAllProperties(sortedProperties)
             },
             (error) => {}
         )
 }
 
-export function getPropertyLcus(token, id, setLcusOfThisProperty) {
-    console.log('here is the info passed to getLCUS', token)
-    console.log('here is the info passed to getLCUS', id)
+export function getPropertyLcus(
+    token,
+    id,
+    setLcusOfThisProperty,
+    setIsLoading
+) {
+    setIsLoading(true)
     fetch(API_URL + 'lcus?propertyUUID=' + id, {
         method: 'GET',
         headers: {
@@ -36,12 +47,21 @@ export function getPropertyLcus(token, id, setLcusOfThisProperty) {
             (result) => {
                 console.log('here all lcus for this property', result.lcus)
                 setLcusOfThisProperty(result.lcus)
+                setIsLoading(false)
             },
-            (error) => {}
+            (error) => {
+                setIsLoading(false)
+            }
         )
 }
 
-export function getPropertyLocations(token, id, setLocationsOfThisProperty) {
+export function getPropertyLocations(
+    token,
+    id,
+    setLocationsOfThisProperty,
+    setIsLoading
+) {
+    setIsLoading(true)
     fetch(API_URL + 'locations?propertyUUID=' + id, {
         method: 'GET',
         headers: {
@@ -57,8 +77,11 @@ export function getPropertyLocations(token, id, setLocationsOfThisProperty) {
                     result.locations
                 )
                 setLocationsOfThisProperty(result.locations)
+                setIsLoading(false)
             },
-            (error) => {}
+            (error) => {
+                setIsLoading(false)
+            }
         )
 }
 
@@ -111,8 +134,10 @@ export function getLocationSmartOutletsById(
 export function getPropertySmartOutletsByPropertyId(
     token,
     id,
-    setSmartOutletsOfThisProperty
+    setSmartOutletsOfThisProperty,
+    setIsLoading
 ) {
+    setIsLoading(true)
     fetch(API_URL + 'smart-outlets?propertyUUID=' + id, {
         method: 'GET',
         headers: {
@@ -128,8 +153,11 @@ export function getPropertySmartOutletsByPropertyId(
                     result.smartOutlets
                 )
                 setSmartOutletsOfThisProperty(result.smartOutlets)
+                setIsLoading(false)
             },
-            (error) => {}
+            (error) => {
+                setIsLoading(false)
+            }
         )
 }
 

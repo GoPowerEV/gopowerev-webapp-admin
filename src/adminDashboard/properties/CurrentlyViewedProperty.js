@@ -36,6 +36,7 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyContactPhone, setPropertyContactPhone] = useState('')
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
     const [propertyInstaller, setPropertyInstaller] = useState(null)
+    const [propertyMaxVoltAmps, setPropertyMaxVoltAmps] = useState('')
     const [propertyNotes, setPropertyNotes] = useState('')
     const [locations, setLocations] = useState(props.locations)
     const [lcus, setLcus] = useState(props.lcus)
@@ -96,6 +97,8 @@ const CurrentlyViewedProperty = (props) => {
             setPropertyZip(value)
         } else if (field === 'installerUUID') {
             setPropertyInstaller(value)
+        } else if (field === 'maxVoltAmps') {
+            setPropertyMaxVoltAmps(value)
         } else if (field === 'detail') {
             setPropertyNotes(value)
         }
@@ -140,6 +143,7 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyContactPhone(props.property.contactPhone1)
         setPropertyInstaller(props.property.installerUUID)
         setPropertyNotes(props.property.detail)
+        setPropertyMaxVoltAmps(props.property.maxVoltAmps)
         document.querySelector('body').scrollTo(0, 0)
         getAllInstallers(props.token, setIsLoading, setAllInstallers)
     }, [])
@@ -229,29 +233,20 @@ const CurrentlyViewedProperty = (props) => {
                             {!isLoading && (
                                 <div className="editInfoContainer">
                                     <Grid container xs={12} spacing={3}>
-                                        <Grid item lg={6} xs={12}>
-                                            <div className="editInfoItem">
-                                                <FlashOnOutlinedIcon />
-                                                <span>
-                                                    {property.maxVoltAmps} Max
-                                                    Volt Amps
-                                                </span>
-                                            </div>
-                                        </Grid>
-                                        <Grid item lg={6} xs={12}>
+                                        <Grid item lg={4} xs={12}>
                                             <div className="editInfoItem">
                                                 <WifiOutlinedIcon />
                                                 <span>
-                                                    {smartOutlets
+                                                    {smartOutlets !== undefined
                                                         ? smartOutlets.length
                                                         : '0'}{' '}
-                                                    {smartOutlets.length === 1
-                                                        ? 'Smart Outlets'
-                                                        : 'Smart Outlet'}
+                                                    {smartOutlets?.length === 1
+                                                        ? 'Smart Outlet'
+                                                        : 'Smart Outlets'}
                                                 </span>
                                             </div>
                                         </Grid>
-                                        <Grid item lg={6} xs={12}>
+                                        <Grid item lg={4} xs={12}>
                                             <div className="editInfoItem">
                                                 <EvStationOutlinedIcon />
                                                 <span>
@@ -261,7 +256,7 @@ const CurrentlyViewedProperty = (props) => {
                                             </div>
                                         </Grid>
                                         <Grid item lg={6} xs={12}>
-                                            <div className="editInfoItem">
+                                            <div className="editInfoItemTypeOfPowerService">
                                                 Type Of Power Service:
                                                 <span> 1P-240</span>
                                             </div>
@@ -434,7 +429,7 @@ const CurrentlyViewedProperty = (props) => {
                         <Grid item xs={12}>
                             <div className="viewedPropertyContactInfoContainer">
                                 <div className="propertyContactDetailsHeader">
-                                    <span>Property Contact Details</span>
+                                    <span>Property Details</span>
                                 </div>
                                 {isLoading && (
                                     <div className="loaderContainer">
@@ -534,6 +529,26 @@ const CurrentlyViewedProperty = (props) => {
                                     ))}
                                 </Select>
                             </FormControl>
+                        </Grid>
+                        <Grid item lg={4} xs={12}>
+                            <TextField
+                                fullWidth
+                                id="maxVoltAmps"
+                                className="editableField"
+                                label="Max Volt Amps"
+                                variant="outlined"
+                                value={propertyMaxVoltAmps}
+                                onChange={(e) =>
+                                    handlePropertyFieldChange(
+                                        e.target.value,
+                                        'maxVoltAmps'
+                                    )
+                                }
+                                onBlur={() => savePropertyInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
