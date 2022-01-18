@@ -10,7 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import TextField from '@material-ui/core/TextField'
-import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
+import { getAllStates } from './../properties/utils/PropertyUtils'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import './Properties.css'
@@ -43,6 +43,7 @@ const CurrentlyViewedProperty = (props) => {
     const [smartOutlets, setSmartOutlets] = useState(props.smartOutlets)
     const [openModal, setOpenModal] = useState(false)
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
+    const allStates = getAllStates()
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -357,28 +358,45 @@ const CurrentlyViewedProperty = (props) => {
                                             />
                                         </Grid>
                                         <Grid item lg={6} xs={12}>
-                                            <TextField
+                                            <FormControl
                                                 fullWidth
-                                                className="editableField"
-                                                id="propertyState"
-                                                label="State"
-                                                variant="outlined"
-                                                value={propertyState}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'state'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
+                                                className="editableFieldSelectContainerState"
+                                            >
+                                                <InputLabel id="state">
+                                                    State
+                                                </InputLabel>
+                                                <Select
+                                                    labelId="state"
+                                                    variant="outlined"
+                                                    id="state"
+                                                    value={propertyState}
+                                                    label="State"
+                                                    onChange={(e) =>
+                                                        handlePropertyFieldChange(
+                                                            e.target.value,
+                                                            'state'
+                                                        )
+                                                    }
+                                                    onBlur={() =>
+                                                        savePropertyInfo()
+                                                    }
+                                                >
+                                                    {allStates?.map(
+                                                        (item, index) => (
+                                                            <MenuItem
+                                                                value={
+                                                                    item.name
+                                                                }
+                                                                key={index}
+                                                            >
+                                                                {
+                                                                    item.abbreviation
+                                                                }
+                                                            </MenuItem>
+                                                        )
+                                                    )}
+                                                </Select>
+                                            </FormControl>
                                         </Grid>
                                         {!updateIsLoading && !updateSuccess && (
                                             <Grid item lg={6} xs={12}>
