@@ -6,3 +6,5 @@ export const adminStateOptions = [
     { label: 'Suspended', value: 'suspended' },
     { label: 'Deactivated', value: 'deactivated' },
 ]
+
+export const modelOptions = [{ label: 'LCU10', value: 'LCU10' }]

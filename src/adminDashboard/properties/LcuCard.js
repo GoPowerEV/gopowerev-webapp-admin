@@ -17,7 +17,7 @@ import Collapse from '@material-ui/core/Collapse'
 import LocationCard from './LocationCard'
 import './Properties.css'
 import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
-import { adminStateOptions } from './../dashboardConstants'
+import { adminStateOptions, modelOptions } from './../dashboardConstants'
 import AddNewLocationModal from './AddNewLocationModal/AddNewLocationModal'
 
 const LcuCard = (props) => {
@@ -313,24 +313,37 @@ const LcuCard = (props) => {
                         />
                     </Grid>
                     <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
+                    <FormControl
                             fullWidth
-                            className="editableField"
-                            id="model"
-                            label="Model"
-                            value={model}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'modelNumber'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            variant="outlined"
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
+                            className="editableFieldSelectContainer"
+                        >
+                            <InputLabel id="model">Model</InputLabel>
+                            <Select
+                                labelId="model"
+                                variant="outlined"
+                                id="model"
+                                value={model}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'modelNumber'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                label="Model"
+                            >
+                                {modelOptions?.map((option) => {
+                                    return (
+                                        <MenuItem
+                                            key={option.value}
+                                            value={option.value}
+                                        >
+                                            {option.label ?? option.value}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item lg={3} md={6} s={12} xs={12}>
                         <TextField
