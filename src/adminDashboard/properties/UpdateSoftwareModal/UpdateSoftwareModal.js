@@ -101,7 +101,7 @@ export default function UpdateSoftwareModal(props) {
                         />
                     </div>
                 )}
-                {!isLoading && (
+                {!isLoading && soModels && (
                     <Grid container xs={12} spacing={2}>
                         <hr className="soHr" />
                         {soModels?.map((model) => (
@@ -112,7 +112,9 @@ export default function UpdateSoftwareModal(props) {
                                 <Grid item xs={3}>
                                     <Button
                                         className="updateSoButton"
-                                        onClick={() => updateThisModel(model.model)}
+                                        onClick={() =>
+                                            updateThisModel(model.model)
+                                        }
                                     >
                                         Update
                                     </Button>

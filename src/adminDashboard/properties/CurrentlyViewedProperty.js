@@ -145,6 +145,7 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     useEffect(() => {
+        console.log('here it is', props.property)
         setProperty(props.property)
         setPropertyName(props.property.name)
         setPropertyAddress(props.property.address1)
@@ -615,11 +616,14 @@ const CurrentlyViewedProperty = (props) => {
                                     }
                                     onBlur={() => savePropertyInfo()}
                                 >
-                                    {allInstallers?.map((installer) => (
-                                        <MenuItem value={installer.cognitoUUID}>
-                                            {installer.email}
-                                        </MenuItem>
-                                    ))}
+                                    {allInstallers &&
+                                        allInstallers.map((installer) => (
+                                            <MenuItem
+                                                value={installer.cognitoUUID}
+                                            >
+                                                {installer.email}
+                                            </MenuItem>
+                                        ))}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -662,7 +666,7 @@ const CurrentlyViewedProperty = (props) => {
                     <EvStationOutlinedIcon />
                     LCUs
                 </div>
-                {lcus.length === 0 && <div>No LCUs</div>}
+                {lcus?.length === 0 && <div>No LCUs</div>}
                 <div>
                     <Button
                         className="addNewLocationButton"
