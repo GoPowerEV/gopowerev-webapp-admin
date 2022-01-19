@@ -570,7 +570,7 @@ export default function UpdateLcuAndLocation(props) {
                                 disabled={submitButtonDisabled}
                                 onClick={() => validateAndSubmit()}
                             >
-                                Submit for Installation
+                                Create Property
                             </Button>
                         </Grid>
                     </Grid>

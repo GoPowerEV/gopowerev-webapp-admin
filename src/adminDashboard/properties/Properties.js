@@ -36,7 +36,6 @@ const Properties = (props) => {
 
     const getAllPropertiesByStatus = (status) => {
         setIsLoading(true)
-        console.log('token', props.token)
         if (props.token) {
             fetch(API_URL + 'properties', {
                 method: 'GET',
@@ -101,7 +100,6 @@ const Properties = (props) => {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('here new stuff on paste', result)
                         setOpenedPropertyData(result)
                         getLcus(props.token, id, setOpenedPropertyLcus)
                         getLocations(
@@ -119,19 +117,15 @@ const Properties = (props) => {
     }
 
     const openPropertyDetails = (property, lcus, locations, smartOutlets) => {
-        console.log('here opening propertyDetails')
         history.push('/property/' + property.propertyUUID)
         setOpenedPropertyData(property)
         setOpenedPropertyLcus(lcus)
         setOpenedPropertyLocations(locations)
-        console.log('here are the smart outlets', smartOutlets)
         setOpenedPropertySmartOutlets(smartOutlets)
-        console.log('here property data SINGLE', property)
         setPropertyOpened(true)
     }
 
     const openPropertyDetailsOnLoad = (propertyId) => {
-        console.log('here opening ON LOAD')
         history.push('/property/' + propertyId)
         getPropertyInfo(propertyId)
     }
@@ -163,9 +157,6 @@ const Properties = (props) => {
         if (status === 'all') {
             history.push('/dashboard/properties')
             getAllProperties(props.token, setIsLoading, setAllProperties)
-        } else if (status === 'installed') {
-            history.push('/dashboard/properties/installed')
-            getAllPropertiesByStatus('operational')
         } else {
             history.push('/dashboard/properties/' + status)
             getAllPropertiesByStatus(status)
@@ -178,17 +169,12 @@ const Properties = (props) => {
 
     useEffect(() => {
         if (props.filterPropertiesBy) {
-            console.log(
-                'here is the status that is being passed',
-                props.filterPropertiesBy
-            )
             filterOutPropertiesByStatus(props.filterPropertiesBy)
         }
         document.querySelector('body').scrollTo(0, 0)
     }, [props.filterPropertiesBy, props.token])
 
     useEffect(() => {
-        console.log('here haha', props.viewThisProperty)
         if (props.viewThisProperty !== null) {
             openPropertyDetailsOnLoad(props.viewThisProperty)
         } else {
@@ -202,7 +188,6 @@ const Properties = (props) => {
     }, [props.viewThisProperty, props.token])
 
     useEffect(() => {
-        console.log('here haha', openedPropertyLocations)
         if (openedPropertyLocations?.length > 0) {
             openedPropertyLocations.forEach((location) => {
                 getPropertySmartOutletsByPropertyId(
@@ -310,6 +295,19 @@ const Properties = (props) => {
                         </Button>
                         <Button
                             className={
+                                activeFilter === 'operational'
+                                    ? 'topButtonProperties'
+                                    : 'topButtonPropertiesNotActive'
+                            }
+                            variant="contained"
+                            onClick={(e) =>
+                                filterOutPropertiesByStatus('operational')
+                            }
+                        >
+                            Operational
+                        </Button>
+                        <Button
+                            className={
                                 activeFilter === 'paused'
                                     ? 'topButtonProperties'
                                     : 'topButtonPropertiesNotActive'
@@ -363,9 +361,6 @@ const Properties = (props) => {
             {!isLoading && propertyOpened && openedPropertyData && (
                 <CurrentlyViewedProperty
                     property={openedPropertyData}
-                    lcus={openedPropertyLcus}
-                    locations={openedPropertyLocations}
-                    smartOutlets={openedPropertySmartOutlets}
                     closeOpenedProperty={closeOpenedProperty}
                     openPropertyDetailsOnLoad={openPropertyDetailsOnLoad}
                     token={props.token}

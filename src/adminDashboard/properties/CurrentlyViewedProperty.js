@@ -22,6 +22,11 @@ import { getAllInstallers } from './../dashboardService'
 import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
 import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
 import LcuCard from './LcuCard'
+import {
+    getPropertySmartOutletsByPropertyId,
+    getPropertyLcus,
+    getPropertyLocations,
+} from './../dashboardService'
 
 const CurrentlyViewedProperty = (props) => {
     const [allInstallers, setAllInstallers] = useState([])
@@ -42,9 +47,9 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyMaxVoltAmps, setPropertyMaxVoltAmps] = useState('')
     const [propertyPowerType, setPropertyPowerType] = useState('')
     const [propertyNotes, setPropertyNotes] = useState('')
-    const [locations, setLocations] = useState(props.locations)
-    const [lcus, setLcus] = useState(props.lcus)
-    const [smartOutlets, setSmartOutlets] = useState(props.smartOutlets)
+    const [locations, setLocations] = useState([])
+    const [lcus, setLcus] = useState([])
+    const [smartOutlets, setSmartOutlets] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
     const allStates = getAllStates()
@@ -155,19 +160,25 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyPowerType(props.property.powerType)
         document.querySelector('body').scrollTo(0, 0)
         getAllInstallers(props.token, setIsLoading, setAllInstallers)
+        getPropertyLcus(
+            props.token,
+            props.property.propertyUUID,
+            setLcus,
+            setIsLoading
+        )
+        getPropertyLocations(
+            props.token,
+            props.property.propertyUUID,
+            setLocations,
+            setIsLoading
+        )
+        getPropertySmartOutletsByPropertyId(
+            props.token,
+            props.property.propertyUUID,
+            setSmartOutlets,
+            setIsLoading
+        )
     }, [])
-
-    useEffect(() => {
-        if (props.lcus) {
-            setLcus(props.lcus)
-        }
-        if (props.smartOutlets) {
-            setSmartOutlets(props.smartOutlets)
-        }
-        if (props.locations) {
-            setLocations(props.locations)
-        }
-    }, [props.lcus, props.smartOutlets, props.locations])
 
     return (
         <div className="propertiesMainBody">

@@ -288,9 +288,6 @@ export default function AddInstaller(props) {
                                 >
                                     {installers?.map((installer) => (
                                         <MenuItem
-                                            onClick={props.setInstallerName(
-                                                installer.email
-                                            )}
                                             value={installer.cognitoUUID}
                                             key={installer.cognitoUUID}
                                         >
@@ -314,7 +311,7 @@ export default function AddInstaller(props) {
                                 onClick={() => props.addInstaller()}
                                 className={classes.createButton}
                             >
-                                Add LCU & Submit to Installer
+                                Continue to Add LCU
                             </Button>
                         </Grid>
                     </Grid>

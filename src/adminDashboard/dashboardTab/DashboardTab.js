@@ -78,7 +78,7 @@ const DashboardTab = (props) => {
                     <Grid item lg={3} md={6} xs={12}>
                         <div className="status-card">
                             <div className="status-card-header boldText">
-                                Active
+                                New
                             </div>
                             <div className="status-card-amount boldText">
                                 {isLoading && (
@@ -88,7 +88,35 @@ const DashboardTab = (props) => {
                                         />
                                     </div>
                                 )}
-                                {!isLoading && activePropertyCount}
+                                {!isLoading && newPropertyCount}
+                            </div>
+                            <hr className="status-card-hr" />
+                            <Button
+                                className="status-card-button"
+                                variant="contained"
+                                onClick={() => {
+                                    history.push('/dashboard/properties/new')
+                                    props.goToPropertiesByType('new')
+                                }}
+                            >
+                                View All
+                            </Button>
+                        </div>
+                    </Grid>
+                    <Grid item lg={3} md={6} xs={12}>
+                        <div className="status-card">
+                            <div className="status-card-header boldText">
+                                Pending
+                            </div>
+                            <div className="status-card-amount boldText">
+                                {isLoading && (
+                                    <div className="propertyCountLoader">
+                                        <CircularProgress
+                                            style={{ color: '#12BFA2' }}
+                                        />
+                                    </div>
+                                )}
+                                {!isLoading && pendingPropertyCount}
                             </div>
                             <hr className="status-card-hr" />
                             <Button
@@ -96,12 +124,12 @@ const DashboardTab = (props) => {
                                 variant="contained"
                                 onClick={() => {
                                     history.push(
-                                        '/dashboard/properties/installed'
+                                        '/dashboard/properties/pending'
                                     )
-                                    props.goToPropertiesByType('active')
+                                    props.goToPropertiesByType('pending')
                                 }}
                             >
-                                View All
+                                Resolve
                             </Button>
                         </div>
                     </Grid>
@@ -130,11 +158,10 @@ const DashboardTab = (props) => {
                             </Button>
                         </div>
                     </Grid>
-
                     <Grid item lg={3} md={6} xs={12}>
                         <div className="status-card">
                             <div className="status-card-header boldText">
-                                New
+                                Operational
                             </div>
                             <div className="status-card-amount boldText">
                                 {isLoading && (
@@ -144,36 +171,7 @@ const DashboardTab = (props) => {
                                         />
                                     </div>
                                 )}
-                                {!isLoading && newPropertyCount}
-                            </div>
-                            <hr className="status-card-hr" />
-                            <Button
-                                className="status-card-button"
-                                variant="contained"
-                                onClick={() => {
-                                    history.push('/dashboard/properties/new')
-                                    props.goToPropertiesByType('new')
-                                }}
-                            >
-                                View All
-                            </Button>
-                        </div>
-                    </Grid>
-
-                    <Grid item lg={3} md={6} xs={12}>
-                        <div className="status-card">
-                            <div className="status-card-header boldText">
-                                Pending
-                            </div>
-                            <div className="status-card-amount boldText">
-                                {isLoading && (
-                                    <div className="propertyCountLoader">
-                                        <CircularProgress
-                                            style={{ color: '#12BFA2' }}
-                                        />
-                                    </div>
-                                )}
-                                {!isLoading && pendingPropertyCount}
+                                {!isLoading && activePropertyCount}
                             </div>
                             <hr className="status-card-hr" />
                             <Button
@@ -181,12 +179,12 @@ const DashboardTab = (props) => {
                                 variant="contained"
                                 onClick={() => {
                                     history.push(
-                                        '/dashboard/properties/pending'
+                                        '/dashboard/properties/operational'
                                     )
-                                    props.goToPropertiesByType('pending')
+                                    props.goToPropertiesByType('active')
                                 }}
                             >
-                                Resolve
+                                View All
                             </Button>
                         </div>
                     </Grid>

@@ -120,19 +120,19 @@ const LocationCard = (props) => {
                     </div>
                     {!locationInfoOpened && (
                         <div className="smartOutletsCountHidden">
-                            {smartOutlets.length} Smart Outlets (Expend to see
+                            {smartOutlets.length} Smart Outlets (Expand to see
                             more information)
                         </div>
                     )}
                 </Grid>
                 <Grid item xs={1}>
-                    {locationInfoOpened && (
+                    {!locationInfoOpened && (
                         <ExpandMoreIcon
                             className="expandIconFirstPortion"
                             onClick={toggleLocationInfo}
                         />
                     )}
-                    {!locationInfoOpened && (
+                    {locationInfoOpened && (
                         <ExpandLessIcon
                             className="expandIconFirstPortion"
                             onClick={toggleLocationInfo}
