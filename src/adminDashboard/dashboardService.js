@@ -13,6 +13,7 @@ export function getAllProperties(token, setIsLoading, setAllProperties) {
         .then((res) => res.json())
         .then(
             (result) => {
+                console.log('here ar eall props', result.properties)
                 setIsLoading(false)
                 let sortedProperties = result.properties
                 if (sortedProperties) {

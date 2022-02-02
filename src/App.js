@@ -108,7 +108,6 @@ function App() {
                         exact
                         path="/"
                         render={() => {
-                            console.log('here you go', loggedIn)
                             return isUserLoggedIn() ? (
                                 <Redirect to="/admin-dashboard" />
                             ) : (
@@ -120,7 +119,6 @@ function App() {
                         exact
                         path="/admin-dashboard"
                         render={() => {
-                            console.log('here you go', loggedIn)
                             return isUserLoggedIn() ? (
                                 <AdminDashboard
                                     path={'admin-dashboard'}

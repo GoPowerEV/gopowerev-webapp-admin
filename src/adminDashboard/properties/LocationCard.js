@@ -98,12 +98,16 @@ const LocationCard = (props) => {
         setlLocationInfoOpened(!locationInfoOpened)
     }
 
-    useEffect(() => {
+    const getSmartOutletData = () => {
         getLocationSmartOutletsById(
             props.token,
             locationInfo.locationUUID,
             setSmartOutlets
         )
+    }
+
+    useEffect(() => {
+        getSmartOutletData()
     }, [])
 
     useEffect(() => {
@@ -243,6 +247,8 @@ const LocationCard = (props) => {
                     <SmartOutlets
                         smartOutlets={smartOutlets}
                         token={props.token}
+                        locationdUuid={locationInfo.locationUUID}
+                        getSmartOutletData={getSmartOutletData}
                     />
                 </Grid>
             </Collapse>

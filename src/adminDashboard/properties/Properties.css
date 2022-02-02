@@ -150,7 +150,12 @@
 }
 
 .propertyCountLoader {
-    margin-left: 35%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 15%;
+    padding-top: 20%;
+    padding-bottom: 20%;
 }
 
 .lcuContainer {
@@ -363,6 +368,15 @@
 }
 
 .updateOutletSoftwareBtn {
+    background-color: #12bfa2 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    height: 55px;
+    width: 100%;
+    top: 16px;
+}
+
+.editPropertyImageButton {
     background-color: #12bfa2 !important;
     color: #ffffff !important;
     font-weight: bold !important;

@@ -257,7 +257,7 @@ export default function AddNewLcuModal(props) {
         console.log('locationId', locationId)
         for (var i = 0; i < amountOfOutlets; i++) {
             setIsLoading(true)
-            let locationObject = {
+            let soObject = {
                 locationUUID: locationId,
                 model: 'Proto X0-Frank',
             }
@@ -268,7 +268,7 @@ export default function AddNewLcuModal(props) {
                         Authorization: 'Bearer ' + props.token,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(locationObject),
+                    body: JSON.stringify(soObject),
                 })
                     .then((res) => res.json())
                     .then(

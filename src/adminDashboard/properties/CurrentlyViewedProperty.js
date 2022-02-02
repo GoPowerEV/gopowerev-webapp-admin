@@ -52,8 +52,66 @@ const CurrentlyViewedProperty = (props) => {
     const [smartOutlets, setSmartOutlets] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
+    const [photoBinary, setPhotoBinary] = React.useState(null)
     const allStates = getAllStates()
     const allPowerTypes = getTypesOfPowerServiceOptions()
+
+    const uploadPropertyImg = async () => {
+        setIsLoading(true)
+        if (props.token) {
+            await fetch(
+                API_URL + 'properties-image/' + props.property.propertyUUID,
+                {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'image/jpg',
+                    },
+                    body: photoBinary,
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log('here image result', result)
+                        props.reloadPropertyInfo(props.property.propertyUUID)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const getBinaryFromImg = (picFile) => {
+        new Promise((resolve, reject) => {
+            const reader = new FileReader()
+
+            reader.onload = (event) => {
+                resolve(event.target.result)
+            }
+
+            reader.onerror = (err) => {
+                reject(err)
+            }
+
+            reader.readAsArrayBuffer(picFile)
+        }).then((result) => {
+            setPhotoBinary(result)
+        })
+    }
+
+    const handlePhotoChange = (event) => {
+        event.preventDefault()
+        const files = event.target.files
+        getBinaryFromImg(files[0])
+    }
+
+    const hiddenFileInput = React.useRef(null)
+
+    const handlePhotoClick = (event) => {
+        hiddenFileInput.current.click()
+    }
 
     const togglePropertyInfo = () => {
         setPropertyInfoOpened(!propertyInfoOpened)
@@ -145,6 +203,12 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     useEffect(() => {
+        if (photoBinary) {
+            uploadPropertyImg()
+        }
+    }, [photoBinary])
+
+    useEffect(() => {
         console.log('here it is', props.property)
         setProperty(props.property)
         setPropertyName(props.property.name)
@@ -226,6 +290,22 @@ const CurrentlyViewedProperty = (props) => {
                             alt="Property Img"
                             src={property.pictureUrl1 ?? NoImageAvailable}
                             className="viewedPropertyMainImage"
+                        />
+                        <Button
+                            size="small"
+                            className="editPropertyImageButton"
+                            variant="contained"
+                            onClick={() => handlePhotoClick()}
+                        >
+                            Edit Property Image
+                        </Button>
+                        <input
+                            type="file"
+                            ref={hiddenFileInput}
+                            style={{
+                                display: 'none',
+                            }}
+                            onChange={handlePhotoChange}
                         />
                     </Grid>
                     <Grid item xs={8}>
@@ -616,7 +696,7 @@ const CurrentlyViewedProperty = (props) => {
                                     }
                                     onBlur={() => savePropertyInfo()}
                                 >
-                                    {allInstallers &&
+                                    {allInstallers?.length > 0 &&
                                         allInstallers.map((installer) => (
                                             <MenuItem
                                                 value={installer.cognitoUUID}

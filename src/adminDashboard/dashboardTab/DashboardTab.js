@@ -18,7 +18,9 @@ const DashboardTab = (props) => {
     const [allProperties, setAllProperties] = useState([])
 
     useEffect(() => {
-        getAllProperties(props.token, setIsLoading, setAllProperties)
+        if (props.token) {
+            getAllProperties(props.token, setIsLoading, setAllProperties)
+        }
     }, [props.token])
 
     useEffect(() => {

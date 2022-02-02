@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Card from '@material-ui/core/Card'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import CardContent from '@material-ui/core/CardContent'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
@@ -9,6 +10,7 @@ import './SmartOutlets.css'
 import { makeStyles } from '@material-ui/core/styles'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
 import EditSmartOutletModal from './EditSmartOutletModal'
+import AddNewSmartOutletModal from './AddNewSmartOutletModal'
 import moment from 'moment'
 
 const useStyles = makeStyles({
@@ -61,7 +63,12 @@ const useStyles = makeStyles({
 const SmartOutlets = (props) => {
     const classes = useStyles()
     const [openModal, setOpenModal] = useState(false)
+    const [openNewModal, setOpenNewModal] = useState(false)
     const [currentlyViewedOutlet, setCurrentlyViewedOutlet] = useState({})
+    const [
+        createSmartOutletForThisLocation,
+        setCreateSmartOutletForThisLocation,
+    ] = useState()
     const [outletIndex, setOutletIndex] = useState()
 
     const handleOpen = (outletData, index) => {
@@ -76,12 +83,34 @@ const SmartOutlets = (props) => {
         setOutletIndex()
     }
 
+    const handleNewOpen = () => {
+        setOpenNewModal(true)
+    }
+
+    const handleNewClose = () => {
+        setCreateSmartOutletForThisLocation()
+        setOpenNewModal(false)
+    }
+
+    const addNewSmartOutlet = () => {
+        setCreateSmartOutletForThisLocation(props.locationdUuid)
+        handleNewOpen()
+    }
+
     return (
         <div className="smartOutletsContainer">
             <div className="outletHeader">
                 <FlashOnOutlinedIcon />
                 Smart Outlets ({props.smartOutlets.length})
             </div>
+            <br />
+            <Button
+                className="addNewLocButton"
+                variant="outlined"
+                onClick={addNewSmartOutlet}
+            >
+                Add New Smart Outlet
+            </Button>
             <Grid container xs={12} spacing={2}>
                 {props.smartOutlets?.map((outlet, index) => (
                     <React.Fragment>
@@ -233,6 +262,17 @@ const SmartOutlets = (props) => {
                 token={props.token}
                 outletData={currentlyViewedOutlet}
                 outletIndex={outletIndex}
+            />
+            {/* ADD NEW SMART OUTLET MODAL */}
+            <AddNewSmartOutletModal
+                handleOpen={handleNewOpen}
+                handleClose={handleNewClose}
+                createSmartOutletForThisLocation={
+                    createSmartOutletForThisLocation
+                }
+                open={openNewModal}
+                token={props.token}
+                getSmartOutletData={props.getSmartOutletData}
             />
         </div>
     )

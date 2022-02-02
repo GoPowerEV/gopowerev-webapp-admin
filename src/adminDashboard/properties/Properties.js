@@ -139,6 +139,10 @@ const Properties = (props) => {
         setPropertyOpened(false)
     }
 
+    const reloadPropertyInfo = (propertyId) => {
+        getPropertyInfo(propertyId)
+    }
+
     const filterOutPropertiesByStatus = (status) => {
         if (status === 'ready') {
             history.push('/dashboard/properties/ready')
@@ -172,7 +176,7 @@ const Properties = (props) => {
             filterOutPropertiesByStatus(props.filterPropertiesBy)
         }
         document.querySelector('body').scrollTo(0, 0)
-    }, [props.filterPropertiesBy, props.token])
+    }, [props.filterPropertiesBy])
 
     useEffect(() => {
         if (props.viewThisProperty !== null) {
@@ -197,8 +201,6 @@ const Properties = (props) => {
                     setIsLoading
                 )
             })
-        } else {
-            console.log('here it is null')
         }
     }, [openedPropertyLocations])
 
@@ -363,6 +365,7 @@ const Properties = (props) => {
                     property={openedPropertyData}
                     closeOpenedProperty={closeOpenedProperty}
                     openPropertyDetailsOnLoad={openPropertyDetailsOnLoad}
+                    reloadPropertyInfo={reloadPropertyInfo}
                     token={props.token}
                 />
             )}
