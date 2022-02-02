@@ -4,6 +4,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Collapse from '@material-ui/core/Collapse'
 import Card from '@material-ui/core/Card'
 import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import './../../adminDashboard/dashboardTab/DashboardTab.css'
 import { makeStyles } from '@material-ui/core/styles'
@@ -43,9 +44,11 @@ const useStyles = makeStyles({
 })
 
 const LocationCard = (props) => {
+    const [isLoading, setIsLoading] = useState(false)
     const [locationInfo, setLocationInfo] = useState(props.location)
     const [locationName, setLocationName] = useState(props.location.name)
     const [locationInfoOpened, setlLocationInfoOpened] = useState(true)
+    const [photoBinary, setPhotoBinary] = React.useState(null)
     const [locationVoltAmps, setLocationVoltAmps] = useState(
         props.location.maxVoltAmps
     )
@@ -55,6 +58,62 @@ const LocationCard = (props) => {
     const [smartOutlets, setSmartOutlets] = useState([])
     const classes = useStyles()
 
+    const uploadLocationImg = async () => {
+        setIsLoading(true)
+        if (props.token) {
+            await fetch(
+                API_URL + 'locations-image/' + locationInfo.locationUUID,
+                {
+                    method: 'PUT',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'image/jpg',
+                    },
+                    body: photoBinary,
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log('here image result', result)
+                        props.reloadPropertyLocations()
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const getBinaryFromImg = (picFile) => {
+        new Promise((resolve, reject) => {
+            const reader = new FileReader()
+
+            reader.onload = (event) => {
+                resolve(event.target.result)
+            }
+
+            reader.onerror = (err) => {
+                reject(err)
+            }
+
+            reader.readAsArrayBuffer(picFile)
+        }).then((result) => {
+            setPhotoBinary(result)
+        })
+    }
+
+    const handlePhotoChange = (event) => {
+        event.preventDefault()
+        const files = event.target.files
+        getBinaryFromImg(files[0])
+    }
+
+    const hiddenFileInput = React.useRef(null)
+
+    const handlePhotoClick = (event) => {
+        hiddenFileInput.current.click()
+    }
     const saveLocationInfo = () => {
         props.setIsLoading(true)
         if (props.token) {
@@ -107,6 +166,12 @@ const LocationCard = (props) => {
     }
 
     useEffect(() => {
+        if (photoBinary) {
+            uploadLocationImg()
+        }
+    }, [photoBinary])
+
+    useEffect(() => {
         getSmartOutletData()
     }, [])
 
@@ -155,6 +220,22 @@ const LocationCard = (props) => {
                                             NoImageAvailable
                                         }
                                         className="viewedPropertyMainImage"
+                                    />
+                                    <Button
+                                        size="small"
+                                        className="editLocationmageButton"
+                                        variant="contained"
+                                        onClick={() => handlePhotoClick()}
+                                    >
+                                        Edit Location Image
+                                    </Button>
+                                    <input
+                                        type="file"
+                                        ref={hiddenFileInput}
+                                        style={{
+                                            display: 'none',
+                                        }}
+                                        onChange={handlePhotoChange}
                                     />
                                 </Grid>
                                 <Grid item xs={8}>

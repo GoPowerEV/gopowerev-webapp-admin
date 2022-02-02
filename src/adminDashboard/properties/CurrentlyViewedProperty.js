@@ -117,6 +117,15 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyInfoOpened(!propertyInfoOpened)
     }
 
+    const reloadPropertyLocations = () => {
+        getPropertyLocations(
+            props.token,
+            props.property.propertyUUID,
+            setLocations,
+            setIsLoading
+        )
+    }
+
     const savePropertyInfo = () => {
         setIsLoading(true)
         if (props.token) {
@@ -235,12 +244,6 @@ const CurrentlyViewedProperty = (props) => {
             props.token,
             props.property.propertyUUID,
             setLocations,
-            setIsLoading
-        )
-        getPropertySmartOutletsByPropertyId(
-            props.token,
-            props.property.propertyUUID,
-            setSmartOutlets,
             setIsLoading
         )
     }, [])
@@ -774,6 +777,7 @@ const CurrentlyViewedProperty = (props) => {
                         setIsLoading={setIsLoading}
                         isLoading={isLoading}
                         locations={locations}
+                        reloadPropertyLocations={reloadPropertyLocations}
                     />
                 ))}
         </div>

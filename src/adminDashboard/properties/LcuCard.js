@@ -451,22 +451,31 @@ const LcuCard = (props) => {
                 <Grid item xs={12}>
                     {!props.isLoading &&
                         props.locations?.map((location, index) => (
-                            <div className="status-card-ininstall">
-                                <Grid
-                                    container
-                                    className="allPropertiesContainer"
-                                    xs={12}
-                                    spacing={2}
-                                >
-                                    <Grid item xs={12} key={index}>
-                                        <LocationCard
-                                            token={props.token}
-                                            location={location}
-                                            setIsLoading={props.setIsLoading}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </div>
+                            <>
+                                {location.lcuUUID === lcuInfo.lcuUUID && (
+                                    <div className="status-card-ininstall">
+                                        <Grid
+                                            container
+                                            className="allPropertiesContainer"
+                                            xs={12}
+                                            spacing={2}
+                                        >
+                                            <Grid item xs={12} key={index}>
+                                                <LocationCard
+                                                    reloadPropertyLocations={
+                                                        props.reloadPropertyLocations
+                                                    }
+                                                    token={props.token}
+                                                    location={location}
+                                                    setIsLoading={
+                                                        props.setIsLoading
+                                                    }
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </div>
+                                )}
+                            </>
                         ))}
                     {props.isLoading && (
                         <div className="loaderContainer">
