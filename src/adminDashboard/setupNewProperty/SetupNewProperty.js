@@ -321,7 +321,7 @@ export default function SetupNewProperty(props) {
             setIsLoading(true)
             let locationObject = {
                 locationUUID: locationId,
-                model: 'Proto X0-Frank',
+                model: 'Proto X2',
             }
             if (props.token) {
                 fetch(API_URL + 'smart-outlets', {

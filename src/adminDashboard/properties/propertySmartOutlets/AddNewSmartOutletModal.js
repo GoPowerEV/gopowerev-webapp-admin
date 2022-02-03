@@ -57,7 +57,7 @@ export default function AddNewSmartOutletModal(props) {
 
     const soData = {
         locationUUID: props.createSmartOutletForThisLocation,
-        model: 'Proto X0-Frank',
+        model: 'Proto X2',
     }
 
     const addNewSmartOutlet = () => {

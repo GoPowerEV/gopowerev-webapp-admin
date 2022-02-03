@@ -72,8 +72,6 @@ export default function EditSmartOutletModal(props) {
         setMac(props.outletData.macAddr)
     }, [props.outletData])
 
-    console.log('here is the outlet data', outletData)
-
     const saveOutletInfo = () => {
         setIsLoading(true)
         if (props.token) {
