@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AddInstaller(props) {
     const classes = useStyles()
     const [isLoading, setIsLoading] = useState(false)
-    const [disableAddLcuButton, setDisableAddLcuButton] = useState(true)
+    const [disableAddLcuButton, setDisableAddLcuButton] = useState(false)
     const [selectedInstaller, setSelectedInstaller] = useState()
     const [installers, setInstallers] = useState([])
 
@@ -139,11 +139,11 @@ export default function AddInstaller(props) {
         setSelectedInstaller(installerId)
         props.setInstallerUuid(installerId)
         props.setInstallerName(installerName)
-        if (installerId) {
-            setDisableAddLcuButton(false)
-        } else {
-            setDisableAddLcuButton(true)
-        }
+        // if (installerId) {
+        //     setDisableAddLcuButton(false)
+        // } else {
+        //     setDisableAddLcuButton(true)
+        // }
     }
 
     const getAllInstallers = () => {
@@ -199,10 +199,11 @@ export default function AddInstaller(props) {
         getAllInstallers()
         if (props.installerUuid) {
             setSelectedInstaller(props.installerUuid)
-            setDisableAddLcuButton(false)
-        } else {
-            setDisableAddLcuButton(true)
+            // setDisableAddLcuButton(false)
         }
+        // } else {
+        //     setDisableAddLcuButton(true)
+        // }
     }, [])
 
     return (
