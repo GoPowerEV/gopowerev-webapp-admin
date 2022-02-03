@@ -101,10 +101,10 @@ export default function UpdateSoftwareModal(props) {
                         />
                     </div>
                 )}
-                {!isLoading && soModels && (
+                {!isLoading && soModels?.length > 0 && (
                     <Grid container xs={12} spacing={2}>
                         <hr className="soHr" />
-                        {soModels?.map((model) => (
+                        {soModels.map((model) => (
                             <>
                                 <Grid item xs={9}>
                                     <div className="soModel">{model.model}</div>

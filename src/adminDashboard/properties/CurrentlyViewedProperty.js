@@ -699,7 +699,8 @@ const CurrentlyViewedProperty = (props) => {
                                     }
                                     onBlur={() => savePropertyInfo()}
                                 >
-                                    {allInstallers?.length > 0 &&
+                                    {allInstallers &&
+                                        allInstallers?.length > 0 &&
                                         allInstallers.map((installer) => (
                                             <MenuItem
                                                 value={installer.cognitoUUID}
