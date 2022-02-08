@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 
 const PropertyCard = (props) => {
     const [lcusOfThisProperty, setLcusOfThisProperty] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [locationsOfThisProperty, setLocationsOfThisProperty] = useState([])
     const [
         smartOutletsOfThisProperty,
@@ -100,30 +100,26 @@ const PropertyCard = (props) => {
     }
 
     useEffect(() => {
-        setIsLoading(true)
-        getLcus()
-        getLocations()
-    }, [])
-
-    useEffect(() => {
         if (locationsOfThisProperty?.length > 0) {
             getSmartOutlets()
         }
     }, [locationsOfThisProperty])
 
+    const openThisProperty = () => {
+        setIsLoading(true)
+        getLcus()
+        getLocations()
+        props.openPropertyDetails(
+            propertyInfo,
+            lcusOfThisProperty,
+            locationsOfThisProperty,
+            smartOutletsOfThisProperty
+        )
+    }
+
     return (
         <React.Fragment>
-            <Card
-                className={classes.root}
-                onClick={() =>
-                    props.openPropertyDetails(
-                        propertyInfo,
-                        lcusOfThisProperty,
-                        locationsOfThisProperty,
-                        smartOutletsOfThisProperty
-                    )
-                }
-            >
+            <Card className={classes.root} onClick={() => openThisProperty()}>
                 {isLoading && (
                     <div className="propertyCountLoader">
                         <CircularProgress style={{ color: '#12BFA2' }} />
@@ -147,35 +143,6 @@ const PropertyCard = (props) => {
                             <div className={getBadgeClass(propertyInfo.status)}>
                                 {propertyInfo.status.charAt(0).toUpperCase() +
                                     propertyInfo.status.slice(1)}
-                            </div>
-                            <div className="grey badge">
-                                <div className="badgeBox">
-                                    <EvStationOutlinedIcon />
-                                    <span className="badgeText">
-                                        {lcusOfThisProperty
-                                            ? lcusOfThisProperty.length
-                                            : '0'}{' '}
-                                        LCUs
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="grey badge">
-                                <div className="badgeBox">
-                                    <WifiOutlinedIcon />
-                                    <span className="badgeText">
-                                        {smartOutletsOfThisProperty?.length}{' '}
-                                        Smart Outlet(s)
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="grey badge">
-                                <div className="badgeBox">
-                                    <FlashOnOutlinedIcon />
-                                    <span className="badgeText">
-                                        {propertyInfo.maxVoltAmps / 1000}k Max
-                                        Volt-Amps
-                                    </span>
-                                </div>
                             </div>
                         </CardContent>
                     </React.Fragment>

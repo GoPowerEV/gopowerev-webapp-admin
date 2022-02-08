@@ -23,9 +23,9 @@ import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
 import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
 import LcuCard from './LcuCard'
 import {
-    getPropertySmartOutletsByPropertyId,
     getPropertyLcus,
     getPropertyLocations,
+    getPropertySmartOutletsByPropertyId,
 } from './../dashboardService'
 
 const CurrentlyViewedProperty = (props) => {
@@ -218,7 +218,6 @@ const CurrentlyViewedProperty = (props) => {
     }, [photoBinary])
 
     useEffect(() => {
-        console.log('here it is', props.property)
         setProperty(props.property)
         setPropertyName(props.property.name)
         setPropertyAddress(props.property.address1)
@@ -244,6 +243,12 @@ const CurrentlyViewedProperty = (props) => {
             props.token,
             props.property.propertyUUID,
             setLocations,
+            setIsLoading
+        )
+        getPropertySmartOutletsByPropertyId(
+            props.token,
+            props.property.propertyUUID,
+            setSmartOutlets,
             setIsLoading
         )
     }, [])
@@ -317,6 +322,18 @@ const CurrentlyViewedProperty = (props) => {
                                 <Grid item xs={11}>
                                     <div className="viewedPropertyTitle">
                                         {property.name}
+                                        {property.status !== undefined && (
+                                            <span
+                                                className={getBadgeClass(
+                                                    property.status
+                                                )}
+                                            >
+                                                {property.status
+                                                    .charAt(0)
+                                                    .toUpperCase() +
+                                                    property.status.slice(1)}
+                                            </span>
+                                        )}
                                     </div>
                                 </Grid>
                                 <Grid item xs={1}>
@@ -328,12 +345,6 @@ const CurrentlyViewedProperty = (props) => {
                                     </div>
                                 </Grid>
                             </Grid>
-                            {property.status !== undefined && (
-                                <div className={getBadgeClass(property.status)}>
-                                    {property.status.charAt(0).toUpperCase() +
-                                        property.status.slice(1)}
-                                </div>
-                            )}
                             {!isLoading && (
                                 <div className="editInfoContainer">
                                     <Grid container xs={12} spacing={3}>
@@ -699,15 +710,11 @@ const CurrentlyViewedProperty = (props) => {
                                     }
                                     onBlur={() => savePropertyInfo()}
                                 >
-                                    {allInstallers &&
-                                        allInstallers?.length > 0 &&
-                                        allInstallers.map((installer) => (
-                                            <MenuItem
-                                                value={installer.cognitoUUID}
-                                            >
-                                                {installer.email}
-                                            </MenuItem>
-                                        ))}
+                                    {allInstallers?.map((installer) => (
+                                        <MenuItem value={installer.cognitoUUID}>
+                                            {installer.email}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -746,12 +753,12 @@ const CurrentlyViewedProperty = (props) => {
                     openPropertyDetailsOnLoad={props.openPropertyDetailsOnLoad}
                 />
                 <hr className="propertiesHrLcu" />
-                <div className="greyHeader">
-                    <EvStationOutlinedIcon />
-                    LCUs
-                </div>
-                {lcus?.length === 0 && <div>No LCUs</div>}
-                <div>
+                <Grid container justifyContent="space-between">
+                    <div className="greyHeader">
+                        <EvStationOutlinedIcon />
+                        LCUs
+                    </div>
+                    {lcus?.length === 0 && <div>No LCUs</div>}
                     <Button
                         className="addNewLocationButton"
                         variant="outlined"
@@ -759,7 +766,7 @@ const CurrentlyViewedProperty = (props) => {
                     >
                         Add New LCU & Location
                     </Button>
-                </div>
+                </Grid>
             </React.Fragment>
             {/* UPDATE OUTLET MODAL */}
             <UpdateSoftwareModal

@@ -12,6 +12,20 @@ export const getBadgeClass = (status) => {
     }
 }
 
+export const getLcuBadgeClass = (status) => {
+    if (status === 'Inspected') {
+        return 'brightGreen lcuBadge'
+    } else if (status === 'New') {
+        return 'pink lcuBadge'
+    } else if (status === 'Ready For Install') {
+        return 'purple lcuBadge'
+    } else if (status === 'operational') {
+        return 'blue lcuBadge'
+    } else {
+        return 'yellow lcuBadge'
+    }
+}
+
 export const getBadgeText = (status) => {
     if (status === 'inspected') {
         return 'inspected'
@@ -45,7 +59,7 @@ export const getTypesOfPowerServiceOptions = () => {
         { label: '1P-240', value: '1P-240' },
         { label: '3P-208', value: '3P-208' },
     ]
-}    
+}
 
 export const getAllStates = () => {
     return [

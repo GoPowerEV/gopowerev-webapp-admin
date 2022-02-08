@@ -99,18 +99,19 @@ const SmartOutlets = (props) => {
 
     return (
         <div className="smartOutletsContainer">
-            <div className="outletHeader">
-                <FlashOnOutlinedIcon />
-                Smart Outlets ({props.smartOutlets.length})
-            </div>
-            <br />
-            <Button
-                className="addNewLocButton"
-                variant="outlined"
-                onClick={addNewSmartOutlet}
-            >
-                Add New Smart Outlet
-            </Button>
+            <Grid container justifyContent="space-between">
+                <div className="outletHeader">
+                    <FlashOnOutlinedIcon />
+                    Smart Outlets ({props.smartOutlets.length})
+                </div>
+                <Button
+                    className="addNewLocButton"
+                    variant="outlined"
+                    onClick={addNewSmartOutlet}
+                >
+                    Add New Smart Outlet
+                </Button>
+            </Grid>
             <Grid container xs={12} spacing={2}>
                 {props.smartOutlets?.map((outlet, index) => (
                     <React.Fragment>

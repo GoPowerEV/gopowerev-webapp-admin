@@ -52,11 +52,12 @@ const Installers = (props) => {
                     xs={12}
                     spacing={2}
                 >
-                    {allInstallers?.map((installer, index) => (
-                        <Grid item xs={3} key={index}>
-                            <InstallerCard installer={installer} />
-                        </Grid>
-                    ))}
+                    {allInstallers?.length > 0 &&
+                        allInstallers?.map((installer, index) => (
+                            <Grid item xs={3} key={index}>
+                                <InstallerCard installer={installer} />
+                            </Grid>
+                        ))}
                     {allInstallers?.length === 0 && !isLoading && (
                         <div>There are no installers available.</div>
                     )}

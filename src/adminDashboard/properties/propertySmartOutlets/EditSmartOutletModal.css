@@ -1,5 +1,4 @@
-f
-.smartOutletGridHeader {
+f .smartOutletGridHeader {
     font-size: 13px;
     color: #adaeaf;
 }
@@ -42,4 +41,5 @@ f
 
 .smartOutletEditDetails {
     margin-bottom: 10px !important;
+    padding: 20px;
 }

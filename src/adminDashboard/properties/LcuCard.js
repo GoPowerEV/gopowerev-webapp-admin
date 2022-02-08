@@ -16,7 +16,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Collapse from '@material-ui/core/Collapse'
 import LocationCard from './LocationCard'
 import './Properties.css'
-import { getBadgeClass, getBadgeText } from './utils/PropertyUtils'
+import { getLcuBadgeClass, getBadgeText } from './utils/PropertyUtils'
 import { adminStateOptions, modelOptions } from './../dashboardConstants'
 import AddNewLocationModal from './AddNewLocationModal/AddNewLocationModal'
 
@@ -115,34 +115,56 @@ const LcuCard = (props) => {
 
     return (
         <React.Fragment>
-            <Grid container xs={12} spacing={2} className="lcuContainer">
-                <Grid item xs={2} className="lcuHeaderColumn">
-                    <div className="lcuLocation">
-                        {lcuInfo.name ?? 'No LCU Name'}
-                    </div>
+            <Grid
+                container
+                xs={12}
+                spacing={2}
+                className="lcuContainer"
+                justifyContent="space-between"
+            >
+                <Grid item xs={1}>
+                    <div className="lcuHeader">Name</div>
+                    <div className="lcuRowText">{lcuInfo.name ?? '-'}</div>
                 </Grid>
                 <Grid item xs={2}>
-                    <div className={getBadgeClass(lcuInfo.adminStatus)}>
+                    <FormControl fullWidth>
+                        <InputLabel id="adminState">Admin State</InputLabel>
+                        <Select
+                            labelId="adminState"
+                            variant="standard"
+                            id="adminState"
+                            value={adminState}
+                            onChange={(e) =>
+                                handleLCUFieldChange(
+                                    e.target.value,
+                                    'adminStatus'
+                                )
+                            }
+                            onBlur={() => saveLCUInfo()}
+                            label="Admin State"
+                        >
+                            {adminStateOptions?.map((option) => {
+                                return (
+                                    <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                    >
+                                        {option.label ?? option.value}
+                                    </MenuItem>
+                                )
+                            })}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={2}>
+                    <div className="lcuHeader">Status</div>
+                    <div className={getLcuBadgeClass(lcuInfo.adminStatus)}>
                         {getBadgeText(lcuInfo.adminStatus)}
-                    </div>
-                </Grid>
-                <Grid item xs={2}>
-                    <div className="lcuHeader">Operational Status</div>
-                    <div className="lcuRowText">
-                        {lcuInfo.operationalStatus &&
-                            lcuInfo.operationalStatus[0].toUpperCase() +
-                                lcuInfo.operationalStatus.slice(1)}
                     </div>
                 </Grid>
                 <Grid item xs={3}>
                     <div className="lcuHeader">Heartbeat</div>
                     <div className="lcuRowText">{lcuInfo.heartbeat ?? '-'}</div>
-                </Grid>
-                <Grid item xs={2}>
-                    <div className="lcuHeader">Installed</div>
-                    <div className="lcuRowText">
-                        {lcuInfo.installedDate ?? '-'}
-                    </div>
                 </Grid>
                 <Grid item xs={1}>
                     {!lcuInfoOpened ? (
@@ -164,275 +186,244 @@ const LcuCard = (props) => {
                 </div>
             )}
             {!props.isLoading && (
-                <Grid
-                    container
-                    spacing={3}
-                    xs={12}
-                    className="editLcuDetailsContainer"
-                >
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="lcuName"
-                            label="LCU Name"
-                            variant="outlined"
-                            value={lcuName}
-                            onChange={(e) =>
-                                handleLCUFieldChange(e.target.value, 'name')
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
+                <Collapse in={lcuInfoOpened}>
+                    <Grid
+                        container
+                        spacing={3}
+                        xs={12}
+                        className="editLcuDetailsContainer"
+                    >
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="lcuName"
+                                label="LCU Name"
+                                variant="outlined"
+                                value={lcuName}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(e.target.value, 'name')
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <FormControl
+                                fullWidth
+                                className="editableFieldSelectContainer"
+                            >
+                                <InputLabel id="model">Model</InputLabel>
+                                <Select
+                                    labelId="model"
+                                    variant="outlined"
+                                    id="model"
+                                    value={model}
+                                    onChange={(e) =>
+                                        handleLCUFieldChange(
+                                            e.target.value,
+                                            'modelNumber'
+                                        )
+                                    }
+                                    onBlur={() => saveLCUInfo()}
+                                    label="Model"
+                                >
+                                    {modelOptions?.map((option) => {
+                                        return (
+                                            <MenuItem
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label ?? option.value}
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="imei"
+                                label="IMEI"
+                                variant="outlined"
+                                value={imei}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'imeiNumber'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="sim"
+                                label="SIM"
+                                variant="outlined"
+                                value={sim}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'simNumber'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="line"
+                                label="Line"
+                                variant="outlined"
+                                value={lineNumber}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'lineNumber'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="carrier"
+                                label="Carrier"
+                                value={carrier}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'cellCarrier'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                variant="outlined"
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="serial"
+                                label="Serial"
+                                variant="outlined"
+                                value={serial}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'serialNumber'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="imei"
-                            label="IMEI"
-                            variant="outlined"
-                            value={imei}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'imeiNumber'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
+                    <Grid
+                        container
+                        spacing={3}
+                        xs={12}
+                        className="editLcuDetailsContainer"
+                    >
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="hwVersion"
+                                label="Hardware Version"
+                                variant="outlined"
+                                value={hardware}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'hwVersion'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="softwareVersion"
+                                label="Software Version"
+                                variant="outlined"
+                                value={software}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'swVersion'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item lg={3} md={6} s={12} xs={12}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="fwVersion"
+                                label="Firmware Version"
+                                variant="outlined"
+                                value={firmware}
+                                onChange={(e) =>
+                                    handleLCUFieldChange(
+                                        e.target.value,
+                                        'fwVersion'
+                                    )
+                                }
+                                onBlur={() => saveLCUInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="sim"
-                            label="SIM"
-                            variant="outlined"
-                            value={sim}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'simNumber'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="line"
-                            label="Line"
-                            variant="outlined"
-                            value={lineNumber}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'lineNumber'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
+                </Collapse>
             )}
-            <Collapse in={lcuInfoOpened}>
-                <Grid
-                    container
-                    spacing={3}
-                    xs={12}
-                    className="editLcuDetailsContainer"
-                >
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <FormControl
-                            fullWidth
-                            className="editableFieldSelectContainer"
-                        >
-                            <InputLabel id="adminState">Admin State</InputLabel>
-                            <Select
-                                labelId="adminState"
-                                variant="outlined"
-                                id="adminState"
-                                value={adminState}
-                                onChange={(e) =>
-                                    handleLCUFieldChange(
-                                        e.target.value,
-                                        'adminStatus'
-                                    )
-                                }
-                                onBlur={() => saveLCUInfo()}
-                                label="Admin State"
-                            >
-                                {adminStateOptions?.map((option) => {
-                                    return (
-                                        <MenuItem
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label ?? option.value}
-                                        </MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="carrier"
-                            label="Carrier"
-                            value={carrier}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'cellCarrier'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            variant="outlined"
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <FormControl
-                            fullWidth
-                            className="editableFieldSelectContainer"
-                        >
-                            <InputLabel id="model">Model</InputLabel>
-                            <Select
-                                labelId="model"
-                                variant="outlined"
-                                id="model"
-                                value={model}
-                                onChange={(e) =>
-                                    handleLCUFieldChange(
-                                        e.target.value,
-                                        'modelNumber'
-                                    )
-                                }
-                                onBlur={() => saveLCUInfo()}
-                                label="Model"
-                            >
-                                {modelOptions?.map((option) => {
-                                    return (
-                                        <MenuItem
-                                            key={option.value}
-                                            value={option.value}
-                                        >
-                                            {option.label ?? option.value}
-                                        </MenuItem>
-                                    )
-                                })}
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="serial"
-                            label="Serial"
-                            variant="outlined"
-                            value={serial}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'serialNumber'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="hwVersion"
-                            label="Hardware Version"
-                            variant="outlined"
-                            value={hardware}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'hwVersion'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="softwareVersion"
-                            label="Software Version"
-                            variant="outlined"
-                            value={software}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'swVersion'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                    <Grid item lg={3} md={6} s={12} xs={12}>
-                        <TextField
-                            fullWidth
-                            className="editableField"
-                            id="fwVersion"
-                            label="Firmware Version"
-                            variant="outlined"
-                            value={firmware}
-                            onChange={(e) =>
-                                handleLCUFieldChange(
-                                    e.target.value,
-                                    'fwVersion'
-                                )
-                            }
-                            onBlur={() => saveLCUInfo()}
-                            InputProps={{
-                                endAdornment: <EditOutlinedIcon />,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
-            </Collapse>
             <hr className="propertiesHrLcu" />
-            <div className="tabHeader inInstallHeader">Locations</div>
-            <Button
-                className="addNewLocButton"
-                variant="outlined"
-                onClick={addNewLocation}
-            >
-                Add New Location
-            </Button>
+            <Grid container justifyContent="space-between">
+                <div className="tabHeader inInstallHeader">Locations</div>
+                <Button
+                    className="addNewLocButton"
+                    variant="outlined"
+                    onClick={addNewLocation}
+                >
+                    Add New Location
+                </Button>
+            </Grid>
             {/* ADD NEW LOCATION MODAL */}
             <AddNewLocationModal
                 handleOpen={handleOpen}
