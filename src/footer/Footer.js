@@ -10,18 +10,74 @@ import InstagramIcon from '@material-ui/icons/Instagram'
 const Footer = () => {
     return (
         <div className="footer-body">
-            <Grid container spacing={10}>
-                <Grid item xs={12} md={4}>
+            <hr />
+            <Grid
+                container
+                direction="row"
+                justifyContent="space-between"
+                alignItems="stretch"
+            >
+                <Grid item xs={12} md={3}>
                     <img
                         src={MainLogoWhite}
                         className="footer-logo"
                         alt="fireSpot"
                     />
+                    <Grid
+                        container
+                        spacing={1}
+                        xs={12}
+                        md={12}
+                        className="icon-grid"
+                    >
+                        <Grid item xs={3} md={3}>
+                            <a href="#" className="iconLink">
+                                <InstagramIcon fontSize={'large'} />
+                            </a>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <a href="#" className="iconLink">
+                                <FacebookIcon fontSize={'large'} />
+                            </a>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <a href="#" className="iconLink">
+                                <TwitterIcon fontSize={'large'} />
+                            </a>
+                        </Grid>
+                        <Grid item xs={3} md={3}>
+                            <a href="#" className="iconLink">
+                                <YouTubeIcon fontSize={'large'} />
+                            </a>
+                        </Grid>
+                    </Grid>
                     <div className="footer-copyright-text">
-                        Copyright © 2021 GoPowerEV
+                        Copyright 2010 - 2021
+                        <span className="footer-small-links">
+                            <a href="#">Privacy Policy</a> |{' '}
+                            <a href="#">Website Terms</a>
+                        </span>
                     </div>
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12} md={1}>
+                    <div className="footer-header">Company</div>
+                    <div className="footer-right-side-link">
+                        <a href="#" className="iconLink">
+                            About Us
+                        </a>
+                    </div>
+                    <div className="footer-right-side-link">
+                        <a href="#" className="iconLink">
+                            Industry News
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#" className="iconLink">
+                            Contact Us
+                        </a>
+                    </div>
+                </Grid>
+                {/* <Grid item xs={12} md={8}>
                     <Grid container spacing={2}>
                         <Grid item xs={6} md={2}>
                             <a href="#" className="iconLink">
@@ -54,37 +110,7 @@ const Footer = () => {
                             </a>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <Grid
-                        container
-                        spacing={1}
-                        xs={12}
-                        md={4}
-                        className="icon-grid"
-                    >
-                        <Grid item xs={3} md={3}>
-                            <a href="#" className="iconLink">
-                                <InstagramIcon fontSize={'large'} />
-                            </a>
-                        </Grid>
-                        <Grid item xs={3} md={3}>
-                            <a href="#" className="iconLink">
-                                <FacebookIcon fontSize={'large'} />
-                            </a>
-                        </Grid>
-                        <Grid item xs={3} md={3}>
-                            <a href="#" className="iconLink">
-                                <TwitterIcon fontSize={'large'} />
-                            </a>
-                        </Grid>
-                        <Grid item xs={3} md={3}>
-                            <a href="#" className="iconLink">
-                                <YouTubeIcon fontSize={'large'} />
-                            </a>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                </Grid> */}
             </Grid>
         </div>
     )

@@ -1,11 +1,30 @@
 .footer-body {
     color: white;
-    background-color: #000000;
+    background-color: #151924;
     font-family: 'Nunito Sans', sans-serif;
     padding-left: 100px;
     padding-right: 100px;
     font-size: 16px;
-    margin-top: 60px;
+    margin-top: 30px;
+    padding-bottom: 20px;
+}
+
+.footer-body hr {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+    margin-bottom: 35px;
+}
+
+.footer-small-links {
+    margin-left: 20px;
+}
+
+.footer-small-links a {
+    color: white !important;
+    text-decoration: none;
 }
 
 .footer-logo {
@@ -23,20 +42,24 @@
     font-size: 30px;
 }
 
+.footer-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.footer-right-side-link {
+    margin-bottom: 7px;
+}
+
 .iconLink {
     color: #ffffff;
-    font-weight: 700;
     text-decoration: none;
 }
 
 .icon-grid {
-    float: right;
-    margin-top: -75px;
-}
-
-.icon-grid a {
-    float: right;
-    margin-right: 30px;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
 }
 
 @media only screen and (max-width: 960px) {
@@ -46,6 +69,7 @@
         font-size: 16px;
         margin-top: 60px;
         text-align: center !important;
+        margin-top: -15px;
     }
 
     .footer-logo {
@@ -59,14 +83,11 @@
         font-size: 12px;
     }
 
-    .icon-grid {
-        float: center !important;
-        margin-top: -30px;
+    .footer-header {
+        margin-top: 50px;
     }
 
-    .icon-grid a {
-        float: left !important;
-        margin-right: 0px;
-        margin-left: 25px
+    .footer-body hr {
+        margin-bottom: 35px;
     }
 }

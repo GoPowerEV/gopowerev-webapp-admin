@@ -5,11 +5,12 @@
 }
 
 .appBar {
-    background-color: #000000 !important;
+    background-color: #151924 !important;
     padding-left: 85px;
     padding-right: 70px;
     padding-top: 20px;
     padding-bottom: 20px;
+    margin-bottom: 20px;
     font-family: 'Nunito Sans', sans-serif;
     font-weight: 700;
 }
@@ -28,7 +29,7 @@
     }
 
     .appBar {
-        background-color: #000000 !important;
+        background-color: #151924 !important;
         padding-left: 15px;
         padding-right: 15px;
         padding-top: 15px;
