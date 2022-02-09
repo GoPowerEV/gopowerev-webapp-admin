@@ -4,10 +4,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Card from '@material-ui/core/Card'
 import './Properties.css'
 import { makeStyles } from '@material-ui/core/styles'
-import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
-import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
-import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
-import { getBadgeClass } from './utils/PropertyUtils'
+import { getPropertyBadgeClass } from './utils/PropertyUtils'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {
@@ -140,7 +137,11 @@ const PropertyCard = (props) => {
                             <Typography className={classes.propertyCardHeader}>
                                 {propertyInfo.name}
                             </Typography>
-                            <div className={getBadgeClass(propertyInfo.status)}>
+                            <div
+                                className={getPropertyBadgeClass(
+                                    propertyInfo.status
+                                )}
+                            >
                                 {propertyInfo.status.charAt(0).toUpperCase() +
                                     propertyInfo.status.slice(1)}
                             </div>

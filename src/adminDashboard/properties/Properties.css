@@ -245,6 +245,16 @@
     width: fit-content;
 }
 
+.propertyBadge {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 6px;
+    margin-bottom: 6px;
+    border-radius: 7px;
+    width: fit-content;
+}
+
 .badgeBox {
     display: inline-flex;
 }

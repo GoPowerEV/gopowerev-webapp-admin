@@ -12,6 +12,20 @@ export const getBadgeClass = (status) => {
     }
 }
 
+export const getPropertyBadgeClass = (status) => {
+    if (status === 'Inspected') {
+        return 'brightGreen propertyBadge'
+    } else if (status === 'New') {
+        return 'pink propertyBadge'
+    } else if (status === 'Ready For Install') {
+        return 'purple propertyBadge'
+    } else if (status === 'operational') {
+        return 'blue propertyBadge'
+    } else {
+        return 'yellow propertyBadge'
+    }
+}
+
 export const getLcuBadgeClass = (status) => {
     if (status === 'Inspected') {
         return 'brightGreen lcuBadge'

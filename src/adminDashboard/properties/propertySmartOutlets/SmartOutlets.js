@@ -3,12 +3,10 @@ import Card from '@material-ui/core/Card'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import CardContent from '@material-ui/core/CardContent'
-import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import Grid from '@material-ui/core/Grid'
 import './SmartOutlets.css'
 import { makeStyles } from '@material-ui/core/styles'
-import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
 import EditSmartOutletModal from './EditSmartOutletModal'
 import AddNewSmartOutletModal from './AddNewSmartOutletModal'
 import moment from 'moment'
@@ -25,6 +23,7 @@ const useStyles = makeStyles({
     },
     content: {
         marginTop: '-10px',
+        padding: '20px',
     },
     bullet: {
         display: 'inline-block',
@@ -51,7 +50,7 @@ const useStyles = makeStyles({
     },
     operationalStatusHeader: {
         fontSize: '14px',
-        marginTop: '15px',
+        marginTop: '8px',
     },
     status: {
         fontSize: 15,
@@ -97,6 +96,8 @@ const SmartOutlets = (props) => {
         handleNewOpen()
     }
 
+    console.log('here', props.smartOutlets)
+
     return (
         <div className="smartOutletsContainer">
             <Grid container justifyContent="space-between">
@@ -127,37 +128,43 @@ const SmartOutlets = (props) => {
                                                 className={classes.cardHeader}
                                             >
                                                 <span className="smartSo">
-                                                    SO:
-                                                </span>{' '}
-                                                {index + 1}
+                                                    SO: {index + 1}
+                                                </span>
                                             </Typography>
                                         </Grid>
-                                        <Grid
-                                            item
-                                            xs={2}
-                                            className={classes.right}
-                                        >
-                                            <SettingsOutlinedIcon />
-                                        </Grid>
                                     </Grid>
-                                    <Typography className={classes.location}>
-                                        Parking Spot: {outlet.parkingSpot}
-                                    </Typography>
-                                    <Grid container spacing={4}>
-                                        <Grid item xs={3}>
-                                            <div className="red statusBadge">
+                                    <Grid
+                                        container
+                                        spacing={1}
+                                        justifyContent="center"
+                                    >
+                                        <Grid item xs={6}>
+                                            <div
+                                                className={
+                                                    outlet.status
+                                                        ? 'green statusBadge'
+                                                        : 'red statusBadge'
+                                                }
+                                            >
                                                 <div className="badgeBox">
                                                     <span className="badgeText">
-                                                        Offline
+                                                        {outlet.status ??
+                                                            'Not Connected'}
                                                     </span>
                                                 </div>
                                             </div>
                                         </Grid>
-                                        <Grid item xs={5}>
+                                        <Grid item xs={4}>
                                             <div className="black statusBadge">
                                                 <div className="locationBadgeBox">
                                                     <span className="badgeText">
-                                                        <div class="overall-progress">
+                                                        <div
+                                                            className={
+                                                                outlet?.rssi
+                                                                    ? 'overall-progress greenBar'
+                                                                    : 'overall-progress'
+                                                            }
+                                                        >
                                                             <div
                                                                 class="progress"
                                                                 data-progress="80"
@@ -169,55 +176,96 @@ const SmartOutlets = (props) => {
                                                                 data-progress="20"
                                                             ></div>
                                                         </div>
-                                                        <div class="overall-progress">
+                                                        <div
+                                                            className={
+                                                                outlet?.rssi &&
+                                                                outlet?.rssi >
+                                                                    -84
+                                                                    ? 'overall-progress greenBar'
+                                                                    : 'overall-progress'
+                                                            }
+                                                        >
                                                             <div
                                                                 class="progress"
                                                                 data-progress="90"
                                                             ></div>
                                                         </div>
-                                                        <div class="overall-progress">
+                                                        <div
+                                                            className={
+                                                                outlet?.rssi &&
+                                                                outlet?.rssi >
+                                                                    -72
+                                                                    ? 'overall-progress greenBar'
+                                                                    : 'overall-progress'
+                                                            }
+                                                        >
                                                             <div
                                                                 class="progress"
                                                                 data-progress="40"
                                                             ></div>
                                                         </div>
-                                                        <div class="overall-progress">
+                                                        <div
+                                                            className={
+                                                                outlet?.rssi &&
+                                                                outlet?.rssi >
+                                                                    -66
+                                                                    ? 'overall-progress greenBar'
+                                                                    : 'overall-progress'
+                                                            }
+                                                        >
                                                             <div
                                                                 class="progress"
                                                                 data-progress="40"
                                                             ></div>
                                                         </div>
-                                                        <div class="overall-progress">
+                                                        <div
+                                                            className={
+                                                                outlet?.rssi &&
+                                                                outlet?.rssi >
+                                                                    -60
+                                                                    ? 'overall-progress greenBar'
+                                                                    : 'overall-progress'
+                                                            }
+                                                        >
                                                             <div
                                                                 class="progress"
                                                                 data-progress="40"
                                                             ></div>
                                                         </div>
-                                                        <div class="overall-progress">
+                                                        <div
+                                                            className={
+                                                                outlet?.rssi &&
+                                                                outlet?.rssi >
+                                                                    -52
+                                                                    ? 'overall-progress greenBar'
+                                                                    : 'overall-progress'
+                                                            }
+                                                        >
                                                             <div
                                                                 class="progress"
                                                                 data-progress="40"
                                                             ></div>
                                                         </div>
-                                                        <div class="overall-progress">
+                                                        <div
+                                                            class="overall-progress greenBar"
+                                                            className={
+                                                                outlet?.rssi &&
+                                                                outlet?.rssi >
+                                                                    -41
+                                                                    ? 'overall-progress greenBar'
+                                                                    : 'overall-progress'
+                                                            }
+                                                        >
                                                             <div
                                                                 class="progress"
                                                                 data-progress="40"
                                                             ></div>
                                                         </div>
                                                         <span class="progressDigits">
-                                                            -00
+                                                            {outlet.rssi
+                                                                ? outlet.rssi
+                                                                : '-00'}
                                                         </span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <div className="black statusBadge">
-                                                <div className="locationBadgeBox">
-                                                    <span className="badgeText">
-                                                        <LocationOnOutlinedIcon />{' '}
-                                                        na
                                                     </span>
                                                 </div>
                                             </div>
@@ -228,10 +276,10 @@ const SmartOutlets = (props) => {
                                             classes.operationalStatusHeader
                                         }
                                     >
-                                        Operational Status
+                                        Admin Status
                                     </Typography>
                                     <Typography className={classes.status}>
-                                        {outlet.operationalStatus ?? '-'}
+                                        {outlet.adminStatus ?? '-'}
                                     </Typography>
                                     <Typography
                                         className={
