@@ -4,6 +4,8 @@
 
 .smartSo {
     color: grey !important;
+    font-weight: bold !important;
+    font-size: 16px;
 }
 
 .red {

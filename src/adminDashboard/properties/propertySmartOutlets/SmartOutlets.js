@@ -31,7 +31,7 @@ const useStyles = makeStyles({
         transform: 'scale(0.8)',
     },
     cardHeader: {
-        fontSize: 19,
+        fontSize: 16,
         fontWeight: '600',
         marginBottom: '15px',
     },
@@ -123,19 +123,20 @@ const SmartOutlets = (props) => {
                             >
                                 <CardContent className={classes.content}>
                                     <Grid container spacing={3}>
-                                        <Grid item xs={4}>
-                                            <Typography
+                                        <Grid item xs={12}>
+                                            <span
                                                 className={classes.cardHeader}
                                             >
-                                                <span className="smartSo">
-                                                    SO: {index + 1}
-                                                </span>
-                                            </Typography>
+                                                Parking Spot:{' '}
+                                            </span>
+                                            <span className="smartSo">
+                                                {outlet.parkingSpot ?? '-'}
+                                            </span>
                                         </Grid>
                                     </Grid>
                                     <Grid
                                         container
-                                        spacing={1}
+                                        spacing={2}
                                         justifyContent="center"
                                     >
                                         <Grid item xs={6}>

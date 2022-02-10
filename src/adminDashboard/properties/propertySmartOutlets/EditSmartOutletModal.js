@@ -134,14 +134,6 @@ export default function EditSmartOutletModal(props) {
                     >
                         <Grid item xs={3}>
                             <div className="smartOutletGridHeader smartOutletGridItem">
-                                Smart Outlet <span>{props.outletIndex}</span>
-                            </div>
-                            <div className="smartOutletGridLocationHeader smartOutletGridItem">
-                                Parking Spot: {outletData?.parkingSpot}
-                            </div>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <div className="smartOutletGridHeader smartOutletGridItem">
                                 Operational Status
                             </div>
                             <div className="smartOutletGridLocationHeaderSmall smartOutletGridItem">
