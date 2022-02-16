@@ -116,7 +116,7 @@ const SmartOutlets = (props) => {
             <Grid container xs={12} spacing={2}>
                 {props.smartOutlets?.map((outlet, index) => (
                     <React.Fragment>
-                        <Grid item lg={4} md={6} xs={12}>
+                        <Grid item xl={4} lg={4} md={6} xs={12}>
                             <Card
                                 className={classes.root}
                                 onClick={() => handleOpen(outlet, index)}
@@ -137,26 +137,10 @@ const SmartOutlets = (props) => {
                                     <Grid
                                         container
                                         spacing={2}
-                                        justifyContent="center"
+                                        justifyContent="space-between"
                                     >
-                                        <Grid item xs={6}>
-                                            <div
-                                                className={
-                                                    outlet.status
-                                                        ? 'green statusBadge'
-                                                        : 'red statusBadge'
-                                                }
-                                            >
-                                                <div className="badgeBox">
-                                                    <span className="badgeText">
-                                                        {outlet.status ??
-                                                            'Not Connected'}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </Grid>
                                         <Grid item xs={4}>
-                                            <div className="black statusBadge">
+                                            <div className="black barBadge">
                                                 <div className="locationBadgeBox">
                                                     <span className="badgeText">
                                                         <div
@@ -267,6 +251,22 @@ const SmartOutlets = (props) => {
                                                                 ? outlet.rssi
                                                                 : '-00'}
                                                         </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </Grid>
+                                        <Grid item xs={5}>
+                                            <div
+                                                className={
+                                                    outlet.status
+                                                        ? 'green statusBadge'
+                                                        : 'orange statusBadge'
+                                                }
+                                            >
+                                                <div className="badgeBox">
+                                                    <span className="badgeText">
+                                                        {outlet.status ??
+                                                            'Not Connected'}
                                                     </span>
                                                 </div>
                                             </div>

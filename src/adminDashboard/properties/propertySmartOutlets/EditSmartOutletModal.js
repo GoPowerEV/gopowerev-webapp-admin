@@ -75,7 +75,6 @@ export default function EditSmartOutletModal(props) {
     const saveOutletInfo = () => {
         setIsLoading(true)
         if (props.token) {
-            console.log('about to save this  outlet info', outletData)
             fetch(API_URL + 'smart-outlets/' + outletData.soUUID, {
                 method: 'PUT',
                 headers: {
@@ -115,6 +114,8 @@ export default function EditSmartOutletModal(props) {
         setOutletData(tempOutlet)
     }
 
+    console.log('here it is', outletData)
+
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <div id="simple-modal-description">
@@ -138,6 +139,17 @@ export default function EditSmartOutletModal(props) {
                             </div>
                             <div className="smartOutletGridLocationHeaderSmall smartOutletGridItem">
                                 {outletData?.status ?? '-'}
+                            </div>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div className="smartOutletGridHeader smartOutletGridItem">
+                                Admin Status
+                            </div>
+                            <div className="smartOutletGridLocationHeaderSmall smartOutletGridItem">
+                                {outletData?.adminStatus
+                                    ?.charAt(0)
+                                    .toUpperCase() +
+                                    outletData?.adminStatus?.slice(1) ?? '-'}
                             </div>
                         </Grid>
                         <Grid item xs={3}>
@@ -186,20 +198,11 @@ export default function EditSmartOutletModal(props) {
                             <TextField
                                 fullWidth
                                 className="editableField"
-                                id="soSerial"
-                                label="Serial Number"
+                                id="parkingSpot"
+                                label="Model"
+                                disabled
                                 variant="filled"
-                                value={serialNumber}
-                                onChange={(e) =>
-                                    handleOutletFieldChange(
-                                        e.target.value,
-                                        'serialNumber'
-                                    )
-                                }
-                                onBlur={() => saveOutletInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
+                                value={outletData?.model ?? '-'}
                             />
                         </Grid>
                         <Grid item xs={5}>
@@ -214,6 +217,26 @@ export default function EditSmartOutletModal(props) {
                                     handleOutletFieldChange(
                                         e.target.value,
                                         'macAddr'
+                                    )
+                                }
+                                onBlur={() => saveOutletInfo()}
+                                InputProps={{
+                                    endAdornment: <EditOutlinedIcon />,
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={5}>
+                            <TextField
+                                fullWidth
+                                className="editableField"
+                                id="soSerial"
+                                label="Serial Number"
+                                variant="filled"
+                                value={serialNumber}
+                                onChange={(e) =>
+                                    handleOutletFieldChange(
+                                        e.target.value,
+                                        'serialNumber'
                                     )
                                 }
                                 onBlur={() => saveOutletInfo()}

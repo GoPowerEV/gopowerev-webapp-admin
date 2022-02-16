@@ -108,7 +108,7 @@ function App() {
                         exact
                         path="/"
                         render={() => {
-                            return isUserLoggedIn() ? (
+                            return loggedIn === true ? (
                                 <Redirect to="/admin-dashboard" />
                             ) : (
                                 <Redirect to="/login" />
@@ -119,7 +119,7 @@ function App() {
                         exact
                         path="/admin-dashboard"
                         render={() => {
-                            return isUserLoggedIn() ? (
+                            return loggedIn === true ? (
                                 <AdminDashboard
                                     path={'admin-dashboard'}
                                     loggedIn={loggedIn}

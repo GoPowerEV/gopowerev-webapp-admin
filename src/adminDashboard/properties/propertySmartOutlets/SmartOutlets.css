@@ -20,6 +20,10 @@
     background-color: #16d76f;
 }
 
+.orange {
+    background-color: orange;
+}
+
 .outletHeader {
     margin-top: 5px;
     margin-bottom: 25px;
@@ -29,6 +33,16 @@
     display: inline-flex;
 }
 
+.barBadge {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 5px;
+    margin-bottom: 6px;
+    border-radius: 7px;
+    width: 120px;
+}
+
 .statusBadge {
     color: white;
     font-size: 15px;
@@ -36,6 +50,7 @@
     padding: 5px;
     margin-bottom: 6px;
     border-radius: 7px;
+    width: 130px;
 }
 
 .locationBadgeBox {
