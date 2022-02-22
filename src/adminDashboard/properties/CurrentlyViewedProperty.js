@@ -371,68 +371,6 @@ const CurrentlyViewedProperty = (props) => {
                                                 </span>
                                             </div>
                                         </Grid>
-                                        <Grid item lg={6} xs={12}>
-                                            <TextField
-                                                fullWidth
-                                                id="maxVoltAmps"
-                                                className="editableField"
-                                                label="Max Volt Amps"
-                                                variant="outlined"
-                                                value={propertyMaxVoltAmps}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'maxVoltAmps'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item lg={6} xs={12}>
-                                            <FormControl
-                                                fullWidth
-                                                className="editableFieldSelectContainer"
-                                            >
-                                                <InputLabel id="typeOfPowerService">
-                                                    Type Of Power Service
-                                                </InputLabel>
-                                                <Select
-                                                    labelId="typeOfPowerService"
-                                                    variant="outlined"
-                                                    id="typeOfPowerService"
-                                                    value={propertyPowerType}
-                                                    label="Type Of Power Service"
-                                                    onChange={(e) =>
-                                                        handlePropertyFieldChange(
-                                                            e.target.value,
-                                                            'powerType'
-                                                        )
-                                                    }
-                                                    onBlur={() =>
-                                                        savePropertyInfo()
-                                                    }
-                                                >
-                                                    {allPowerTypes?.map(
-                                                        (type) => (
-                                                            <MenuItem
-                                                                value={
-                                                                    type.value
-                                                                }
-                                                            >
-                                                                {type.value}
-                                                            </MenuItem>
-                                                        )
-                                                    )}
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
                                         <Grid item xs={12}>
                                             <TextField
                                                 fullWidth
@@ -459,6 +397,7 @@ const CurrentlyViewedProperty = (props) => {
                                         </Grid>
                                         <Grid item xs={12}>
                                             <TextField
+                                                className="editableField"
                                                 fullWidth
                                                 id="propertyAddress"
                                                 label="Street"
@@ -468,6 +407,30 @@ const CurrentlyViewedProperty = (props) => {
                                                     handlePropertyFieldChange(
                                                         e.target.value,
                                                         'address1'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item lg={3} xs={12}>
+                                            <TextField
+                                                fullWidth
+                                                className="editableField"
+                                                id="propertyZip"
+                                                label="Zip Code"
+                                                variant="outlined"
+                                                value={propertyZip}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'zipcode'
                                                     )
                                                 }
                                                 onBlur={() =>
@@ -504,31 +467,7 @@ const CurrentlyViewedProperty = (props) => {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item lg={6} xs={12}>
-                                            <TextField
-                                                fullWidth
-                                                className="editableField"
-                                                id="propertyZip"
-                                                label="Zip Code"
-                                                variant="outlined"
-                                                value={propertyZip}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'zipcode'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item lg={6} xs={12}>
+                                        <Grid item lg={3} xs={12}>
                                             <FormControl
                                                 fullWidth
                                                 className="editableFieldSelectContainerState"
@@ -569,8 +508,70 @@ const CurrentlyViewedProperty = (props) => {
                                                 </Select>
                                             </FormControl>
                                         </Grid>
+                                        <Grid item lg={4} xs={12}>
+                                            <TextField
+                                                fullWidth
+                                                id="maxVoltAmps"
+                                                className="editableField"
+                                                label="Max Volt Amps"
+                                                variant="outlined"
+                                                value={propertyMaxVoltAmps}
+                                                onChange={(e) =>
+                                                    handlePropertyFieldChange(
+                                                        e.target.value,
+                                                        'maxVoltAmps'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    savePropertyInfo()
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item lg={4} xs={12}>
+                                            <FormControl
+                                                fullWidth
+                                                className="editableFieldSelectContainer"
+                                            >
+                                                <InputLabel id="typeOfPowerService">
+                                                    Type Of Power Service
+                                                </InputLabel>
+                                                <Select
+                                                    labelId="typeOfPowerService"
+                                                    variant="outlined"
+                                                    id="typeOfPowerService"
+                                                    value={propertyPowerType}
+                                                    label="Type Of Power Service"
+                                                    onChange={(e) =>
+                                                        handlePropertyFieldChange(
+                                                            e.target.value,
+                                                            'powerType'
+                                                        )
+                                                    }
+                                                    onBlur={() =>
+                                                        savePropertyInfo()
+                                                    }
+                                                >
+                                                    {allPowerTypes?.map(
+                                                        (type) => (
+                                                            <MenuItem
+                                                                value={
+                                                                    type.value
+                                                                }
+                                                            >
+                                                                {type.value}
+                                                            </MenuItem>
+                                                        )
+                                                    )}
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
                                         {!updateIsLoading && !updateSuccess && (
-                                            <Grid item lg={6} xs={12}>
+                                            <Grid item lg={4} xs={12}>
                                                 <Button
                                                     className="updateOutletSoftwareBtn"
                                                     variant="contained"

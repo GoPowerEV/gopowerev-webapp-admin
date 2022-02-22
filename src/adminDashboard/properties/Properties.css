@@ -40,9 +40,8 @@
 .editableFieldSelectContainerState label {
     font-family: 'Nunito Sans', sans-serif !important;
     z-index: 1;
-    position: relative;
     left: 13px;
-    top: 12px;
+    top: -7px;
 }
 
 .editableField div {
@@ -405,7 +404,6 @@
     font-weight: bold !important;
     height: 55px;
     width: 100%;
-    top: 16px;
 }
 
 .editPropertyImageButton {
