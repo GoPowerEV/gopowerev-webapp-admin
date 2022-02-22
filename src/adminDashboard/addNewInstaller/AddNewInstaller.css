@@ -14,6 +14,10 @@
     margin-top: 15px !important;
 }
 
+.addInstallerButton:disabled {
+    background-color: grey !important;
+}
+
 .installerErrorMessageText {
     color: red;
     font-weight: bold;

@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { API_URL_ADMIN } from '../../constants'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import './AddNewInstaller.css'
 
 const useStyles = makeStyles((theme) => ({
@@ -93,18 +94,31 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const allRoles = [
+    { label: 'Admin', value: 'ADMIN' },
+    { label: 'Installer', value: 'INSTALLER' },
+    { label: 'Property Manager', value: 'PROPERTY_MANAGER' },
+    { label: 'Property Owner', value: 'PROPERTY_OWNER' },
+]
+
 export default function AddNewInstaller(props) {
     const [isLoading, setIsLoading] = useState(false)
-    const [userId, setUserId] = useState('')
+    const [userId, setUserId] = useState(undefined)
+    const [role, setRole] = useState(undefined)
     const [showNoInfoEnteredMessage, setShowNoInfoEnteredMessage] = useState(
         false
     )
     const [callFailedError, setCallFailedError] = useState(false)
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+    const [disableButton, setdDisableButton] = useState(true)
 
     const classes = useStyles()
 
-    const addInstaller = () => {
+    const handleRoleChange = (value) => {
+        setRole(value)
+    }
+
+    const sendInvite = () => {
         if (userId.length === 0) {
             setShowNoInfoEnteredMessage(true)
             setShowSuccessMessage(false)
@@ -136,7 +150,7 @@ export default function AddNewInstaller(props) {
                                         userId +
                                         ' is now an installer.'
                                 )
-                                setUserId('')
+                                setUserId(undefined)
                             } else {
                                 setIsLoading(false)
                                 setCallFailedError(false)
@@ -151,54 +165,93 @@ export default function AddNewInstaller(props) {
         }
     }
 
+    useEffect(() => {
+        if (!userId || !role) {
+            setdDisableButton(true)
+        } else {
+            setdDisableButton(false)
+        }
+    }, [userId, role])
+
     return (
         <div className={classes.root}>
             <React.Fragment>
                 <Grid className={classes.headerContainer} container>
                     {!isLoading && (
-                        <Grid item xs={6}>
-                            <span className={classes.firstHeader}>
-                                Create New Installer
-                            </span>
-                            <div className="addNewInstallerMainContainer">
-                                <TextField
-                                    variant="outlined"
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="userId"
-                                    label="User Email"
-                                    name="id"
-                                    autoComplete="id"
-                                    autoFocus
-                                    value={userId}
-                                    onChange={(e) => setUserId(e.target.value)}
-                                />
-                                {showNoInfoEnteredMessage && (
-                                    <div className="installerErrorMessageText">
-                                        Please enter a proper user email.
-                                    </div>
-                                )}
-                                {showSuccessMessage && (
-                                    <div className="installerSuccessrMessageText">
-                                        Success!
-                                    </div>
-                                )}
-                                {callFailedError && (
-                                    <div className="installerErrorMessageText">
-                                        Encountered an internal server error.
-                                        Try again later.
-                                    </div>
-                                )}
-                                <Button
-                                    className="addInstallerButton"
-                                    variant="contained"
-                                    onClick={addInstaller}
-                                >
-                                    Assign Installer Role
-                                </Button>
-                            </div>
-                        </Grid>
+                        <>
+                            <Grid item xs={6}>
+                                <span className={classes.firstHeader}>
+                                    Add New Partner
+                                </span>
+                                <div className="addNewInstallerMainContainer">
+                                    <TextField
+                                        variant="outlined"
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id="userId"
+                                        label="User Email"
+                                        name="id"
+                                        autoComplete="id"
+                                        autoFocus
+                                        value={userId}
+                                        onChange={(e) =>
+                                            setUserId(e.target.value)
+                                        }
+                                    />
+                                    {showNoInfoEnteredMessage && (
+                                        <div className="installerErrorMessageText">
+                                            Please enter a proper user email.
+                                        </div>
+                                    )}
+                                    {showSuccessMessage && (
+                                        <div className="installerSuccessrMessageText">
+                                            Success!
+                                        </div>
+                                    )}
+                                    {callFailedError && (
+                                        <div className="installerErrorMessageText">
+                                            Encountered an internal server
+                                            error. Try again later.
+                                        </div>
+                                    )}
+                                    <FormControl
+                                        fullWidth
+                                        className="editRoleContainer"
+                                    >
+                                        <InputLabel
+                                            id="userRole"
+                                            style={{ paddingLeft: '15px' }}
+                                        >
+                                            Role
+                                        </InputLabel>
+                                        <Select
+                                            labelId="userRole"
+                                            variant="outlined"
+                                            id="userRole"
+                                            value={role}
+                                            onChange={(e) =>
+                                                handleRoleChange(e.target.value)
+                                            }
+                                        >
+                                            {allRoles?.map((role) => (
+                                                <MenuItem value={role.value}>
+                                                    {role.label}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <Button
+                                        className="addInstallerButton"
+                                        variant="contained"
+                                        disabled={disableButton}
+                                        onClick={() => sendInvite()}
+                                    >
+                                        Send Invite
+                                    </Button>
+                                </div>
+                            </Grid>
+                        </>
                     )}
                     {isLoading && (
                         <Grid item xs={12}>

@@ -228,7 +228,7 @@ export default function AdminDashboard(props) {
     }
 
     const addNewInstaller = () => {
-        history.push('/dashboard/add-new-installer')
+        history.push('/dashboard/add-new-partner')
         // Setting the value to something non-existant
         setValue(8)
         setDisplaySetupNewProperty(false)
@@ -285,7 +285,7 @@ export default function AdminDashboard(props) {
                     setValue(7)
                     setDisplaySetupNewProperty(true)
                     setDisplayAddNewInstaller(false)
-                } else if (urlLocation === 'add-new-installer') {
+                } else if (urlLocation === 'add-new-partner') {
                     setViewThisProperty(null)
                     history.push('/dashboard/' + urlLocation)
                     setValue(8)
@@ -400,7 +400,7 @@ export default function AdminDashboard(props) {
                                     />
                                 }
                             >
-                                Add New Installer
+                                Add New Partner
                             </Button>
                         </Paper>
                     </Grid>
