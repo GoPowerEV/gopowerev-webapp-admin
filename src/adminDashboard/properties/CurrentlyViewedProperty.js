@@ -22,6 +22,8 @@ import { getAllInstallers } from './../dashboardService'
 import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
 import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
 import LcuCard from './LcuCard'
+import PropertyTeam from './PropertyTeam/PropertyTeam'
+import InstallerTeam from './InstallerTeam/InstallerTeam'
 import {
     getPropertyLcus,
     getPropertyLocations,
@@ -743,6 +745,8 @@ const CurrentlyViewedProperty = (props) => {
                     </Grid>
                 )}
             </Collapse>
+            <PropertyTeam isLoading={isLoading} />
+            <InstallerTeam isLoading={isLoading} />
             <React.Fragment>
                 {/* ADD NEW CLU MODAL */}
                 <AddNewLcuModal
