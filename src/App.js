@@ -172,7 +172,22 @@ function App() {
                             />
                         )}
                     />
-                    <Route exact path="/login" component={Login} />
+                    <Route
+                        exact
+                        path="/login"
+                        render={() => {
+                            return loggedIn === true ? (
+                                <AdminDashboard
+                                    path={'admin-dashboard'}
+                                    loggedIn={loggedIn}
+                                    history={history}
+                                    token={token}
+                                />
+                            ) : (
+                                <Login />
+                            )
+                        }}
+                    />
                 </Switch>
                 <Footer />
             </div>

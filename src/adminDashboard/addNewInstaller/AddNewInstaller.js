@@ -128,11 +128,11 @@ export default function AddNewInstaller(props) {
             setIsLoading(true)
             let objectToSend = {
                 email: userId,
-                role: 'INSTALLER',
+                role: role,
             }
             if (props.token) {
-                fetch(API_URL_ADMIN + 'admin/set-user-role', {
-                    method: 'PUT',
+                fetch(API_URL_ADMIN + 'admin/invites', {
+                    method: 'POST',
                     headers: {
                         Authorization: 'Bearer ' + props.token,
                         'Content-Type': 'application/json',
@@ -145,16 +145,17 @@ export default function AddNewInstaller(props) {
                             if (result.code) {
                                 setIsLoading(false)
                                 setCallFailedError(true)
-                                alert(
-                                    'Success! ' +
-                                        userId +
-                                        ' is now an installer.'
-                                )
                                 setUserId(undefined)
+                                setRole(undefined)
                             } else {
+                                setUserId(undefined)
+                                setRole(undefined)
                                 setIsLoading(false)
                                 setCallFailedError(false)
                                 setShowSuccessMessage(true)
+                                setTimeout(() => {
+                                    setShowSuccessMessage(false)
+                                }, 10000)
                             }
                         },
                         (error) => {
@@ -204,17 +205,6 @@ export default function AddNewInstaller(props) {
                                             Please enter a proper user email.
                                         </div>
                                     )}
-                                    {showSuccessMessage && (
-                                        <div className="installerSuccessrMessageText">
-                                            Success!
-                                        </div>
-                                    )}
-                                    {callFailedError && (
-                                        <div className="installerErrorMessageText">
-                                            Encountered an internal server
-                                            error. Try again later.
-                                        </div>
-                                    )}
                                     <FormControl
                                         fullWidth
                                         className="editRoleContainer"
@@ -249,6 +239,18 @@ export default function AddNewInstaller(props) {
                                     >
                                         Send Invite
                                     </Button>
+                                    {showSuccessMessage && (
+                                        <div className="installerSuccessrMessageText">
+                                            Invite sent!
+                                        </div>
+                                    )}
+                                    {callFailedError && (
+                                        <div className="installerErrorMessageText">
+                                            Encountered an internal server
+                                            error. Try again later.
+                                        </div>
+                                    )}
+                                    <div></div>
                                 </div>
                             </Grid>
                         </>
