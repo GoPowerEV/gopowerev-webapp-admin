@@ -22,6 +22,7 @@
 }
 
 .status-card-button {
+    font-family: 'Nunito Sans', sans-serif !important;
     width: auto;
     background-color: #12bfa2 !important;
     color: #ffffff !important;
@@ -32,6 +33,7 @@
 }
 
 .view-all-ininstall-button {
+    font-family: 'Nunito Sans', sans-serif !important;
     float: right !important;
     align-content: right;
     width: auto;
@@ -44,6 +46,7 @@
 }
 
 .inInstallHeader {
+    font-family: 'Nunito Sans', sans-serif !important;
     margin-bottom: 15px !important;
 }
 
@@ -53,12 +56,14 @@
 }
 
 .propertiesMainBody {
+    font-family: 'Nunito Sans', sans-serif !important;
     padding-left: 15px;
     width: 100%;
     text-align: left;
 }
 
 .tabHeader {
+    font-family: 'Nunito Sans', sans-serif !important;
     margin-top: 20px;
     margin-bottom: 10px;
     font-weight: bold;
@@ -67,6 +72,7 @@
 }
 
 .textAsLink {
+    font-family: 'Nunito Sans', sans-serif !important;
     cursor: pointer;
 }
 
@@ -80,6 +86,7 @@
 }
 
 .allDashboardItemsContainer {
+    font-family: 'Nunito Sans', sans-serif !important;
     margin-top: 25px;
 }
 

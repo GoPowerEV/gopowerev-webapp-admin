@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: '3%',
     },
     root: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         width: '94%',
         '@media (max-width: 1200px)': {
             width: '90%',

@@ -57,6 +57,8 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
+        fontWeight: theme.typography.fontWeightBold,
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
         display: 'flex',
@@ -95,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '10px',
         width: '70%',
         display: 'block',
+        fontFamily: 'Nunito Sans',
         fontSize: '18px',
         fontWeight: theme.typography.fontWeightBold,
         '@media (max-width: 1300px)': {
@@ -126,6 +129,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'block',
     },
     outlinedButton: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         color: '#FFFFFF',
         fontWeight: 'bold',
         borderColor: '#FFFFFF',
@@ -142,6 +146,7 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     outlinedButtonInstaller: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         color: '#FFFFFF',
         fontWeight: 'bold',
         borderColor: '#FFFFFF',

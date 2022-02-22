@@ -10,6 +10,7 @@ import './AddNewInstaller.css'
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         width: '100%',
     },
     headerContainer: {

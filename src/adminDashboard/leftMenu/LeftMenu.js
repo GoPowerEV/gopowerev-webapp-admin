@@ -41,6 +41,7 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         flexGrow: 1,
         backgroundColor: theme.palette.background.paper,
         display: 'flex',

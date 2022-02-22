@@ -12,6 +12,7 @@ import LocationCardToCreate from './LocationCardToCreate'
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         width: '100%',
     },
     headerContainer: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 'bold',
     },
     firstHeader: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         color: '#12BFA2',
     },
     formContainer: {

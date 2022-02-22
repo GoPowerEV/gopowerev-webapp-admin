@@ -19,6 +19,7 @@ import { getLocationSmartOutletsById } from './../dashboardService'
 
 const useStyles = makeStyles({
     root: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         minWidth: 275,
         borderRadius: '15px',
         height: '100%',

@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
         textDecoration: 'none',
         color: 'white !important',
         fontSize: '20px',
-        fontFamily: 'Nunito Sans, sans-serif',
+        fontFamily: 'Nunito Sans, sans-serif !important',
         fontWeight: '700',
         borderBottom: '0.5px solid grey',
     },

@@ -25,7 +25,6 @@ const DashboardTab = (props) => {
 
     useEffect(() => {
         function getPropertyCount(status) {
-            console.log('here all props', allProperties)
             if (status === 'operational') {
                 setActivePropertyCount(
                     allProperties.filter(

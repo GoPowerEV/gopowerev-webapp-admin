@@ -1,22 +1,27 @@
 .addressRow {
+    font-family: 'Nunito Sans', sans-serif !important;
     margin-bottom: 21px;
 }
 
 .bottom-margin-container {
+    font-family: 'Nunito Sans', sans-serif !important;
     margin-top: 85px;
 }
 
 .editableFieldSelectContainer div {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #e8e8e8;
     border-radius: 10px;
 }
 
 .editableFieldSelectContainer div div {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #e8e8e8;
     border-radius: 10px;
 }
 
 .editableFieldSelectContainer label {
+    font-family: 'Nunito Sans', sans-serif !important;
     z-index: 1;
     left: 13px;
     top: -9px;
@@ -33,6 +38,7 @@
 }
 
 .editableFieldSelectContainerState label {
+    font-family: 'Nunito Sans', sans-serif !important;
     z-index: 1;
     position: relative;
     left: 13px;
@@ -40,6 +46,7 @@
 }
 
 .editableField div {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #e8e8e8;
     border-radius: 10px;
 }
@@ -50,12 +57,14 @@
 }
 
 .editableFieldSelectLcuCard {
+    font-family: 'Nunito Sans', sans-serif !important;
     border: 1px solid #b2b2b2;
     padding: 10px;
     margin-top: 0px !important;
 }
 
 .addNewLocationButton {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #12bfa2 !important;
     font-size: 15px !important;
     margin-right: 20px !important;
@@ -65,6 +74,7 @@
 }
 
 .addNewLocButton {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #12bfa2 !important;
     font-size: 15px !important;
     margin-bottom: 20px !important;
@@ -75,6 +85,7 @@
 }
 
 .topButtonProperties {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #12bfa2 !important;
     margin-top: 20px;
     margin-right: 20px !important;
@@ -87,6 +98,7 @@
 }
 
 .topButtonPropertiesNotActive {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #d6d6d7 !important;
     margin-top: 20px;
     margin-right: 20px !important;
@@ -387,6 +399,7 @@
 }
 
 .updateOutletSoftwareBtn {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #12bfa2 !important;
     color: #ffffff !important;
     font-weight: bold !important;
@@ -396,6 +409,7 @@
 }
 
 .editPropertyImageButton {
+    font-family: 'Nunito Sans', sans-serif !important;
     background-color: #12bfa2 !important;
     color: #ffffff !important;
     font-weight: bold !important;

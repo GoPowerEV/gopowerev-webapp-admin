@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2, 4, 3),
     },
     submit: {
-        fontFamily: 'Nunito Sans, sans-serif',
+        fontFamily: 'Nunito Sans, sans-serif !important',
         fontWeight: '900',
         margin: theme.spacing(3, 0, 2),
         backgroundColor: '#12BFA2',
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: '5px',
     },
     cancel: {
-        fontFamily: 'Nunito Sans, sans-serif',
+        fontFamily: 'Nunito Sans, sans-serif !important',
         fontWeight: '900',
         margin: theme.spacing(3, 0, 2),
         backgroundColor: '#FFF',

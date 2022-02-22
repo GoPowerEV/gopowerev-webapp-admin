@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles({
     root: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         minWidth: 275,
         borderRadius: '15px',
         height: '100%',
@@ -24,6 +25,7 @@ const useStyles = makeStyles({
         transform: 'scale(0.8)',
     },
     cardHeader: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
         fontSize: 19,
         fontWeight: '600',
         marginBottom: '15px',
