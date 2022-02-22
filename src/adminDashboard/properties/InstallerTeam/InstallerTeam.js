@@ -6,7 +6,6 @@ import EngineeringOutlinedIcon from '@mui/icons-material/EngineeringOutlined'
 import './InstallerTeam.css'
 import InstallerCard from './InstallerCard'
 import InviteInstallerCard from './InviteInstallerCard'
-
 const InstallerTeam = (props) => {
     const [installerTeamOpened, setInstallerTeamOpened] = useState(false)
 

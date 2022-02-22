@@ -186,7 +186,6 @@ const CurrentlyViewedProperty = (props) => {
         }
         let tempPropertyData = property
         tempPropertyData[field] = value
-        console.log('about to save this', tempPropertyData)
         setProperty(tempPropertyData)
     }
 

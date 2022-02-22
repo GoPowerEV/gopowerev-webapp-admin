@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField'
 import './UpdateSoftwareModal.css'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import moment from 'moment'
 
 function getModalStyle() {
     const top = 50

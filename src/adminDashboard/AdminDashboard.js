@@ -306,7 +306,14 @@ export default function AdminDashboard(props) {
             }
             setIsLoading(false)
         }
-    }, [props.loggedIn, props.token, value])
+    }, [
+        history,
+        props.loggedIn,
+        props.path,
+        props.propertyStatus,
+        props.token,
+        value,
+    ])
 
     return (
         <div className={classes.root}>
