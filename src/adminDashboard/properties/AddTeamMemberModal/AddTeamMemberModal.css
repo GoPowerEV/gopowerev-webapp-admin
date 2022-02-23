@@ -1,0 +1,37 @@
+.partnerModalHeader {
+    font-weight: bold;
+    font-size: 19px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+.smallHeader {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.sendPartnerInviteButton {
+    font-family: 'Nunito Sans', sans-serif !important;
+    background-color: #12bfa2 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    font-size: 17px !important;
+    margin-top: 15px;
+}
+
+.partner-dotted-hr {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-top: 1px dashed #80808069;
+    border-bottom: none;
+}
+
+.editablePartnerField {
+    margin-left: 5px !important;
+}
+
+.editablePartnerField div {
+    font-family: 'Nunito Sans', sans-serif !important;
+    border-radius: 10px;
+}

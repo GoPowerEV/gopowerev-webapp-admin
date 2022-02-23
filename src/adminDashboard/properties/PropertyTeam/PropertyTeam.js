@@ -88,7 +88,10 @@ const PropertyTeam = (props) => {
                         {[
                             ...Array(totalAmountInTeam - propertyTeam.length),
                         ].map((e, i) => (
-                            <InviteTeamMemberCard key={i} />
+                            <InviteTeamMemberCard
+                                key={i}
+                                openModal={props.openModal}
+                            />
                         ))}
                     </Grid>
                 </Collapse>

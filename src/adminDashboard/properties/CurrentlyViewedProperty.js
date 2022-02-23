@@ -20,6 +20,7 @@ import {
 } from './utils/PropertyUtils'
 import { getAllInstallers } from './../dashboardService'
 import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
+import AddTeamMemberModal from './AddTeamMemberModal/AddTeamMemberModal'
 import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
 import LcuCard from './LcuCard'
 import PropertyTeam from './PropertyTeam/PropertyTeam'
@@ -33,6 +34,7 @@ import {
 const CurrentlyViewedProperty = (props) => {
     const [allInstallers, setAllInstallers] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [dataWithInstallerRole, setDataWithInstallerRole] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState(false)
     const [updateIsLoading, setUpdateIsLoading] = useState(false)
     const [property, setProperty] = useState({})
@@ -53,6 +55,7 @@ const CurrentlyViewedProperty = (props) => {
     const [lcus, setLcus] = useState([])
     const [smartOutlets, setSmartOutlets] = useState([])
     const [openModal, setOpenModal] = useState(false)
+    const [openTeamMemberModal, setOpenTeamMemberModal] = useState(false)
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
     const [photoBinary, setPhotoBinary] = React.useState(null)
     const allStates = getAllStates()
@@ -195,6 +198,15 @@ const CurrentlyViewedProperty = (props) => {
 
     const handleClose = () => {
         setOpenModal(false)
+    }
+
+    const handleTeamMemberModalOpen = (showInstaller) => {
+        setDataWithInstallerRole(showInstaller)
+        setOpenTeamMemberModal(true)
+    }
+
+    const handleTeamMemberModalClose = () => {
+        setOpenTeamMemberModal(false)
     }
 
     const addNewLocationAndLcu = () => {
@@ -744,12 +756,24 @@ const CurrentlyViewedProperty = (props) => {
                     </Grid>
                 )}
             </Collapse>
+            {/* ADD NEW PARTNER MODAL */}
+            <AddTeamMemberModal
+                showInstaller={dataWithInstallerRole}
+                handleOpen={handleTeamMemberModalOpen}
+                handleClose={handleTeamMemberModalClose}
+                open={openTeamMemberModal}
+                close={handleTeamMemberModalClose}
+                token={props.token}
+                propertyUUID={property.propertyUUID}
+            />
             <PropertyTeam
+                openModal={handleTeamMemberModalOpen}
                 isLoading={isLoading}
                 propertyUUID={property.propertyUUID}
                 token={props.token}
             />
             <InstallerTeam
+                openModal={handleTeamMemberModalOpen}
                 isLoading={isLoading}
                 propertyUUID={property.propertyUUID}
                 token={props.token}

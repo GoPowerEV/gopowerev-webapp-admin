@@ -87,7 +87,10 @@ const InstallerTeam = (props) => {
                         {[
                             ...Array(totalAmountInTeam - installerTeam.length),
                         ].map((e, i) => (
-                            <InviteInstallerCard key={i} />
+                            <InviteInstallerCard
+                                key={i}
+                                openModal={props.openModal}
+                            />
                         ))}
                     </Grid>
                 </Collapse>

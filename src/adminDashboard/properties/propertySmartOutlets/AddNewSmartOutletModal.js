@@ -4,9 +4,7 @@ import { API_URL } from '../../../constants'
 import Modal from '@material-ui/core/Modal'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
 import './AddNewSmartOutletModal.css'
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 function getModalStyle() {
@@ -21,6 +19,7 @@ function getModalStyle() {
 
 const useStyles = makeStyles((theme) => ({
     paper: {
+        outline: 'none',
         position: 'absolute',
         width: 840,
         backgroundColor: theme.palette.background.paper,

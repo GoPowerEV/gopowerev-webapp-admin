@@ -2,12 +2,10 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import './InstallerTeam.css'
-import { useHistory } from 'react-router-dom'
 
 const InviteInstallerCard = (props) => {
-    const history = useHistory()
     const inviteTeamMemberCard = () => {
-        history.push('/dashboard/add-new-partner')
+        props.openModal(true)
     }
     return (
         <Grid item lg={4} xs={12} justify="center">
