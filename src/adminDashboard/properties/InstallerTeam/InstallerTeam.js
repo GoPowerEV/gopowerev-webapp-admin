@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Collapse, CircularProgress, Grid } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
@@ -6,16 +6,50 @@ import EngineeringOutlinedIcon from '@mui/icons-material/EngineeringOutlined'
 import './InstallerTeam.css'
 import InstallerCard from './InstallerCard'
 import InviteInstallerCard from './InviteInstallerCard'
-const InstallerTeam = (props) => {
-    const [installerTeamOpened, setInstallerTeamOpened] = useState(false)
+import { API_URL_ADMIN } from '../../../constants'
 
-    const installerTeam = []
+const InstallerTeam = (props) => {
+    const [installerTeamOpened, setInstallerTeamOpened] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
+    const [installerTeam, setInstallerTeam] = useState([])
 
     const totalAmountInTeam = 3
+
+    const getInstallerTeam = () => {
+        setIsLoading(true)
+        if (props.token && props.propertyUUID) {
+            fetch(
+                API_URL_ADMIN +
+                    'admin/property-installers/' +
+                    props.propertyUUID,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        setInstallerTeam(result)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
 
     const toggleTeamInfo = () => {
         setInstallerTeamOpened(!installerTeamOpened)
     }
+
+    useEffect(() => {
+        getInstallerTeam()
+    }, [props.token, props.propertyUUID])
 
     return (
         <>
@@ -44,7 +78,7 @@ const InstallerTeam = (props) => {
                     )}
                 </Grid>
             </Grid>
-            {!props.isLoading && (
+            {!isLoading && (
                 <Collapse in={installerTeamOpened}>
                     <Grid container spacing={2} xs={11}>
                         {installerTeam.map((teamMember, i) => (
@@ -58,7 +92,7 @@ const InstallerTeam = (props) => {
                     </Grid>
                 </Collapse>
             )}
-            {props.isLoading && (
+            {isLoading && (
                 <div className="loaderContainer">
                     <CircularProgress style={{ color: '#12BFA2' }} />
                 </div>

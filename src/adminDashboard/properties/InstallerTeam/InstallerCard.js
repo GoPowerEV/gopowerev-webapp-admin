@@ -10,7 +10,7 @@ const InstallerCard = (props) => {
     return (
         <Grid item lg={4} xs={12} justify="center">
             <Grid container spacing={2}>
-                <Grid xs={4} item>
+                <Grid xs={5} item>
                     <TextField
                         fullWidth
                         className="editableField"
@@ -19,10 +19,10 @@ const InstallerCard = (props) => {
                         variant="outlined"
                         disabled
                         inputProps={fontColor}
-                        value={memberInfo.role}
+                        value="Installer"
                     />
                 </Grid>
-                <Grid xs={6} item>
+                <Grid xs={7} item>
                     <TextField
                         fullWidth
                         className="editableField"
@@ -31,10 +31,16 @@ const InstallerCard = (props) => {
                         variant="outlined"
                         disabled
                         inputProps={fontColor}
-                        value={memberInfo.fullName}
+                        value={
+                            !memberInfo.firstName
+                                ? 'No name'
+                                : memberInfo.firstName +
+                                  ' ' +
+                                  memberInfo.lastName
+                        }
                     />
                 </Grid>
-                <Grid xs={10} item>
+                <Grid xs={12} item>
                     <TextField
                         fullWidth
                         className="editableField"

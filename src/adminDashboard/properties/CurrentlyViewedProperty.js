@@ -744,8 +744,16 @@ const CurrentlyViewedProperty = (props) => {
                     </Grid>
                 )}
             </Collapse>
-            <PropertyTeam isLoading={isLoading} />
-            <InstallerTeam isLoading={isLoading} />
+            <PropertyTeam
+                isLoading={isLoading}
+                propertyUUID={property.propertyUUID}
+                token={props.token}
+            />
+            <InstallerTeam
+                isLoading={isLoading}
+                propertyUUID={property.propertyUUID}
+                token={props.token}
+            />
             <React.Fragment>
                 {/* ADD NEW CLU MODAL */}
                 <AddNewLcuModal

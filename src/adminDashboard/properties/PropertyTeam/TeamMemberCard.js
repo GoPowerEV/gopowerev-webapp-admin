@@ -10,7 +10,7 @@ const TeamMemberCard = (props) => {
     return (
         <Grid item lg={4} xs={12} justify="center">
             <Grid container spacing={2}>
-                <Grid xs={4} item>
+                <Grid xs={5} item>
                     <TextField
                         fullWidth
                         className="editableField"
@@ -22,7 +22,7 @@ const TeamMemberCard = (props) => {
                         value={memberInfo.role}
                     />
                 </Grid>
-                <Grid xs={6} item>
+                <Grid xs={7} item>
                     <TextField
                         fullWidth
                         className="editableField"
@@ -34,7 +34,7 @@ const TeamMemberCard = (props) => {
                         value={memberInfo.fullName}
                     />
                 </Grid>
-                <Grid xs={10} item>
+                <Grid xs={12} item>
                     <TextField
                         fullWidth
                         className="editableField"

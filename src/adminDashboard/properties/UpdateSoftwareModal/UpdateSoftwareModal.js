@@ -4,9 +4,7 @@ import { API_URL_ADMIN } from '../../../constants'
 import Modal from '@material-ui/core/Modal'
 import { Button } from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
-import TextField from '@material-ui/core/TextField'
 import './UpdateSoftwareModal.css'
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 function getModalStyle() {
