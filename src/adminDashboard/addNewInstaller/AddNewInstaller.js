@@ -119,6 +119,12 @@ export default function AddNewInstaller(props) {
         setRole(value)
     }
 
+    const copyToClipBoard = () => {
+        navigator.clipboard.writeText(
+            'https://devapp.gopowerev.com/contractorSignUp/' + userId
+        )
+    }
+
     const sendInvite = () => {
         if (userId.length === 0) {
             setShowNoInfoEnteredMessage(true)
@@ -143,6 +149,8 @@ export default function AddNewInstaller(props) {
                     .then((res) => res.json())
                     .then(
                         (result) => {
+                            console.log('here it is', result)
+                            copyToClipBoard()
                             if (result.code) {
                                 setIsLoading(false)
                                 setCallFailedError(true)
@@ -239,6 +247,15 @@ export default function AddNewInstaller(props) {
                                         onClick={() => sendInvite()}
                                     >
                                         Send Invite
+                                    </Button>
+                                    <br />
+                                    <Button
+                                        className="addInstallerButton"
+                                        variant="contained"
+                                        disabled={disableButton}
+                                        onClick={() => copyToClipBoard()}
+                                    >
+                                        Copy Invite Link To Clipboard
                                     </Button>
                                     {showSuccessMessage && (
                                         <div className="installerSuccessrMessageText">
