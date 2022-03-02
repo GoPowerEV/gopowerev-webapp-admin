@@ -154,10 +154,8 @@ export default function AddNewInstaller(props) {
                             if (result.code) {
                                 setIsLoading(false)
                                 setCallFailedError(true)
-                                setUserId(undefined)
                                 setRole(undefined)
                             } else {
-                                setUserId(undefined)
                                 setRole(undefined)
                                 setIsLoading(false)
                                 setCallFailedError(false)
@@ -252,7 +250,6 @@ export default function AddNewInstaller(props) {
                                     <Button
                                         className="addInstallerButton"
                                         variant="contained"
-                                        disabled={disableButton}
                                         onClick={() => copyToClipBoard()}
                                     >
                                         Copy Invite Link To Clipboard

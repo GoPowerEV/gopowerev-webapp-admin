@@ -11,7 +11,15 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import TextField from '@material-ui/core/TextField'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    Tab,
+    MenuItem,
+    Tabs,
+} from '@material-ui/core'
 import './Properties.css'
 import {
     getBadgeClass,
@@ -30,6 +38,7 @@ import {
     getPropertyLocations,
     getPropertySmartOutletsByPropertyId,
 } from './../dashboardService'
+import PropertyGallery from './PropertyGallery'
 
 const CurrentlyViewedProperty = (props) => {
     const [allInstallers, setAllInstallers] = useState([])
@@ -57,9 +66,14 @@ const CurrentlyViewedProperty = (props) => {
     const [openModal, setOpenModal] = useState(false)
     const [openTeamMemberModal, setOpenTeamMemberModal] = useState(false)
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
-    const [photoBinary, setPhotoBinary] = React.useState(null)
+    const [tabValue, setTabValue] = useState('info')
+    const [photoBinary, setPhotoBinary] = useState(null)
     const allStates = getAllStates()
     const allPowerTypes = getTypesOfPowerServiceOptions()
+
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue)
+    }
 
     const uploadPropertyImg = async () => {
         setIsLoading(true)
@@ -274,537 +288,626 @@ const CurrentlyViewedProperty = (props) => {
                     className="textAsLink"
                     onClick={props.closeOpenedProperty}
                 >
-                    My Properties
+                    Back to My Properties ->{' '}
+                    <span className="lcuLocation">{property.name}</span>
                 </span>
-                <span className="boldTex"> - Property</span>
             </div>
-            {!propertyInfoOpened && (
-                <Grid container xs={12} spacing={3} className="lcuContainer">
-                    <Grid item xs={3} className="lcuHeaderColumn">
-                        <span className="lcuLocation">{property.name}</span>
-                    </Grid>
-                    <Grid item xs={3}>
-                        {property.address1 !== null && (
-                            <span>
-                                {property.address1}, {property.city},{' '}
-                                {property.state} {property.zipcode}
-                            </span>
-                        )}
-                        {!property.address1 && (
-                            <span>No address available</span>
-                        )}
-                    </Grid>
-                    <Grid item xs={5}>
-                        {property.contactName}
-                    </Grid>
-                    <Grid item xs={1}>
-                        <ExpandMoreIcon
-                            className="expandIconFirstPortion"
-                            onClick={togglePropertyInfo}
-                        />
-                    </Grid>
-                </Grid>
-            )}
-            <Collapse in={propertyInfoOpened}>
-                <Grid container className="singlePropertyContainer" xs={12}>
-                    <Grid item xs={4}>
-                        <img
-                            alt="Property Img"
-                            src={property.pictureUrl1 ?? NoImageAvailable}
-                            className="viewedPropertyMainImage"
-                        />
-                        <Button
-                            size="small"
-                            className="editPropertyImageButton"
-                            variant="contained"
-                            onClick={() => handlePhotoClick()}
+            <Box
+                sx={{ width: '100%', marginBottom: '25px', marginTop: '20px' }}
+            >
+                <Tabs
+                    value={tabValue}
+                    onChange={handleTabChange}
+                    TabIndicatorProps={{
+                        style: { background: '#12bfa2' },
+                    }}
+                    aria-label="tabs"
+                >
+                    <Tab
+                        style={{
+                            color: 'black',
+                            textTransform: 'none',
+                            fontSize: '17px',
+                            fontFamily: 'Nunito Sans, sans-serif',
+                            fontWeight: '700',
+                        }}
+                        value="info"
+                        label="Property Details"
+                    />
+                    <Tab
+                        style={{
+                            color: 'black',
+                            textTransform: 'none',
+                            fontSize: '17px',
+                            fontFamily: 'Nunito Sans, sans-serif',
+                            fontWeight: '700',
+                        }}
+                        value="gallery"
+                        label="Manage Gallery"
+                    />
+                </Tabs>
+            </Box>
+            {tabValue === 'info' && (
+                <>
+                    {!propertyInfoOpened && (
+                        <Grid
+                            container
+                            xs={12}
+                            spacing={3}
+                            className="lcuContainer"
                         >
-                            Edit Property Image
-                        </Button>
-                        <input
-                            type="file"
-                            ref={hiddenFileInput}
-                            style={{
-                                display: 'none',
-                            }}
-                            onChange={handlePhotoChange}
-                        />
-                    </Grid>
-                    <Grid item xs={8}>
-                        <div className="viewedPropertyInfoContainer">
-                            <Grid container xs={12}>
-                                <Grid item xs={11}>
-                                    <div className="viewedPropertyTitle">
-                                        {property.name}
-                                        {property.status !== undefined && (
-                                            <span
-                                                className={getBadgeClass(
-                                                    property.status
-                                                )}
-                                            >
-                                                {property.status
-                                                    .charAt(0)
-                                                    .toUpperCase() +
-                                                    property.status.slice(1)}
-                                            </span>
-                                        )}
-                                    </div>
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <div>
-                                        <ExpandLessIcon
-                                            className="expandIconFirstPortionOpened"
-                                            onClick={togglePropertyInfo}
-                                        />
-                                    </div>
-                                </Grid>
+                            <Grid item xs={3}>
+                                {property.address1 !== null && (
+                                    <span>
+                                        {property.address1}, {property.city},{' '}
+                                        {property.state} {property.zipcode}
+                                    </span>
+                                )}
+                                {!property.address1 && (
+                                    <span>No address available</span>
+                                )}
                             </Grid>
-                            {!isLoading && (
-                                <div className="editInfoContainer">
-                                    <Grid container xs={12} spacing={3}>
-                                        <Grid item lg={6} xs={12}>
-                                            <div className="editInfoItem">
-                                                <WifiOutlinedIcon />
-                                                <span>
-                                                    {smartOutlets !== undefined
-                                                        ? smartOutlets.length
-                                                        : '0'}{' '}
-                                                    {smartOutlets?.length === 1
-                                                        ? 'Smart Outlet'
-                                                        : 'Smart Outlets'}
-                                                </span>
-                                            </div>
-                                        </Grid>
-                                        <Grid item lg={6} xs={12}>
-                                            <div className="editInfoItem">
-                                                <EvStationOutlinedIcon />
-                                                <span>
-                                                    {lcus ? lcus.length : '0'}{' '}
-                                                    LCU(s)
-                                                </span>
-                                            </div>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                fullWidth
-                                                className="editableField"
-                                                id="propertyName"
-                                                label="Property Name"
-                                                variant="outlined"
-                                                value={propertyName}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'name'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                className="editableField"
-                                                fullWidth
-                                                id="propertyAddress"
-                                                label="Street"
-                                                variant="outlined"
-                                                value={propertyAddress}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'address1'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item lg={3} xs={12}>
-                                            <TextField
-                                                fullWidth
-                                                className="editableField"
-                                                id="propertyZip"
-                                                label="Zip Code"
-                                                variant="outlined"
-                                                value={propertyZip}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'zipcode'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item lg={6} xs={12}>
-                                            <TextField
-                                                fullWidth
-                                                className="editableField"
-                                                id="propertyCity"
-                                                label="City"
-                                                variant="outlined"
-                                                value={propertyCity}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'city'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item lg={3} xs={12}>
-                                            <FormControl
-                                                fullWidth
-                                                className="editableFieldSelectContainerState"
-                                            >
-                                                <InputLabel id="state">
-                                                    State
-                                                </InputLabel>
-                                                <Select
-                                                    labelId="state"
-                                                    variant="outlined"
-                                                    id="state"
-                                                    value={propertyState}
-                                                    label="State"
-                                                    onChange={(e) =>
-                                                        handlePropertyFieldChange(
-                                                            e.target.value,
-                                                            'state'
-                                                        )
-                                                    }
-                                                    onBlur={() =>
-                                                        savePropertyInfo()
-                                                    }
-                                                >
-                                                    {allStates?.map(
-                                                        (item, index) => (
-                                                            <MenuItem
-                                                                value={
-                                                                    item.name
+                            <Grid item xs={5}>
+                                {property.contactName}
+                            </Grid>
+                            <Grid item xs={1}>
+                                <ExpandMoreIcon
+                                    className="expandIconFirstPortion"
+                                    onClick={togglePropertyInfo}
+                                />
+                            </Grid>
+                        </Grid>
+                    )}
+                    <Collapse in={propertyInfoOpened}>
+                        <Grid container xs={12}>
+                            <Grid item xs={11}>
+                                <div className="viewedPropertyTitle">
+                                    {property.name}
+                                    {property.status !== undefined && (
+                                        <span
+                                            className={getBadgeClass(
+                                                property.status
+                                            )}
+                                        >
+                                            {property.status
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                                property.status.slice(1)}
+                                        </span>
+                                    )}
+                                </div>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <div>
+                                    <ExpandLessIcon
+                                        className="expandIconFirstPortionOpened"
+                                        onClick={togglePropertyInfo}
+                                    />
+                                </div>
+                            </Grid>
+                        </Grid>
+                        <Grid
+                            container
+                            className="singlePropertyContainer"
+                            xs={12}
+                        >
+                            <Grid item xs={4}>
+                                <img
+                                    alt="Property Img"
+                                    src={
+                                        property.pictureUrl1 ?? NoImageAvailable
+                                    }
+                                    className="viewedPropertyMainImage"
+                                />
+                                <Button
+                                    size="small"
+                                    className="editPropertyImageButton"
+                                    variant="contained"
+                                    onClick={() => handlePhotoClick()}
+                                >
+                                    Edit Property Hero Image
+                                </Button>
+                                <input
+                                    type="file"
+                                    ref={hiddenFileInput}
+                                    style={{
+                                        display: 'none',
+                                    }}
+                                    onChange={handlePhotoChange}
+                                />
+                            </Grid>
+                            <Grid item xs={8}>
+                                <div className="viewedPropertyInfoContainer">
+                                    {!isLoading && (
+                                        <div className="editInfoContainer">
+                                            <Grid container xs={12} spacing={3}>
+                                                <Grid item lg={6} xs={12}>
+                                                    <div className="editInfoItem">
+                                                        <WifiOutlinedIcon />
+                                                        <span>
+                                                            {smartOutlets !==
+                                                            undefined
+                                                                ? smartOutlets.length
+                                                                : '0'}{' '}
+                                                            {smartOutlets?.length ===
+                                                            1
+                                                                ? 'Smart Outlet'
+                                                                : 'Smart Outlets'}
+                                                        </span>
+                                                    </div>
+                                                </Grid>
+                                                <Grid item lg={6} xs={12}>
+                                                    <div className="editInfoItem">
+                                                        <EvStationOutlinedIcon />
+                                                        <span>
+                                                            {lcus
+                                                                ? lcus.length
+                                                                : '0'}{' '}
+                                                            LCU(s)
+                                                        </span>
+                                                    </div>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        fullWidth
+                                                        className="editableField"
+                                                        id="propertyName"
+                                                        label="Property Name"
+                                                        variant="outlined"
+                                                        value={propertyName}
+                                                        onChange={(e) =>
+                                                            handlePropertyFieldChange(
+                                                                e.target.value,
+                                                                'name'
+                                                            )
+                                                        }
+                                                        onBlur={() =>
+                                                            savePropertyInfo()
+                                                        }
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <EditOutlinedIcon />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <TextField
+                                                        className="editableField"
+                                                        fullWidth
+                                                        id="propertyAddress"
+                                                        label="Street"
+                                                        variant="outlined"
+                                                        value={propertyAddress}
+                                                        onChange={(e) =>
+                                                            handlePropertyFieldChange(
+                                                                e.target.value,
+                                                                'address1'
+                                                            )
+                                                        }
+                                                        onBlur={() =>
+                                                            savePropertyInfo()
+                                                        }
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <EditOutlinedIcon />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item lg={3} xs={12}>
+                                                    <TextField
+                                                        fullWidth
+                                                        className="editableField"
+                                                        id="propertyZip"
+                                                        label="Zip Code"
+                                                        variant="outlined"
+                                                        value={propertyZip}
+                                                        onChange={(e) =>
+                                                            handlePropertyFieldChange(
+                                                                e.target.value,
+                                                                'zipcode'
+                                                            )
+                                                        }
+                                                        onBlur={() =>
+                                                            savePropertyInfo()
+                                                        }
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <EditOutlinedIcon />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item lg={6} xs={12}>
+                                                    <TextField
+                                                        fullWidth
+                                                        className="editableField"
+                                                        id="propertyCity"
+                                                        label="City"
+                                                        variant="outlined"
+                                                        value={propertyCity}
+                                                        onChange={(e) =>
+                                                            handlePropertyFieldChange(
+                                                                e.target.value,
+                                                                'city'
+                                                            )
+                                                        }
+                                                        onBlur={() =>
+                                                            savePropertyInfo()
+                                                        }
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <EditOutlinedIcon />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item lg={3} xs={12}>
+                                                    <FormControl
+                                                        fullWidth
+                                                        className="editableFieldSelectContainerState"
+                                                    >
+                                                        <InputLabel id="state">
+                                                            State
+                                                        </InputLabel>
+                                                        <Select
+                                                            labelId="state"
+                                                            variant="outlined"
+                                                            id="state"
+                                                            value={
+                                                                propertyState
+                                                            }
+                                                            label="State"
+                                                            onChange={(e) =>
+                                                                handlePropertyFieldChange(
+                                                                    e.target
+                                                                        .value,
+                                                                    'state'
+                                                                )
+                                                            }
+                                                            onBlur={() =>
+                                                                savePropertyInfo()
+                                                            }
+                                                        >
+                                                            {allStates?.map(
+                                                                (
+                                                                    item,
+                                                                    index
+                                                                ) => (
+                                                                    <MenuItem
+                                                                        value={
+                                                                            item.name
+                                                                        }
+                                                                        key={
+                                                                            index
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            item.abbreviation
+                                                                        }
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item lg={4} xs={12}>
+                                                    <TextField
+                                                        fullWidth
+                                                        id="maxVoltAmps"
+                                                        className="editableField"
+                                                        label="Max Volt Amps"
+                                                        variant="outlined"
+                                                        value={
+                                                            propertyMaxVoltAmps
+                                                        }
+                                                        onChange={(e) =>
+                                                            handlePropertyFieldChange(
+                                                                e.target.value,
+                                                                'maxVoltAmps'
+                                                            )
+                                                        }
+                                                        onBlur={() =>
+                                                            savePropertyInfo()
+                                                        }
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <EditOutlinedIcon />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                <Grid item lg={4} xs={12}>
+                                                    <FormControl
+                                                        fullWidth
+                                                        className="editableFieldSelectContainer"
+                                                    >
+                                                        <InputLabel id="typeOfPowerService">
+                                                            Type Of Power
+                                                            Service
+                                                        </InputLabel>
+                                                        <Select
+                                                            labelId="typeOfPowerService"
+                                                            variant="outlined"
+                                                            id="typeOfPowerService"
+                                                            value={
+                                                                propertyPowerType
+                                                            }
+                                                            label="Type Of Power Service"
+                                                            onChange={(e) =>
+                                                                handlePropertyFieldChange(
+                                                                    e.target
+                                                                        .value,
+                                                                    'powerType'
+                                                                )
+                                                            }
+                                                            onBlur={() =>
+                                                                savePropertyInfo()
+                                                            }
+                                                        >
+                                                            {allPowerTypes?.map(
+                                                                (type) => (
+                                                                    <MenuItem
+                                                                        value={
+                                                                            type.value
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            type.value
+                                                                        }
+                                                                    </MenuItem>
+                                                                )
+                                                            )}
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                                {!updateIsLoading &&
+                                                    !updateSuccess && (
+                                                        <Grid
+                                                            item
+                                                            lg={4}
+                                                            xs={12}
+                                                        >
+                                                            <Button
+                                                                className="updateOutletSoftwareBtn"
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    openUpdateSmartOutletSoftwareModal()
                                                                 }
-                                                                key={index}
                                                             >
-                                                                {
-                                                                    item.abbreviation
-                                                                }
-                                                            </MenuItem>
-                                                        )
+                                                                Update Smart
+                                                                Outlet Software
+                                                            </Button>
+                                                        </Grid>
                                                     )}
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item lg={4} xs={12}>
-                                            <TextField
-                                                fullWidth
-                                                id="maxVoltAmps"
-                                                className="editableField"
-                                                label="Max Volt Amps"
-                                                variant="outlined"
-                                                value={propertyMaxVoltAmps}
-                                                onChange={(e) =>
-                                                    handlePropertyFieldChange(
-                                                        e.target.value,
-                                                        'maxVoltAmps'
-                                                    )
-                                                }
-                                                onBlur={() =>
-                                                    savePropertyInfo()
-                                                }
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <EditOutlinedIcon />
-                                                    ),
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item lg={4} xs={12}>
-                                            <FormControl
-                                                fullWidth
-                                                className="editableFieldSelectContainer"
-                                            >
-                                                <InputLabel id="typeOfPowerService">
-                                                    Type Of Power Service
-                                                </InputLabel>
-                                                <Select
-                                                    labelId="typeOfPowerService"
-                                                    variant="outlined"
-                                                    id="typeOfPowerService"
-                                                    value={propertyPowerType}
-                                                    label="Type Of Power Service"
-                                                    onChange={(e) =>
-                                                        handlePropertyFieldChange(
-                                                            e.target.value,
-                                                            'powerType'
-                                                        )
-                                                    }
-                                                    onBlur={() =>
-                                                        savePropertyInfo()
-                                                    }
-                                                >
-                                                    {allPowerTypes?.map(
-                                                        (type) => (
-                                                            <MenuItem
-                                                                value={
-                                                                    type.value
-                                                                }
-                                                            >
-                                                                {type.value}
-                                                            </MenuItem>
-                                                        )
+                                                {updateIsLoading &&
+                                                    !updateSuccess && (
+                                                        <div className="updateLoaderContainer">
+                                                            <CircularProgress
+                                                                style={{
+                                                                    color:
+                                                                        '#12BFA2',
+                                                                }}
+                                                            />
+                                                        </div>
                                                     )}
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        {!updateIsLoading && !updateSuccess && (
-                                            <Grid item lg={4} xs={12}>
-                                                <Button
-                                                    className="updateOutletSoftwareBtn"
-                                                    variant="contained"
-                                                    onClick={() =>
-                                                        openUpdateSmartOutletSoftwareModal()
-                                                    }
-                                                >
-                                                    Update Smart Outlet Software
-                                                </Button>
+                                                {!updateIsLoading &&
+                                                    updateSuccess && (
+                                                        <div className="update-success">
+                                                            Updated
+                                                            successfully.
+                                                        </div>
+                                                    )}
                                             </Grid>
-                                        )}
-                                        {updateIsLoading && !updateSuccess && (
-                                            <div className="updateLoaderContainer">
+                                        </div>
+                                    )}
+
+                                    {isLoading && (
+                                        <div className="loaderContainer">
+                                            <CircularProgress
+                                                style={{ color: '#12BFA2' }}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </Grid>
+                        </Grid>
+                        {!isLoading && (
+                            <Grid
+                                container
+                                className="singlePropertyContainer"
+                                xs={12}
+                                spacing={3}
+                            >
+                                <Grid item xs={12}>
+                                    <div className="viewedPropertyContactInfoContainer">
+                                        <div className="propertyContactDetailsHeader">
+                                            <span>Property Details</span>
+                                        </div>
+                                        {isLoading && (
+                                            <div className="loaderContainer">
                                                 <CircularProgress
                                                     style={{ color: '#12BFA2' }}
                                                 />
                                             </div>
                                         )}
-                                        {!updateIsLoading && updateSuccess && (
-                                            <div className="update-success">
-                                                Updated successfully.
-                                            </div>
-                                        )}
-                                    </Grid>
-                                </div>
-                            )}
-
-                            {isLoading && (
-                                <div className="loaderContainer">
-                                    <CircularProgress
-                                        style={{ color: '#12BFA2' }}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    </Grid>
-                </Grid>
-                {!isLoading && (
-                    <Grid
-                        container
-                        className="singlePropertyContainer"
-                        xs={12}
-                        spacing={3}
-                    >
-                        <Grid item xs={12}>
-                            <div className="viewedPropertyContactInfoContainer">
-                                <div className="propertyContactDetailsHeader">
-                                    <span>Property Details</span>
-                                </div>
-                                {isLoading && (
-                                    <div className="loaderContainer">
-                                        <CircularProgress
-                                            style={{ color: '#12BFA2' }}
-                                        />
                                     </div>
-                                )}
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        id="propertyContactName"
+                                        className="editableField"
+                                        fullWidth
+                                        label="Property Contact Name"
+                                        variant="outlined"
+                                        value={propertyContactName}
+                                        onChange={(e) =>
+                                            handlePropertyFieldChange(
+                                                e.target.value,
+                                                'contactName'
+                                            )
+                                        }
+                                        onBlur={() => savePropertyInfo()}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        id="propertyContactEmail"
+                                        className="editableField"
+                                        fullWidth
+                                        label="Property Contact Email"
+                                        variant="outlined"
+                                        value={propertyContactEmail}
+                                        onChange={(e) =>
+                                            handlePropertyFieldChange(
+                                                e.target.value,
+                                                'contactEmail'
+                                            )
+                                        }
+                                        onBlur={() => savePropertyInfo()}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <TextField
+                                        fullWidth
+                                        className="editableField"
+                                        id="propertyContactPhone"
+                                        label="Property Contact Phone"
+                                        variant="outlined"
+                                        value={propertyContactPhone}
+                                        onChange={(e) =>
+                                            handlePropertyFieldChange(
+                                                e.target.value,
+                                                'contactPhone1'
+                                            )
+                                        }
+                                        onBlur={() => savePropertyInfo()}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <FormControl
+                                        fullWidth
+                                        className="editableFieldSelectContainer"
+                                    >
+                                        <InputLabel id="assigned-installer">
+                                            Assigned Installer
+                                        </InputLabel>
+                                        <Select
+                                            labelId="assigned-installer"
+                                            variant="outlined"
+                                            id="assigned-installer"
+                                            value={propertyInstaller}
+                                            label="Assigned Installer"
+                                            onChange={(e) =>
+                                                handlePropertyFieldChange(
+                                                    e.target.value,
+                                                    'installerUUID'
+                                                )
+                                            }
+                                            onBlur={() => savePropertyInfo()}
+                                        >
+                                            {allInstallers?.map((installer) => (
+                                                <MenuItem
+                                                    value={
+                                                        installer.cognitoUUID
+                                                    }
+                                                >
+                                                    {installer.email}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        id="propNotes"
+                                        className="editableField"
+                                        label="Notes"
+                                        variant="outlined"
+                                        value={propertyNotes}
+                                        onChange={(e) =>
+                                            handlePropertyFieldChange(
+                                                e.target.value,
+                                                'detail'
+                                            )
+                                        }
+                                        onBlur={() => savePropertyInfo()}
+                                        InputProps={{
+                                            endAdornment: <EditOutlinedIcon />,
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )}
+                    </Collapse>
+                </>
+            )}
+            {tabValue === 'info' && (
+                <>
+                    {/* ADD NEW PARTNER MODAL */}
+                    <AddTeamMemberModal
+                        showInstaller={dataWithInstallerRole}
+                        handleOpen={handleTeamMemberModalOpen}
+                        handleClose={handleTeamMemberModalClose}
+                        open={openTeamMemberModal}
+                        close={handleTeamMemberModalClose}
+                        token={props.token}
+                        propertyUUID={property.propertyUUID}
+                    />
+                    <PropertyTeam
+                        openModal={handleTeamMemberModalOpen}
+                        isLoading={isLoading}
+                        propertyUUID={property.propertyUUID}
+                        token={props.token}
+                    />
+                    <InstallerTeam
+                        openModal={handleTeamMemberModalOpen}
+                        isLoading={isLoading}
+                        propertyUUID={property.propertyUUID}
+                        token={props.token}
+                    />
+                    <React.Fragment>
+                        {/* ADD NEW CLU MODAL */}
+                        <AddNewLcuModal
+                            handleOpen={handleOpen}
+                            handleClose={handleClose}
+                            open={openModal}
+                            close={handleClose}
+                            token={props.token}
+                            propertyUUID={property.propertyUUID}
+                            openPropertyDetailsOnLoad={
+                                props.openPropertyDetailsOnLoad
+                            }
+                        />
+                        <hr className="propertiesHrLcu" />
+                        <Grid container justifyContent="space-between">
+                            <div className="greyHeader">
+                                <EvStationOutlinedIcon />
+                                LCUs
                             </div>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                id="propertyContactName"
-                                className="editableField"
-                                fullWidth
-                                label="Property Contact Name"
+                            {lcus?.length === 0 && <div>No LCUs</div>}
+                            <Button
+                                className="addNewLocationButton"
                                 variant="outlined"
-                                value={propertyContactName}
-                                onChange={(e) =>
-                                    handlePropertyFieldChange(
-                                        e.target.value,
-                                        'contactName'
-                                    )
-                                }
-                                onBlur={() => savePropertyInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                id="propertyContactEmail"
-                                className="editableField"
-                                fullWidth
-                                label="Property Contact Email"
-                                variant="outlined"
-                                value={propertyContactEmail}
-                                onChange={(e) =>
-                                    handlePropertyFieldChange(
-                                        e.target.value,
-                                        'contactEmail'
-                                    )
-                                }
-                                onBlur={() => savePropertyInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <TextField
-                                fullWidth
-                                className="editableField"
-                                id="propertyContactPhone"
-                                label="Property Contact Phone"
-                                variant="outlined"
-                                value={propertyContactPhone}
-                                onChange={(e) =>
-                                    handlePropertyFieldChange(
-                                        e.target.value,
-                                        'contactPhone1'
-                                    )
-                                }
-                                onBlur={() => savePropertyInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <FormControl
-                                fullWidth
-                                className="editableFieldSelectContainer"
+                                onClick={addNewLocationAndLcu}
                             >
-                                <InputLabel id="assigned-installer">
-                                    Assigned Installer
-                                </InputLabel>
-                                <Select
-                                    labelId="assigned-installer"
-                                    variant="outlined"
-                                    id="assigned-installer"
-                                    value={propertyInstaller}
-                                    label="Assigned Installer"
-                                    onChange={(e) =>
-                                        handlePropertyFieldChange(
-                                            e.target.value,
-                                            'installerUUID'
-                                        )
-                                    }
-                                    onBlur={() => savePropertyInfo()}
-                                >
-                                    {allInstallers?.map((installer) => (
-                                        <MenuItem value={installer.cognitoUUID}>
-                                            {installer.email}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                Add New LCU & Location
+                            </Button>
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                id="propNotes"
-                                className="editableField"
-                                label="Notes"
-                                variant="outlined"
-                                value={propertyNotes}
-                                onChange={(e) =>
-                                    handlePropertyFieldChange(
-                                        e.target.value,
-                                        'detail'
-                                    )
-                                }
-                                onBlur={() => savePropertyInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
-                        </Grid>
-                    </Grid>
-                )}
-            </Collapse>
-            {/* ADD NEW PARTNER MODAL */}
-            <AddTeamMemberModal
-                showInstaller={dataWithInstallerRole}
-                handleOpen={handleTeamMemberModalOpen}
-                handleClose={handleTeamMemberModalClose}
-                open={openTeamMemberModal}
-                close={handleTeamMemberModalClose}
-                token={props.token}
-                propertyUUID={property.propertyUUID}
-            />
-            <PropertyTeam
-                openModal={handleTeamMemberModalOpen}
-                isLoading={isLoading}
-                propertyUUID={property.propertyUUID}
-                token={props.token}
-            />
-            <InstallerTeam
-                openModal={handleTeamMemberModalOpen}
-                isLoading={isLoading}
-                propertyUUID={property.propertyUUID}
-                token={props.token}
-            />
-            <React.Fragment>
-                {/* ADD NEW CLU MODAL */}
-                <AddNewLcuModal
-                    handleOpen={handleOpen}
-                    handleClose={handleClose}
-                    open={openModal}
-                    close={handleClose}
-                    token={props.token}
-                    propertyUUID={property.propertyUUID}
-                    openPropertyDetailsOnLoad={props.openPropertyDetailsOnLoad}
-                />
-                <hr className="propertiesHrLcu" />
-                <Grid container justifyContent="space-between">
-                    <div className="greyHeader">
-                        <EvStationOutlinedIcon />
-                        LCUs
-                    </div>
-                    {lcus?.length === 0 && <div>No LCUs</div>}
-                    <Button
-                        className="addNewLocationButton"
-                        variant="outlined"
-                        onClick={addNewLocationAndLcu}
-                    >
-                        Add New LCU & Location
-                    </Button>
-                </Grid>
-            </React.Fragment>
+                    </React.Fragment>
+                </>
+            )}
             {/* UPDATE OUTLET MODAL */}
             <UpdateSoftwareModal
                 handleOpen={handleOpenUpdateModal}
@@ -814,17 +917,24 @@ const CurrentlyViewedProperty = (props) => {
                 close={handleCloseUpdateModal}
                 token={props.token}
             />
-            {lcus &&
-                lcus.map((lcu, index) => (
-                    <LcuCard
-                        token={props.token}
-                        lcu={lcu}
-                        setIsLoading={setIsLoading}
-                        isLoading={isLoading}
-                        locations={locations}
-                        reloadPropertyLocations={reloadPropertyLocations}
-                    />
-                ))}
+            {tabValue === 'info' && (
+                <>
+                    {lcus &&
+                        lcus.map((lcu, index) => (
+                            <LcuCard
+                                token={props.token}
+                                lcu={lcu}
+                                setIsLoading={setIsLoading}
+                                isLoading={isLoading}
+                                locations={locations}
+                                reloadPropertyLocations={
+                                    reloadPropertyLocations
+                                }
+                            />
+                        ))}
+                </>
+            )}
+            {tabValue === 'gallery' && <PropertyGallery />}
         </div>
     )
 }
