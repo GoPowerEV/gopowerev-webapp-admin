@@ -181,7 +181,7 @@ export default function PropertyGallery(props) {
 
     useEffect(() => {
         if (photoBinary) {
-            uploadImage(photoBinary)
+            uploadPropertyImg(photoBinary)
         }
     }, [photoBinary])
 
