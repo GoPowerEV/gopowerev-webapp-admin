@@ -3,7 +3,6 @@ import { API_URL } from '../../constants'
 import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
-import Grid from '@material-ui/core/Grid'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
@@ -12,6 +11,7 @@ import WifiOutlinedIcon from '@material-ui/icons/WifiOutlined'
 import TextField from '@material-ui/core/TextField'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import {
+    Grid,
     Box,
     FormControl,
     InputLabel,
@@ -92,7 +92,6 @@ const CurrentlyViewedProperty = (props) => {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log('here image result', result)
                         props.reloadPropertyInfo(props.property.propertyUUID)
                     },
                     (error) => {
@@ -260,6 +259,7 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyMaxVoltAmps(props.property.maxVoltAmps)
         setPropertyPowerType(props.property.powerType)
         document.querySelector('body').scrollTo(0, 0)
+        console.log('here it is!!!', props.property)
         getAllInstallers(props.token, setIsLoading, setAllInstallers)
         getPropertyLcus(
             props.token,
@@ -336,6 +336,23 @@ const CurrentlyViewedProperty = (props) => {
                             spacing={3}
                             className="lcuContainer"
                         >
+                            <Grid item xs={5}>
+                                <div className="viewedPropertyTitle">
+                                    {property.name}
+                                    {property.status !== undefined && (
+                                        <span
+                                            className={getBadgeClass(
+                                                property.status
+                                            )}
+                                        >
+                                            {property.status
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                                property.status.slice(1)}
+                                        </span>
+                                    )}
+                                </div>
+                            </Grid>
                             <Grid item xs={3}>
                                 {property.address1 !== null && (
                                     <span>
@@ -347,7 +364,7 @@ const CurrentlyViewedProperty = (props) => {
                                     <span>No address available</span>
                                 )}
                             </Grid>
-                            <Grid item xs={5}>
+                            <Grid item xs={3}>
                                 {property.contactName}
                             </Grid>
                             <Grid item xs={1}>
@@ -405,7 +422,7 @@ const CurrentlyViewedProperty = (props) => {
                                     variant="contained"
                                     onClick={() => handlePhotoClick()}
                                 >
-                                    Edit Property Hero Image
+                                    Edit Property Image
                                 </Button>
                                 <input
                                     type="file"
@@ -934,7 +951,14 @@ const CurrentlyViewedProperty = (props) => {
                         ))}
                 </>
             )}
-            {tabValue === 'gallery' && <PropertyGallery />}
+            {tabValue === 'gallery' && (
+                <PropertyGallery
+                    token={props.token}
+                    propertyUuid={property.propertyUUID}
+                    reloadPropertyInfo={props.reloadPropertyInfo}
+                    propertyImage={property.pictureUrl1}
+                />
+            )}
         </div>
     )
 }

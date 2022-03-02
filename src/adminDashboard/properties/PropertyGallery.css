@@ -1,0 +1,14 @@
+.galleryImage {
+    margin-top: 20px;
+    border-radius: 13px;
+    width: 100%;
+    height: auto;
+}
+
+.gallery-container {
+    padding-bottom: 25%;
+}
+
+.gallery-photo-container {
+    margin-top: 30px !important;
+}
