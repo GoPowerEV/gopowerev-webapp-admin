@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { API_URL } from '../../../constants'
+import { API_URL, API_URL_ADMIN } from '../../../constants'
 import Modal from '@material-ui/core/Modal'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import './AddNewSmartOutletModal.css'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 
 function getModalStyle() {
     const top = 50
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+        paddingTop: '55px',
         borderRadius: '10px',
     },
     submit: {
@@ -51,13 +53,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddNewSmartOutletModal(props) {
     const [isLoading, setIsLoading] = useState(false)
-    const [modalStyle] = useState(getModalStyle)
-    const classes = useStyles()
-
-    const soData = {
+    const [selectedModel, setSelectedModel] = useState(undefined)
+    const [models, setModels] = useState([])
+    const [soData, setSoData] = useState({
         locationUUID: props.createSmartOutletForThisLocation,
         model: 'Proto X2',
-    }
+    })
+    const [modalStyle] = useState(getModalStyle)
+    const classes = useStyles()
 
     const addNewSmartOutlet = () => {
         setIsLoading(true)
@@ -84,13 +87,53 @@ export default function AddNewSmartOutletModal(props) {
         }
     }
 
+    const handleOutletTypeChange = (value) => {
+        setSelectedModel(value)
+        setSoData({
+            locationUUID: props.createSmartOutletForThisLocation,
+            model: value,
+        })
+    }
+
+    useEffect(() => {
+        if (props.token) {
+            fetch(API_URL_ADMIN + 'admin/so-model', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        let allModels = []
+                        result.forEach((element) => {
+                            const tempModel = {
+                                label: element.model,
+                                value: element.model,
+                            }
+                            allModels.push(tempModel)
+                        })
+                        setModels(allModels)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }, [props.token])
+
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <div id="simple-modal-description">
                 {isLoading && (
                     <div className="loaderContainer">
                         <CircularProgress
-                            style={{ color: '#12BFA2', marginBottom: '35px' }}
+                            style={{
+                                color: '#12BFA2',
+                                marginBottom: '35px',
+                            }}
                         />
                     </div>
                 )}
@@ -98,18 +141,56 @@ export default function AddNewSmartOutletModal(props) {
                     <Grid
                         container
                         xs={12}
-                        spacing={0}
-                        direction="column"
+                        spacing={1}
+                        justify="center"
                         alignItems="center"
                         justifyContent="center"
+                        direction="row"
                     >
-                        <Button
-                            className="addNewSOButton"
-                            variant="outlined"
-                            onClick={() => addNewSmartOutlet()}
+                        <Grid item xs={4}>
+                            <FormControl fullWidth>
+                                <InputLabel
+                                    id="model"
+                                    style={{ paddingLeft: '15px' }}
+                                >
+                                    Model
+                                </InputLabel>
+                                <Select
+                                    labelId="model"
+                                    variant="outlined"
+                                    id="model"
+                                    value={selectedModel}
+                                    onChange={(e) =>
+                                        handleOutletTypeChange(e.target.value)
+                                    }
+                                >
+                                    {models?.map((model) => (
+                                        <MenuItem value={model.value}>
+                                            {model.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid
+                            container
+                            xs={12}
+                            spacing={1}
+                            justify="center"
+                            alignItems="center"
+                            justifyContent="center"
+                            direction="row"
                         >
-                            Add New Smart Outlet To This Location
-                        </Button>
+                            <Grid item>
+                                <Button
+                                    className="addNewSOButton"
+                                    variant="outlined"
+                                    onClick={() => addNewSmartOutlet()}
+                                >
+                                    Add New Smart Outlet To This Location
+                                </Button>
+                            </Grid>
+                        </Grid>
                     </Grid>
                 )}
             </div>

@@ -315,14 +315,14 @@ export default function SetupNewProperty(props) {
         document.querySelector('body').scrollTo(0, 0)
     }, [activeStep])
 
-    const createSmartOutlets = (amountOfOutlets, locationId) => {
+    const createSmartOutlets = (amountOfOutlets, locationId, soModel) => {
         console.log('this is the amount of outlets', amountOfOutlets)
         console.log('locationId', locationId)
         for (var i = 0; i < amountOfOutlets; i++) {
             setIsLoading(true)
             let locationObject = {
                 locationUUID: locationId,
-                model: 'Proto X2',
+                model: soModel,
             }
             if (props.token) {
                 fetch(API_URL + 'smart-outlets', {
@@ -356,7 +356,8 @@ export default function SetupNewProperty(props) {
         photoBinaries,
         index,
         amountOfSmartOutlets,
-        propertyId
+        propertyId,
+        soModel
     ) => {
         let locationId = null
         setIsLoading(true)
@@ -395,7 +396,8 @@ export default function SetupNewProperty(props) {
                         ) {
                             await createSmartOutlets(
                                 amountOfSmartOutlets[index],
-                                locationId
+                                locationId,
+                                soModel
                             )
                         }
                         setIsLoading(false)
@@ -414,7 +416,8 @@ export default function SetupNewProperty(props) {
         locations,
         photoBinaries,
         amountOfSmartOutlets,
-        propertyUUID
+        propertyUUID,
+        soModel
     ) => {
         setIsLoading(true)
         let lcuObject = {
@@ -442,7 +445,8 @@ export default function SetupNewProperty(props) {
                                 photoBinaries,
                                 index,
                                 amountOfSmartOutlets,
-                                propertyUUID
+                                propertyUUID,
+                                soModel
                             )
                         })
                     },
@@ -458,7 +462,8 @@ export default function SetupNewProperty(props) {
         lcuModel,
         locations,
         photoBinaries,
-        amountOfSmartOutlets
+        amountOfSmartOutlets,
+        soModel
     ) => {
         console.log('here lcuName', lcuName)
         console.log('here lcuModel', lcuModel)
@@ -489,7 +494,8 @@ export default function SetupNewProperty(props) {
                         locations,
                         photoBinaries,
                         amountOfSmartOutlets,
-                        result.propertyUUID
+                        result.propertyUUID,
+                        soModel
                     )
                 },
                 (error) => {}

@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import {
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Stepper,
+    Step,
+    StepLabel,
+    Button,
+    TextField,
+    Grid,
+} from '@material-ui/core'
+import { API_URL_ADMIN } from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
-import Grid from '@material-ui/core/Grid'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import LocationCardToCreate from './LocationCardToCreate'
@@ -155,7 +162,9 @@ export default function UpdateLcuAndLocation(props) {
     const [locations, setLocations] = useState([])
     const [locationsError, setLocationsError] = useState(false)
     const [lcuName, setLcuName] = useState('')
-    const [lcuModel, setLcuModel] = useState('LCU10')
+    const [lcuModel, setLcuModel] = useState(undefined)
+    const [soModel, setSoModel] = useState(undefined)
+    const [models, setModels] = useState([])
     const [photoBinaries, setPhotoBinaries] = React.useState([])
     const [photoFileNames, setPhotoFileNames] = React.useState([])
     const [amountOfSmartOutlets, setAmountOfSmartOutlets] = React.useState([])
@@ -217,9 +226,8 @@ export default function UpdateLcuAndLocation(props) {
         setLcuName(event.target.value)
     }
 
-    const handleLcuModelChange = (event) => {
-        console.log('setting model to', event.target.value)
-        setLcuModel(event.target.value)
+    const handleOutletTypeChange = (value, locationIndex) => {
+        setSoModel(value)
     }
 
     const handleThisLocationNameChange = (value, index) => {
@@ -262,8 +270,6 @@ export default function UpdateLcuAndLocation(props) {
         if (!lcuName) {
             errorCount++
         }
-
-        console.log('here is error count ' + errorCount)
 
         if (errorCount > 0) {
             setSubmitButtonDisabled(true)
@@ -375,16 +381,15 @@ export default function UpdateLcuAndLocation(props) {
         checkLocationsNames()
         checkSmartOutlets()
         checkIfThereAreStillErrors()
-        console.log('here does it have errors? ' + hasErrors)
         if (!hasErrors && lcuName) {
             props.handleSubmitForInstallation(
                 lcuName,
                 lcuModel,
                 locations,
                 photoBinaries,
-                amountOfSmartOutlets
+                amountOfSmartOutlets,
+                soModel
             )
-            // alert('no errors')
         } else {
             document.querySelector('body').scrollTo(0, 0)
         }
@@ -398,6 +403,33 @@ export default function UpdateLcuAndLocation(props) {
         }
         setLocations(tempLocations)
         setNumberOfLocations(1)
+        // GET SO MODELS
+        if (props.token) {
+            fetch(API_URL_ADMIN + 'admin/so-model', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        let allModels = []
+                        result.forEach((element) => {
+                            const tempModel = {
+                                label: element.model,
+                                value: element.model,
+                            }
+                            allModels.push(tempModel)
+                        })
+                        setModels(allModels)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
     }, [])
 
     return (
@@ -488,7 +520,7 @@ export default function UpdateLcuAndLocation(props) {
                                 />
                             </Grid>
                             <Grid item xs={6}>
-                                <TextField
+                                {/* <TextField
                                     className={classes.textField}
                                     label="LCU Model"
                                     variant="outlined"
@@ -496,7 +528,32 @@ export default function UpdateLcuAndLocation(props) {
                                     onChange={handleLcuModelChange}
                                     fullWidth
                                     disabled
-                                />
+                                /> */}
+                                <FormControl fullWidth>
+                                    <InputLabel
+                                        id="model"
+                                        style={{ paddingLeft: '15px' }}
+                                    >
+                                        Model
+                                    </InputLabel>
+                                    <Select
+                                        labelId="model"
+                                        variant="outlined"
+                                        id="model"
+                                        value={soModel}
+                                        onChange={(e) =>
+                                            handleOutletTypeChange(
+                                                e.target.value
+                                            )
+                                        }
+                                    >
+                                        {models?.map((model) => (
+                                            <MenuItem value={model.value}>
+                                                {model.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
                         </Grid>
                         <Grid container xs={12} spacing={4}>
