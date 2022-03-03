@@ -59,8 +59,10 @@ export default function AddTeamMemberModal(props) {
     const [inviteEmail, setInviteEmail] = useState(undefined)
     const [role, setRole] = useState(undefined)
     const [isLoading, setIsLoading] = useState(false)
+    const [disableAssignButton, setDisableAssignButton] = useState(true)
     const [disableButton, setDisableButton] = useState(true)
     const [gridData, setGridData] = useState([])
+    const [selectionModel, setSelectionModel] = React.useState([])
     const [modalStyle] = useState(getModalStyle)
     const classes = useStyles()
 
@@ -115,6 +117,16 @@ export default function AddTeamMemberModal(props) {
                         setIsLoading(false)
                     }
                 )
+        }
+    }
+
+    const handleAssignClick = () => {
+        if (props.showInstaller) {
+            if (selectionModel?.length > 0) {
+                selectionModel.forEach((element) => {
+                    props.setInstaller(element)
+                })
+            }
         }
     }
 
@@ -185,14 +197,30 @@ export default function AddTeamMemberModal(props) {
                             <Grid item xs={12}>
                                 <ModalDataGrid
                                     data={gridData}
+                                    setSelectionModel={setSelectionModel}
                                     showInstaller={props.showInstaller}
+                                    setDisableAssignButton={
+                                        setDisableAssignButton
+                                    }
                                 />
+                            </Grid>
+                            <Grid container justifyContent="flex-end">
+                                <Grid item>
+                                    <Button
+                                        className="assignButton"
+                                        variant="contained"
+                                        disabled={disableAssignButton}
+                                        onClick={handleAssignClick}
+                                    >
+                                        Assign
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </Grid>
                         <hr className="partner-dotted-hr" />
                         <Grid container xs={12} spacing={1} alignItems="center">
                             <Grid item xs={12} className="smallHeader">
-                                Invite New Partner
+                                -OR- Invite New Partner
                             </Grid>
                             <Grid item xs={4}>
                                 <FormControl fullWidth size="small">
@@ -268,7 +296,7 @@ export default function AddTeamMemberModal(props) {
                                     variant="contained"
                                     disabled={disableButton}
                                 >
-                                    Send invitation
+                                    Send Invitation
                                 </Button>
                             </Grid>
                         </Grid>

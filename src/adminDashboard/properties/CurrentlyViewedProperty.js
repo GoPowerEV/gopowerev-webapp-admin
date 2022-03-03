@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { API_URL } from '../../constants'
+import { API_URL, API_URL_ADMIN } from '../../constants'
 import Button from '@material-ui/core/Button'
 import Collapse from '@material-ui/core/Collapse'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
@@ -26,7 +26,6 @@ import {
     getAllStates,
     getTypesOfPowerServiceOptions,
 } from './utils/PropertyUtils'
-import { getAllInstallers } from './../dashboardService'
 import AddNewLcuModal from './AddNewLcuModal/AddNewLcuModal'
 import AddTeamMemberModal from './AddTeamMemberModal/AddTeamMemberModal'
 import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
@@ -41,7 +40,6 @@ import {
 import PropertyGallery from './PropertyGallery'
 
 const CurrentlyViewedProperty = (props) => {
-    const [allInstallers, setAllInstallers] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [dataWithInstallerRole, setDataWithInstallerRole] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState(false)
@@ -56,7 +54,6 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyContactEmail, setPropertyContactEmail] = useState('')
     const [propertyContactPhone, setPropertyContactPhone] = useState('')
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
-    const [propertyInstaller, setPropertyInstaller] = useState(null)
     const [propertyMaxVoltAmps, setPropertyMaxVoltAmps] = useState('')
     const [propertyPowerType, setPropertyPowerType] = useState('')
     const [propertyNotes, setPropertyNotes] = useState('')
@@ -67,68 +64,11 @@ const CurrentlyViewedProperty = (props) => {
     const [openTeamMemberModal, setOpenTeamMemberModal] = useState(false)
     const [openUpdateModal, setOpenUpdateModal] = useState(false)
     const [tabValue, setTabValue] = useState('info')
-    const [photoBinary, setPhotoBinary] = useState(null)
     const allStates = getAllStates()
     const allPowerTypes = getTypesOfPowerServiceOptions()
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue)
-    }
-
-    const uploadPropertyImg = async () => {
-        setIsLoading(true)
-        if (props.token) {
-            await fetch(
-                API_URL + 'properties-image/' + props.property.propertyUUID,
-                {
-                    method: 'PUT',
-                    headers: {
-                        Authorization: 'Bearer ' + props.token,
-                        'Content-Type': 'image/jpg',
-                    },
-                    body: photoBinary,
-                }
-            )
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        props.reloadPropertyInfo(props.property.propertyUUID)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
-
-    const getBinaryFromImg = (picFile) => {
-        new Promise((resolve, reject) => {
-            const reader = new FileReader()
-
-            reader.onload = (event) => {
-                resolve(event.target.result)
-            }
-
-            reader.onerror = (err) => {
-                reject(err)
-            }
-
-            reader.readAsArrayBuffer(picFile)
-        }).then((result) => {
-            setPhotoBinary(result)
-        })
-    }
-
-    const handlePhotoChange = (event) => {
-        event.preventDefault()
-        const files = event.target.files
-        getBinaryFromImg(files[0])
-    }
-
-    const hiddenFileInput = React.useRef(null)
-
-    const handlePhotoClick = (event) => {
-        hiddenFileInput.current.click()
     }
 
     const togglePropertyInfo = () => {
@@ -142,6 +82,33 @@ const CurrentlyViewedProperty = (props) => {
             setLocations,
             setIsLoading
         )
+    }
+
+    const setInstaller = (installerId) => {
+        setIsLoading(true)
+        const bodyToPost = { cognitoUUID: installerId }
+        fetch(
+            API_URL_ADMIN +
+                'admin/property-installers/' +
+                property.propertyUUID,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'image/jpg',
+                },
+                body: JSON.stringify(bodyToPost),
+            }
+        )
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    //props.reloadPropertyInfo(property.propertyUUID)
+                },
+                (error) => {
+                    setIsLoading(false)
+                }
+            )
     }
 
     const savePropertyInfo = () => {
@@ -191,8 +158,6 @@ const CurrentlyViewedProperty = (props) => {
             setPropertyState(value)
         } else if (field === 'zipcode') {
             setPropertyZip(value)
-        } else if (field === 'installerUUID') {
-            setPropertyInstaller(value)
         } else if (field === 'maxVoltAmps') {
             setPropertyMaxVoltAmps(value)
         } else if (field === 'detail') {
@@ -239,12 +204,6 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     useEffect(() => {
-        if (photoBinary) {
-            uploadPropertyImg()
-        }
-    }, [photoBinary])
-
-    useEffect(() => {
         setProperty(props.property)
         setPropertyName(props.property.name)
         setPropertyAddress(props.property.address1)
@@ -254,13 +213,11 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyContactName(props.property.contactName)
         setPropertyContactEmail(props.property.contactEmail)
         setPropertyContactPhone(props.property.contactPhone1)
-        setPropertyInstaller(props.property.installerUUID)
         setPropertyNotes(props.property.detail)
         setPropertyMaxVoltAmps(props.property.maxVoltAmps)
         setPropertyPowerType(props.property.powerType)
         document.querySelector('body').scrollTo(0, 0)
         console.log('here it is!!!', props.property)
-        getAllInstallers(props.token, setIsLoading, setAllInstallers)
         getPropertyLcus(
             props.token,
             props.property.propertyUUID,
@@ -288,7 +245,7 @@ const CurrentlyViewedProperty = (props) => {
                     className="textAsLink"
                     onClick={props.closeOpenedProperty}
                 >
-                    Back to My Properties ->{' '}
+                    All Properties -
                     <span className="lcuLocation">{property.name}</span>
                 </span>
             </div>
@@ -415,22 +372,6 @@ const CurrentlyViewedProperty = (props) => {
                                         property.pictureUrl1 ?? NoImageAvailable
                                     }
                                     className="viewedPropertyMainImage"
-                                />
-                                <Button
-                                    size="small"
-                                    className="editPropertyImageButton"
-                                    variant="contained"
-                                    onClick={() => handlePhotoClick()}
-                                >
-                                    Edit Property Image
-                                </Button>
-                                <input
-                                    type="file"
-                                    ref={hiddenFileInput}
-                                    style={{
-                                        display: 'none',
-                                    }}
-                                    onChange={handlePhotoChange}
                                 />
                             </Grid>
                             <Grid item xs={8}>
@@ -811,40 +752,6 @@ const CurrentlyViewedProperty = (props) => {
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <FormControl
-                                        fullWidth
-                                        className="editableFieldSelectContainer"
-                                    >
-                                        <InputLabel id="assigned-installer">
-                                            Assigned Installer
-                                        </InputLabel>
-                                        <Select
-                                            labelId="assigned-installer"
-                                            variant="outlined"
-                                            id="assigned-installer"
-                                            value={propertyInstaller}
-                                            label="Assigned Installer"
-                                            onChange={(e) =>
-                                                handlePropertyFieldChange(
-                                                    e.target.value,
-                                                    'installerUUID'
-                                                )
-                                            }
-                                            onBlur={() => savePropertyInfo()}
-                                        >
-                                            {allInstallers?.map((installer) => (
-                                                <MenuItem
-                                                    value={
-                                                        installer.cognitoUUID
-                                                    }
-                                                >
-                                                    {installer.email}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
@@ -881,6 +788,7 @@ const CurrentlyViewedProperty = (props) => {
                         close={handleTeamMemberModalClose}
                         token={props.token}
                         propertyUUID={property.propertyUUID}
+                        setInstaller={setInstaller}
                     />
                     <PropertyTeam
                         openModal={handleTeamMemberModalOpen}

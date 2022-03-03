@@ -74,7 +74,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     ].join(','),
     WebkitFontSmoothing: 'auto',
     letterSpacing: 'normal',
-    '& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
+    '& .MuiDataGrid-columnHeader': {
         textTransform: 'capitalize',
     },
     '& .MuiDataGrid-columnsContainer': {
@@ -137,6 +137,12 @@ export default function CheckboxSelectionGrid(props) {
 
     const handleSelection = (value) => {
         setSelectionModel(value)
+        props.setSelectionModel(value)
+        if (value?.length > 0) {
+            props.setDisableAssignButton(false)
+        } else {
+            props.setDisableAssignButton(true)
+        }
     }
 
     const transformData = () => {
