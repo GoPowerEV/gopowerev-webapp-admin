@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
+import {
+    TextField,
+    InputLabel,
+    Select,
+    MenuItem,
+    FormControl,
+} from '@material-ui/core'
 import Grid from '@material-ui/core/Grid'
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined'
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined'
@@ -148,7 +154,6 @@ export default function LocationCardToCreate(props) {
     const classes = useStyles()
     const [photoAdded, setPhotoAdded] = React.useState(false)
     const [photoFile, setPhotoFile] = React.useState(null)
-
     const [numberOfSmartOutlets, setNumberOfSmartOutlets] = useState([])
     const [locationName, setLocationName] = useState()
     const [maxVoltAmps, setMaxVoltAmps] = useState()
@@ -191,6 +196,10 @@ export default function LocationCardToCreate(props) {
         let tempFileNames = props.photoFileNames
         tempFileNames[locationIndex] = files[0].name
         props.setPhotoFileNames(tempFileNames)
+    }
+
+    const handleOutletTypeChange = (value, locationIndex) => {
+        props.setSoModel(value)
     }
 
     useEffect(() => {
@@ -327,6 +336,35 @@ export default function LocationCardToCreate(props) {
                                     Must be a number that is more than a zero.
                                 </div>
                             )}
+                        </Grid>
+                        <Grid item xs={6}>
+                            <FormControl variant="filled" fullWidth>
+                                <InputLabel
+                                    id="demo-simple-select-filled-label2"
+                                    style={{
+                                        marginTop: '-13px',
+                                        marginLeft: '5px',
+                                    }}
+                                >
+                                    SO Model
+                                </InputLabel>
+                                <Select
+                                    className={classes.textField}
+                                    label="SO Model"
+                                    labelId="demo-simple-select-filled-label2"
+                                    variant="outlined"
+                                    value={props.soModel}
+                                    onChange={(e) =>
+                                        handleOutletTypeChange(e.target.value)
+                                    }
+                                >
+                                    {props.models?.map((model) => (
+                                        <MenuItem value={model.value}>
+                                            {model.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                     </Grid>
                 </Grid>

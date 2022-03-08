@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
     Stepper,
     Step,
     StepLabel,
@@ -11,11 +7,11 @@ import {
     TextField,
     Grid,
 } from '@material-ui/core'
-import { API_URL_ADMIN } from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import LocationCardToCreate from './LocationCardToCreate'
+import { API_URL_ADMIN } from '../../constants'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -162,9 +158,8 @@ export default function UpdateLcuAndLocation(props) {
     const [locations, setLocations] = useState([])
     const [locationsError, setLocationsError] = useState(false)
     const [lcuName, setLcuName] = useState('')
-    const [lcuModel, setLcuModel] = useState(undefined)
+    const [lcuModel, setLcuModel] = useState('LCU10')
     const [soModel, setSoModel] = useState(undefined)
-    const [models, setModels] = useState([])
     const [photoBinaries, setPhotoBinaries] = React.useState([])
     const [photoFileNames, setPhotoFileNames] = React.useState([])
     const [amountOfSmartOutlets, setAmountOfSmartOutlets] = React.useState([])
@@ -172,6 +167,7 @@ export default function UpdateLcuAndLocation(props) {
     const [smartOutletsErrors, setSmartOutletsErrors] = React.useState([])
     const [locationsNamesErrors, setLocationsNamesErrors] = React.useState([])
     const [hasErrors, setHasErrors] = React.useState(false)
+    const [models, setModels] = useState([])
 
     const sampleLocationObject = {
         description: '',
@@ -224,10 +220,6 @@ export default function UpdateLcuAndLocation(props) {
     const handleLcuNameChange = (event) => {
         console.log('setting name to', event.target.value)
         setLcuName(event.target.value)
-    }
-
-    const handleOutletTypeChange = (value, locationIndex) => {
-        setSoModel(value)
     }
 
     const handleThisLocationNameChange = (value, index) => {
@@ -396,7 +388,6 @@ export default function UpdateLcuAndLocation(props) {
     }
 
     useEffect(() => {
-        setNumberOfLocations(1)
         let tempLocations = locations
         for (let i = 0; i < 1; i++) {
             tempLocations.push(sampleLocationObject)
@@ -405,6 +396,7 @@ export default function UpdateLcuAndLocation(props) {
         setNumberOfLocations(1)
         // GET SO MODELS
         if (props.token) {
+            setIsLoading(true)
             fetch(API_URL_ADMIN + 'admin/so-model', {
                 method: 'GET',
                 headers: {
@@ -424,6 +416,7 @@ export default function UpdateLcuAndLocation(props) {
                             allModels.push(tempModel)
                         })
                         setModels(allModels)
+                        setIsLoading(false)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -520,40 +513,14 @@ export default function UpdateLcuAndLocation(props) {
                                 />
                             </Grid>
                             <Grid item xs={6}>
-                                {/* <TextField
+                                <TextField
                                     className={classes.textField}
                                     label="LCU Model"
                                     variant="outlined"
                                     value={lcuModel}
-                                    onChange={handleLcuModelChange}
                                     fullWidth
                                     disabled
-                                /> */}
-                                <FormControl fullWidth>
-                                    <InputLabel
-                                        id="model"
-                                        style={{ paddingLeft: '15px' }}
-                                    >
-                                        Model
-                                    </InputLabel>
-                                    <Select
-                                        labelId="model"
-                                        variant="outlined"
-                                        id="model"
-                                        value={soModel}
-                                        onChange={(e) =>
-                                            handleOutletTypeChange(
-                                                e.target.value
-                                            )
-                                        }
-                                    >
-                                        {models?.map((model) => (
-                                            <MenuItem value={model.value}>
-                                                {model.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                />
                             </Grid>
                         </Grid>
                         <Grid container xs={12} spacing={4}>
@@ -562,11 +529,6 @@ export default function UpdateLcuAndLocation(props) {
                                     className={classes.textField}
                                     label="Number of Locations"
                                     value={numberOfLocations}
-                                    onChange={(event) =>
-                                        handleNumberOfLocationsChange(
-                                            event.target.value
-                                        )
-                                    }
                                     variant="outlined"
                                     fullWidth
                                     disabled
@@ -602,6 +564,10 @@ export default function UpdateLcuAndLocation(props) {
                                     handleThisLocationNumberOfSmartOutletsChange={
                                         handleThisLocationNumberOfSmartOutletsChange
                                     }
+                                    setSoModel={setSoModel}
+                                    soModel={soModel}
+                                    models={models}
+                                    setIsLoading={setIsLoading}
                                 />
                             ))}
                         </React.Fragment>

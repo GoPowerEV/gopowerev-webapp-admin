@@ -465,11 +465,11 @@ export default function SetupNewProperty(props) {
         amountOfSmartOutlets,
         soModel
     ) => {
-        console.log('here lcuName', lcuName)
-        console.log('here lcuModel', lcuModel)
-        console.log('lhere ocations', locations)
-        console.log('here photoBinaries', photoBinaries)
-        console.log('here amountOfSmartOutlets', amountOfSmartOutlets)
+        // console.log('here lcuName', lcuName)
+        // console.log('here lcuModel', lcuModel)
+        // console.log('lhere ocations', locations)
+        // console.log('here photoBinaries', photoBinaries)
+        // console.log('here amountOfSmartOutlets', amountOfSmartOutlets)
         setIsLoading(true)
         await fetch(API_URL + 'properties', {
             method: 'POST',
