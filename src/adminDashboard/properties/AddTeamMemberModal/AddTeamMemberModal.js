@@ -63,6 +63,7 @@ export default function AddTeamMemberModal(props) {
     const [disableButton, setDisableButton] = useState(true)
     const [gridData, setGridData] = useState([])
     const [selectionModel, setSelectionModel] = React.useState([])
+    const [installerTeam, setInstallerTeam] = useState([])
     const [modalStyle] = useState(getModalStyle)
     const classes = useStyles()
 
@@ -77,6 +78,7 @@ export default function AddTeamMemberModal(props) {
     const loadAllInstallers = () => {
         setIsLoading(true)
         if (props.token) {
+            getInstallerTeam()
             fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
                 method: 'GET',
                 headers: {
@@ -89,6 +91,34 @@ export default function AddTeamMemberModal(props) {
                     (result) => {
                         setIsLoading(false)
                         setGridData(result)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const getInstallerTeam = () => {
+        setIsLoading(true)
+        if (props.token && props.propertyUUID) {
+            fetch(
+                API_URL_ADMIN +
+                    'admin/property-installers/' +
+                    props.propertyUUID,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        setInstallerTeam(result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -133,6 +163,10 @@ export default function AddTeamMemberModal(props) {
     useEffect(() => {
         props.showInstaller ? loadAllInstallers() : loadAllAdmins()
     }, [props.showInstaller, props.token])
+
+    useEffect(() => {
+        props.showInstaller ? getInstallerTeam() : getInstallerTeam()
+    }, [props.propertyUUID, props.token])
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
@@ -198,6 +232,7 @@ export default function AddTeamMemberModal(props) {
                                 <ModalDataGrid
                                     data={gridData}
                                     setSelectionModel={setSelectionModel}
+                                    installerTeam={installerTeam}
                                     showInstaller={props.showInstaller}
                                     setDisableAssignButton={
                                         setDisableAssignButton

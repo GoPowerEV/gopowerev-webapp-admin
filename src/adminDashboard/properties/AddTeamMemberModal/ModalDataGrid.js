@@ -149,15 +149,34 @@ export default function CheckboxSelectionGrid(props) {
         if (props.data.length > 0) {
             let rowsTemp = []
             props.data.forEach((element) => {
-                const tempObj = {
-                    id: element.cognitoUUID,
-                    role: props.showInstaller ? 'Installer' : element.role,
-                    name: element.firstName
-                        ? element.firstName + ' ' + element.lastName
-                        : '-',
-                    email: element.email,
+                if (props.installerTeam) {
+                    props.installerTeam.forEach((member) => {
+                        // Making sure we are not showing installers that a part of this team already
+                        if (member.cognitoUUID !== element.cognitoUUID) {
+                            const tempObj = {
+                                id: element.cognitoUUID,
+                                role: props.showInstaller
+                                    ? 'Installer'
+                                    : element.role,
+                                name: element.firstName
+                                    ? element.firstName + ' ' + element.lastName
+                                    : '-',
+                                email: element.email,
+                            }
+                            rowsTemp.push(tempObj)
+                        }
+                    })
+                } else {
+                    const tempObj = {
+                        id: element.cognitoUUID,
+                        role: props.showInstaller ? 'Installer' : element.role,
+                        name: element.firstName
+                            ? element.firstName + ' ' + element.lastName
+                            : '-',
+                        email: element.email,
+                    }
+                    rowsTemp.push(tempObj)
                 }
-                rowsTemp.push(tempObj)
             })
             setRows(rowsTemp)
         }
