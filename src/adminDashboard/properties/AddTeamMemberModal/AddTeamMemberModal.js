@@ -230,6 +230,7 @@ export default function AddTeamMemberModal(props) {
                             </Grid>
                             <Grid item xs={12}>
                                 <ModalDataGrid
+                                    isLoading={isLoading}
                                     data={gridData}
                                     setSelectionModel={setSelectionModel}
                                     installerTeam={installerTeam}

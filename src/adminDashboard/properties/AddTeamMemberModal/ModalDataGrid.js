@@ -6,6 +6,7 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid'
+import { CircularProgress } from '@material-ui/core'
 import { styled } from '@mui/material/styles'
 import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
@@ -189,22 +190,31 @@ export default function CheckboxSelectionGrid(props) {
 
     return (
         <div style={{ width: '100%' }}>
-            <div style={{ height: 300 }}>
-                <StyledDataGrid
-                    checkboxSelection
-                    onSelectionModelChange={(newSelectionModel) => {
-                        handleSelection(newSelectionModel)
-                    }}
-                    selectionModel={selectionModel}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
-                    components={{
-                        Pagination: CustomPagination,
-                    }}
-                    rows={rows}
-                    columns={columns}
-                />
-            </div>
+            {props.isLoading && (
+                <div className="loaderContainer">
+                    <CircularProgress
+                        style={{ color: '#12BFA2', marginBottom: '35px' }}
+                    />
+                </div>
+            )}
+            {!props.isLoading && (
+                <div style={{ height: 300 }}>
+                    <StyledDataGrid
+                        checkboxSelection
+                        onSelectionModelChange={(newSelectionModel) => {
+                            handleSelection(newSelectionModel)
+                        }}
+                        selectionModel={selectionModel}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        components={{
+                            Pagination: CustomPagination,
+                        }}
+                        rows={rows}
+                        columns={columns}
+                    />
+                </div>
+            )}
         </div>
     )
 }
