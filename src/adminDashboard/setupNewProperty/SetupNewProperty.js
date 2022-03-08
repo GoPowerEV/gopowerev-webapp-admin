@@ -745,7 +745,12 @@ export default function SetupNewProperty(props) {
                                                     variant="filled"
                                                     fullWidth
                                                 >
-                                                    <InputLabel id="demo-simple-select-filled-label">
+                                                    <InputLabel
+                                                        style={{
+                                                            marginTop: '-13px',
+                                                        }}
+                                                        id="demo-simple-select-filled-label"
+                                                    >
                                                         State
                                                     </InputLabel>
                                                     <Select
