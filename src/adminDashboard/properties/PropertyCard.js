@@ -128,8 +128,8 @@ const PropertyCard = (props) => {
                         <img
                             alt="Property Img"
                             src={
-                                propertyInfo.pictureUrl1
-                                    ? propertyInfo.pictureUrl1
+                                propertyInfo?.hero?.length > 0
+                                    ? propertyInfo?.hero[2].url
                                     : NoImageAvailable
                             }
                             className="propertyImage"

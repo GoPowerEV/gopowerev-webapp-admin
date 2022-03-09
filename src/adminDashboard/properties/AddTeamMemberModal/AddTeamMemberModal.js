@@ -158,6 +158,8 @@ export default function AddTeamMemberModal(props) {
                 })
             }
         }
+        setSelectionModel([])
+        props.handleClose()
     }
 
     useEffect(() => {

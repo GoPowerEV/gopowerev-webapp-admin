@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Grid } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { API_URL, API_URL_ADMIN } from './../../constants'
+import { API_URL_ADMIN } from './../../constants'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import './PropertyGallery.css'
 
@@ -10,30 +10,9 @@ export default function PropertyGallery(props) {
     const [heroImage, setHeroImage] = useState(null)
     const [photoHeroBinary, setHeroPhotoBinary] = useState(null)
     const [logo, setLogo] = useState(null)
-    const [propertyImage, setPropertyImage] = useState(props.propertyImage)
+    const [marketingImage, setMarketingImage] = useState()
     const [photoLogoBinary, setPhotoLogoBinary] = useState(null)
     const [photoBinary, setPhotoBinary] = useState(null)
-
-    const uploadPropertyImg = (binary) => {
-        setIsLoading(true)
-        fetch(API_URL + 'properties-image/' + props.propertyUuid, {
-            method: 'PUT',
-            headers: {
-                Authorization: 'Bearer ' + props.token,
-                'Content-Type': 'image/jpg',
-            },
-            body: binary,
-        })
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    props.reloadPropertyInfo(props.propertyUuid)
-                },
-                (error) => {
-                    setIsLoading(false)
-                }
-            )
-    }
 
     const uploadImage = (imageType, binary) => {
         setIsLoading(true)
@@ -47,7 +26,7 @@ export default function PropertyGallery(props) {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'image/jpg',
                 },
                 body: binary,
             }
@@ -83,11 +62,13 @@ export default function PropertyGallery(props) {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    console.log('here is image', result)
                     if (imageType === 'hero') {
-                        setHeroImage(result)
+                        console.log('here yooooo', result)
+                        setHeroImage(result[2])
+                    } else if (imageType === 'logo') {
+                        setLogo(result[2])
                     } else {
-                        setLogo(result)
+                        setMarketingImage(result[2])
                     }
                     setIsLoading(false)
                 },
@@ -181,7 +162,7 @@ export default function PropertyGallery(props) {
 
     useEffect(() => {
         if (photoBinary) {
-            uploadPropertyImg(photoBinary)
+            uploadImage('marketing', photoBinary)
         }
     }, [photoBinary])
 
@@ -194,8 +175,8 @@ export default function PropertyGallery(props) {
                         <img
                             alt="Hero Img"
                             src={
-                                heroImage?.length > 0
-                                    ? heroImage[0]
+                                heroImage?.url.length > 0
+                                    ? heroImage.url
                                     : NoImageAvailable
                             }
                             className="galleryImage"
@@ -221,7 +202,11 @@ export default function PropertyGallery(props) {
                         <div>Logo</div>
                         <img
                             alt="Logo Img"
-                            src={logo?.length > 0 ? logo[0] : NoImageAvailable}
+                            src={
+                                logo?.url.length > 0
+                                    ? logo.url
+                                    : NoImageAvailable
+                            }
                             className="galleryImage"
                         />
                         <Button
@@ -251,7 +236,7 @@ export default function PropertyGallery(props) {
                             <div>Property Image</div>
                             <img
                                 alt="Property Img"
-                                src={propertyImage ?? NoImageAvailable}
+                                src={marketingImage?.url ?? NoImageAvailable}
                                 className="galleryImage"
                             />
                             <Button

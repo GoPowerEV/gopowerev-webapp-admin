@@ -109,7 +109,8 @@ function Navbar(props) {
                             <span
                                 onClick={goToDashboard}
                                 className={
-                                    splitLocation[1] === 'admin-dashboard'
+                                    splitLocation[1] === 'admin-dashboard' ||
+                                    splitLocation[1] === 'dashboard'
                                         ? classes.activeLink
                                         : classes.link
                                 }

@@ -217,7 +217,6 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyMaxVoltAmps(props.property.maxVoltAmps)
         setPropertyPowerType(props.property.powerType)
         document.querySelector('body').scrollTo(0, 0)
-        console.log('here it is!!!', props.property)
         getPropertyLcus(
             props.token,
             props.property.propertyUUID,
@@ -237,6 +236,8 @@ const CurrentlyViewedProperty = (props) => {
             setIsLoading
         )
     }, [])
+
+    console.log('here haha !!!!!!!', property)
 
     return (
         <div className="propertiesMainBody">
@@ -369,7 +370,9 @@ const CurrentlyViewedProperty = (props) => {
                                 <img
                                     alt="Property Img"
                                     src={
-                                        property.pictureUrl1 ?? NoImageAvailable
+                                        property?.hero?.length > 0
+                                            ? property.hero[2].url
+                                            : NoImageAvailable
                                     }
                                     className="viewedPropertyMainImage"
                                 />
@@ -864,7 +867,6 @@ const CurrentlyViewedProperty = (props) => {
                     token={props.token}
                     propertyUuid={property.propertyUUID}
                     reloadPropertyInfo={props.reloadPropertyInfo}
-                    propertyImage={property.pictureUrl1}
                 />
             )}
         </div>
