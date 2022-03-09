@@ -140,7 +140,6 @@ export default function UpdateSoftwareModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('here  !!! so models', result)
                         setSoModels(result)
                     },
                     (error) => {

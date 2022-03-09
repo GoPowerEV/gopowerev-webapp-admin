@@ -63,7 +63,6 @@ export default function PropertyGallery(props) {
             .then(
                 (result) => {
                     if (imageType === 'hero') {
-                        console.log('here yooooo', result)
                         setHeroImage(result[2])
                     } else if (imageType === 'logo') {
                         setLogo(result[2])

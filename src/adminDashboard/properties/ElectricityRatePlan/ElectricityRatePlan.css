@@ -1,0 +1,14 @@
+.ratePlanRegularText {
+    color: black;
+    font-weight: bold;
+}
+
+.plan-badge {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 6px;
+    border-radius: 7px;
+    width: fit-content;
+}

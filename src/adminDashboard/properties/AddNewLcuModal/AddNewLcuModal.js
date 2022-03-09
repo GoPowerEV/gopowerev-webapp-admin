@@ -148,8 +148,6 @@ export default function AddNewLcuModal(props) {
             }
         })
 
-        console.log('here is error count ' + errorCount)
-
         if (errorCount > 0) {
             return true
         } else {
@@ -397,8 +395,6 @@ export default function AddNewLcuModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('created lcu successfully', result)
-                        console.log('here photo binaries', photoBinaries)
                         locations.forEach((location, index) => {
                             createLocation(
                                 result.lcuUUID,
@@ -419,7 +415,6 @@ export default function AddNewLcuModal(props) {
     const validateAndSubmit = () => {
         checkLocationsNames()
         // checkLcuName()
-        console.log('here does it have errors? ' + hasErrors)
         if (!hasErrors) {
             createLcu(
                 lcuName,

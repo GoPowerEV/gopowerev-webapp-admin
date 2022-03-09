@@ -117,12 +117,11 @@ const LcuCard = (props) => {
         <React.Fragment>
             <Grid
                 container
-                xs={12}
                 spacing={2}
                 className="lcuContainer"
                 justifyContent="space-between"
             >
-                <Grid item xs={1}>
+                <Grid item>
                     <div className="lcuHeader">Name</div>
                     <div className="lcuRowText">{lcuInfo.name ?? '-'}</div>
                 </Grid>
@@ -166,7 +165,7 @@ const LcuCard = (props) => {
                     <div className="lcuHeader">Heartbeat</div>
                     <div className="lcuRowText">{lcuInfo.heartbeat ?? '-'}</div>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item>
                     {!lcuInfoOpened ? (
                         <ExpandMoreIcon
                             className="expandIcon"

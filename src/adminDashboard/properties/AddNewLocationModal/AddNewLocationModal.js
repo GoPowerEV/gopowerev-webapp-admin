@@ -142,8 +142,6 @@ export default function AddNewLocationModal(props) {
             }
         })
 
-        console.log('here is error count ' + errorCount)
-
         if (errorCount > 0) {
             return true
         } else {
@@ -368,8 +366,6 @@ export default function AddNewLocationModal(props) {
 
     const validateAndSubmit = () => {
         checkLocationsNames()
-        // checkLcuName()
-        console.log('here does it have errors? ' + hasErrors)
         if (!hasErrors) {
             createLocation(
                 props.lcuId,

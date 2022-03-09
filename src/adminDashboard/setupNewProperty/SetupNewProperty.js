@@ -219,7 +219,6 @@ export default function SetupNewProperty(props) {
     }
 
     const handleCompleteFirstStep = (formValues) => {
-        console.log('here is the property', formValues)
         const newCompleted = completed
         newCompleted[activeStep] = true
         setCompleted(newCompleted)
@@ -367,7 +366,6 @@ export default function SetupNewProperty(props) {
             name: location.name,
             propertyUUID: propertyId,
         }
-        console.log('here creating this location', locationObject)
         if (props.token) {
             await fetch(API_URL + 'locations', {
                 method: 'POST',
@@ -437,7 +435,6 @@ export default function SetupNewProperty(props) {
                 .then(
                     (result) => {
                         setIsLoading(true)
-                        console.log('here created lcu successfully', result)
                         locations.forEach((location, index) => {
                             createLocation(
                                 result.lcuUUID,
@@ -482,8 +479,6 @@ export default function SetupNewProperty(props) {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    console.log('here created peropty')
-                    console.log('here is the property id', result.propertyUUID)
                     setPropertyUUID(result.propertyUUID)
                     if (photoFile) {
                         uploadPropertyImg(result.propertyUUID, propertyInfo)
@@ -542,7 +537,6 @@ export default function SetupNewProperty(props) {
     }
 
     const goToStepTwo = () => {
-        console.log('here are the values', propertyInfo)
         handleCompleteFirstStep(propertyInfo)
     }
 

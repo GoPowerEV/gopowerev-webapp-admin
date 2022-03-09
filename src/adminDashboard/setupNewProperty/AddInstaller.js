@@ -135,8 +135,6 @@ export default function AddInstaller(props) {
         let installerName = installers.filter(
             (installer) => installer.cognitoUUID === installerId
         )[0].email
-        console.log('here all installers', installers)
-        console.log('here isntaller email', installerName)
         setSelectedInstaller(installerId)
         props.setInstallerUuid(installerId)
         props.setInstallerName(installerName)
@@ -194,7 +192,6 @@ export default function AddInstaller(props) {
     }
 
     useEffect(() => {
-        console.log('HERE TOKEN', props.token)
         getAllLcus()
         getAllInstallers()
         if (props.installerUuid) {

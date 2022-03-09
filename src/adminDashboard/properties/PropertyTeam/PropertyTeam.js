@@ -34,7 +34,6 @@ const PropertyTeam = (props) => {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('here you go champ', result)
                         setPropertyTeam(result)
                     },
                     (error) => {
@@ -65,7 +64,7 @@ const PropertyTeam = (props) => {
                         Property Team
                     </div>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item justifyContent="flex-end">
                     {!propertyTeamOpened ? (
                         <ExpandMoreIcon
                             className="expandIcon"

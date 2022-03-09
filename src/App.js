@@ -48,7 +48,6 @@ function App() {
         await Auth.currentAuthenticatedUser()
             .then((user) => {
                 setLoggedIn(true)
-                console.log('here setting to logged in true')
             })
             .catch((err) => {
                 console.log('ERROR', err)
@@ -59,10 +58,8 @@ function App() {
     async function isUserLoggedIn() {
         try {
             await Auth.currentAuthenticatedUser()
-            console.log('here loggedIn')
             return true
         } catch {
-            console.log('here NOT loggedIn')
             return false
         }
     }
@@ -71,7 +68,6 @@ function App() {
         await Auth.currentSession()
             .then((response) => {
                 setToken(response.idToken.jwtToken)
-                console.log('here app token set', response.idToken.jwtToken)
             })
             .catch((err) => {
                 console.log('ERROR', err)

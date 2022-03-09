@@ -1,7 +1,6 @@
 import { API_URL, API_URL_ADMIN } from './../constants'
 
 export function getAllProperties(token, setIsLoading, setAllProperties) {
-    console.log('here token', token)
     setIsLoading(true)
     fetch(API_URL + 'properties', {
         method: 'GET',
@@ -13,7 +12,6 @@ export function getAllProperties(token, setIsLoading, setAllProperties) {
         .then((res) => res.json())
         .then(
             (result) => {
-                console.log('here ar eall props', result.properties)
                 setIsLoading(false)
                 let sortedProperties = result.properties
                 if (sortedProperties) {
@@ -46,7 +44,6 @@ export function getPropertyLcus(
         .then((res) => res.json())
         .then(
             (result) => {
-                console.log('here all lcus for this property', result.lcus)
                 setLcusOfThisProperty(result.lcus)
                 setIsLoading(false)
             },
@@ -175,7 +172,6 @@ export function getAllInstallers(token, setIsLoading, setAllInstallers) {
         .then(
             (result) => {
                 setIsLoading(false)
-                console.log('here all installers', result)
                 setAllInstallers(result)
             },
             (error) => {}

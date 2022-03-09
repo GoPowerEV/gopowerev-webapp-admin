@@ -97,8 +97,6 @@ const SmartOutlets = (props) => {
         handleNewOpen()
     }
 
-    console.log('here', props.smartOutlets)
-
     return (
         <div className="smartOutletsContainer">
             <Grid container justifyContent="space-between">

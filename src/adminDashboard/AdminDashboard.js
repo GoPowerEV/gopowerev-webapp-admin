@@ -257,8 +257,6 @@ export default function AdminDashboard(props) {
 
             if (propertyStatus) {
                 setFilterPropertiesBy(propertyStatus)
-                console.log('here' + urlLocation)
-                console.log('here' + propertyStatus)
                 setViewThisProperty(null)
                 history.push('/dashboard/' + urlLocation + '/' + propertyStatus)
                 setDisplaySetupNewProperty(false)

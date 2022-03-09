@@ -64,7 +64,7 @@ const InstallerTeam = (props) => {
                         Installer Team
                     </div>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item>
                     {!installerTeamOpened ? (
                         <ExpandMoreIcon
                             className="expandIcon"

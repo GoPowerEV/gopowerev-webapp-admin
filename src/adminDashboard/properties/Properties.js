@@ -204,8 +204,6 @@ const Properties = (props) => {
         }
     }, [openedPropertyLocations])
 
-    console.log('here yo hha', allProperties)
-
     return (
         <React.Fragment>
             {!isLoading && !propertyOpened && (

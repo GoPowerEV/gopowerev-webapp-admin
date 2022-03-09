@@ -236,7 +236,6 @@ export default function UpdateLcuAndLocation(props) {
             tempErrors[index] = true
             setLocationsNamesErrors(tempErrors)
         }
-        console.log('here all locations', locations)
     }
 
     const checkIfThereAreStillErrors = () => {
@@ -298,18 +297,15 @@ export default function UpdateLcuAndLocation(props) {
             let tempErrors = voltAmpsErrors
             tempErrors[index] = true
             setVoltAmpsErrors(tempErrors)
-            console.log('here ErRORS1', tempErrors)
             setHasErrors(true)
         } else if (Number(value) <= 0) {
             let tempErrors = voltAmpsErrors
             tempErrors[index] = true
-            console.log('here ErRORS2', tempErrors)
             setVoltAmpsErrors(tempErrors)
             setHasErrors(true)
         } else {
             let tempErrors = voltAmpsErrors
             tempErrors[index] = false
-            console.log('here ErRORS3', tempErrors)
             setVoltAmpsErrors(tempErrors)
             checkIfThereAreStillErrors()
             let tempLocations = locations
@@ -349,7 +345,6 @@ export default function UpdateLcuAndLocation(props) {
                 tempErrors[index] = null
             }
         })
-        console.log('here location errors', tempErrors)
         setLocationsNamesErrors(tempErrors)
         checkIfThereAreStillErrors()
     }
@@ -364,7 +359,6 @@ export default function UpdateLcuAndLocation(props) {
                 tempErrors[index] = null
             }
         })
-        console.log('here smart outlet errors', tempErrors)
         setLocationsNamesErrors(tempErrors)
         checkIfThereAreStillErrors()
     }

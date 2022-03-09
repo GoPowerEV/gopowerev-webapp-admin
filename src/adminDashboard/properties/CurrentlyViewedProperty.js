@@ -32,6 +32,7 @@ import UpdateSoftwareModal from './UpdateSoftwareModal/UpdateSoftwareModal'
 import LcuCard from './LcuCard'
 import PropertyTeam from './PropertyTeam/PropertyTeam'
 import InstallerTeam from './InstallerTeam/InstallerTeam'
+import ElectricityRatePlan from './ElectricityRatePlan/ElectricityRatePlan'
 import {
     getPropertyLcus,
     getPropertyLocations,
@@ -237,8 +238,6 @@ const CurrentlyViewedProperty = (props) => {
         )
     }, [])
 
-    console.log('here haha !!!!!!!', property)
-
     return (
         <div className="propertiesMainBody">
             <div className="tabHeader">
@@ -290,8 +289,9 @@ const CurrentlyViewedProperty = (props) => {
                     {!propertyInfoOpened && (
                         <Grid
                             container
-                            xs={12}
-                            spacing={3}
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
                             className="lcuContainer"
                         >
                             <Grid item xs={5}>
@@ -325,7 +325,7 @@ const CurrentlyViewedProperty = (props) => {
                             <Grid item xs={3}>
                                 {property.contactName}
                             </Grid>
-                            <Grid item xs={1}>
+                            <Grid item>
                                 <ExpandMoreIcon
                                     className="expandIconFirstPortion"
                                     onClick={togglePropertyInfo}
@@ -334,25 +334,36 @@ const CurrentlyViewedProperty = (props) => {
                         </Grid>
                     )}
                     <Collapse in={propertyInfoOpened}>
-                        <Grid container xs={12}>
-                            <Grid item xs={11}>
-                                <div className="viewedPropertyTitle">
-                                    {property.name}
-                                    {property.status !== undefined && (
-                                        <span
-                                            className={getBadgeClass(
-                                                property.status
-                                            )}
-                                        >
-                                            {property.status
-                                                .charAt(0)
-                                                .toUpperCase() +
-                                                property.status.slice(1)}
-                                        </span>
-                                    )}
-                                </div>
+                        <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                        >
+                            <Grid item>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    alignItems="center"
+                                >
+                                    <div className="viewedPropertyTitle">
+                                        {property.name}
+                                        {property.status !== undefined && (
+                                            <span
+                                                className={getBadgeClass(
+                                                    property.status
+                                                )}
+                                            >
+                                                {property.status
+                                                    .charAt(0)
+                                                    .toUpperCase() +
+                                                    property.status.slice(1)}
+                                            </span>
+                                        )}
+                                    </div>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={1}>
+                            <Grid item>
                                 <div>
                                     <ExpandLessIcon
                                         className="expandIconFirstPortionOpened"
@@ -792,6 +803,11 @@ const CurrentlyViewedProperty = (props) => {
                         token={props.token}
                         propertyUUID={property.propertyUUID}
                         setInstaller={setInstaller}
+                    />
+                    <ElectricityRatePlan
+                        token={props.token}
+                        propertyUUID={property.propertyUUID}
+                        isLoading={isLoading}
                     />
                     <PropertyTeam
                         openModal={handleTeamMemberModalOpen}

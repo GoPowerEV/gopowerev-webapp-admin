@@ -76,7 +76,6 @@ const LocationCard = (props) => {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log('here image result', result)
                         props.reloadPropertyLocations()
                     },
                     (error) => {
@@ -176,9 +175,7 @@ const LocationCard = (props) => {
         getSmartOutletData()
     }, [])
 
-    useEffect(() => {
-        console.log('here ARE THE ACTUAL SMART OUTLETS', smartOutlets)
-    }, [smartOutlets])
+    useEffect(() => {}, [smartOutlets])
 
     return (
         <React.Fragment>
