@@ -115,8 +115,6 @@ export default function EditSmartOutletModal(props) {
         setOutletData(tempOutlet)
     }
 
-    console.log('here it is', outletData)
-
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <div id="simple-modal-description">

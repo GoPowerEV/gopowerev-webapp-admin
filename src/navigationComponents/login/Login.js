@@ -46,7 +46,6 @@ const Login = (props) => {
             password,
         })
             .then((user) => {
-                console.log('here it is', user)
                 setEmail('')
                 setPassword('')
                 setIsLoading(false)

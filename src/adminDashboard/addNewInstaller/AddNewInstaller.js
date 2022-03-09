@@ -149,7 +149,6 @@ export default function AddNewInstaller(props) {
                     .then((res) => res.json())
                     .then(
                         (result) => {
-                            console.log('here it is', result)
                             copyToClipBoard()
                             if (result.code) {
                                 setIsLoading(false)

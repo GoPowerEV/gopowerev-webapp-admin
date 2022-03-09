@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { API_URL } from '../../constants'
+import { API_URL, API_URL_ADMIN } from '../../constants'
 import { makeStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -520,27 +520,25 @@ export default function SetupNewProperty(props) {
         })
     }
 
-    const uploadPropertyImg = async (propertyId, thisPropertyInfo) => {
+    const uploadPropertyImg = (propertyId) => {
         setIsLoading(true)
-        if (props.token) {
-            await fetch(API_URL + 'properties-image/' + propertyId, {
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'image/jpg',
+        fetch(API_URL_ADMIN + 'admin/property/image/hero/' + propertyId, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer ' + props.token,
+                'Content-Type': 'image/jpg',
+            },
+            body: photoBinary,
+        })
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    setIsLoading(false)
                 },
-                body: photoBinary,
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        console.log('here image result', result)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
+                (error) => {
+                    setIsLoading(false)
+                }
+            )
     }
 
     const goToStepTwo = () => {

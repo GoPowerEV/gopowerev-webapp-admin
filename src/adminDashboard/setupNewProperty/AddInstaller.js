@@ -185,7 +185,6 @@ export default function AddInstaller(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('here it is', result)
                     },
                     (error) => {
                         setIsLoading(false)
