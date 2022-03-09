@@ -10,7 +10,7 @@ export default function PropertyGallery(props) {
     const [heroImage, setHeroImage] = useState(null)
     const [photoHeroBinary, setHeroPhotoBinary] = useState(null)
     const [logo, setLogo] = useState(null)
-    const [marketingImage, setMarketingImage] = useState()
+    const [marketingImage, setMarketingImage] = useState(null)
     const [photoLogoBinary, setPhotoLogoBinary] = useState(null)
     const [photoBinary, setPhotoBinary] = useState(null)
 
@@ -62,12 +62,13 @@ export default function PropertyGallery(props) {
             .then((res) => res.json())
             .then(
                 (result) => {
+                    console.log('here is marketing image', result)
                     if (imageType === 'hero') {
                         setHeroImage(result[2])
                     } else if (imageType === 'logo') {
                         setLogo(result[2])
                     } else {
-                        setMarketingImage(result[2])
+                        setMarketingImage(result[2].url)
                     }
                     setIsLoading(false)
                 },
@@ -144,6 +145,7 @@ export default function PropertyGallery(props) {
         if (props.token && props.propertyUuid) {
             getImage('logo')
             getImage('hero')
+            getImage('marketing')
         }
     }, [props.token, props.propertyUuid])
 
@@ -232,10 +234,14 @@ export default function PropertyGallery(props) {
                         className="gallery-photo-container"
                     >
                         <Grid item xs={3}>
-                            <div>Property Image</div>
+                            <div>Property Images</div>
                             <img
                                 alt="Property Img"
-                                src={marketingImage?.url ?? NoImageAvailable}
+                                src={
+                                    marketingImage
+                                        ? marketingImage
+                                        : NoImageAvailable
+                                }
                                 className="galleryImage"
                             />
                             <Button
