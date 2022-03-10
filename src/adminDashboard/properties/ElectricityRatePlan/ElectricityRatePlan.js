@@ -175,41 +175,48 @@ export default function ElectricityRatePlan(props) {
                                 Electricity Rate Plan
                             </div>
                         </Grid>
-                        <Divider
-                            orientation="vertical"
-                            variant="middle"
-                            flexItem
-                        ></Divider>
-                        <Grid item>
-                            <div className="light-grey plan-badge">
-                                {utilityRatePlan && (
-                                    <div className="badgeBox">
-                                        <span className="badgeText">
-                                            {utilityRatePlan}
-                                        </span>
+                        {!planDetailsOpened && (
+                            <>
+                                <Divider
+                                    orientation="vertical"
+                                    variant="middle"
+                                    flexItem
+                                ></Divider>
+                                <Grid item>
+                                    <div className="light-grey plan-badge">
+                                        {utilityRatePlan && (
+                                            <div className="badgeBox">
+                                                <span className="badgeText">
+                                                    {utilityRatePlan}
+                                                </span>
+                                            </div>
+                                        )}
+                                        {!utilityRatePlan && <div>No Plan</div>}
                                     </div>
-                                )}
-                                {!utilityRatePlan && <div>No Plan</div>}
-                            </div>
-                        </Grid>
-                        <Divider
-                            orientation="vertical"
-                            variant="middle"
-                            flexItem
-                        ></Divider>
-                        <Grid item>
-                            <div>Margin</div>
-                            <div className="ratePlanRegularText">Absolute</div>
-                        </Grid>
-                        <Divider
-                            orientation="vertical"
-                            variant="middle"
-                            flexItem
-                        ></Divider>
-                        <Grid item xs="auto">
-                            <div>Amount Of Margin</div>
-                            <div className="ratePlanRegularText">$5.00</div>
-                        </Grid>
+                                </Grid>
+                                <Divider
+                                    orientation="vertical"
+                                    variant="middle"
+                                    flexItem
+                                ></Divider>
+                                <Grid item>
+                                    <div>Margin</div>
+                                    <div className="ratePlanRegularText">
+                                        {margin.charAt(0).toUpperCase() +
+                                            margin.slice(1).toLowerCase()}
+                                    </div>
+                                </Grid>
+                                <Divider
+                                    orientation="vertical"
+                                    variant="middle"
+                                    flexItem
+                                ></Divider>
+                                <Grid item xs="auto">
+                                    <div>Amount Of Margin</div>
+                                    <div className="ratePlanRegularText">-</div>
+                                </Grid>
+                            </>
+                        )}
                     </Grid>
                 </Grid>
                 <Grid item>
