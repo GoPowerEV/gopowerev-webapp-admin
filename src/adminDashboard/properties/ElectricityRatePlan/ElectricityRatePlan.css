@@ -12,3 +12,31 @@
     border-radius: 7px;
     width: fit-content;
 }
+
+.radioButtonGroup label {
+    font-family: 'Nunito Sans', sans-serif !important;
+    font-weight: 600;
+    color: #757575;
+}
+
+.radioButtonGroup .Mui-focused {
+    color: #757575;
+}
+
+.radioButtonGroup span {
+    font-family: 'Nunito Sans', sans-serif !important;
+}
+
+.savePlanButton {
+    background-color: #12bfa2 !important;
+    font-size: 15px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    cursor: pointer;
+}
+
+.savePlanButton:disabled {
+    background-color: #b2d1cc !important;
+    cursor: pointer;
+}
