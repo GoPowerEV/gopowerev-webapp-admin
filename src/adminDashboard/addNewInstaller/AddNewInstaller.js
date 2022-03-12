@@ -155,6 +155,7 @@ export default function AddNewInstaller(props) {
                                 setCallFailedError(true)
                                 setRole(undefined)
                             } else {
+                                setUserId(undefined)
                                 setRole(undefined)
                                 setIsLoading(false)
                                 setCallFailedError(false)

@@ -80,7 +80,7 @@ export default function ElectricityRatePlan(props) {
     }
 
     const getMargins = (chargeType) => {
-        if (props.token && props.propertyUUID) {
+        if (props.token) {
             setIsLoading(true)
             fetch(API_URL_ADMIN + 'admin/electricity-margins/' + chargeType, {
                 method: 'GET',
@@ -104,6 +104,7 @@ export default function ElectricityRatePlan(props) {
 
     const getPlanInfo = () => {
         if (props.token && props.propertyUUID) {
+            console.log('here token', props.token)
             setIsLoading(true)
             fetch(
                 API_URL_ADMIN +
@@ -202,8 +203,10 @@ export default function ElectricityRatePlan(props) {
                                 <Grid item>
                                     <div>Margin</div>
                                     <div className="ratePlanRegularText">
-                                        {margin.charAt(0).toUpperCase() +
-                                            margin.slice(1).toLowerCase()}
+                                        {!margin
+                                            ? '-'
+                                            : margin?.charAt(0).toUpperCase() +
+                                              margin?.slice(1).toLowerCase()}
                                     </div>
                                 </Grid>
                                 <Divider
