@@ -96,7 +96,7 @@ const CurrentlyViewedProperty = (props) => {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'image/jpg',
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(bodyToPost),
             }
@@ -104,7 +104,8 @@ const CurrentlyViewedProperty = (props) => {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    //props.reloadPropertyInfo(property.propertyUUID)
+                    setIsLoading(false)
+                    props.reloadPropertyInfo(property.propertyUUID)
                 },
                 (error) => {
                     setIsLoading(false)
@@ -821,6 +822,7 @@ const CurrentlyViewedProperty = (props) => {
                         isLoading={isLoading}
                         propertyUUID={property.propertyUUID}
                         token={props.token}
+                        reloadPropertyInfo={props.reloadPropertyInfo}
                     />
                     <React.Fragment>
                         {/* ADD NEW CLU MODAL */}

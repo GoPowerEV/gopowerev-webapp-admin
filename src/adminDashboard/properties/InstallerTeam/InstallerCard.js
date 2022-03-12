@@ -1,12 +1,20 @@
-import React from 'react'
-import { Grid, TextField } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Button, Grid, TextField } from '@material-ui/core'
 import './InstallerTeam.css'
+import AreYouSureModal from './AreYouSureModal'
 
 const InstallerCard = (props) => {
     const fontColor = {
         style: { color: 'black' },
     }
     const memberInfo = props.teamMember
+
+    const [openModal, setOpenModal] = useState(false)
+
+    const handleClose = () => {
+        setOpenModal(false)
+    }
+
     return (
         <Grid item lg={4} xs={12} justify="center">
             <Grid container spacing={2}>
@@ -52,7 +60,24 @@ const InstallerCard = (props) => {
                         value={memberInfo.email}
                     />
                 </Grid>
+                <Grid xs={12} item>
+                    <Button
+                        className="deleteTeamMemberButton"
+                        onClick={() => setOpenModal(true)}
+                    >
+                        Unassign
+                    </Button>
+                </Grid>
             </Grid>
+            <AreYouSureModal
+                installerId={memberInfo?.cognitoUUID}
+                handleClose={handleClose}
+                open={openModal}
+                setIsLoading={props.setIsLoading}
+                token={props.token}
+                propertyUUID={props.propertyUUID}
+                reloadPropertyInfo={props.reloadPropertyInfo}
+            />
         </Grid>
     )
 }

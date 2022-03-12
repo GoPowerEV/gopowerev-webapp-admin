@@ -140,6 +140,7 @@ const Properties = (props) => {
     }
 
     const reloadPropertyInfo = (propertyId) => {
+        console.log('HERE GETtiNG', propertyId)
         getPropertyInfo(propertyId)
     }
 

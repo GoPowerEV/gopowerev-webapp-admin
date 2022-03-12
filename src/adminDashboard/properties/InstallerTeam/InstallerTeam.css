@@ -9,3 +9,10 @@
 .invite-team-member-card:hover {
     background-color: #cdcdcd !important;
 }
+
+.deleteTeamMemberButton {
+    text-transform: none !important;
+    font-size: 14px !important;
+    color: #ff0000a1 !important;
+    border: 1px solid #ff0000a1 !important;
+}
