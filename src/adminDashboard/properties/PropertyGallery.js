@@ -62,13 +62,14 @@ export default function PropertyGallery(props) {
             .then((res) => res.json())
             .then(
                 (result) => {
-                    console.log('here is marketing image', result)
-                    if (imageType === 'hero') {
-                        setHeroImage(result[2])
-                    } else if (imageType === 'logo') {
-                        setLogo(result[2])
-                    } else {
-                        setMarketingImage(result[2].url)
+                    if (result) {
+                        if (imageType === 'hero') {
+                            setHeroImage(result[2])
+                        } else if (imageType === 'logo') {
+                            setLogo(result[2])
+                        } else {
+                            setMarketingImage(result[2].url)
+                        }
                     }
                     setIsLoading(false)
                 },

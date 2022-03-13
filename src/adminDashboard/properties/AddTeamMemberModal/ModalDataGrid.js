@@ -134,15 +134,18 @@ const columns = [
 
 export default function CheckboxSelectionGrid(props) {
     const [selectionModel, setSelectionModel] = React.useState([])
+    const [existingTeamSize, setExistingTeamSize] = React.useState(0)
     const [rows, setRows] = React.useState([])
 
     const handleSelection = (value) => {
-        setSelectionModel(value)
-        props.setSelectionModel(value)
-        if (value?.length > 0) {
-            props.setDisableAssignButton(false)
-        } else {
-            props.setDisableAssignButton(true)
+        if (3 - existingTeamSize >= value.length) {
+            setSelectionModel(value)
+            props.setSelectionModel(value)
+            if (value?.length > 0) {
+                props.setDisableAssignButton(false)
+            } else {
+                props.setDisableAssignButton(true)
+            }
         }
     }
 
@@ -186,6 +189,11 @@ export default function CheckboxSelectionGrid(props) {
     React.useEffect(() => {
         setRows([])
         transformData()
+        setExistingTeamSize(
+            props.showInstaller
+                ? props.installerTeam?.length
+                : props.propertyTeam?.length
+        )
     }, [props.data])
 
     return (

@@ -64,6 +64,9 @@ export default function AddTeamMemberModal(props) {
     const [gridData, setGridData] = useState([])
     const [selectionModel, setSelectionModel] = React.useState([])
     const [installerTeam, setInstallerTeam] = useState([])
+    const [propertyTeam, setPropertyTeam] = useState([])
+    const [callFailedError, setCallFailedError] = useState(false)
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false)
     const [modalStyle] = useState(getModalStyle)
     const classes = useStyles()
 
@@ -75,11 +78,42 @@ export default function AddTeamMemberModal(props) {
         setInviteRole(value)
     }
 
+    const handleNameChange = (value) => {
+        setInviteName(value)
+    }
+
+    const handleEmailChange = (value) => {
+        setInviteEmail(value)
+    }
+
     const loadAllInstallers = () => {
         setIsLoading(true)
         if (props.token) {
             getInstallerTeam()
             fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setIsLoading(false)
+                        setGridData(result)
+                    },
+                    (error) => {
+                        setIsLoading(false)
+                    }
+                )
+        }
+    }
+
+    const loadAllAdmins = () => {
+        setIsLoading(true)
+        if (props.token) {
+            fetch(API_URL_ADMIN + 'admin/property-administrators', {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -127,26 +161,74 @@ export default function AddTeamMemberModal(props) {
         }
     }
 
-    const loadAllAdmins = () => {
+    const getPropertyTeam = () => {
         setIsLoading(true)
-        if (props.token) {
-            fetch(API_URL_ADMIN + 'admin/property-administrators', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-            })
+        if (props.token && props.propertyUUID) {
+            fetch(
+                API_URL_ADMIN +
+                    'admin/property-administrators/' +
+                    props.propertyUUID,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
                 .then((res) => res.json())
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        setGridData(result)
+                        setPropertyTeam(result)
                     },
                     (error) => {
                         setIsLoading(false)
                     }
                 )
+        }
+    }
+
+    const sendInvite = () => {
+        if (props.token) {
+            setIsLoading(true)
+            let objectToSend = {
+                email: inviteEmail,
+                role: inviteRole,
+            }
+            if (props.token) {
+                fetch(API_URL_ADMIN + 'admin/invites', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(objectToSend),
+                })
+                    .then((res) => res.json())
+                    .then(
+                        (result) => {
+                            if (result.code) {
+                                setIsLoading(false)
+                                setCallFailedError(true)
+                                setRole(undefined)
+                            } else {
+                                setInviteEmail(undefined)
+                                setInviteRole(undefined)
+                                setInviteName(undefined)
+                                setIsLoading(false)
+                                setCallFailedError(false)
+                                setShowSuccessMessage(true)
+                                setTimeout(() => {
+                                    setShowSuccessMessage(false)
+                                }, 10000)
+                            }
+                        },
+                        (error) => {
+                            setIsLoading(false)
+                        }
+                    )
+            }
         }
     }
 
@@ -167,8 +249,16 @@ export default function AddTeamMemberModal(props) {
     }, [props.showInstaller, props.token])
 
     useEffect(() => {
-        props.showInstaller ? getInstallerTeam() : getInstallerTeam()
+        props.showInstaller ? getInstallerTeam() : getPropertyTeam()
     }, [props.propertyUUID, props.token])
+
+    useEffect(() => {
+        if (inviteEmail && inviteName && inviteRole) {
+            setDisableButton(false)
+        } else {
+            setDisableButton(true)
+        }
+    }, [inviteEmail, inviteRole, inviteName])
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
@@ -236,6 +326,7 @@ export default function AddTeamMemberModal(props) {
                                     data={gridData}
                                     setSelectionModel={setSelectionModel}
                                     installerTeam={installerTeam}
+                                    propertyTeam={propertyTeam}
                                     showInstaller={props.showInstaller}
                                     setDisableAssignButton={
                                         setDisableAssignButton
@@ -307,7 +398,9 @@ export default function AddTeamMemberModal(props) {
                                     autoComplete="id"
                                     autoFocus
                                     value={inviteName}
-                                    // onChange={(e) => setUserId(e.target.value)}
+                                    onChange={(e) =>
+                                        handleNameChange(e.target.value)
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={4}>
@@ -322,21 +415,40 @@ export default function AddTeamMemberModal(props) {
                                     autoComplete="id"
                                     autoFocus
                                     value={inviteEmail}
-                                    // onChange={(e) => setUserId(e.target.value)}
+                                    onChange={(e) =>
+                                        handleEmailChange(e.target.value)
+                                    }
                                 />
                             </Grid>
                         </Grid>
                         <hr className="partner-dotted-hr" />
                         <Grid container justifyContent="flex-end">
+                            {showSuccessMessage && (
+                                <Grid itemm xs={12} justifyContent="flex-end">
+                                    <div className="installerSuccessrMessageText">
+                                        Invite sent!
+                                    </div>
+                                </Grid>
+                            )}
+                            {callFailedError && (
+                                <Grid item xs={12}>
+                                    <div className="installerErrorMessageText">
+                                        Encountered an internal server error.
+                                        Try again later.
+                                    </div>
+                                </Grid>
+                            )}
                             <Grid item>
                                 <Button
                                     className="sendPartnerInviteButton"
                                     variant="contained"
+                                    onClick={() => sendInvite()}
                                     disabled={disableButton}
                                 >
                                     Send Invitation
                                 </Button>
                             </Grid>
+                            <br />
                         </Grid>
                     </>
                 )}

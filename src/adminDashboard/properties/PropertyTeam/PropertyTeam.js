@@ -82,7 +82,14 @@ const PropertyTeam = (props) => {
                 <Collapse in={propertyTeamOpened}>
                     <Grid container spacing={2} xs={11}>
                         {propertyTeam?.map((teamMember, i) => (
-                            <TeamMemberCard key={i} teamMember={teamMember} />
+                            <TeamMemberCard
+                                key={i}
+                                teamMember={teamMember}
+                                setIsLoading={setIsLoading}
+                                token={props.token}
+                                propertyUUID={props.propertyUUID}
+                                reloadPropertyInfo={props.reloadPropertyInfo}
+                            />
                         ))}
                         {[
                             ...Array(totalAmountInTeam - propertyTeam.length),

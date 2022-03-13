@@ -816,6 +816,7 @@ const CurrentlyViewedProperty = (props) => {
                         isLoading={isLoading}
                         propertyUUID={property.propertyUUID}
                         token={props.token}
+                        reloadPropertyInfo={props.reloadPropertyInfo}
                     />
                     <InstallerTeam
                         openModal={handleTeamMemberModalOpen}

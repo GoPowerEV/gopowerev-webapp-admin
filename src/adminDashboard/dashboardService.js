@@ -70,10 +70,6 @@ export function getPropertyLocations(
         .then((res) => res.json())
         .then(
             (result) => {
-                console.log(
-                    'here all locations for this property',
-                    result.locations
-                )
                 setLocationsOfThisProperty(result.locations)
                 setIsLoading(false)
             },
@@ -119,10 +115,6 @@ export function getLocationSmartOutletsById(
         .then((res) => res.json())
         .then(
             (result) => {
-                console.log(
-                    'here all smart outlets for this location',
-                    result.smartOutlets
-                )
                 setSmartOutletsOfThisProperty(result.smartOutlets)
             },
             (error) => {}
@@ -146,10 +138,6 @@ export function getPropertySmartOutletsByPropertyId(
         .then((res) => res.json())
         .then(
             (result) => {
-                console.log(
-                    'here all smart outlets for this property',
-                    result.smartOutlets
-                )
                 setSmartOutletsOfThisProperty(result.smartOutlets)
                 setIsLoading(false)
             },
