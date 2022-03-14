@@ -3,7 +3,6 @@ import {
     Button,
     Collapse,
     CircularProgress,
-    TextField,
     Grid,
     Divider,
     FormControl,
@@ -17,22 +16,21 @@ import {
     OutlinedInput,
     InputAdornment,
 } from '@material-ui/core'
-import { API_URL_ADMIN } from '../../../constants'
 import FlashOnOutlinedIcon from '@material-ui/icons/FlashOnOutlined'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
-import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
+import {
+    getPlanOptions,
+    getMargins,
+    getPlanInfo,
+    savePlanInfo,
+} from './ElectricityRatePlanUtils'
 import './ElectricityRatePlan.css'
 
 const margins = [
     { value: 'ABSOLUTE', label: 'Absolute' },
     { value: 'RELATIVE', label: 'Relative' },
     { value: 'NOTHING', label: 'None' },
-]
-
-const settings = [
-    { value: '1', label: 'First Settng' },
-    { value: '2', label: 'Second Settng' },
 ]
 
 export default function ElectricityRatePlan(props) {
@@ -43,10 +41,18 @@ export default function ElectricityRatePlan(props) {
     const [l2MaginRate, setL2MaginRate] = useState(null)
     const [marginAmount, setMarginAmount] = useState(null)
     const [margin, setMargin] = useState(0.0)
+    const [ratePlanOptions, setRatePlanOptions] = useState([])
+    const [l1Options, setL1Options] = useState([])
+    const [l2Options, setL2Options] = useState([])
     const [disabledButton, setDisabledButton] = useState(true)
 
     const toggleInfo = () => {
         setPlanDetailsOpened(!planDetailsOpened)
+        setL1MaginRate(null)
+        setL2MaginRate(null)
+        setMarginAmount(null)
+        setMargin(null)
+        setUtilityRatePlan(null)
     }
 
     const handlePlanNameChange = (value) => {
@@ -79,61 +85,14 @@ export default function ElectricityRatePlan(props) {
         setMargin(event.target.value)
     }
 
-    const getMargins = (chargeType) => {
-        if (props.token) {
-            setIsLoading(true)
-            fetch(API_URL_ADMIN + 'admin/electricity-margins/' + chargeType, {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        console.log('here is margins result', result)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
-
-    const getPlanInfo = () => {
-        if (props.token && props.propertyUUID) {
-            console.log('here token', props.token)
-            setIsLoading(true)
-            fetch(
-                API_URL_ADMIN +
-                    'admin/property-power-plans/' +
-                    props.propertyUUID,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: 'Bearer ' + props.token,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        console.log('here is ER result', result)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
-
     const validateRelative = () => {
         let showError = false
-        if (parseFloat(marginAmount) < 0.0 || parseFloat(marginAmount) > 50.0) {
+        if (
+            parseFloat(marginAmount) < 0.0 ||
+            parseFloat(marginAmount) > 50.0 ||
+            !marginAmount ||
+            marginAmount?.length === 0
+        ) {
             showError = true
         }
         return showError
@@ -141,16 +100,49 @@ export default function ElectricityRatePlan(props) {
 
     const validateAbsolute = () => {
         let showError = false
-        if (parseFloat(marginAmount) < 0.0 || parseFloat(marginAmount) > 0.15) {
+        if (
+            parseFloat(marginAmount) < 0.0 ||
+            parseFloat(marginAmount) > 0.15 ||
+            !marginAmount ||
+            marginAmount?.length === 0
+        ) {
             showError = true
         }
         return showError
     }
 
+    const saveThis = () => {
+        const dataToSend = {
+            electricityRatesUUID: utilityRatePlan,
+            l1electricityMarginsUUID: l1MaginRate,
+            l2electricityMarginsUUID: l2MaginRate,
+            ownerMarginAmount: marginAmount,
+            ownerMarginType: margin,
+            propertyUUID: props.propertyUUID,
+        }
+        savePlanInfo(props.token, setIsLoading, dataToSend)
+    }
+
     useEffect(() => {
-        getPlanInfo()
-        getMargins('L1')
-        getMargins('L2')
+        if (
+            !marginAmount ||
+            marginAmount?.length === 0 ||
+            !l1MaginRate ||
+            !l2MaginRate ||
+            !margin ||
+            !utilityRatePlan
+        ) {
+            setDisabledButton(true)
+        } else {
+            setDisabledButton(false)
+        }
+    }, [marginAmount, l1MaginRate, l2MaginRate, margin, utilityRatePlan])
+
+    useEffect(() => {
+        getPlanInfo(props.token, props.propertyUUID, setIsLoading)
+        getPlanOptions(setIsLoading, props.token, setRatePlanOptions)
+        getMargins('L1', setIsLoading, props.token, setL1Options)
+        getMargins('L2', setIsLoading, props.token, setL2Options)
     }, [])
 
     return (
@@ -201,7 +193,7 @@ export default function ElectricityRatePlan(props) {
                                     flexItem
                                 ></Divider>
                                 <Grid item>
-                                    <div>Margin</div>
+                                    <div>Property Owner Margin</div>
                                     <div className="ratePlanRegularText">
                                         {!margin
                                             ? '-'
@@ -245,20 +237,35 @@ export default function ElectricityRatePlan(props) {
                         className="editLcuDetailsContainer"
                     >
                         <Grid item lg={3} md={6} s={12} xs={12}>
-                            <TextField
+                            <FormControl
                                 fullWidth
-                                className="editableField"
-                                id="planName"
-                                label="Utility Rate Plan"
-                                variant="outlined"
-                                value={utilityRatePlan}
-                                onChange={(e) =>
-                                    handlePlanNameChange(e.target.value)
-                                }
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
+                                className="editableFieldSelectContainer"
+                            >
+                                <InputLabel id="utilityRatePlan">
+                                    Utility Rate Plan
+                                </InputLabel>
+                                <Select
+                                    labelId="utilityRatePlan"
+                                    variant="outlined"
+                                    id="utilityRatePlan"
+                                    value={utilityRatePlan}
+                                    onChange={(e) =>
+                                        handlePlanNameChange(e.target.value)
+                                    }
+                                    label="Utility Rate Plan"
+                                >
+                                    {ratePlanOptions?.map((option) => {
+                                        return (
+                                            <MenuItem
+                                                key={option.value}
+                                                value={option.value}
+                                            >
+                                                {option.label ?? option.value}
+                                            </MenuItem>
+                                        )
+                                    })}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item lg={3} md={6} s={12} xs={12}>
                             <FormControl
@@ -281,7 +288,7 @@ export default function ElectricityRatePlan(props) {
                                     }
                                     label="L1 Margin Rate Plan"
                                 >
-                                    {settings?.map((option) => {
+                                    {l1Options?.map((option) => {
                                         return (
                                             <MenuItem
                                                 key={option.value}
@@ -315,7 +322,7 @@ export default function ElectricityRatePlan(props) {
                                     }
                                     label="L2 Margin Rate Plan"
                                 >
-                                    {settings?.map((option) => {
+                                    {l2Options?.map((option) => {
                                         return (
                                             <MenuItem
                                                 key={option.value}
@@ -434,6 +441,7 @@ export default function ElectricityRatePlan(props) {
                                 className="savePlanButton"
                                 variant="outlined"
                                 disabled={disabledButton}
+                                onClick={() => saveThis()}
                             >
                                 Save
                             </Button>
