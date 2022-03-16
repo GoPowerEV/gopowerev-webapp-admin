@@ -81,7 +81,6 @@ export const getPlanOptions = (setIsLoading, token, setRatePlanOptions) => {
 
 export const getMargins = (chargeType, setIsLoading, token, setOptions) => {
     if (token) {
-        console.log('here token', token)
         setIsLoading(true)
         fetch(API_URL_ADMIN + 'admin/electricity-margins/' + chargeType, {
             method: 'GET',

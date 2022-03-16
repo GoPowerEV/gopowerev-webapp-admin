@@ -123,6 +123,7 @@ export default function AddTeamMemberModal(props) {
                 .then((res) => res.json())
                 .then(
                     (result) => {
+                        console.log('here it is all admins', result)
                         setIsLoading(false)
                         setGridData(result)
                     },
