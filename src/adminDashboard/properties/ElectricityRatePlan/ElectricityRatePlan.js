@@ -28,8 +28,8 @@ import {
 import './ElectricityRatePlan.css'
 
 const margins = [
-    { value: 'ABSOLUTE', label: 'Absolute' },
-    { value: 'RELATIVE', label: 'Relative' },
+    { value: 'DELTA', label: 'Absolute' },
+    { value: 'PERCENTAGE', label: 'Relative' },
     { value: 'NOTHING', label: 'None' },
 ]
 
@@ -76,10 +76,10 @@ export default function ElectricityRatePlan(props) {
         if (event.target.value === 'NOTHING') {
             setMarginAmount(0)
         }
-        if (event.target.value === 'ABSOLUTE') {
+        if (event.target.value === 'DELTA') {
             setMarginAmount(zero.toFixed(3))
         }
-        if (event.target.value === 'RELATIVE') {
+        if (event.target.value === 'PERCENTAGE') {
             setMarginAmount(zero.toFixed(1))
         }
         setMargin(event.target.value)
@@ -116,7 +116,7 @@ export default function ElectricityRatePlan(props) {
             electricityRatesUUID: utilityRatePlan,
             l1electricityMarginsUUID: l1MaginRate,
             l2electricityMarginsUUID: l2MaginRate,
-            ownerMarginAmount: marginAmount,
+            ownerMarginAmount: Number(marginAmount),
             ownerMarginType: margin,
             propertyUUID: props.propertyUUID,
         }

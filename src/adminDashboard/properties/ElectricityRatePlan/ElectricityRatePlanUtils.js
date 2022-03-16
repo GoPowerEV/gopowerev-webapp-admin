@@ -32,7 +32,7 @@ export const savePlanInfo = (token, setIsLoading, data) => {
                 Authorization: 'Bearer ' + token,
                 Accept: 'application/json',
             },
-            body: data,
+            body: JSON.stringify(data),
         })
             .then((res) => res.json())
             .then(
