@@ -72,15 +72,14 @@ export default function ElectricityRatePlan(props) {
     }
 
     const handleRadioButtonChange = (event) => {
-        const zero = 0
         if (event.target.value === 'NOTHING') {
             setMarginAmount(0)
         }
         if (event.target.value === 'DELTA') {
-            setMarginAmount(zero.toFixed(3))
+            setMarginAmount(parseFloat(0.001))
         }
         if (event.target.value === 'PERCENTAGE') {
-            setMarginAmount(zero.toFixed(1))
+            setMarginAmount(parseFloat(0.1))
         }
         setMargin(event.target.value)
     }
@@ -88,8 +87,8 @@ export default function ElectricityRatePlan(props) {
     const validateRelative = () => {
         let showError = false
         if (
-            parseFloat(marginAmount) < 0.0 ||
-            parseFloat(marginAmount) > 50.0 ||
+            parseFloat(marginAmount) < parseFloat(0.1) ||
+            parseFloat(marginAmount) > parseFloat(50.0) ||
             !marginAmount ||
             marginAmount?.length === 0
         ) {
@@ -101,8 +100,8 @@ export default function ElectricityRatePlan(props) {
     const validateAbsolute = () => {
         let showError = false
         if (
-            parseFloat(marginAmount) < 0.0 ||
-            parseFloat(marginAmount) > 0.15 ||
+            parseFloat(marginAmount) < parseFloat(0.001) ||
+            parseFloat(marginAmount) > parseFloat(0.15) ||
             !marginAmount ||
             marginAmount?.length === 0
         ) {
@@ -125,8 +124,8 @@ export default function ElectricityRatePlan(props) {
 
     useEffect(() => {
         if (
-            !marginAmount ||
-            marginAmount?.length === 0 ||
+            marginAmount === undefined ||
+            marginAmount?.length < 1 ||
             !l1MaginRate ||
             !l2MaginRate ||
             !margin ||
@@ -374,7 +373,7 @@ export default function ElectricityRatePlan(props) {
                                 </RadioGroup>
                             </FormControl>
                         </Grid>
-                        {margin === 'ABSOLUTE' && (
+                        {margin === 'DELTA' && (
                             <Grid item lg={3} md={6} s={12} xs={12}>
                                 <FormControl
                                     fullWidth
@@ -389,7 +388,7 @@ export default function ElectricityRatePlan(props) {
                                         value={marginAmount}
                                         type="number"
                                         error={validateAbsolute() === true}
-                                        helperText="Must be between 0.000 and 0.150"
+                                        helperText="Must be between 0.001 and 0.150"
                                         onChange={(e) =>
                                             handleMarginAmountChange(
                                                 e.target.value
@@ -405,7 +404,7 @@ export default function ElectricityRatePlan(props) {
                                 </FormControl>
                             </Grid>
                         )}
-                        {margin === 'RELATIVE' && (
+                        {margin === 'PERCENTAGE' && (
                             <Grid item lg={3} md={6} s={12} xs={12}>
                                 <FormControl
                                     fullWidth
@@ -419,7 +418,7 @@ export default function ElectricityRatePlan(props) {
                                         id="outlined-adornment-amount"
                                         type="number"
                                         error={validateRelative() === true}
-                                        helperText="Must be between 0.0 and 50.0"
+                                        helperText="Must be between 0.1 and 50.0"
                                         value={marginAmount}
                                         onChange={(e) =>
                                             handleMarginAmountChange(
