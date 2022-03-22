@@ -64,8 +64,6 @@ export default function AddTeamMemberModal(props) {
     const [installerGridData, setInstallerGridData] = useState([])
     const [adminGridData, setAdminGridData] = useState([])
     const [selectionModel, setSelectionModel] = React.useState([])
-    const [installerTeam, setInstallerTeam] = useState([])
-    const [propertyTeam, setPropertyTeam] = useState([])
     const [callFailedError, setCallFailedError] = useState(false)
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
     const [modalStyle] = useState(getModalStyle)
@@ -91,7 +89,6 @@ export default function AddTeamMemberModal(props) {
         setInstallerGridData([])
         setIsLoading(true)
         if (props.token) {
-            getInstallerTeam()
             fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
                 method: 'GET',
                 headers: {
@@ -154,62 +151,6 @@ export default function AddTeamMemberModal(props) {
                                     setIsLoading(false)
                                 }
                             )
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
-
-    const getInstallerTeam = () => {
-        setIsLoading(true)
-        if (props.token && props.propertyUUID) {
-            fetch(
-                API_URL_ADMIN +
-                    'admin/property-installers/' +
-                    props.propertyUUID,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: 'Bearer ' + props.token,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        setInstallerTeam(result)
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
-    }
-
-    const getPropertyTeam = () => {
-        setIsLoading(true)
-        if (props.token && props.propertyUUID) {
-            fetch(
-                API_URL_ADMIN +
-                    'admin/property-administrators/' +
-                    props.propertyUUID,
-                {
-                    method: 'GET',
-                    headers: {
-                        Authorization: 'Bearer ' + props.token,
-                        'Content-Type': 'application/json',
-                    },
-                }
-            )
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        setIsLoading(false)
-                        setPropertyTeam(result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -281,13 +222,10 @@ export default function AddTeamMemberModal(props) {
 
     useEffect(() => {
         if (props.token && props.propertyUUID) {
-            console.log('here it is', props.showInstaller)
-            getInstallerTeam()
-            getPropertyTeam()
             loadAllInstallers()
             loadAllAdmins()
         }
-    }, [props.token, props.propertyUUID])
+    }, [props.token, props.propertyUUID, props.showInstaller])
 
     useEffect(() => {
         if (inviteEmail && inviteName && inviteRole) {
@@ -360,14 +298,14 @@ export default function AddTeamMemberModal(props) {
                             <Grid item xs={12}>
                                 <ModalDataGrid
                                     isLoading={isLoading}
+                                    token={props.token}
+                                    propertyUUID={props.propertyUUID}
                                     data={
                                         props.showInstaller === true
                                             ? installerGridData
                                             : adminGridData
                                     }
                                     setSelectionModel={setSelectionModel}
-                                    installerTeam={installerTeam}
-                                    propertyTeam={propertyTeam}
                                     showInstaller={props.showInstaller}
                                     setDisableAssignButton={
                                         setDisableAssignButton

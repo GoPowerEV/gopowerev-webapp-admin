@@ -10,6 +10,7 @@ import { CircularProgress } from '@material-ui/core'
 import { styled } from '@mui/material/styles'
 import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
+import { API_URL_ADMIN } from '../../../constants'
 
 function customCheckbox(theme) {
     return {
@@ -135,7 +136,59 @@ const columns = [
 export default function CheckboxSelectionGrid(props) {
     const [selectionModel, setSelectionModel] = React.useState([])
     const [existingTeamSize, setExistingTeamSize] = React.useState(0)
+    const [installerTeam, setInstallerTeam] = React.useState([])
+    const [propertyTeam, setPropertyTeam] = React.useState([])
     const [rows, setRows] = React.useState([])
+
+    const getInstallerTeam = () => {
+        if (props.token && props.propertyUUID) {
+            fetch(
+                API_URL_ADMIN +
+                    'admin/property-installers/' +
+                    props.propertyUUID,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        setInstallerTeam(result)
+                    },
+                    (error) => {}
+                )
+        }
+    }
+
+    const getPropertyTeam = () => {
+        if (props.token && props.propertyUUID) {
+            console.log('Where E ARE IN')
+            fetch(
+                API_URL_ADMIN +
+                    'admin/property-administrators/' +
+                    props.propertyUUID,
+                {
+                    method: 'GET',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log('her!!!', result)
+                        setPropertyTeam(result)
+                    },
+                    (error) => {}
+                )
+        }
+    }
 
     const handleSelection = (value) => {
         if (3 - existingTeamSize >= value.length) {
@@ -152,54 +205,84 @@ export default function CheckboxSelectionGrid(props) {
     const transformData = () => {
         let rowsTemp = []
         props.data.forEach((element) => {
-            if (props.installerTeam === true) {
-                props.installerTeam.forEach((member) => {
-                    // Making sure we are not showing installers that a part of this team already
-                    if (member.cognitoUUID !== element.cognitoUUID) {
-                        const tempObj = {
-                            id: element.cognitoUUID,
-                            role: props.showInstaller
-                                ? 'Installer'
-                                : element.role,
-                            name: element.firstName
-                                ? element.firstName + ' ' + element.lastName
-                                : '-',
-                            email: element.email,
-                        }
-                        rowsTemp.push(tempObj)
-                    }
-                })
-            } else {
-                props.propertyTeam.forEach((member) => {
-                    if (member.cognitoUUID !== element.cognitoUUID) {
-                        const tempObj = {
-                            id: element.cognitoUUID,
-                            role:
-                                props.showInstaller === true
+            if (props.showInstaller === true) {
+                if (installerTeam?.length > 0) {
+                    installerTeam.forEach((member) => {
+                        // Making sure we are not showing installers that a part of this team already
+                        if (member.cognitoUUID !== element.cognitoUUID) {
+                            const tempObj = {
+                                id: element.cognitoUUID,
+                                role: props.showInstaller
                                     ? 'Installer'
-                                    : 'Manager',
-                            name: element.firstName
-                                ? element.firstName + ' ' + element.lastName
-                                : '-',
-                            email: element.email,
+                                    : element.role,
+                                name: element.firstName
+                                    ? element.firstName + ' ' + element.lastName
+                                    : '-',
+                                email: element.email,
+                            }
+                            rowsTemp.push(tempObj)
                         }
-                        rowsTemp.push(tempObj)
+                    })
+                } else {
+                    const tempObj = {
+                        id: element.cognitoUUID,
+                        role: props.showInstaller ? 'Installer' : element.role,
+                        name: element.firstName
+                            ? element.firstName + ' ' + element.lastName
+                            : '-',
+                        email: element.email,
                     }
-                })
+                    rowsTemp.push(tempObj)
+                }
+            } else {
+                if (installerTeam?.length > 0) {
+                    propertyTeam.forEach((member) => {
+                        if (member.cognitoUUID !== element.cognitoUUID) {
+                            const tempObj = {
+                                id: element.cognitoUUID,
+                                role:
+                                    props.showInstaller === true
+                                        ? 'Installer'
+                                        : 'Manager',
+                                name: element.firstName
+                                    ? element.firstName + ' ' + element.lastName
+                                    : '-',
+                                email: element.email,
+                            }
+                            rowsTemp.push(tempObj)
+                        }
+                    })
+                }
+                const tempObj = {
+                    id: element.cognitoUUID,
+                    role: props.showInstaller ? 'Installer' : 'Manager',
+                    name: element.firstName
+                        ? element.firstName + ' ' + element.lastName
+                        : '-',
+                    email: element.email,
+                }
+                rowsTemp.push(tempObj)
             }
         })
         setRows(rowsTemp)
     }
 
     React.useEffect(() => {
+        getInstallerTeam()
+        getPropertyTeam()
+    }, [props.token, props.propertyUUID])
+
+    React.useEffect(() => {
+        if (propertyTeam && installerTeam)
+            console.log('here it is', propertyTeam)
         setRows([])
         transformData()
         setExistingTeamSize(
             props.showInstaller === true
-                ? props.installerTeam?.length
-                : props.propertyTeam?.length
+                ? installerTeam?.length
+                : propertyTeam?.length
         )
-    }, [props.propertyTeam, props.installerTeam])
+    }, [installerTeam, propertyTeam])
 
     return (
         <div style={{ width: '100%' }}>
