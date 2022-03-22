@@ -51,8 +51,6 @@ const PropertyTeam = (props) => {
         getPropertyTeam()
     }, [props.token, props.propertyUUID])
 
-    console.log('here we go', propertyTeam)
-
     return (
         <>
             <hr className="propertiesHrLcu" />

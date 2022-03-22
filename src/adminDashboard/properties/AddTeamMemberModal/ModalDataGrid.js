@@ -150,58 +150,56 @@ export default function CheckboxSelectionGrid(props) {
     }
 
     const transformData = () => {
-        if (props.data.length > 0) {
-            let rowsTemp = []
-            props.data.forEach((element) => {
-                if (props.installerTeam === true) {
-                    props.installerTeam.forEach((member) => {
-                        // Making sure we are not showing installers that a part of this team already
-                        if (member.cognitoUUID !== element.cognitoUUID) {
-                            const tempObj = {
-                                id: element.cognitoUUID,
-                                role: props.showInstaller
+        let rowsTemp = []
+        props.data.forEach((element) => {
+            if (props.installerTeam === true) {
+                props.installerTeam.forEach((member) => {
+                    // Making sure we are not showing installers that a part of this team already
+                    if (member.cognitoUUID !== element.cognitoUUID) {
+                        const tempObj = {
+                            id: element.cognitoUUID,
+                            role: props.showInstaller
+                                ? 'Installer'
+                                : element.role,
+                            name: element.firstName
+                                ? element.firstName + ' ' + element.lastName
+                                : '-',
+                            email: element.email,
+                        }
+                        rowsTemp.push(tempObj)
+                    }
+                })
+            } else {
+                props.propertyTeam.forEach((member) => {
+                    if (member.cognitoUUID !== element.cognitoUUID) {
+                        const tempObj = {
+                            id: element.cognitoUUID,
+                            role:
+                                props.showInstaller === true
                                     ? 'Installer'
-                                    : element.role,
-                                name: element.firstName
-                                    ? element.firstName + ' ' + element.lastName
-                                    : '-',
-                                email: element.email,
-                            }
-                            rowsTemp.push(tempObj)
+                                    : 'Manager',
+                            name: element.firstName
+                                ? element.firstName + ' ' + element.lastName
+                                : '-',
+                            email: element.email,
                         }
-                    })
-                } else {
-                    props.propertyTeam.forEach((member) => {
-                        if (member.cognitoUUID !== element.cognitoUUID) {
-                            const tempObj = {
-                                id: element.cognitoUUID,
-                                role:
-                                    props.showInstaller === true
-                                        ? 'Installer'
-                                        : 'Manager',
-                                name: element.firstName
-                                    ? element.firstName + ' ' + element.lastName
-                                    : '-',
-                                email: element.email,
-                            }
-                            rowsTemp.push(tempObj)
-                        }
-                    })
-                }
-            })
-            setRows(rowsTemp)
-        }
+                        rowsTemp.push(tempObj)
+                    }
+                })
+            }
+        })
+        setRows(rowsTemp)
     }
 
     React.useEffect(() => {
         setRows([])
         transformData()
         setExistingTeamSize(
-            props.showInstaller
+            props.showInstaller === true
                 ? props.installerTeam?.length
                 : props.propertyTeam?.length
         )
-    }, [props.data])
+    }, [props.propertyTeam, props.installerTeam])
 
     return (
         <div style={{ width: '100%' }}>

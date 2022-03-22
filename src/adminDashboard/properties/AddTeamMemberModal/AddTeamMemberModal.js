@@ -127,7 +127,6 @@ export default function AddTeamMemberModal(props) {
                 .then(
                     (result1) => {
                         setAdminGridData(result1)
-                        console.log('here it is all managers', result1)
                         setIsLoading(false)
                         setIsLoading(true)
                         fetch(
@@ -281,14 +280,14 @@ export default function AddTeamMemberModal(props) {
     }
 
     useEffect(() => {
-        if (props.token) {
+        if (props.token && props.propertyUUID) {
             console.log('here it is', props.showInstaller)
             getInstallerTeam()
             getPropertyTeam()
             loadAllInstallers()
             loadAllAdmins()
         }
-    }, [props.token])
+    }, [props.token, props.propertyUUID])
 
     useEffect(() => {
         if (inviteEmail && inviteName && inviteRole) {
