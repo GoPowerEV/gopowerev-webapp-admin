@@ -111,9 +111,10 @@ export default function AddTeamMemberModal(props) {
     }
 
     const loadAllAdmins = () => {
+        setGridData([])
         setIsLoading(true)
         if (props.token) {
-            fetch(API_URL_ADMIN + 'admin/property-administrators', {
+            fetch(API_URL_ADMIN + 'admin/users?role=PROPERTY_MANAGER', {
                 method: 'GET',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -123,9 +124,38 @@ export default function AddTeamMemberModal(props) {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log('here it is all admins', result)
+                        console.log('here it is all managers', result)
                         setIsLoading(false)
                         setGridData(result)
+                        setIsLoading(true)
+                        fetch(
+                            API_URL_ADMIN + 'admin/users?role=PROPERTY_OWNER',
+                            {
+                                method: 'GET',
+                                headers: {
+                                    Authorization: 'Bearer ' + props.token,
+                                    'Content-Type': 'application/json',
+                                },
+                            }
+                        )
+                            .then((res) => res.json())
+                            .then(
+                                (result) => {
+                                    console.log(
+                                        'here is grid data baby',
+                                        gridData
+                                    )
+                                    const dataTemp = gridData
+                                    console.log('here it is all owners', result)
+                                    setIsLoading(false)
+                                    if (result?.length > 0) {
+                                        setGridData(dataTemp.concat(result))
+                                    }
+                                },
+                                (error) => {
+                                    setIsLoading(false)
+                                }
+                            )
                     },
                     (error) => {
                         setIsLoading(false)
@@ -246,12 +276,16 @@ export default function AddTeamMemberModal(props) {
     }
 
     useEffect(() => {
-        props.showInstaller ? loadAllInstallers() : loadAllAdmins()
+        props.showInstaller === true ? getInstallerTeam() : getPropertyTeam()
     }, [props.showInstaller, props.token])
 
     useEffect(() => {
-        props.showInstaller ? getInstallerTeam() : getPropertyTeam()
-    }, [props.propertyUUID, props.token])
+        setGridData([])
+        if (props.open === true) {
+            console.log('here it is', props.showInstaller)
+            props.showInstaller === true ? loadAllInstallers() : loadAllAdmins()
+        }
+    }, [props.open])
 
     useEffect(() => {
         if (inviteEmail && inviteName && inviteRole) {

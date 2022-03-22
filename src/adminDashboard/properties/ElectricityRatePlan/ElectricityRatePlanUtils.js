@@ -17,6 +17,7 @@ export const getPlanInfo = (token, propertyUUID, setIsLoading) => {
                     console.log('here is ER result', result)
                 },
                 (error) => {
+                    console.log('HERE ERROR')
                     setIsLoading(false)
                 }
             )
@@ -30,7 +31,7 @@ export const savePlanInfo = (token, setIsLoading, data) => {
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + token,
-                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
         })
@@ -63,7 +64,7 @@ export const getPlanOptions = (setIsLoading, token, setRatePlanOptions) => {
                     setIsLoading(false)
                     if (result) {
                         let options = []
-                        result.forEach((item) => {
+                        result?.forEach((item) => {
                             options.push({
                                 label: item.plan,
                                 value: item.electricityRatesUUID,

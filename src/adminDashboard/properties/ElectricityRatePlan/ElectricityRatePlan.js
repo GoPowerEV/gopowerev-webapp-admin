@@ -142,7 +142,7 @@ export default function ElectricityRatePlan(props) {
         getPlanOptions(setIsLoading, props.token, setRatePlanOptions)
         getMargins('L1', setIsLoading, props.token, setL1Options)
         getMargins('L2', setIsLoading, props.token, setL2Options)
-    }, [])
+    }, [props.token, props.propertyUUID])
 
     return (
         <>
