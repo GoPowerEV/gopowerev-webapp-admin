@@ -87,6 +87,7 @@ export default function AddTeamMemberModal(props) {
     }
 
     const loadAllInstallers = () => {
+        setGridData([])
         setIsLoading(true)
         if (props.token) {
             getInstallerTeam()
@@ -280,7 +281,6 @@ export default function AddTeamMemberModal(props) {
     }, [props.showInstaller, props.token])
 
     useEffect(() => {
-        setGridData([])
         if (props.open === true) {
             console.log('here it is', props.showInstaller)
             props.showInstaller === true ? loadAllInstallers() : loadAllAdmins()
