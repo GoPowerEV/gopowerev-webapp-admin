@@ -166,7 +166,6 @@ export default function CheckboxSelectionGrid(props) {
 
     const getPropertyTeam = () => {
         if (props.token && props.propertyUUID) {
-            console.log('Where E ARE IN')
             fetch(
                 API_URL_ADMIN +
                     'admin/property-administrators/' +
@@ -182,7 +181,6 @@ export default function CheckboxSelectionGrid(props) {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log('her!!!', result)
                         setPropertyTeam(result)
                     },
                     (error) => {}
@@ -235,7 +233,7 @@ export default function CheckboxSelectionGrid(props) {
                     rowsTemp.push(tempObj)
                 }
             } else {
-                if (installerTeam?.length > 0) {
+                if (propertyTeam?.length > 0) {
                     propertyTeam.forEach((member) => {
                         if (member.cognitoUUID !== element.cognitoUUID) {
                             const tempObj = {
@@ -252,16 +250,17 @@ export default function CheckboxSelectionGrid(props) {
                             rowsTemp.push(tempObj)
                         }
                     })
+                } else {
+                    const tempObj = {
+                        id: element.cognitoUUID,
+                        role: props.showInstaller ? 'Installer' : 'Manager',
+                        name: element.firstName
+                            ? element.firstName + ' ' + element.lastName
+                            : '-',
+                        email: element.email,
+                    }
+                    rowsTemp.push(tempObj)
                 }
-                const tempObj = {
-                    id: element.cognitoUUID,
-                    role: props.showInstaller ? 'Installer' : 'Manager',
-                    name: element.firstName
-                        ? element.firstName + ' ' + element.lastName
-                        : '-',
-                    email: element.email,
-                }
-                rowsTemp.push(tempObj)
             }
         })
         setRows(rowsTemp)
@@ -273,8 +272,6 @@ export default function CheckboxSelectionGrid(props) {
     }, [props.token, props.propertyUUID])
 
     React.useEffect(() => {
-        if (propertyTeam && installerTeam)
-            console.log('here it is', propertyTeam)
         setRows([])
         transformData()
         setExistingTeamSize(
