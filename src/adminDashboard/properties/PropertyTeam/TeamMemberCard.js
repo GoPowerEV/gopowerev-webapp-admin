@@ -27,7 +27,11 @@ const TeamMemberCard = (props) => {
                         variant="outlined"
                         disabled
                         inputProps={fontColor}
-                        value={memberInfo.role}
+                        value={
+                            memberInfo.role === 'PROPERTY_MANAGER'
+                                ? 'Manager'
+                                : 'Owner'
+                        }
                     />
                 </Grid>
                 <Grid xs={7} item>
@@ -39,7 +43,13 @@ const TeamMemberCard = (props) => {
                         variant="outlined"
                         disabled
                         inputProps={fontColor}
-                        value={memberInfo.fullName}
+                        value={
+                            !memberInfo.firstName
+                                ? 'No name'
+                                : memberInfo.firstName +
+                                  ' ' +
+                                  memberInfo.lastName
+                        }
                     />
                 </Grid>
                 <Grid xs={12} item>

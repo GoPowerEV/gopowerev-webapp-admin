@@ -59,7 +59,7 @@ export default function AreYouSureModal(props) {
             const bodyToPost = { cognitoUUID: props.installerId }
             fetch(
                 API_URL_ADMIN +
-                    'admin/property-administrators' +
+                    'admin/property-administrators/' +
                     props.propertyUUID,
                 {
                     method: 'DELETE',

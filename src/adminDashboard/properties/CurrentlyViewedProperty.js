@@ -113,6 +113,34 @@ const CurrentlyViewedProperty = (props) => {
             )
     }
 
+    const setAdmin = (adminId) => {
+        setIsLoading(true)
+        const bodyToPost = { cognitoUUID: adminId }
+        fetch(
+            API_URL_ADMIN +
+                'admin/property-administrators/' +
+                property.propertyUUID,
+            {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(bodyToPost),
+            }
+        )
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    setIsLoading(false)
+                    props.reloadPropertyInfo(property.propertyUUID)
+                },
+                (error) => {
+                    setIsLoading(false)
+                }
+            )
+    }
+
     const savePropertyInfo = () => {
         setIsLoading(true)
         if (props.token) {
@@ -805,6 +833,7 @@ const CurrentlyViewedProperty = (props) => {
                         token={props.token}
                         propertyUUID={property.propertyUUID}
                         setInstaller={setInstaller}
+                        setAdmin={setAdmin}
                     />
                     <ElectricityRatePlan
                         token={props.token}

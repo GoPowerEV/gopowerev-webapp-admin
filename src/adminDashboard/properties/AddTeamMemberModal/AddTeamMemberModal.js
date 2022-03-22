@@ -61,7 +61,8 @@ export default function AddTeamMemberModal(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [disableAssignButton, setDisableAssignButton] = useState(true)
     const [disableButton, setDisableButton] = useState(true)
-    const [gridData, setGridData] = useState([])
+    const [installerGridData, setInstallerGridData] = useState([])
+    const [adminGridData, setAdminGridData] = useState([])
     const [selectionModel, setSelectionModel] = React.useState([])
     const [installerTeam, setInstallerTeam] = useState([])
     const [propertyTeam, setPropertyTeam] = useState([])
@@ -87,7 +88,7 @@ export default function AddTeamMemberModal(props) {
     }
 
     const loadAllInstallers = () => {
-        setGridData([])
+        setInstallerGridData([])
         setIsLoading(true)
         if (props.token) {
             getInstallerTeam()
@@ -102,7 +103,7 @@ export default function AddTeamMemberModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        setGridData(result)
+                        setInstallerGridData(result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -112,7 +113,7 @@ export default function AddTeamMemberModal(props) {
     }
 
     const loadAllAdmins = () => {
-        setGridData([])
+        setAdminGridData([])
         setIsLoading(true)
         if (props.token) {
             fetch(API_URL_ADMIN + 'admin/users?role=PROPERTY_MANAGER', {
@@ -124,10 +125,10 @@ export default function AddTeamMemberModal(props) {
             })
                 .then((res) => res.json())
                 .then(
-                    (result) => {
-                        console.log('here it is all managers', result)
+                    (result1) => {
+                        setAdminGridData(result1)
+                        console.log('here it is all managers', result1)
                         setIsLoading(false)
-                        setGridData(result)
                         setIsLoading(true)
                         fetch(
                             API_URL_ADMIN + 'admin/users?role=PROPERTY_OWNER',
@@ -141,17 +142,14 @@ export default function AddTeamMemberModal(props) {
                         )
                             .then((res) => res.json())
                             .then(
-                                (result) => {
+                                (result2) => {
                                     console.log(
-                                        'here is grid data baby',
-                                        gridData
+                                        'here it is all owners',
+                                        result2
                                     )
-                                    const dataTemp = gridData
-                                    console.log('here it is all owners', result)
                                     setIsLoading(false)
-                                    if (result?.length > 0) {
-                                        setGridData(dataTemp.concat(result))
-                                    }
+
+                                    // setAdminGridData(result1.concat(result2))
                                 },
                                 (error) => {
                                     setIsLoading(false)
@@ -271,21 +269,26 @@ export default function AddTeamMemberModal(props) {
                     props.setInstaller(element)
                 })
             }
+        } else {
+            if (selectionModel?.length > 0) {
+                selectionModel.forEach((element) => {
+                    props.setAdmin(element)
+                })
+            }
         }
         setSelectionModel([])
         props.handleClose()
     }
 
     useEffect(() => {
-        props.showInstaller === true ? getInstallerTeam() : getPropertyTeam()
-    }, [props.showInstaller, props.token])
-
-    useEffect(() => {
-        if (props.open === true) {
+        if (props.token) {
             console.log('here it is', props.showInstaller)
-            props.showInstaller === true ? loadAllInstallers() : loadAllAdmins()
+            getInstallerTeam()
+            getPropertyTeam()
+            loadAllInstallers()
+            loadAllAdmins()
         }
-    }, [props.open])
+    }, [props.token])
 
     useEffect(() => {
         if (inviteEmail && inviteName && inviteRole) {
@@ -358,7 +361,11 @@ export default function AddTeamMemberModal(props) {
                             <Grid item xs={12}>
                                 <ModalDataGrid
                                     isLoading={isLoading}
-                                    data={gridData}
+                                    data={
+                                        props.showInstaller === true
+                                            ? installerGridData
+                                            : adminGridData
+                                    }
                                     setSelectionModel={setSelectionModel}
                                     installerTeam={installerTeam}
                                     propertyTeam={propertyTeam}
