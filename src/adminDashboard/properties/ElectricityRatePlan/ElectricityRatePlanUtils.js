@@ -3,13 +3,18 @@ import { API_URL_ADMIN } from '../../../constants'
 export const getPlanInfo = (token, propertyUUID, setIsLoading) => {
     if (token && propertyUUID) {
         setIsLoading(true)
-        fetch(API_URL_ADMIN + 'admin/property-power-plans/' + propertyUUID, {
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + token,
-                Accept: 'application/json',
-            },
-        })
+        fetch(
+            API_URL_ADMIN +
+                'admin/property-power-plans?propertyUUID=' +
+                propertyUUID,
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    Accept: 'application/json',
+                },
+            }
+        )
             .then((res) => res.json())
             .then(
                 (result) => {
