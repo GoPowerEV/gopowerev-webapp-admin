@@ -200,7 +200,7 @@ export default function PropertyGallery(props) {
                             onChange={handleHeroPhotoChange}
                         />
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={3} className="galleryImageContainer">
                         <div>Logo</div>
                         <img
                             alt="Logo Img"
