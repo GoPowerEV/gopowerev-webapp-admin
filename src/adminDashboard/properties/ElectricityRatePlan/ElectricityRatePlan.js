@@ -24,6 +24,7 @@ import {
     getMargins,
     getPlanInfo,
     savePlanInfo,
+    updatePlanInfo,
 } from './ElectricityRatePlanUtils'
 import './ElectricityRatePlan.css'
 
@@ -37,6 +38,7 @@ export default function ElectricityRatePlan(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [planDetailsOpened, setPlanDetailsOpened] = useState(false)
     const [utilityRatePlan, setUtilityRatePlan] = useState(null)
+    const [utilityRatePlanString, setUtilityRatePlanString] = useState(null)
     const [l1MaginRate, setL1MaginRate] = useState(null)
     const [l2MaginRate, setL2MaginRate] = useState(null)
     const [marginAmount, setMarginAmount] = useState(null)
@@ -45,14 +47,18 @@ export default function ElectricityRatePlan(props) {
     const [l1Options, setL1Options] = useState([])
     const [l2Options, setL2Options] = useState([])
     const [disabledButton, setDisabledButton] = useState(true)
+    const [planInfo, setPlanInfo] = useState({})
 
     const toggleInfo = () => {
+        if (planDetailsOpened) {
+            getPlanInfo(
+                props.token,
+                props.propertyUUID,
+                setIsLoading,
+                setPlanInfo
+            )
+        }
         setPlanDetailsOpened(!planDetailsOpened)
-        setL1MaginRate(null)
-        setL2MaginRate(null)
-        setMarginAmount(null)
-        setMargin(null)
-        setUtilityRatePlan(null)
     }
 
     const handlePlanNameChange = (value) => {
@@ -119,7 +125,25 @@ export default function ElectricityRatePlan(props) {
             ownerMarginType: margin,
             propertyUUID: props.propertyUUID,
         }
-        savePlanInfo(props.token, setIsLoading, dataToSend)
+        savePlanInfo(props.token, setIsLoading, dataToSend, toggleInfo)
+    }
+
+    const updateThis = () => {
+        const dataToSend = {
+            electricityRatesUUID: utilityRatePlan,
+            l1electricityMarginsUUID: l1MaginRate,
+            l2electricityMarginsUUID: l2MaginRate,
+            ownerMarginAmount: Number(marginAmount),
+            ownerMarginType: margin,
+            propertyUUID: props.propertyUUID,
+        }
+        updatePlanInfo(
+            props.token,
+            setIsLoading,
+            dataToSend,
+            toggleInfo,
+            planInfo.propertyPowerPlanUUID
+        )
     }
 
     useEffect(() => {
@@ -138,11 +162,27 @@ export default function ElectricityRatePlan(props) {
     }, [marginAmount, l1MaginRate, l2MaginRate, margin, utilityRatePlan])
 
     useEffect(() => {
-        getPlanInfo(props.token, props.propertyUUID, setIsLoading)
+        getPlanInfo(props.token, props.propertyUUID, setIsLoading, setPlanInfo)
         getPlanOptions(setIsLoading, props.token, setRatePlanOptions)
         getMargins('L1', setIsLoading, props.token, setL1Options)
         getMargins('L2', setIsLoading, props.token, setL2Options)
     }, [props.token, props.propertyUUID])
+
+    useEffect(() => {
+        if (planInfo && ratePlanOptions?.length > 0) {
+            setMarginAmount(planInfo.ownerMarginAmount)
+            setMargin(planInfo.ownerMarginType)
+            setMarginAmount(planInfo.ownerMarginAmount)
+            setUtilityRatePlanString(
+                ratePlanOptions.find(
+                    (x) => x.value === planInfo.electricityRatesUUID
+                )?.label
+            )
+            setUtilityRatePlan(planInfo.electricityRatesUUID)
+            setL1MaginRate(planInfo.l1electricityMarginsUUID)
+            setL2MaginRate(planInfo.l2electricityMarginsUUID)
+        }
+    }, [planInfo, ratePlanOptions])
 
     return (
         <>
@@ -175,15 +215,23 @@ export default function ElectricityRatePlan(props) {
                                     flexItem
                                 ></Divider>
                                 <Grid item>
-                                    <div className="light-grey plan-badge">
-                                        {utilityRatePlan && (
+                                    <div
+                                        className={
+                                            utilityRatePlanString
+                                                ? 'blue plan-badge'
+                                                : 'light-grey plan-badge'
+                                        }
+                                    >
+                                        {utilityRatePlanString && (
                                             <div className="badgeBox">
                                                 <span className="badgeText">
-                                                    {utilityRatePlan}
+                                                    {utilityRatePlanString}
                                                 </span>
                                             </div>
                                         )}
-                                        {!utilityRatePlan && <div>No Plan</div>}
+                                        {!utilityRatePlanString && (
+                                            <div>No Plan</div>
+                                        )}
                                     </div>
                                 </Grid>
                                 <Divider
@@ -207,7 +255,9 @@ export default function ElectricityRatePlan(props) {
                                 ></Divider>
                                 <Grid item xs="auto">
                                     <div>Amount Of Margin</div>
-                                    <div className="ratePlanRegularText">-</div>
+                                    <div className="ratePlanRegularText">
+                                        {marginAmount ?? '-'}
+                                    </div>
                                 </Grid>
                             </>
                         )}
@@ -435,16 +485,30 @@ export default function ElectricityRatePlan(props) {
                                 </FormControl>
                             </Grid>
                         )}
-                        <Grid item xs={12}>
-                            <Button
-                                className="savePlanButton"
-                                variant="outlined"
-                                disabled={disabledButton}
-                                onClick={() => saveThis()}
-                            >
-                                Save
-                            </Button>
-                        </Grid>
+                        {planInfo && (
+                            <Grid item xs={12}>
+                                <Button
+                                    className="savePlanButton"
+                                    variant="outlined"
+                                    disabled={disabledButton}
+                                    onClick={() => updateThis()}
+                                >
+                                    Save Changes
+                                </Button>
+                            </Grid>
+                        )}
+                        {!planInfo && (
+                            <Grid item xs={12}>
+                                <Button
+                                    className="savePlanButton"
+                                    variant="outlined"
+                                    disabled={disabledButton}
+                                    onClick={() => saveThis()}
+                                >
+                                    Save
+                                </Button>
+                            </Grid>
+                        )}
                     </Grid>
                 </Collapse>
             )}

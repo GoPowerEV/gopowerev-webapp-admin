@@ -1,6 +1,6 @@
 import { API_URL_ADMIN } from '../../../constants'
 
-export const getPlanInfo = (token, propertyUUID, setIsLoading) => {
+export const getPlanInfo = (token, propertyUUID, setIsLoading, setPlanInfo) => {
     if (token && propertyUUID) {
         setIsLoading(true)
         fetch(
@@ -19,6 +19,7 @@ export const getPlanInfo = (token, propertyUUID, setIsLoading) => {
             .then(
                 (result) => {
                     setIsLoading(false)
+                    setPlanInfo(result)
                     console.log('here is ER result', result)
                 },
                 (error) => {
@@ -29,7 +30,7 @@ export const getPlanInfo = (token, propertyUUID, setIsLoading) => {
     }
 }
 
-export const savePlanInfo = (token, setIsLoading, data) => {
+export const savePlanInfo = (token, setIsLoading, data, toggleInfo) => {
     if (token) {
         setIsLoading(true)
         fetch(API_URL_ADMIN + 'admin/property-power-plans', {
@@ -44,7 +45,44 @@ export const savePlanInfo = (token, setIsLoading, data) => {
             .then(
                 (result) => {
                     setIsLoading(false)
+                    toggleInfo()
                     console.log('here is CREATE RESULT', result)
+                },
+                (error) => {
+                    setIsLoading(false)
+                }
+            )
+    }
+}
+
+export const updatePlanInfo = (
+    token,
+    setIsLoading,
+    data,
+    toggleInfo,
+    propertyPowerPlanUUID
+) => {
+    if (token) {
+        setIsLoading(true)
+        fetch(
+            API_URL_ADMIN +
+                'admin/property-power-plans/' +
+                propertyPowerPlanUUID,
+            {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }
+        )
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    setIsLoading(false)
+                    toggleInfo()
+                    console.log('here is UPDATE RESULT', result)
                 },
                 (error) => {
                     setIsLoading(false)
