@@ -100,6 +100,7 @@ export default function AddTeamMemberModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
+                        console.log('here are all installers', result)
                         setInstallerGridData(result)
                     },
                     (error) => {
@@ -300,11 +301,8 @@ export default function AddTeamMemberModal(props) {
                                     isLoading={isLoading}
                                     token={props.token}
                                     propertyUUID={props.propertyUUID}
-                                    data={
-                                        props.showInstaller === true
-                                            ? installerGridData
-                                            : adminGridData
-                                    }
+                                    installerData={installerGridData}
+                                    adminData={adminGridData}
                                     setSelectionModel={setSelectionModel}
                                     showInstaller={props.showInstaller}
                                     setDisableAssignButton={

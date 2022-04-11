@@ -202,67 +202,38 @@ export default function CheckboxSelectionGrid(props) {
 
     const transformData = () => {
         let rowsTemp = []
-        props.data.forEach((element) => {
-            if (props.showInstaller === true) {
-                if (installerTeam?.length > 0) {
-                    installerTeam.forEach((member) => {
-                        // Making sure we are not showing installers that a part of this team already
-                        if (member.cognitoUUID !== element.cognitoUUID) {
-                            const tempObj = {
-                                id: element.cognitoUUID,
-                                role: props.showInstaller
-                                    ? 'Installer'
-                                    : element.role,
-                                name: element.firstName
-                                    ? element.firstName + ' ' + element.lastName
-                                    : '-',
-                                email: element.email,
-                            }
-                            rowsTemp.push(tempObj)
-                        }
-                    })
-                } else {
-                    const tempObj = {
-                        id: element.cognitoUUID,
-                        role: props.showInstaller ? 'Installer' : element.role,
-                        name: element.firstName
-                            ? element.firstName + ' ' + element.lastName
-                            : '-',
-                        email: element.email,
-                    }
-                    rowsTemp.push(tempObj)
+        const data =
+            props.showInstaller === true ? props.installerData : props.adminData
+        if (
+            data &&
+            props.showInstaller !== undefined &&
+            installerTeam &&
+            propertyTeam
+        ) {
+            data.forEach((element) => {
+                const tempObj = {
+                    id: element.cognitoUUID,
+                    role:
+                        props.showInstaller === true ? 'Installer' : 'Manager',
+                    name: element.firstName
+                        ? element.firstName + ' ' + element.lastName
+                        : '-',
+                    email: element.email,
                 }
-            } else {
-                if (propertyTeam?.length > 0) {
-                    propertyTeam.forEach((member) => {
-                        if (member.cognitoUUID !== element.cognitoUUID) {
-                            const tempObj = {
-                                id: element.cognitoUUID,
-                                role:
-                                    props.showInstaller === true
-                                        ? 'Installer'
-                                        : 'Manager',
-                                name: element.firstName
-                                    ? element.firstName + ' ' + element.lastName
-                                    : '-',
-                                email: element.email,
-                            }
-                            rowsTemp.push(tempObj)
-                        }
-                    })
-                } else {
-                    const tempObj = {
-                        id: element.cognitoUUID,
-                        role: props.showInstaller ? 'Installer' : 'Manager',
-                        name: element.firstName
-                            ? element.firstName + ' ' + element.lastName
-                            : '-',
-                        email: element.email,
+                if (props.showInstaller !== undefined) {
+                    const arrayToCheckOn =
+                        props.showInstaller === true
+                            ? installerTeam
+                            : propertyTeam
+                    let obj = arrayToCheckOn.find(
+                        (o) => o.cognitoUUID === tempObj.id
+                    )
+                    if (!rowsTemp.includes(tempObj) && !obj) {
+                        rowsTemp.push(tempObj)
                     }
-                    rowsTemp.push(tempObj)
                 }
-            }
-        })
+            })
+        }
         setRows(rowsTemp)
     }
 
@@ -273,13 +244,15 @@ export default function CheckboxSelectionGrid(props) {
 
     React.useEffect(() => {
         setRows([])
-        transformData()
+        if (props.installerData && props.adminData) {
+            transformData()
+        }
         setExistingTeamSize(
             props.showInstaller === true
                 ? installerTeam?.length
                 : propertyTeam?.length
         )
-    }, [installerTeam, propertyTeam])
+    }, [installerTeam, propertyTeam, props.installerData, props.adminData])
 
     return (
         <div style={{ width: '100%' }}>
