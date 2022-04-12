@@ -517,7 +517,7 @@ export default function SetupNewProperty(props) {
 
     const uploadPropertyImg = (propertyId) => {
         setIsLoading(true)
-        fetch(API_URL_ADMIN + 'admin/property/image/hero/' + propertyId, {
+        fetch(API_URL_ADMIN + 'api/property/image/hero/' + propertyId, {
             method: 'POST',
             headers: {
                 Authorization: 'Bearer ' + props.token,

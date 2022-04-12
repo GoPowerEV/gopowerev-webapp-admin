@@ -18,7 +18,7 @@ export default function PropertyGallery(props) {
         setIsLoading(true)
         fetch(
             API_URL_ADMIN +
-                'admin/property/image/' +
+                'api/property/image/' +
                 imageType +
                 '/' +
                 props.propertyUuid,
@@ -47,7 +47,7 @@ export default function PropertyGallery(props) {
         setIsLoading(true)
         fetch(
             API_URL_ADMIN +
-                'admin/property/image/' +
+                'api/property/image/' +
                 imageType +
                 '/' +
                 props.propertyUuid,
