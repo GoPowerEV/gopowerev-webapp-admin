@@ -54,5 +54,4 @@ jobs:
             ls -la
             aws --version
             cd build
-            aws s3 rm s3://bucket-name --recursive
             aws s3 sync . s3://gopev-admin-web-app-dev
