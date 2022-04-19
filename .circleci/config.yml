@@ -23,8 +23,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+            - admin-app-dependencies-{{ checksum "package.json" }}
+            - admin-app-dependencies-
       - run:
           name: Building
           command: |
@@ -34,7 +34,7 @@ jobs:
             npx browserslist@latest --update-db
             npm run build:dev
       - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: admin-app-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
       - persist_to_workspace:
