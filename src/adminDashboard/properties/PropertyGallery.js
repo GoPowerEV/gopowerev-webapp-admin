@@ -68,7 +68,7 @@ export default function PropertyGallery(props) {
                         } else if (imageType === 'logo') {
                             setLogo(result[2])
                         } else {
-                            setMarketingImage(result[2].url)
+                            setMarketingImage(result[2]?.url)
                         }
                     }
                     setIsLoading(false)
