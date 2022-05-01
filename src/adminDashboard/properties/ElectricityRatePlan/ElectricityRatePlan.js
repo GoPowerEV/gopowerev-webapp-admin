@@ -37,11 +37,11 @@ const margins = [
 export default function ElectricityRatePlan(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [planDetailsOpened, setPlanDetailsOpened] = useState(false)
-    const [utilityRatePlan, setUtilityRatePlan] = useState(null)
-    const [utilityRatePlanString, setUtilityRatePlanString] = useState(null)
-    const [l1MaginRate, setL1MaginRate] = useState(null)
-    const [l2MaginRate, setL2MaginRate] = useState(null)
-    const [marginAmount, setMarginAmount] = useState(null)
+    const [utilityRatePlan, setUtilityRatePlan] = useState('')
+    const [utilityRatePlanString, setUtilityRatePlanString] = useState('')
+    const [l1MarginRate, setL1MarginRate] = useState('')
+    const [l2MarginRate, setL2MarginRate] = useState('')
+    const [marginAmount, setMarginAmount] = useState('')
     const [margin, setMargin] = useState(0.0)
     const [ratePlanOptions, setRatePlanOptions] = useState([])
     const [l1Options, setL1Options] = useState([])
@@ -67,9 +67,9 @@ export default function ElectricityRatePlan(props) {
 
     const handleSettingChange = (value, type) => {
         if (type === 'l1') {
-            setL1MaginRate(value)
+            setL1MarginRate(value)
         } else {
-            setL2MaginRate(value)
+            setL2MarginRate(value)
         }
     }
 
@@ -119,8 +119,8 @@ export default function ElectricityRatePlan(props) {
     const saveThis = () => {
         const dataToSend = {
             electricityRatesUUID: utilityRatePlan,
-            l1electricityMarginsUUID: l1MaginRate,
-            l2electricityMarginsUUID: l2MaginRate,
+            l1electricityMarginsUUID: l1MarginRate,
+            l2electricityMarginsUUID: l2MarginRate,
             ownerMarginAmount: Number(marginAmount),
             ownerMarginType: margin,
             propertyUUID: props.propertyUUID,
@@ -131,8 +131,8 @@ export default function ElectricityRatePlan(props) {
     const updateThis = () => {
         const dataToSend = {
             electricityRatesUUID: utilityRatePlan,
-            l1electricityMarginsUUID: l1MaginRate,
-            l2electricityMarginsUUID: l2MaginRate,
+            l1electricityMarginsUUID: l1MarginRate,
+            l2electricityMarginsUUID: l2MarginRate,
             ownerMarginAmount: Number(marginAmount),
             ownerMarginType: margin,
             propertyUUID: props.propertyUUID,
@@ -150,8 +150,8 @@ export default function ElectricityRatePlan(props) {
         if (
             marginAmount === undefined ||
             marginAmount?.length < 1 ||
-            !l1MaginRate ||
-            !l2MaginRate ||
+            !l1MarginRate ||
+            !l2MarginRate ||
             !margin ||
             !utilityRatePlan
         ) {
@@ -159,7 +159,7 @@ export default function ElectricityRatePlan(props) {
         } else {
             setDisabledButton(false)
         }
-    }, [marginAmount, l1MaginRate, l2MaginRate, margin, utilityRatePlan])
+    }, [marginAmount, l1MarginRate, l2MarginRate, margin, utilityRatePlan])
 
     useEffect(() => {
         getPlanInfo(props.token, props.propertyUUID, setIsLoading, setPlanInfo)
@@ -169,7 +169,12 @@ export default function ElectricityRatePlan(props) {
     }, [props.token, props.propertyUUID])
 
     useEffect(() => {
-        if (planInfo && ratePlanOptions?.length > 0) {
+        if (
+            planInfo &&
+            ratePlanOptions?.length > 0 &&
+            l1Options?.length > 0 &&
+            l2Options?.length > 0
+        ) {
             setMarginAmount(planInfo.ownerMarginAmount)
             setMargin(planInfo.ownerMarginType)
             setMarginAmount(planInfo.ownerMarginAmount)
@@ -179,10 +184,17 @@ export default function ElectricityRatePlan(props) {
                 )?.label
             )
             setUtilityRatePlan(planInfo.electricityRatesUUID)
-            setL1MaginRate(planInfo.l1electricityMarginsUUID)
-            setL2MaginRate(planInfo.l2electricityMarginsUUID)
+            console.log('here setting l1', l1MarginRate)
+            setL1MarginRate(planInfo.l1electricityMarginsUUID)
+            setL2MarginRate(planInfo.l2electricityMarginsUUID)
         }
-    }, [planInfo, ratePlanOptions])
+    }, [
+        l1MarginRate,
+        l1Options?.length,
+        l2Options?.length,
+        planInfo,
+        ratePlanOptions,
+    ])
 
     return (
         <>
@@ -328,7 +340,7 @@ export default function ElectricityRatePlan(props) {
                                     labelId="l1Setting"
                                     variant="outlined"
                                     id="l1Setting"
-                                    value={l1MaginRate}
+                                    value={l1MarginRate}
                                     onChange={(e) =>
                                         handleSettingChange(
                                             e.target.value,
@@ -362,7 +374,7 @@ export default function ElectricityRatePlan(props) {
                                     labelId="l2Setting"
                                     variant="outlined"
                                     id="l2Setting"
-                                    value={l2MaginRate}
+                                    value={l2MarginRate}
                                     onChange={(e) =>
                                         handleSettingChange(
                                             e.target.value,

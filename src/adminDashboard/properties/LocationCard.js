@@ -50,8 +50,14 @@ const LocationCard = (props) => {
     const [locationName, setLocationName] = useState(props.location.name)
     const [locationInfoOpened, setlLocationInfoOpened] = useState(true)
     const [photoBinary, setPhotoBinary] = React.useState(null)
-    const [locationVoltAmps, setLocationVoltAmps] = useState(
-        props.location.maxVoltAmps
+    const [locationAmpsBlack, setLocationAmpsBlack] = useState(
+        props.location.maxAmpsBlack
+    )
+    const [locationAmpsBlue, setLocationAmpsBlue] = useState(
+        props.location.maxAmpsBlue
+    )
+    const [locationAmpsRed, setLocationAmpsRed] = useState(
+        props.location.maxAmpsRed
     )
     const [locationNotes, setLocationNotes] = useState(
         props.location.description
@@ -144,8 +150,12 @@ const LocationCard = (props) => {
             setLocationName(value)
         } else if (field === 'description') {
             setLocationNotes(value)
+        } else if (field === 'maxAmpsBlack') {
+            setLocationAmpsBlack(value)
+        } else if (field === 'maxAmpsBlue') {
+            setLocationAmpsBlue(value)
         } else {
-            setLocationVoltAmps(value)
+            setLocationAmpsRed(value)
         }
         let tempLocation = locationInfo
         tempLocation[field] = value
@@ -270,14 +280,65 @@ const LocationCard = (props) => {
                                             <TextField
                                                 fullWidth
                                                 className="editableField"
-                                                id="maxVoltAmps"
-                                                label="Max-Volt-Amps"
+                                                id="maxVoltAmpsBlack"
+                                                label="Black Max-Volt-Amps"
                                                 variant="outlined"
-                                                value={locationVoltAmps}
+                                                value={locationAmpsBlack}
                                                 onChange={(e) =>
                                                     handleLocationFieldChange(
                                                         e.target.value,
-                                                        'maxVoltAmps'
+                                                        'maxAmpsBlack'
+                                                    )
+                                                }
+                                                onBlur={() =>
+                                                    saveLocationInfo()
+                                                }
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <EditOutlinedIcon />
+                                                    ),
+                                                }}
+                                            />
+                                        </Grid>
+                                        {props.propertyPowerType !==
+                                            '1P-240' && (
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    fullWidth
+                                                    className="editableField"
+                                                    id="maxVoltAmpsBlue"
+                                                    label="Blue Max-Volt-Amps"
+                                                    variant="outlined"
+                                                    value={locationAmpsBlue}
+                                                    onChange={(e) =>
+                                                        handleLocationFieldChange(
+                                                            e.target.value,
+                                                            'maxAmpsBlue'
+                                                        )
+                                                    }
+                                                    onBlur={() =>
+                                                        saveLocationInfo()
+                                                    }
+                                                    InputProps={{
+                                                        endAdornment: (
+                                                            <EditOutlinedIcon />
+                                                        ),
+                                                    }}
+                                                />
+                                            </Grid>
+                                        )}
+                                        <Grid item xs={6}>
+                                            <TextField
+                                                fullWidth
+                                                className="editableField"
+                                                id="maxVoltAmpsRed"
+                                                label="Red Max-Volt-Amps"
+                                                variant="outlined"
+                                                value={locationAmpsRed}
+                                                onChange={(e) =>
+                                                    handleLocationFieldChange(
+                                                        e.target.value,
+                                                        'maxAmpsRed'
                                                     )
                                                 }
                                                 onBlur={() =>

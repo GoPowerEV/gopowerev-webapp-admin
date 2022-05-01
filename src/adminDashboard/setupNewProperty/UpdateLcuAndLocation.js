@@ -172,8 +172,9 @@ export default function UpdateLcuAndLocation(props) {
     const sampleLocationObject = {
         description: '',
         lcuUUID: '',
-        maxAmps: 0,
-        maxVoltAmps: 0,
+        maxAmpsBlack: '',
+        maxAmpsBlue: '',
+        maxAmpsRed: '',
         name: '',
         pictureUrl1: '',
         propertyUUID: '',
@@ -197,12 +198,6 @@ export default function UpdateLcuAndLocation(props) {
         let tempLocations = locations.splice(1, index)
         setLocations(tempLocations)
         setNumberOfLocations(tempLocations.length)
-        // CLEANING UP VOLT AMP ERRORS
-        let voltAmpsErrorsTemp = voltAmpsErrors
-        if (voltAmpsErrors[index]) {
-            voltAmpsErrorsTemp.splice(index, 1)
-            setVoltAmpsErrors(voltAmpsErrorsTemp)
-        }
         // CLEANING UP LOCATION ERRORS
         let locationsNamesErrorsTemp = locationsNamesErrors
         if (locationsNamesErrors[index]) {
@@ -241,12 +236,6 @@ export default function UpdateLcuAndLocation(props) {
     const checkIfThereAreStillErrors = () => {
         let errorCount = 0
         smartOutletsErrors.forEach((value) => {
-            if (value === true) {
-                errorCount++
-            }
-        })
-
-        voltAmpsErrors.forEach((value) => {
             if (value === true) {
                 errorCount++
             }
@@ -292,27 +281,16 @@ export default function UpdateLcuAndLocation(props) {
         }
     }
 
-    const handleThisLocationMaxVoltAmpsChange = (value, index) => {
-        if (isNaN(Number(value))) {
-            let tempErrors = voltAmpsErrors
-            tempErrors[index] = true
-            setVoltAmpsErrors(tempErrors)
-            setHasErrors(true)
-        } else if (Number(value) <= 0) {
-            let tempErrors = voltAmpsErrors
-            tempErrors[index] = true
-            setVoltAmpsErrors(tempErrors)
-            setHasErrors(true)
+    const handleThisLocationMaxVoltAmpsChange = (color, value, index) => {
+        let tempLocations = locations
+        if (color === 'black') {
+            tempLocations[index].maxAmpsBlack = value
+        } else if (color === 'blue') {
+            tempLocations[index].maxAmpsBlue = value
         } else {
-            let tempErrors = voltAmpsErrors
-            tempErrors[index] = false
-            setVoltAmpsErrors(tempErrors)
-            checkIfThereAreStillErrors()
-            let tempLocations = locations
-            tempLocations[index].maxVoltAmps = Number(value)
-            console.log('allTempLocations', tempLocations)
-            setLocations(tempLocations)
+            tempLocations[index].maxAmpsRed = value
         }
+        setLocations(tempLocations)
     }
 
     const getBinaryFromImg = (picFile, locationIndex) => {

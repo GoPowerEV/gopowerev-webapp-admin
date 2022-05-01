@@ -55,7 +55,9 @@ const CurrentlyViewedProperty = (props) => {
     const [propertyContactEmail, setPropertyContactEmail] = useState('')
     const [propertyContactPhone, setPropertyContactPhone] = useState('')
     const [propertyInfoOpened, setPropertyInfoOpened] = useState(true)
-    const [propertyMaxVoltAmps, setPropertyMaxVoltAmps] = useState('')
+    const [propertyBlackMaxVoltAmps, setPropertyBlackMaxVoltAmps] = useState('')
+    const [propertyBlueMaxVoltAmps, setPropertyBlueMaxVoltAmps] = useState('')
+    const [propertyRedMaxVoltAmps, setPropertyRedMaxVoltAmps] = useState('')
     const [propertyPowerType, setPropertyPowerType] = useState('')
     const [propertyNotes, setPropertyNotes] = useState('')
     const [locations, setLocations] = useState([])
@@ -188,8 +190,12 @@ const CurrentlyViewedProperty = (props) => {
             setPropertyState(value)
         } else if (field === 'zipcode') {
             setPropertyZip(value)
-        } else if (field === 'maxVoltAmps') {
-            setPropertyMaxVoltAmps(value)
+        } else if (field === 'maxAmpsBlack') {
+            setPropertyBlackMaxVoltAmps(value)
+        } else if (field === 'maxAmpsBlue') {
+            setPropertyBlueMaxVoltAmps(value)
+        } else if (field === 'maxAmpsRed') {
+            setPropertyRedMaxVoltAmps(value)
         } else if (field === 'detail') {
             setPropertyNotes(value)
         } else if (field === 'powerType') {
@@ -245,7 +251,9 @@ const CurrentlyViewedProperty = (props) => {
         setPropertyContactEmail(props.property.contactEmail)
         setPropertyContactPhone(props.property.contactPhone1)
         setPropertyNotes(props.property.detail)
-        setPropertyMaxVoltAmps(props.property.maxVoltAmps)
+        setPropertyRedMaxVoltAmps(props.property.maxAmpsRed)
+        setPropertyBlackMaxVoltAmps(props.property.maxAmpsBlack)
+        setPropertyBlueMaxVoltAmps(props.property.maxAmpsBlue)
         setPropertyPowerType(props.property.powerType)
         document.querySelector('body').scrollTo(0, 0)
         getPropertyLcus(
@@ -266,7 +274,7 @@ const CurrentlyViewedProperty = (props) => {
             setSmartOutlets,
             setIsLoading
         )
-    }, [])
+    }, [props.property, props.token])
 
     return (
         <div className="propertiesMainBody">
@@ -599,15 +607,71 @@ const CurrentlyViewedProperty = (props) => {
                                                         fullWidth
                                                         id="maxVoltAmps"
                                                         className="editableField"
-                                                        label="Max Volt Amps"
+                                                        label="Black Max Volt Amps"
                                                         variant="outlined"
                                                         value={
-                                                            propertyMaxVoltAmps
+                                                            propertyBlackMaxVoltAmps
                                                         }
                                                         onChange={(e) =>
                                                             handlePropertyFieldChange(
                                                                 e.target.value,
-                                                                'maxVoltAmps'
+                                                                'maxAmpsBlack'
+                                                            )
+                                                        }
+                                                        onBlur={() =>
+                                                            savePropertyInfo()
+                                                        }
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <EditOutlinedIcon />
+                                                            ),
+                                                        }}
+                                                    />
+                                                </Grid>
+                                                {propertyPowerType !==
+                                                    '1P-240' && (
+                                                    <Grid item lg={4} xs={12}>
+                                                        <TextField
+                                                            fullWidth
+                                                            id="maxVoltAmpsBlue"
+                                                            className="editableField"
+                                                            label="Blue Max Volt Amps"
+                                                            variant="outlined"
+                                                            value={
+                                                                propertyBlueMaxVoltAmps
+                                                            }
+                                                            onChange={(e) =>
+                                                                handlePropertyFieldChange(
+                                                                    e.target
+                                                                        .value,
+                                                                    'maxAmpsBlue'
+                                                                )
+                                                            }
+                                                            onBlur={() =>
+                                                                savePropertyInfo()
+                                                            }
+                                                            InputProps={{
+                                                                endAdornment: (
+                                                                    <EditOutlinedIcon />
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                )}
+                                                <Grid item lg={4} xs={12}>
+                                                    <TextField
+                                                        fullWidth
+                                                        id="maxVoltAmpsRed"
+                                                        className="editableField"
+                                                        label="Red Max Volt Amps"
+                                                        variant="outlined"
+                                                        value={
+                                                            propertyRedMaxVoltAmps
+                                                        }
+                                                        onChange={(e) =>
+                                                            handlePropertyFieldChange(
+                                                                e.target.value,
+                                                                'maxAmpsRed'
                                                             )
                                                         }
                                                         onBlur={() =>
@@ -899,6 +963,7 @@ const CurrentlyViewedProperty = (props) => {
                     {lcus &&
                         lcus.map((lcu, index) => (
                             <LcuCard
+                                propertyPowerType={propertyPowerType}
                                 token={props.token}
                                 lcu={lcu}
                                 setIsLoading={setIsLoading}

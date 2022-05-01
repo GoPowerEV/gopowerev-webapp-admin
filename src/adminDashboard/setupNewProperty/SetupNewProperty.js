@@ -172,10 +172,18 @@ export default function SetupNewProperty(props) {
     )
     const [newPropertyCell, setNewPropertyCell] = React.useState('')
     const [newPropertyEmail, setNewPropertyEmail] = React.useState('')
-    const [newPropertyMaxVoltAmps, setNewPropertyMaxVoltAmps] = React.useState(
-        ''
-    )
-    const [newPropertyMaxAmps, setNewPropertyMaxAmps] = React.useState('')
+    const [
+        newPropertyMaxVoltAmpsBlack,
+        setNewPropertyMaxVoltAmpsBlack,
+    ] = React.useState('')
+    const [
+        newPropertyMaxVoltAmpsBlue,
+        setNewPropertyMaxVoltAmpsBlue,
+    ] = React.useState('')
+    const [
+        newPropertyMaxVoltAmpsRed,
+        setNewPropertyMaxVoltAmpsRed,
+    ] = React.useState('')
     const [newPropertyNotes, setNewPropertyNotes] = React.useState('')
 
     const steps = getSteps()
@@ -252,8 +260,9 @@ export default function SetupNewProperty(props) {
             newPropertyManageName &&
             newPropertyOfficePhone &&
             newPropertyEmail &&
-            newPropertyMaxVoltAmps &&
-            newPropertyMaxAmps
+            newPropertyMaxVoltAmpsBlack &&
+            newPropertyMaxVoltAmpsBlue &&
+            newPropertyMaxVoltAmpsRed
         ) {
             setDisableSelectInstallerButton(false)
         } else {
@@ -616,12 +625,15 @@ export default function SetupNewProperty(props) {
         } else if (fieldType === 'email') {
             setNewPropertyEmail(value)
             propertyInfo.contactEmail = value
-        } else if (fieldType === 'maxVoltAmps') {
-            setNewPropertyMaxVoltAmps(value)
-            propertyInfo.maxVoltAmps = value
-        } else if (fieldType === 'maxAmps') {
-            setNewPropertyMaxAmps(value)
-            propertyInfo.maxAmps = value
+        } else if (fieldType === 'maxAmpsBlack') {
+            setNewPropertyMaxVoltAmpsBlack(value)
+            propertyInfo.maxAmpsBlack = value
+        } else if (fieldType === 'maxAmpsBlue') {
+            setNewPropertyMaxVoltAmpsBlue(value)
+            propertyInfo.maxAmpsRed = value
+        } else if (fieldType === 'maxAmpsRed') {
+            setNewPropertyMaxVoltAmpsRed(value)
+            propertyInfo.maxAmpsRed = value
         } else {
             setNewPropertyNotes(value)
             propertyInfo.detail = value
@@ -906,11 +918,11 @@ export default function SetupNewProperty(props) {
                                             <Grid item xs={6}>
                                                 <TextField
                                                     value={
-                                                        newPropertyMaxVoltAmps
+                                                        newPropertyMaxVoltAmpsBlack
                                                     }
                                                     onChange={(e) =>
                                                         handleFormChange(
-                                                            'maxVoltAmps',
+                                                            'maxAmpsBlack',
                                                             parseInt(
                                                                 e.target.value
                                                             )
@@ -919,17 +931,19 @@ export default function SetupNewProperty(props) {
                                                     className={
                                                         classes.textField
                                                     }
-                                                    label="Property Max Volt-Amps"
+                                                    label="Property Black Max Volt-Amps"
                                                     variant="outlined"
                                                     fullWidth
                                                 />
                                             </Grid>
                                             <Grid item xs={6}>
                                                 <TextField
-                                                    value={newPropertyMaxAmps}
+                                                    value={
+                                                        newPropertyMaxVoltAmpsBlue
+                                                    }
                                                     onChange={(e) =>
                                                         handleFormChange(
-                                                            'maxAmps',
+                                                            'maxAmpsBlue',
                                                             parseInt(
                                                                 e.target.value
                                                             )
@@ -938,7 +952,28 @@ export default function SetupNewProperty(props) {
                                                     className={
                                                         classes.textField
                                                     }
-                                                    label="Property Max Amps"
+                                                    label="Property Blue Max Volt-Amps"
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    value={
+                                                        newPropertyMaxVoltAmpsRed
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleFormChange(
+                                                            'maxAmpsRed',
+                                                            parseInt(
+                                                                e.target.value
+                                                            )
+                                                        )
+                                                    }
+                                                    className={
+                                                        classes.textField
+                                                    }
+                                                    label="Property Red Max Volt-Amps"
                                                     variant="outlined"
                                                     fullWidth
                                                 />

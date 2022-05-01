@@ -452,6 +452,9 @@ const LcuCard = (props) => {
                                         >
                                             <Grid item xs={12} key={index}>
                                                 <LocationCard
+                                                    propertyPowerType={
+                                                        props.propertyPowerType
+                                                    }
                                                     reloadPropertyLocations={
                                                         props.reloadPropertyLocations
                                                     }

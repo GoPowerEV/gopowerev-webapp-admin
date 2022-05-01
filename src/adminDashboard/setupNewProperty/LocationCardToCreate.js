@@ -156,7 +156,9 @@ export default function LocationCardToCreate(props) {
     const [photoFile, setPhotoFile] = React.useState(null)
     const [numberOfSmartOutlets, setNumberOfSmartOutlets] = useState([])
     const [locationName, setLocationName] = useState()
-    const [maxVoltAmps, setMaxVoltAmps] = useState()
+    const [maxVoltAmpsBlack, setMaxVoltAmpsBlack] = useState()
+    const [maxVoltAmpsBlue, setMaxVoltAmpsBlue] = useState()
+    const [maxVoltAmpsRed, setMaxVoltAmpsRed] = useState()
 
     const fileDrop = (event, locationIndex) => {
         event.preventDefault()
@@ -319,23 +321,68 @@ export default function LocationCardToCreate(props) {
                         <Grid item xs={6}>
                             <TextField
                                 className={classes.textField}
-                                label="Max Volt-Amps"
+                                label="Black Max Volt-Amps"
                                 variant="outlined"
                                 fullWidth
-                                value={maxVoltAmps}
+                                value={maxVoltAmpsBlack}
                                 onChange={(event) => {
-                                    setMaxVoltAmps(event.target.value)
+                                    setMaxVoltAmpsBlack(event.target.value)
                                     props.handleThisLocationMaxVoltAmpsChange(
+                                        'black',
                                         event.target.value,
                                         props.index
                                     )
                                 }}
                             />
-                            {props.voltAmpsErrors[props.index] === true && (
+                            {/* {props.voltAmpsErrors[props.index] === true && (
                                 <div className={classes.locationError}>
                                     Must be a number that is more than a zero.
                                 </div>
-                            )}
+                            )} */}
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                className={classes.textField}
+                                label="Blue Max Volt-Amps"
+                                variant="outlined"
+                                fullWidth
+                                value={maxVoltAmpsBlue}
+                                onChange={(event) => {
+                                    setMaxVoltAmpsBlue(event.target.value)
+                                    props.handleThisLocationMaxVoltAmpsChange(
+                                        'blue',
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                            />
+                            {/* {props.voltAmpsErrors[props.index] === true && (
+                                <div className={classes.locationError}>
+                                    Must be a number that is more than a zero.
+                                </div>
+                            )} */}
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                className={classes.textField}
+                                label="Red Max Volt-Amps"
+                                variant="outlined"
+                                fullWidth
+                                value={maxVoltAmpsRed}
+                                onChange={(event) => {
+                                    setMaxVoltAmpsRed(event.target.value)
+                                    props.handleThisLocationMaxVoltAmpsChange(
+                                        'red',
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                            />
+                            {/* {props.voltAmpsErrors[props.index] === true && (
+                                <div className={classes.locationError}>
+                                    Must be a number that is more than a zero.
+                                </div>
+                            )} */}
                         </Grid>
                         <Grid item xs={6}>
                             <FormControl variant="filled" fullWidth>
