@@ -70,8 +70,9 @@ export default function AddNewLocationModal(props) {
         {
             description: '',
             lcuUUID: '',
-            maxAmps: 0,
-            maxVoltAmps: 0,
+            maxAmpsRed: '',
+            maxAmpsBlack: '',
+            maxAmpsBlue: '',
             name: '',
             pictureUrl1: '',
             propertyUUID: props.propertyUUID,
@@ -91,8 +92,9 @@ export default function AddNewLocationModal(props) {
     const sampleLocationObject = {
         description: '',
         lcuUUID: '',
-        maxAmps: 0,
-        maxVoltAmps: 0,
+        maxAmpsRed: '',
+        maxAmpsBlack: '',
+        maxAmpsBlue: '',
         name: '',
         pictureUrl1: '',
         propertyUUID: props.propertyUUID,
@@ -318,7 +320,9 @@ export default function AddNewLocationModal(props) {
         setIsLoading(true)
         let locationObject = {
             lcuUUID: lcuId,
-            maxVoltAmps: location.maxVoltAmps,
+            maxAmpsRed: location.maxAmpsRed,
+            maxAmpsBlue: location.maxAmpsBlue,
+            maxAmpsBlack: location.maxAmpsBlack,
             name: location.name,
             propertyUUID: props.propertyUUID,
         }
@@ -378,11 +382,15 @@ export default function AddNewLocationModal(props) {
         }
     }
 
-    const handleThisLocationMaxVoltAmpsChange = (value, index) => {
-        console.log('volts firing')
+    const handleThisLocationMaxVoltAmpsChange = (color, value, index) => {
         let tempLocations = [...locations]
-        tempLocations[index].maxVoltAmps = value
-        console.log('allTempLocations', tempLocations)
+        if (color === 'black') {
+            tempLocations[index].maxAmpsBlack = value
+        } else if (color === 'blue') {
+            tempLocations[index].maxAmpsBlue = value
+        } else {
+            tempLocations[index].maxAmpsRed = value
+        }
         setLocations(tempLocations)
     }
 
@@ -400,12 +408,16 @@ export default function AddNewLocationModal(props) {
     useEffect(() => {
         if (
             locations[0].name &&
-            locations[0].maxVoltAmps &&
+            locations[0].maxAmpsBlack &&
+            locations[0].maxAmpsRed &&
+            locations[0].maxAmpsBlue &&
             amountOfSmartOutlets[0]
         ) {
             if (
                 locations[0].name.length > 0 &&
-                locations[0].maxVoltAmps.toString().length > 0 &&
+                locations[0].maxAmpsBlack.toString().length > 0 &&
+                locations[0].maxAmpsRed.toString().length > 0 &&
+                locations[0].maxAmpsBlue.toString().length > 0 &&
                 amountOfSmartOutlets[0].toString().length > 0
             ) {
                 setDisableSubmitButton(false)
@@ -413,7 +425,7 @@ export default function AddNewLocationModal(props) {
                 setDisableSubmitButton(true)
             }
         }
-    }, [locations])
+    }, [amountOfSmartOutlets, locations])
 
     const body = (
         <div style={modalStyle} className={classes.paper}>
@@ -508,11 +520,46 @@ export default function AddNewLocationModal(props) {
                                     fullWidth
                                     className="editableField"
                                     id="maxVoltAmps"
-                                    label="Max Max Amps"
+                                    label="Black Max Amps"
                                     variant="filled"
-                                    value={locations[0].maxVoltAmps}
+                                    value={locations[0].maxAmpsBlack}
                                     onChange={(event) =>
                                         handleThisLocationMaxVoltAmpsChange(
+                                            'black',
+                                            event.target.value,
+                                            0
+                                        )
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    className="editableField"
+                                    id="maxVoltAmpsBlue"
+                                    label="Blue Max Amps"
+                                    variant="filled"
+                                    value={locations[0].maxAmpsBlue}
+                                    onChange={(event) =>
+                                        handleThisLocationMaxVoltAmpsChange(
+                                            'blue',
+                                            event.target.value,
+                                            0
+                                        )
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <TextField
+                                    fullWidth
+                                    className="editableField"
+                                    id="maxVoltAmpsRed"
+                                    label="Red Max Amps"
+                                    variant="filled"
+                                    value={locations[0].maxAmpsRed}
+                                    onChange={(event) =>
+                                        handleThisLocationMaxVoltAmpsChange(
+                                            'red',
                                             event.target.value,
                                             0
                                         )

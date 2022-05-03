@@ -133,8 +133,9 @@ export default function SetupNewProperty(props) {
         contactPhone2: '',
         createdAt: '',
         // installerUUID: '',
-        maxAmps: 0,
-        maxVoltAmps: 0,
+        maxAmpsBlue: '',
+        maxAmpsRed: '',
+        maxAmpsBlack: '',
         name: '',
         pictureUrl1: '',
         state: '',
@@ -351,7 +352,9 @@ export default function SetupNewProperty(props) {
         setIsLoading(true)
         let locationObject = {
             lcuUUID: lcuId,
-            maxVoltAmps: location.maxVoltAmps,
+            maxAmpsRed: location.maxAmpsRed,
+            maxAmpsBlack: location.maxAmpsBlack,
+            maxAmpsBlue: location.maxAmpsBlue,
             name: location.name,
             propertyUUID: propertyId,
         }
