@@ -281,7 +281,7 @@ const LocationCard = (props) => {
                                                 fullWidth
                                                 className="editableField"
                                                 id="maxVoltAmpsBlack"
-                                                label="Black Max-Volt-Amps"
+                                                label="Black-Max Amps"
                                                 variant="outlined"
                                                 value={locationAmpsBlack}
                                                 onChange={(e) =>
@@ -307,7 +307,7 @@ const LocationCard = (props) => {
                                                     fullWidth
                                                     className="editableField"
                                                     id="maxVoltAmpsBlue"
-                                                    label="Blue Max-Volt-Amps"
+                                                    label="Blue-Max Amps"
                                                     variant="outlined"
                                                     value={locationAmpsBlue}
                                                     onChange={(e) =>
@@ -332,7 +332,7 @@ const LocationCard = (props) => {
                                                 fullWidth
                                                 className="editableField"
                                                 id="maxVoltAmpsRed"
-                                                label="Red Max-Volt-Amps"
+                                                label="Red-Max Amps"
                                                 variant="outlined"
                                                 value={locationAmpsRed}
                                                 onChange={(e) =>

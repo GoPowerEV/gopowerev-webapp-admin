@@ -250,26 +250,6 @@ export default function SetupNewProperty(props) {
         handleNext()
     }
 
-    const validateFirstStep = () => {
-        if (
-            newPropertyName &&
-            newPropertyStreet &&
-            newPropertyCity &&
-            newPropertyState &&
-            newPropertyZip &&
-            newPropertyManageName &&
-            newPropertyOfficePhone &&
-            newPropertyEmail &&
-            newPropertyMaxVoltAmpsBlack &&
-            newPropertyMaxVoltAmpsBlue &&
-            newPropertyMaxVoltAmpsRed
-        ) {
-            setDisableSelectInstallerButton(false)
-        } else {
-            setDisableSelectInstallerButton(true)
-        }
-    }
-
     const uploadLocationPicture = (locationId, photoBinaries, index) => {
         setIsLoading(true)
         if (props.token) {
@@ -639,8 +619,39 @@ export default function SetupNewProperty(props) {
             propertyInfo.detail = value
         }
         setPropertyInfo(tempPropertyInfo)
-        validateFirstStep()
     }
+
+    useEffect(() => {
+        if (
+            newPropertyName &&
+            newPropertyStreet &&
+            newPropertyCity &&
+            newPropertyState &&
+            newPropertyZip &&
+            newPropertyManageName &&
+            newPropertyOfficePhone &&
+            newPropertyEmail &&
+            newPropertyMaxVoltAmpsBlack &&
+            newPropertyMaxVoltAmpsBlue &&
+            newPropertyMaxVoltAmpsRed
+        ) {
+            setDisableSelectInstallerButton(false)
+        } else {
+            setDisableSelectInstallerButton(true)
+        }
+    }, [
+        newPropertyName,
+        newPropertyStreet,
+        newPropertyCity,
+        newPropertyState,
+        newPropertyZip,
+        newPropertyManageName,
+        newPropertyOfficePhone,
+        newPropertyEmail,
+        newPropertyMaxVoltAmpsBlack,
+        newPropertyMaxVoltAmpsBlue,
+        newPropertyMaxVoltAmpsRed,
+    ])
 
     return (
         <div className={classes.root}>
@@ -931,7 +942,7 @@ export default function SetupNewProperty(props) {
                                                     className={
                                                         classes.textField
                                                     }
-                                                    label="Property Black Max Volt-Amps"
+                                                    label="Property Black Max Amps"
                                                     variant="outlined"
                                                     fullWidth
                                                 />
@@ -952,7 +963,7 @@ export default function SetupNewProperty(props) {
                                                     className={
                                                         classes.textField
                                                     }
-                                                    label="Property Blue Max Volt-Amps"
+                                                    label="Property Blue Max Amps"
                                                     variant="outlined"
                                                     fullWidth
                                                 />
@@ -973,7 +984,7 @@ export default function SetupNewProperty(props) {
                                                     className={
                                                         classes.textField
                                                     }
-                                                    label="Property Red Max Volt-Amps"
+                                                    label="Property Red Max Amps"
                                                     variant="outlined"
                                                     fullWidth
                                                 />

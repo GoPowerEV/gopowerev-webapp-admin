@@ -599,7 +599,7 @@ export default function AddNewLcuModal(props) {
                                     fullWidth
                                     className="editableField"
                                     id="maxVoltAmps"
-                                    label="Max Volt-Amps"
+                                    label="Max Max Amps"
                                     variant="filled"
                                     value={locations[0].maxVoltAmps}
                                     onChange={(event) =>

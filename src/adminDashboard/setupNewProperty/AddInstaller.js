@@ -129,7 +129,7 @@ export default function AddInstaller(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [disableAddLcuButton, setDisableAddLcuButton] = useState(false)
     const [selectedInstaller, setSelectedInstaller] = useState()
-    const [installers, setInstallers] = useState([])
+    const [installers, setInstallers] = useState()
 
     const handleSelectInstaller = (installerId) => {
         let installerName = installers.filter(
@@ -201,7 +201,7 @@ export default function AddInstaller(props) {
         // } else {
         //     setDisableAddLcuButton(true)
         // }
-    }, [])
+    }, [props.token])
 
     return (
         <div className={classes.root}>
@@ -263,37 +263,39 @@ export default function AddInstaller(props) {
                             Select Installer
                         </div>
                         <Grid container xs={12}>
-                            <FormControl
-                                fullWidth
-                                variant="outlined"
-                                className={classes.formControl}
-                            >
-                                <InputLabel id="demo-simple-select-outlined-label">
-                                    Company Installers
-                                </InputLabel>
-                                <Select
+                            {installers?.length > 0 && (
+                                <FormControl
                                     fullWidth
-                                    className={classes.textField}
-                                    labelId="demo-simple-select-outlined-label"
-                                    id="demo-simple-select-outlined"
-                                    value={selectedInstaller}
-                                    onChange={(event) =>
-                                        handleSelectInstaller(
-                                            event.target.value
-                                        )
-                                    }
-                                    label="Company Installers"
+                                    variant="outlined"
+                                    className={classes.formControl}
                                 >
-                                    {installers?.map((installer) => (
-                                        <MenuItem
-                                            value={installer.cognitoUUID}
-                                            key={installer.cognitoUUID}
-                                        >
-                                            {installer.email}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                    <InputLabel id="demo-simple-select-outlined-label">
+                                        Company Installers
+                                    </InputLabel>
+                                    <Select
+                                        fullWidth
+                                        className={classes.textField}
+                                        labelId="demo-simple-select-outlined-label"
+                                        id="demo-simple-select-outlined"
+                                        value={selectedInstaller}
+                                        onChange={(event) =>
+                                            handleSelectInstaller(
+                                                event.target.value
+                                            )
+                                        }
+                                        label="Company Installers"
+                                    >
+                                        {installers?.map((installer) => (
+                                            <MenuItem
+                                                value={installer.cognitoUUID}
+                                                key={installer.cognitoUUID}
+                                            >
+                                                {installer.email}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
                         </Grid>
                     </div>
                     <Grid

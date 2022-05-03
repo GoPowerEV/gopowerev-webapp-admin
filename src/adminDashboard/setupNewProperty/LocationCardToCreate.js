@@ -321,7 +321,7 @@ export default function LocationCardToCreate(props) {
                         <Grid item xs={6}>
                             <TextField
                                 className={classes.textField}
-                                label="Black Max Volt-Amps"
+                                label="Black Max Amps"
                                 variant="outlined"
                                 fullWidth
                                 value={maxVoltAmpsBlack}
@@ -343,7 +343,7 @@ export default function LocationCardToCreate(props) {
                         <Grid item xs={6}>
                             <TextField
                                 className={classes.textField}
-                                label="Blue Max Volt-Amps"
+                                label="Blue Max Amps"
                                 variant="outlined"
                                 fullWidth
                                 value={maxVoltAmpsBlue}
@@ -365,7 +365,7 @@ export default function LocationCardToCreate(props) {
                         <Grid item xs={6}>
                             <TextField
                                 className={classes.textField}
-                                label="Red Max Volt-Amps"
+                                label="Red Max Amps"
                                 variant="outlined"
                                 fullWidth
                                 value={maxVoltAmpsRed}

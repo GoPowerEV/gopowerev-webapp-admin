@@ -607,7 +607,7 @@ const CurrentlyViewedProperty = (props) => {
                                                         fullWidth
                                                         id="maxVoltAmps"
                                                         className="editableField"
-                                                        label="Black Max Volt Amps"
+                                                        label="Black Max Amps"
                                                         variant="outlined"
                                                         value={
                                                             propertyBlackMaxVoltAmps
@@ -635,7 +635,7 @@ const CurrentlyViewedProperty = (props) => {
                                                             fullWidth
                                                             id="maxVoltAmpsBlue"
                                                             className="editableField"
-                                                            label="Blue Max Volt Amps"
+                                                            label="Blue Max Amps"
                                                             variant="outlined"
                                                             value={
                                                                 propertyBlueMaxVoltAmps
@@ -663,7 +663,7 @@ const CurrentlyViewedProperty = (props) => {
                                                         fullWidth
                                                         id="maxVoltAmpsRed"
                                                         className="editableField"
-                                                        label="Red Max Volt Amps"
+                                                        label="Red Max Amps"
                                                         variant="outlined"
                                                         value={
                                                             propertyRedMaxVoltAmps
