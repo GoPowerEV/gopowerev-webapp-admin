@@ -8,6 +8,25 @@
     margin-top: 85px;
 }
 
+.editableFieldSelectContainerNewProperty div {
+    font-family: 'Nunito Sans', sans-serif !important;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.editableFieldSelectContainerNewProperty div div {
+    font-family: 'Nunito Sans', sans-serif !important;
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.editableFieldSelectContainerNewProperty label {
+    font-family: 'Nunito Sans', sans-serif !important;
+    z-index: 1;
+    left: 13px;
+    top: -9px;
+}
+
 .editableFieldSelectContainer div {
     font-family: 'Nunito Sans', sans-serif !important;
     background-color: #e8e8e8;
@@ -401,8 +420,7 @@
     background-color: #12bfa2 !important;
     color: #ffffff !important;
     font-weight: bold !important;
-    height: 55px;
-    width: 100%;
+    width: auto;
 }
 
 .editPropertyImageButton {

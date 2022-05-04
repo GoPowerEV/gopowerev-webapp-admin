@@ -229,75 +229,34 @@ export default function LocationCardToCreate(props) {
                 )}
             </Grid>
             <Grid container xs={12} spacing={5}>
-                <Grid item xs={6}>
-                    <div className={classes.formHeader}>
-                        Location {props.index + 1} Details
-                    </div>
-                    <TextField
-                        className={classes.textField}
-                        label="Location name"
-                        value={locationName}
-                        variant="outlined"
-                        onChange={(event) => {
-                            setLocationName(event.target.value)
-                            props.handleThisLocationNameChange(
-                                event.target.value,
-                                props.index
-                            )
-                        }}
-                        fullWidth
-                    />
-                    {props.locationsNamesErrors[props.index] === true && (
-                        <div className={classes.locationError}>
-                            Location name must have a value.
-                        </div>
-                    )}
-                </Grid>
-                <Grid item xs={6}>
-                    <div className={classes.formHeader}>Location Photo</div>
-                    <Grid container spacing={3}>
-                        {!photoAdded && (
-                            <Button
-                                className={classes.photoUploadButton}
-                                variant="contained"
-                                startIcon={<ImageOutlinedIcon />}
-                                onClick={handlePhotoClick}
-                                onDragOver={dragOver}
-                                onDragEnter={dragEnter}
-                                onDragLeave={dragLeave}
-                                onDrop={(e) => fileDrop(e, props.index)}
-                                fullWidth
-                            >
-                                Click here or drag and drop photo
-                            </Button>
-                        )}
-                        {photoAdded && (
-                            <div className={classes.photoSelectedName}>
-                                <DoneOutlineOutlinedIcon
-                                    style={{
-                                        marginRight: '10px',
-                                        color: green[500],
-                                    }}
-                                />
-                                Photo selected:
-                                {props.photoFileNames[props.index]}
+                <Grid item md={6} xs={12}>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                            <div className={classes.formHeader}>
+                                Location {props.index + 1} Details
                             </div>
-                        )}
-                        <input
-                            type="file"
-                            ref={hiddenFileInput}
-                            style={{
-                                display: 'none',
-                            }}
-                            onChange={(e) => handlePhotoChange(e, props.index)}
-                        />
-                    </Grid>
-                </Grid>
-            </Grid>
-            <Grid container xs={12} spacing={4}>
-                <Grid item xs={6}>
-                    <Grid container xs={12} spacing={4}>
-                        <Grid item xs={6}>
+                            <TextField
+                                className={classes.textField}
+                                label="Location name"
+                                value={locationName}
+                                variant="outlined"
+                                onChange={(event) => {
+                                    setLocationName(event.target.value)
+                                    props.handleThisLocationNameChange(
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                                fullWidth
+                            />
+                            {props.locationsNamesErrors[props.index] ===
+                                true && (
+                                <div className={classes.locationError}>
+                                    Location name must have a value.
+                                </div>
+                            )}
+                        </Grid>
+                        <Grid item lg={6} md={12}>
                             <TextField
                                 className={classes.textField}
                                 label="Number of Smart Outlets"
@@ -318,7 +277,7 @@ export default function LocationCardToCreate(props) {
                                 </div>
                             )}
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item lg={6} md={12}>
                             <TextField
                                 className={classes.textField}
                                 label="Black Max Amps"
@@ -415,6 +374,53 @@ export default function LocationCardToCreate(props) {
                         </Grid>
                     </Grid>
                 </Grid>
+                <Grid item md={6} xs={12}>
+                    <div className={classes.formHeader}>Location Photo</div>
+                    <Grid container spacing={3}>
+                        {!photoAdded && (
+                            <Button
+                                className={classes.photoUploadButton}
+                                variant="contained"
+                                startIcon={<ImageOutlinedIcon />}
+                                onClick={handlePhotoClick}
+                                onDragOver={dragOver}
+                                onDragEnter={dragEnter}
+                                onDragLeave={dragLeave}
+                                onDrop={(e) => fileDrop(e, props.index)}
+                                fullWidth
+                            >
+                                Click here or drag and drop photo
+                            </Button>
+                        )}
+                        {photoAdded && (
+                            <div className={classes.photoSelectedName}>
+                                <DoneOutlineOutlinedIcon
+                                    style={{
+                                        marginRight: '10px',
+                                        color: green[500],
+                                    }}
+                                />
+                                Photo selected:
+                                {props.photoFileNames[props.index]}
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            ref={hiddenFileInput}
+                            style={{
+                                display: 'none',
+                            }}
+                            onChange={(e) => handlePhotoChange(e, props.index)}
+                        />
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid item xs={6}>
+                <Grid
+                    container
+                    spacing={2}
+                    justifyContent="space-between"
+                ></Grid>
             </Grid>
         </div>
     )

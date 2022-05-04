@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '24px',
         fontWeight: 'bold',
     },
+    buttonContainer: {
+        marginLeft: '25px',
+        fontSize: '24px',
+        fontWeight: 'bold',
+    },
     firstHeader: {
         fontFamily: 'Nunito Sans, sans-serif !important',
         color: '#12BFA2',
@@ -91,7 +96,6 @@ const useStyles = makeStyles((theme) => ({
     active: {},
     completed: {},
     createButton: {
-        width: '400px',
         backgroundColor: '#12BFA2',
         marginTop: '20px',
         marginBottom: '40px',
@@ -100,6 +104,18 @@ const useStyles = makeStyles((theme) => ({
         textTransform: 'none',
         fontSize: '18px',
         borderRadius: '5px',
+    },
+    createButton2: {
+        backgroundColor: '#12BFA2',
+        marginTop: '20px',
+        marginBottom: '40px',
+        marginRight: '5px',
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+        textTransform: 'none',
+        fontSize: '18px',
+        borderRadius: '5px',
+        float: 'right',
     },
     formControlState: {
         position: 'relative',
@@ -442,131 +458,141 @@ export default function UpdateLcuAndLocation(props) {
                 ))}
             </Stepper>
             {!isLoading && (
-                <Grid className={classes.headerContainer} container>
-                    <div className={classes.formHeaderGrey}>
-                        Property Details
-                    </div>
-                    <Grid container xs={12}>
-                        <Grid item xs={10}>
-                            <span className={classes.installerDetailsStep2}>
-                                {props.newPropertyName}
-                            </span>
-                            <span className={classes.splitter}>|</span>
-                            <span className={classes.installerDetailsStep2}>
-                                {props.newPropertyAddress}
-                            </span>
-                            <span className={classes.splitter}>|</span>
-                            <span className={classes.installerDetailsStep2}>
-                                {props.newPropertyAdminName}
-                            </span>
+                <>
+                    <Grid className={classes.headerContainer} container>
+                        <div className={classes.formHeaderGrey}>
+                            Property Details
+                        </div>
+                        <Grid container xs={12}>
+                            <Grid item xs={10}>
+                                <span className={classes.installerDetailsStep2}>
+                                    {props.newPropertyName}
+                                </span>
+                                <span className={classes.splitter}>|</span>
+                                <span className={classes.installerDetailsStep2}>
+                                    {props.newPropertyAddress}
+                                </span>
+                                <span className={classes.splitter}>|</span>
+                                <span className={classes.installerDetailsStep2}>
+                                    {props.newPropertyAdminName}
+                                </span>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <EditOutlinedIcon
+                                    className={classes.editIcon}
+                                    onClick={props.handleTwoBack}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid item xs={2}>
-                            <EditOutlinedIcon
-                                className={classes.editIcon}
-                                onClick={props.handleTwoBack}
-                            />
+                        <div className={classes.hrContainer}>
+                            <hr className={classes.dottedHr} />
+                        </div>
+                        <div className={classes.formHeaderGrey}>
+                            Installer Details
+                        </div>
+                        <Grid container xs={12}>
+                            <Grid item xs={10}>
+                                <span className={classes.installerDetailsStep2}>
+                                    {props.installerName}
+                                </span>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <EditOutlinedIcon
+                                    className={classes.editIcon}
+                                    onClick={props.handleBack}
+                                />
+                            </Grid>
                         </Grid>
+                        <div className={classes.formContainer}>
+                            <div className={classes.formHeader}>
+                                LCU Details
+                            </div>
+                            <Grid container xs={12} spacing={4}>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        className={classes.textField}
+                                        label="Add LCU name"
+                                        variant="outlined"
+                                        value={lcuName}
+                                        onChange={handleLcuNameChange}
+                                        fullWidth
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        className={classes.textField}
+                                        label="LCU Model"
+                                        variant="outlined"
+                                        value={lcuModel}
+                                        fullWidth
+                                        disabled
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Grid container xs={12} spacing={4}>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        className={classes.textField}
+                                        label="Number of Locations"
+                                        value={numberOfLocations}
+                                        variant="outlined"
+                                        fullWidth
+                                        disabled
+                                    />
+                                    {locationsError && (
+                                        <div className={classes.errorText}>
+                                            Must be a number
+                                        </div>
+                                    )}
+                                </Grid>
+                            </Grid>
+                        </div>
+                        {locations.length > 0 && (
+                            <React.Fragment>
+                                {locations.map((location, index) => (
+                                    <LocationCardToCreate
+                                        handleThisLocationNameChange={
+                                            handleThisLocationNameChange
+                                        }
+                                        amountOfSmartOutlets={
+                                            amountOfSmartOutlets
+                                        }
+                                        locationsNamesErrors={
+                                            locationsNamesErrors
+                                        }
+                                        removeThisLocation={removeThisLocation}
+                                        index={index}
+                                        location={location}
+                                        setPhotoFileNames={setPhotoFileNames}
+                                        getBinaryFromImg={getBinaryFromImg}
+                                        photoFileNames={photoFileNames}
+                                        smartOutletsErrors={smartOutletsErrors}
+                                        handleThisLocationMaxVoltAmpsChange={
+                                            handleThisLocationMaxVoltAmpsChange
+                                        }
+                                        voltAmpsErrors={voltAmpsErrors}
+                                        handleThisLocationNumberOfSmartOutletsChange={
+                                            handleThisLocationNumberOfSmartOutletsChange
+                                        }
+                                        setSoModel={setSoModel}
+                                        soModel={soModel}
+                                        models={models}
+                                        setIsLoading={setIsLoading}
+                                    />
+                                ))}
+                            </React.Fragment>
+                        )}
                     </Grid>
-                    <div className={classes.hrContainer}>
-                        <hr className={classes.dottedHr} />
-                    </div>
-                    <div className={classes.formHeaderGrey}>
-                        Installer Details
-                    </div>
-                    <Grid container xs={12}>
-                        <Grid item xs={10}>
-                            <span className={classes.installerDetailsStep2}>
-                                {props.installerName}
-                            </span>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <EditOutlinedIcon
-                                className={classes.editIcon}
-                                onClick={props.handleBack}
-                            />
-                        </Grid>
-                    </Grid>
-                    <div className={classes.formContainer}>
-                        <div className={classes.formHeader}>LCU Details</div>
-                        <Grid container xs={12} spacing={4}>
-                            <Grid item xs={6}>
-                                <TextField
-                                    className={classes.textField}
-                                    label="Add LCU name"
-                                    variant="outlined"
-                                    value={lcuName}
-                                    onChange={handleLcuNameChange}
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    className={classes.textField}
-                                    label="LCU Model"
-                                    variant="outlined"
-                                    value={lcuModel}
-                                    fullWidth
-                                    disabled
-                                />
-                            </Grid>
-                        </Grid>
-                        <Grid container xs={12} spacing={4}>
-                            <Grid item xs={6}>
-                                <TextField
-                                    className={classes.textField}
-                                    label="Number of Locations"
-                                    value={numberOfLocations}
-                                    variant="outlined"
-                                    fullWidth
-                                    disabled
-                                />
-                                {locationsError && (
-                                    <div className={classes.errorText}>
-                                        Must be a number
-                                    </div>
-                                )}
-                            </Grid>
-                        </Grid>
-                    </div>
-                    {locations.length > 0 && (
-                        <React.Fragment>
-                            {locations.map((location, index) => (
-                                <LocationCardToCreate
-                                    handleThisLocationNameChange={
-                                        handleThisLocationNameChange
-                                    }
-                                    amountOfSmartOutlets={amountOfSmartOutlets}
-                                    locationsNamesErrors={locationsNamesErrors}
-                                    removeThisLocation={removeThisLocation}
-                                    index={index}
-                                    location={location}
-                                    setPhotoFileNames={setPhotoFileNames}
-                                    getBinaryFromImg={getBinaryFromImg}
-                                    photoFileNames={photoFileNames}
-                                    smartOutletsErrors={smartOutletsErrors}
-                                    handleThisLocationMaxVoltAmpsChange={
-                                        handleThisLocationMaxVoltAmpsChange
-                                    }
-                                    voltAmpsErrors={voltAmpsErrors}
-                                    handleThisLocationNumberOfSmartOutletsChange={
-                                        handleThisLocationNumberOfSmartOutletsChange
-                                    }
-                                    setSoModel={setSoModel}
-                                    soModel={soModel}
-                                    models={models}
-                                    setIsLoading={setIsLoading}
-                                />
-                            ))}
-                        </React.Fragment>
-                    )}
                     <Grid
-                        className={classes.headerContainer}
+                        className={classes.buttonContainer}
+                        direction="row"
                         container
-                        spacing={1}
+                        justifyContent="space-between"
+                        alignItems="center"
+                        xs={11}
                     >
-                        <Grid item xs={7}>
+                        <Grid item xs={6}>
                             <Button
-                                fullWidth
                                 variant="contained"
                                 className={classes.createButton}
                                 onClick={() => handleNumberOfLocationsChange()}
@@ -574,11 +600,10 @@ export default function UpdateLcuAndLocation(props) {
                                 Add New Location
                             </Button>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={6}>
                             <Button
-                                fullWidth
                                 variant="contained"
-                                className={classes.createButton}
+                                className={classes.createButton2}
                                 disabled={submitButtonDisabled}
                                 onClick={() => validateAndSubmit()}
                             >
@@ -586,7 +611,7 @@ export default function UpdateLcuAndLocation(props) {
                             </Button>
                         </Grid>
                     </Grid>
-                </Grid>
+                </>
             )}
             {isLoading && (
                 <div className="loaderContainer">

@@ -13,7 +13,10 @@ import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined'
 import DoneOutlineOutlinedIcon from '@material-ui/icons/DoneOutlineOutlined'
-import { getAllStates } from './../properties/utils/PropertyUtils'
+import {
+    getAllStates,
+    getTypesOfPowerServiceOptions,
+} from './../properties/utils/PropertyUtils'
 import { green } from '@material-ui/core/colors'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import AddInstaller from './AddInstaller'
@@ -186,6 +189,8 @@ export default function SetupNewProperty(props) {
         setNewPropertyMaxVoltAmpsRed,
     ] = React.useState('')
     const [newPropertyNotes, setNewPropertyNotes] = React.useState('')
+    const [newPropertyPowerType, setNewPropertyPowerType] = useState('')
+    const allPowerTypes = getTypesOfPowerServiceOptions()
 
     const steps = getSteps()
 
@@ -617,6 +622,9 @@ export default function SetupNewProperty(props) {
         } else if (fieldType === 'maxAmpsRed') {
             setNewPropertyMaxVoltAmpsRed(value)
             propertyInfo.maxAmpsRed = value
+        } else if (fieldType === 'powerType') {
+            setNewPropertyPowerType(value)
+            propertyInfo.powerType = value
         } else {
             setNewPropertyNotes(value)
             propertyInfo.detail = value
@@ -929,7 +937,44 @@ export default function SetupNewProperty(props) {
                                         </div>
 
                                         <Grid container spacing={3}>
-                                            <Grid item xs={6}>
+                                            <Grid item lg={6} md={12} sm={12}>
+                                                <FormControl
+                                                    fullWidth
+                                                    className="editableFieldSelectContainerNewProperty"
+                                                >
+                                                    <InputLabel id="typeOfPowerService">
+                                                        Type Of Power Service
+                                                    </InputLabel>
+                                                    <Select
+                                                        labelId="typeOfPowerService"
+                                                        variant="outlined"
+                                                        id="typeOfPowerService"
+                                                        value={
+                                                            newPropertyPowerType
+                                                        }
+                                                        label="Type Of Power Service"
+                                                        onChange={(e) =>
+                                                            handleFormChange(
+                                                                'powerType',
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                    >
+                                                        {allPowerTypes?.map(
+                                                            (type) => (
+                                                                <MenuItem
+                                                                    value={
+                                                                        type.value
+                                                                    }
+                                                                >
+                                                                    {type.value}
+                                                                </MenuItem>
+                                                            )
+                                                        )}
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                            <Grid item lg={6} xs={8}>
                                                 <TextField
                                                     value={
                                                         newPropertyMaxVoltAmpsBlack
@@ -950,28 +995,32 @@ export default function SetupNewProperty(props) {
                                                     fullWidth
                                                 />
                                             </Grid>
-                                            <Grid item xs={6}>
-                                                <TextField
-                                                    value={
-                                                        newPropertyMaxVoltAmpsBlue
-                                                    }
-                                                    onChange={(e) =>
-                                                        handleFormChange(
-                                                            'maxAmpsBlue',
-                                                            parseInt(
-                                                                e.target.value
+                                            {newPropertyPowerType !==
+                                                '1P-240' && (
+                                                <Grid item lg={6} xs={8}>
+                                                    <TextField
+                                                        value={
+                                                            newPropertyMaxVoltAmpsBlue
+                                                        }
+                                                        onChange={(e) =>
+                                                            handleFormChange(
+                                                                'maxAmpsBlue',
+                                                                parseInt(
+                                                                    e.target
+                                                                        .value
+                                                                )
                                                             )
-                                                        )
-                                                    }
-                                                    className={
-                                                        classes.textField
-                                                    }
-                                                    label="Property Blue Max Amps"
-                                                    variant="outlined"
-                                                    fullWidth
-                                                />
-                                            </Grid>
-                                            <Grid item xs={6}>
+                                                        }
+                                                        className={
+                                                            classes.textField
+                                                        }
+                                                        label="Property Blue Max Amps"
+                                                        variant="outlined"
+                                                        fullWidth
+                                                    />
+                                                </Grid>
+                                            )}
+                                            <Grid item lg={6} xs={8}>
                                                 <TextField
                                                     value={
                                                         newPropertyMaxVoltAmpsRed
