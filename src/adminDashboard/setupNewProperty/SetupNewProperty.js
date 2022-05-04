@@ -644,7 +644,8 @@ export default function SetupNewProperty(props) {
             newPropertyEmail &&
             newPropertyMaxVoltAmpsBlack &&
             newPropertyMaxVoltAmpsBlue &&
-            newPropertyMaxVoltAmpsRed
+            newPropertyMaxVoltAmpsRed &&
+            newPropertyPowerType
         ) {
             setDisableSelectInstallerButton(false)
         } else {
@@ -662,7 +663,14 @@ export default function SetupNewProperty(props) {
         newPropertyMaxVoltAmpsBlack,
         newPropertyMaxVoltAmpsBlue,
         newPropertyMaxVoltAmpsRed,
+        newPropertyPowerType,
     ])
+
+    useEffect(() => {
+        if (newPropertyPowerType === '1P-240') {
+            newPropertyMaxVoltAmpsBlue(0)
+        }
+    }, [newPropertyPowerType])
 
     return (
         <div className={classes.root}>
