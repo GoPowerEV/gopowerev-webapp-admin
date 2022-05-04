@@ -668,7 +668,7 @@ export default function SetupNewProperty(props) {
 
     useEffect(() => {
         if (newPropertyPowerType === '1P-240') {
-            newPropertyMaxVoltAmpsBlue(0)
+            setNewPropertyMaxVoltAmpsBlue(0)
         }
     }, [newPropertyPowerType])
 
