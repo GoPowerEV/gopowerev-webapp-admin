@@ -70,9 +70,9 @@ export default function AddNewLocationModal(props) {
         {
             description: '',
             lcuUUID: '',
-            maxAmpsRed: '',
-            maxAmpsBlack: '',
-            maxAmpsBlue: '',
+            maxAmpsRed: 0,
+            maxAmpsBlack: 0,
+            maxAmpsBlue: 0,
             name: '',
             pictureUrl1: '',
             propertyUUID: props.propertyUUID,
@@ -92,9 +92,9 @@ export default function AddNewLocationModal(props) {
     const sampleLocationObject = {
         description: '',
         lcuUUID: '',
-        maxAmpsRed: '',
-        maxAmpsBlack: '',
-        maxAmpsBlue: '',
+        maxAmpsRed: 0,
+        maxAmpsBlack: 0,
+        maxAmpsBlue: 0,
         name: '',
         pictureUrl1: '',
         propertyUUID: props.propertyUUID,
@@ -385,11 +385,11 @@ export default function AddNewLocationModal(props) {
     const handleThisLocationMaxVoltAmpsChange = (color, value, index) => {
         let tempLocations = [...locations]
         if (color === 'black') {
-            tempLocations[index].maxAmpsBlack = value
+            tempLocations[index].maxAmpsBlack = parseInt(value)
         } else if (color === 'blue') {
-            tempLocations[index].maxAmpsBlue = value
+            tempLocations[index].maxAmpsBlue = parseInt(value)
         } else {
-            tempLocations[index].maxAmpsRed = value
+            tempLocations[index].maxAmpsRed = parseInt(value)
         }
         setLocations(tempLocations)
     }

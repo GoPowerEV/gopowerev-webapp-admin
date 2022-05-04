@@ -172,9 +172,9 @@ export default function UpdateLcuAndLocation(props) {
     const sampleLocationObject = {
         description: '',
         lcuUUID: '',
-        maxAmpsBlack: '',
-        maxAmpsBlue: '',
-        maxAmpsRed: '',
+        maxAmpsBlack: 0,
+        maxAmpsBlue: 0,
+        maxAmpsRed: 0,
         name: '',
         pictureUrl1: '',
         propertyUUID: '',
@@ -286,11 +286,11 @@ export default function UpdateLcuAndLocation(props) {
     const handleThisLocationMaxVoltAmpsChange = (color, value, index) => {
         let tempLocations = locations
         if (color === 'black') {
-            tempLocations[index].maxAmpsBlack = value
+            tempLocations[index].maxAmpsBlack = parseInt(value)
         } else if (color === 'blue') {
-            tempLocations[index].maxAmpsBlue = value
+            tempLocations[index].maxAmpsBlue = parseInt(value)
         } else {
-            tempLocations[index].maxAmpsRed = value
+            tempLocations[index].maxAmpsRed = parseInt(value)
         }
         setLocations(tempLocations)
     }
