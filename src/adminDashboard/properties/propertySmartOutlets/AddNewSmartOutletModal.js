@@ -107,15 +107,17 @@ export default function AddNewSmartOutletModal(props) {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        let allModels = []
-                        result.forEach((element) => {
-                            const tempModel = {
-                                label: element.model,
-                                value: element.model,
-                            }
-                            allModels.push(tempModel)
-                        })
-                        setModels(allModels)
+                        if (result?.length > 0) {
+                            let allModels = []
+                            result.forEach((element) => {
+                                const tempModel = {
+                                    label: element.model,
+                                    value: element.model,
+                                }
+                                allModels.push(tempModel)
+                            })
+                            setModels(allModels)
+                        }
                     },
                     (error) => {
                         setIsLoading(false)

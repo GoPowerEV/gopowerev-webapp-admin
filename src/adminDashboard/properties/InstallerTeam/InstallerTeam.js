@@ -78,10 +78,10 @@ const InstallerTeam = (props) => {
                     )}
                 </Grid>
             </Grid>
-            {!isLoading && (
+            {!isLoading && installerTeam?.length > 0 && (
                 <Collapse in={installerTeamOpened}>
                     <Grid container spacing={2} xs={11}>
-                        {installerTeam.map((teamMember, i) => (
+                        {installerTeam?.map((teamMember, i) => (
                             <InstallerCard
                                 key={i}
                                 teamMember={teamMember}
@@ -92,7 +92,7 @@ const InstallerTeam = (props) => {
                             />
                         ))}
                         {[
-                            ...Array(totalAmountInTeam - installerTeam.length),
+                            ...Array(totalAmountInTeam - installerTeam?.length),
                         ].map((e, i) => (
                             <InviteInstallerCard
                                 key={i}

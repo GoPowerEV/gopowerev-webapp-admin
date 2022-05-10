@@ -179,15 +179,15 @@ export default function SetupNewProperty(props) {
     const [
         newPropertyMaxVoltAmpsBlack,
         setNewPropertyMaxVoltAmpsBlack,
-    ] = React.useState('')
+    ] = React.useState(0)
     const [
         newPropertyMaxVoltAmpsBlue,
         setNewPropertyMaxVoltAmpsBlue,
-    ] = React.useState('')
+    ] = React.useState(0)
     const [
         newPropertyMaxVoltAmpsRed,
         setNewPropertyMaxVoltAmpsRed,
-    ] = React.useState('')
+    ] = React.useState(0)
     const [newPropertyNotes, setNewPropertyNotes] = React.useState('')
     const [newPropertyPowerType, setNewPropertyPowerType] = useState('')
     const allPowerTypes = getTypesOfPowerServiceOptions()
@@ -643,7 +643,7 @@ export default function SetupNewProperty(props) {
             newPropertyOfficePhone &&
             newPropertyEmail &&
             newPropertyMaxVoltAmpsBlack &&
-            newPropertyMaxVoltAmpsBlue &&
+            // newPropertyMaxVoltAmpsBlue &&
             newPropertyMaxVoltAmpsRed &&
             newPropertyPowerType
         ) {

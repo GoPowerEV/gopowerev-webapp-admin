@@ -33,6 +33,7 @@ const PropertyTeam = (props) => {
                 .then((res) => res.json())
                 .then(
                     (result) => {
+                        console.log('here you go', result)
                         setIsLoading(false)
                         setPropertyTeam(result)
                     },
@@ -81,16 +82,19 @@ const PropertyTeam = (props) => {
             {!isLoading && (
                 <Collapse in={propertyTeamOpened}>
                     <Grid container spacing={2} xs={11}>
-                        {propertyTeam?.map((teamMember, i) => (
-                            <TeamMemberCard
-                                key={i}
-                                teamMember={teamMember}
-                                setIsLoading={setIsLoading}
-                                token={props.token}
-                                propertyUUID={props.propertyUUID}
-                                reloadPropertyInfo={props.reloadPropertyInfo}
-                            />
-                        ))}
+                        {propertyTeam?.length > 0 &&
+                            propertyTeam?.map((teamMember, i) => (
+                                <TeamMemberCard
+                                    key={i}
+                                    teamMember={teamMember}
+                                    setIsLoading={setIsLoading}
+                                    token={props.token}
+                                    propertyUUID={props.propertyUUID}
+                                    reloadPropertyInfo={
+                                        props.reloadPropertyInfo
+                                    }
+                                />
+                            ))}
                         {[
                             ...Array(totalAmountInTeam - propertyTeam.length),
                         ].map((e, i) => (

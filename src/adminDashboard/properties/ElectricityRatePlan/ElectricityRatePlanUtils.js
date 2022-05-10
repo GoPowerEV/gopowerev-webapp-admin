@@ -105,7 +105,7 @@ export const getPlanOptions = (setIsLoading, token, setRatePlanOptions) => {
             .then(
                 (result) => {
                     setIsLoading(false)
-                    if (result) {
+                    if (result?.length > 0) {
                         let options = []
                         result?.forEach((item) => {
                             options.push({
@@ -137,24 +137,26 @@ export const getMargins = (chargeType, setIsLoading, token, setOptions) => {
             .then(
                 (result) => {
                     setIsLoading(false)
-                    if (chargeType === 'L1') {
-                        let options = []
-                        result.forEach((item) => {
-                            options.push({
-                                label: item.plan,
-                                value: item.electricityMarginsUUID,
+                    if (result?.length > 0) {
+                        if (chargeType === 'L1') {
+                            let options = []
+                            result.forEach((item) => {
+                                options.push({
+                                    label: item.plan,
+                                    value: item.electricityMarginsUUID,
+                                })
                             })
-                        })
-                        setOptions(options)
-                    } else {
-                        let options = []
-                        result.forEach((item) => {
-                            options.push({
-                                label: item.plan,
-                                value: item.electricityMarginsUUID,
+                            setOptions(options)
+                        } else {
+                            let options = []
+                            result.forEach((item) => {
+                                options.push({
+                                    label: item.plan,
+                                    value: item.electricityMarginsUUID,
+                                })
                             })
-                        })
-                        setOptions(options)
+                            setOptions(options)
+                        }
                     }
                 },
                 (error) => {
