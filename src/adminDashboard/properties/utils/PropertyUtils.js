@@ -198,6 +198,10 @@ export const getAllStates = () => {
             abbreviation: 'MO',
         },
         {
+            name: 'Northern Mariana Islands',
+            abbreviation: 'MP',
+        },
+        {
             name: 'Montana',
             abbreviation: 'MT',
         },
@@ -232,10 +236,6 @@ export const getAllStates = () => {
         {
             name: 'North Dakota',
             abbreviation: 'ND',
-        },
-        {
-            name: 'Northern Mariana Islands',
-            abbreviation: 'MP',
         },
         {
             name: 'Ohio',
