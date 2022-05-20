@@ -614,14 +614,29 @@ export default function SetupNewProperty(props) {
             setNewPropertyEmail(value)
             propertyInfo.contactEmail = value
         } else if (fieldType === 'maxAmpsBlack') {
-            setNewPropertyMaxVoltAmpsBlack(value)
-            propertyInfo.maxAmpsBlack = value
+            if (!isNaN(value)) {
+                setNewPropertyMaxVoltAmpsBlack(value)
+                propertyInfo.maxAmpsBlack = value
+            } else if (isNaN(value) && value === '') {
+                setNewPropertyMaxVoltAmpsBlack(value)
+                propertyInfo.maxAmpsBlack = 0
+            }
         } else if (fieldType === 'maxAmpsBlue') {
-            setNewPropertyMaxVoltAmpsBlue(value)
-            propertyInfo.maxAmpsRed = value
+            if (!isNaN(value)) {
+                setNewPropertyMaxVoltAmpsBlue(value)
+                propertyInfo.maxAmpsBlue = value
+            } else if (isNaN(value) && value === '') {
+                setNewPropertyMaxVoltAmpsBlue(value)
+                propertyInfo.maxAmpsBlue = 0
+            }
         } else if (fieldType === 'maxAmpsRed') {
-            setNewPropertyMaxVoltAmpsRed(value)
-            propertyInfo.maxAmpsRed = value
+            if (!isNaN(value)) {
+                setNewPropertyMaxVoltAmpsRed(value)
+                propertyInfo.maxAmpsRed = value
+            } else if (isNaN(value) && value === '') {
+                setNewPropertyMaxVoltAmpsRed(value)
+                propertyInfo.maxAmpsRed = 0
+            }
         } else if (fieldType === 'powerType') {
             setNewPropertyPowerType(value)
             propertyInfo.powerType = value
@@ -990,9 +1005,8 @@ export default function SetupNewProperty(props) {
                                                     onChange={(e) =>
                                                         handleFormChange(
                                                             'maxAmpsBlack',
-                                                            parseInt(
-                                                                e.target.value
-                                                            )
+
+                                                            e.target.value
                                                         )
                                                     }
                                                     className={
@@ -1013,10 +1027,7 @@ export default function SetupNewProperty(props) {
                                                         onChange={(e) =>
                                                             handleFormChange(
                                                                 'maxAmpsBlue',
-                                                                parseInt(
-                                                                    e.target
-                                                                        .value
-                                                                )
+                                                                e.target.value
                                                             )
                                                         }
                                                         className={
@@ -1036,9 +1047,7 @@ export default function SetupNewProperty(props) {
                                                     onChange={(e) =>
                                                         handleFormChange(
                                                             'maxAmpsRed',
-                                                            parseInt(
-                                                                e.target.value
-                                                            )
+                                                            e.target.value
                                                         )
                                                     }
                                                     className={
