@@ -52,6 +52,109 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const breakNumOptions = [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+]
+
 const feedColorOptionsVar1 = [
     { label: 'Red-Black', value: 'Red-Black' },
     { label: 'Red-Blue', value: 'Red-Blue' },
@@ -70,6 +173,8 @@ export default function EditSmartOutletModal(props) {
     const [hardware, setHardware] = useState(props.outletData.hwVersion)
     const [parkingSpot, setParkingSpot] = useState(props.outletData.parkingSpot)
     const [feedColors, setFeedColors] = useState(props.outletData.feedColors)
+    const [breakNumA, setBreakNumA] = useState(props.outletData.breakNumA)
+    const [breakNumB, setBreakNumB] = useState(props.outletData.breakNumB)
     const [mac, setMac] = useState(props.outletData.macAddr)
     const [outletData, setOutletData] = useState(props.outletData)
     const [modalStyle] = useState(getModalStyle)
@@ -83,6 +188,8 @@ export default function EditSmartOutletModal(props) {
         setParkingSpot(props.outletData.parkingSpot)
         setMac(props.outletData.macAddr)
         setFeedColors(props.outletData.feedColors)
+        setBreakNumA(props.outletData.breakNumA)
+        setBreakNumB(props.outletData.breakNumB)
     }, [props.outletData])
 
     const saveOutletInfo = () => {
@@ -120,6 +227,10 @@ export default function EditSmartOutletModal(props) {
             setParkingSpot(value)
         } else if (field === 'feedColors') {
             setFeedColors(value)
+        } else if (field === 'breakNumA') {
+            setBreakNumA(value)
+        } else if (field === 'breakNumB') {
+            setBreakNumB(value)
         } else {
             setMac(value)
         }
@@ -219,13 +330,17 @@ export default function EditSmartOutletModal(props) {
                             />
                         </Grid>
                         <Grid item xs={5}>
+                            <InputLabel
+                                id="feedColors"
+                                style={{
+                                    fontSize: '12px',
+                                    paddingLeft: '5px',
+                                    marginBottom: '2px',
+                                }}
+                            >
+                                Feed Colors
+                            </InputLabel>
                             <FormControl fullWidth>
-                                <InputLabel
-                                    id="feedColors"
-                                    style={{ paddingLeft: '15px' }}
-                                >
-                                    Feed Colors
-                                </InputLabel>
                                 <Select
                                     labelId="feedColors"
                                     variant="outlined"
@@ -257,6 +372,79 @@ export default function EditSmartOutletModal(props) {
                                 </Select>
                             </FormControl>
                         </Grid>
+                        <Grid item xs={5}>
+                            <InputLabel
+                                id="breakNumA"
+                                style={{
+                                    fontSize: '12px',
+                                    paddingLeft: '5px',
+                                    marginBottom: '2px',
+                                }}
+                            >
+                                Break Num A
+                            </InputLabel>
+                            <FormControl fullWidth>
+                                <Select
+                                    labelId="breakNumA"
+                                    variant="outlined"
+                                    id="breakNumA"
+                                    value={breakNumA}
+                                    style={{
+                                        backgroundColor: '#e8e8e8',
+                                        borderRadius: '10px',
+                                    }}
+                                    onChange={(e) =>
+                                        handleOutletFieldChange(
+                                            e.target.value,
+                                            'breakNumA'
+                                        )
+                                    }
+                                >
+                                    {breakNumOptions?.map((option) => (
+                                        <MenuItem value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={5}>
+                            <InputLabel
+                                id="breakNumB"
+                                style={{
+                                    fontSize: '12px',
+                                    paddingLeft: '5px',
+                                    marginBottom: '2px',
+                                }}
+                            >
+                                Break Num B
+                            </InputLabel>
+                            <FormControl fullWidth>
+                                <Select
+                                    labelId="breakNumB"
+                                    variant="outlined"
+                                    id="breakNumB"
+                                    value={breakNumB}
+                                    style={{
+                                        backgroundColor: '#e8e8e8',
+                                        borderRadius: '10px',
+                                    }}
+                                    onChange={(e) =>
+                                        handleOutletFieldChange(
+                                            e.target.value,
+                                            'breakNumB'
+                                        )
+                                    }
+                                >
+                                    {breakNumOptions?.map((option) => (
+                                        <MenuItem value={option}>
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={5}></Grid>
                         <Grid item xs={5}>
                             <TextField
                                 fullWidth
