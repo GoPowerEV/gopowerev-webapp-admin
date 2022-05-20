@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField'
 import './EditSmartOutletModal.css'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import moment from 'moment'
 
 function getModalStyle() {
@@ -51,7 +52,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const feedColorOptionsVar1 = [
+    { label: 'Red-Black', value: 'Red-Black' },
+    { label: 'Red-Blue', value: 'Red-Blue' },
+    { label: 'Blue-Black', value: 'Blue-Black' },
+]
+
+const feedColorOptionsVar2 = [{ label: 'Red-Black', value: 'Red-Black' }]
+
 export default function EditSmartOutletModal(props) {
+    console.log('here it is yoooo', props.outletData)
     const [isLoading, setIsLoading] = useState(false)
     const [serialNumber, setSerialNumber] = useState(
         props.outletData.serialNumber
@@ -59,6 +69,7 @@ export default function EditSmartOutletModal(props) {
     const [firmware, setFirmware] = useState(props.outletData.fwVersion)
     const [hardware, setHardware] = useState(props.outletData.hwVersion)
     const [parkingSpot, setParkingSpot] = useState(props.outletData.parkingSpot)
+    const [feedColors, setFeedColors] = useState(props.outletData.feedColors)
     const [mac, setMac] = useState(props.outletData.macAddr)
     const [outletData, setOutletData] = useState(props.outletData)
     const [modalStyle] = useState(getModalStyle)
@@ -71,6 +82,7 @@ export default function EditSmartOutletModal(props) {
         setSerialNumber(props.outletData.serialNumber)
         setParkingSpot(props.outletData.parkingSpot)
         setMac(props.outletData.macAddr)
+        setFeedColors(props.outletData.feedColors)
     }, [props.outletData])
 
     const saveOutletInfo = () => {
@@ -106,6 +118,8 @@ export default function EditSmartOutletModal(props) {
             setSerialNumber(value)
         } else if (field === 'parkingSpot') {
             setParkingSpot(value)
+        } else if (field === 'feedColors') {
+            setFeedColors(value)
         } else {
             setMac(value)
         }
@@ -203,6 +217,45 @@ export default function EditSmartOutletModal(props) {
                                 variant="filled"
                                 value={outletData?.model ?? '-'}
                             />
+                        </Grid>
+                        <Grid item xs={5}>
+                            <FormControl fullWidth>
+                                <InputLabel
+                                    id="feedColors"
+                                    style={{ paddingLeft: '15px' }}
+                                >
+                                    Feed Colors
+                                </InputLabel>
+                                <Select
+                                    labelId="feedColors"
+                                    variant="outlined"
+                                    id="feedColors"
+                                    value={feedColors}
+                                    style={{
+                                        backgroundColor: '#e8e8e8',
+                                        borderRadius: '10px',
+                                    }}
+                                    onChange={(e) =>
+                                        handleOutletFieldChange(
+                                            e.target.value,
+                                            'feedColors'
+                                        )
+                                    }
+                                >
+                                    {!props.powerTypeIs1P240 &&
+                                        feedColorOptionsVar1?.map((option) => (
+                                            <MenuItem value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    {props.powerTypeIs1P240 &&
+                                        feedColorOptionsVar2?.map((option) => (
+                                            <MenuItem value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={5}>
                             <TextField

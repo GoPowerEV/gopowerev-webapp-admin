@@ -389,6 +389,7 @@ const LocationCard = (props) => {
                         token={props.token}
                         locationdUuid={locationInfo.locationUUID}
                         getSmartOutletData={getSmartOutletData}
+                        powerTypeIs1P240={props.propertyPowerType === '1P-240'}
                     />
                 </Grid>
             </Collapse>

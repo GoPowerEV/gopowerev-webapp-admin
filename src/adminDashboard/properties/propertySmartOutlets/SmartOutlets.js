@@ -311,6 +311,7 @@ const SmartOutlets = (props) => {
                 token={props.token}
                 outletData={currentlyViewedOutlet}
                 outletIndex={outletIndex}
+                powerTypeIs1P240={props.powerTypeIs1P240}
             />
             {/* ADD NEW SMART OUTLET MODAL */}
             <AddNewSmartOutletModal
