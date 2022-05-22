@@ -657,9 +657,9 @@ export default function SetupNewProperty(props) {
             newPropertyManageName &&
             newPropertyOfficePhone &&
             newPropertyEmail &&
-            newPropertyMaxVoltAmpsBlack &&
+            // newPropertyMaxVoltAmpsBlack &&
             // newPropertyMaxVoltAmpsBlue &&
-            newPropertyMaxVoltAmpsRed &&
+            // newPropertyMaxVoltAmpsRed &&
             newPropertyPowerType
         ) {
             setDisableSelectInstallerButton(false)
@@ -1217,6 +1217,7 @@ export default function SetupNewProperty(props) {
                         handleSubmitForInstallation={
                             handleSubmitForInstallation
                         }
+                        isPowerType1P240={newPropertyPowerType === '1P-240'}
                     />
                 </React.Fragment>
             )}

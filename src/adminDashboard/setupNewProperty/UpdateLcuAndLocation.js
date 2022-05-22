@@ -578,6 +578,9 @@ export default function UpdateLcuAndLocation(props) {
                                         soModel={soModel}
                                         models={models}
                                         setIsLoading={setIsLoading}
+                                        isPowerType1P240={
+                                            props.isPowerType1P240
+                                        }
                                     />
                                 ))}
                             </React.Fragment>
