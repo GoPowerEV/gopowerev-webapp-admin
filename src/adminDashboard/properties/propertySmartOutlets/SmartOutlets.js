@@ -102,7 +102,7 @@ const SmartOutlets = (props) => {
             <Grid container justifyContent="space-between">
                 <div className="outletHeader">
                     <FlashOnOutlinedIcon />
-                    Smart Outlets ({props.smartOutlets.length})
+                    Smart Outlets ({props.smartOutlets?.length})
                 </div>
                 <Button
                     className="addNewLocButton"
