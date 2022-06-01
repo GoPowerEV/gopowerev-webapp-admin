@@ -211,6 +211,10 @@
     color: black;
 }
 
+.editLcuDetails {
+    margin-top: 20px !important;
+}
+
 .editLcuDetailsContainer {
     padding-right: 20px !important;
 }

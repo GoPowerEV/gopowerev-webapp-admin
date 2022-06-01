@@ -157,8 +157,10 @@ const LcuCard = (props) => {
                 </Grid>
                 <Grid item xs={2}>
                     <div className="lcuHeader">Status</div>
-                    <div className={getLcuBadgeClass(lcuInfo.adminStatus)}>
-                        {getBadgeText(lcuInfo.adminStatus)}
+                    <div
+                        className={getLcuBadgeClass(lcuInfo.operationalStatus)}
+                    >
+                        {getBadgeText(lcuInfo.operationalStatus)}
                     </div>
                 </Grid>
                 <Grid item xs={3}>
@@ -190,7 +192,11 @@ const LcuCard = (props) => {
                         container
                         spacing={3}
                         xs={12}
-                        className="editLcuDetailsContainer"
+                        className={
+                            lcuInfoOpened
+                                ? 'editLcuDetails'
+                                : 'editLcuDetailsContainer'
+                        }
                     >
                         <Grid item lg={3} md={6} s={12} xs={12}>
                             <TextField

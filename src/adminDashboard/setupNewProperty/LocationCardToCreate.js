@@ -160,8 +160,6 @@ export default function LocationCardToCreate(props) {
     const [maxVoltAmpsBlue, setMaxVoltAmpsBlue] = useState(0)
     const [maxVoltAmpsRed, setMaxVoltAmpsRed] = useState(0)
 
-    console.log('here it is')
-
     const fileDrop = (event, locationIndex) => {
         event.preventDefault()
         const files = event.dataTransfer.files

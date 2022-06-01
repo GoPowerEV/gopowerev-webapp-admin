@@ -140,10 +140,6 @@ export default function AddTeamMemberModal(props) {
                             .then((res) => res.json())
                             .then(
                                 (result2) => {
-                                    console.log(
-                                        'here it is all owners',
-                                        result2
-                                    )
                                     setIsLoading(false)
 
                                     // setAdminGridData(result1.concat(result2))

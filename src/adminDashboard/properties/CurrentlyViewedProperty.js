@@ -941,7 +941,7 @@ const CurrentlyViewedProperty = (props) => {
                             <Button
                                 className="addNewLocationButton"
                                 variant="outlined"
-                                onClick={addNewLocationAndLcu}
+                                onClick={() => addNewLocationAndLcu()}
                             >
                                 Add New LCU & Location
                             </Button>

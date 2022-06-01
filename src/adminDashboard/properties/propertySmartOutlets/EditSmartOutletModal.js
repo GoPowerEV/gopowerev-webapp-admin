@@ -164,7 +164,6 @@ const feedColorOptionsVar1 = [
 const feedColorOptionsVar2 = [{ label: 'Red-Black', value: 'Red-Black' }]
 
 export default function EditSmartOutletModal(props) {
-    console.log('here it is yoooo', props.outletData)
     const [isLoading, setIsLoading] = useState(false)
     const [serialNumber, setSerialNumber] = useState(
         props.outletData.serialNumber

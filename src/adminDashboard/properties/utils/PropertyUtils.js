@@ -49,6 +49,8 @@ export const getBadgeText = (status) => {
         return 'Ready For Install'
     } else if (status === 'operational') {
         return 'Opertational'
+    } else if (status === 'info: never-connected') {
+        return 'Not connected'
     } else {
         return 'Pre-Config'
     }

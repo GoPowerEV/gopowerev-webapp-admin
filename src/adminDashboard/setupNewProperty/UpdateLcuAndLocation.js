@@ -267,8 +267,6 @@ export default function UpdateLcuAndLocation(props) {
             errorCount++
         }
 
-        console.log('here it is', errorCount)
-
         if (errorCount > 0) {
             setSubmitButtonDisabled(true)
             return true
