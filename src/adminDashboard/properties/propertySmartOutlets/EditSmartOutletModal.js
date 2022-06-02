@@ -8,6 +8,7 @@ import './EditSmartOutletModal.css'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
+import { getBadgeText } from './../utils/PropertyUtils'
 import moment from 'moment'
 
 function getModalStyle() {
@@ -189,6 +190,7 @@ export default function EditSmartOutletModal(props) {
         setFeedColors(props.outletData.feedColors)
         setBreakNumA(props.outletData.breakNumA)
         setBreakNumB(props.outletData.breakNumB)
+        console.log('here is the data!!', props.outletData)
     }, [props.outletData])
 
     const saveOutletInfo = () => {
@@ -261,7 +263,9 @@ export default function EditSmartOutletModal(props) {
                                 Operational Status
                             </div>
                             <div className="smartOutletGridLocationHeaderSmall smartOutletGridItem">
-                                {outletData?.status ?? '-'}
+                                {outletData?.status
+                                    ? getBadgeText(outletData?.status)
+                                    : '-'}{' '}
                             </div>
                         </Grid>
                         <Grid item xs={3}>

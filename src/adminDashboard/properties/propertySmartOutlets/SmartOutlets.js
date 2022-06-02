@@ -9,6 +9,7 @@ import './SmartOutlets.css'
 import { makeStyles } from '@material-ui/core/styles'
 import EditSmartOutletModal from './EditSmartOutletModal'
 import AddNewSmartOutletModal from './AddNewSmartOutletModal'
+import { getBadgeText } from './../utils/PropertyUtils'
 import moment from 'moment'
 
 const useStyles = makeStyles({
@@ -96,6 +97,8 @@ const SmartOutlets = (props) => {
         setCreateSmartOutletForThisLocation(props.locationdUuid)
         handleNewOpen()
     }
+
+    console.log('!!!HERE!!!!', props.smartOutlets)
 
     return (
         <div className="smartOutletsContainer">
@@ -258,14 +261,19 @@ const SmartOutlets = (props) => {
                                             <div
                                                 className={
                                                     outlet.status
-                                                        ? 'green statusBadge'
+                                                        ? outlet.status === 'Ok'
+                                                            ? 'green statusBadge'
+                                                            : 'orange statusBadge'
                                                         : 'orange statusBadge'
                                                 }
                                             >
                                                 <div className="badgeBox">
                                                     <span className="badgeText">
-                                                        {outlet.status ??
-                                                            'Not Connected'}
+                                                        {outlet.status
+                                                            ? getBadgeText(
+                                                                  outlet.status
+                                                              )
+                                                            : 'Never Connected'}
                                                     </span>
                                                 </div>
                                             </div>

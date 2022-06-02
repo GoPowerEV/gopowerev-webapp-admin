@@ -51,6 +51,10 @@ export const getBadgeText = (status) => {
         return 'Opertational'
     } else if (status === 'info: never-connected') {
         return 'Not connected'
+    } else if (status === 'never-connected') {
+        return 'Not connected'
+    } else if (status === 'Ok') {
+        return 'OK'
     } else {
         return 'Pre-Config'
     }
