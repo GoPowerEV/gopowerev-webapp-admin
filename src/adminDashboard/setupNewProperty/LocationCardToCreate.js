@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#FFFFFF',
     },
     formHeader: {
-        marginBottom: '20px',
+        marginBottom: '10px',
         color: 'black',
     },
     formHeaderGrey: {
@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
     photoUploadButton: {
         backgroundColor: '#12BFA2',
         height: '52px',
-        marginTop: '13px',
+        marginTop: '27px',
         color: '#FFFFFF',
         fontWeight: 'bold',
         textTransform: 'none',
@@ -204,6 +204,10 @@ export default function LocationCardToCreate(props) {
         props.setSoModel(value)
     }
 
+    const handleReadibaseChange = (value, locationIndex) => {
+        props.handleReadibaseChange(value)
+    }
+
     useEffect(() => {
         if (props.numberOfSmartOutlets) {
             setNumberOfSmartOutlets(props.numberOfSmartOutlets[props.index])
@@ -230,120 +234,40 @@ export default function LocationCardToCreate(props) {
             </Grid>
             <Grid container xs={12} spacing={5}>
                 <Grid item md={6} xs={12}>
-                    <Grid container spacing={1}>
+                    <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <div className={classes.formHeader}>
                                 Location {props.index + 1} Details
                             </div>
-                            <TextField
-                                className={classes.textField}
-                                label="Location name"
-                                value={locationName}
-                                variant="outlined"
-                                onChange={(event) => {
-                                    setLocationName(event.target.value)
-                                    props.handleThisLocationNameChange(
-                                        event.target.value,
-                                        props.index
-                                    )
-                                }}
-                                fullWidth
-                            />
-                            {props.locationsNamesErrors[props.index] ===
-                                true && (
-                                <div className={classes.locationError}>
-                                    Location name must have a value.
-                                </div>
-                            )}
                         </Grid>
-                        <Grid item lg={6} md={12}>
-                            <TextField
-                                className={classes.textField}
-                                label="Number of Smart Outlets"
-                                variant="outlined"
-                                fullWidth
-                                value={numberOfSmartOutlets}
-                                onChange={(event) => {
-                                    setNumberOfSmartOutlets(event.target.value)
-                                    props.handleThisLocationNumberOfSmartOutletsChange(
-                                        event.target.value,
-                                        props.index
-                                    )
-                                }}
-                            />
-                            {props.smartOutletsErrors[props.index] === true && (
-                                <div className={classes.locationError}>
-                                    Must be a number between 1 and 50.
-                                </div>
-                            )}
-                        </Grid>
-                        <Grid item lg={6} md={12}>
-                            <TextField
-                                className={classes.textField}
-                                label="Black Max Amps"
-                                variant="outlined"
-                                fullWidth
-                                value={maxVoltAmpsBlack}
-                                onChange={(event) => {
-                                    setMaxVoltAmpsBlack(event.target.value)
-                                    props.handleThisLocationMaxVoltAmpsChange(
-                                        'black',
-                                        event.target.value,
-                                        props.index
-                                    )
-                                }}
-                            />
-                            {/* {props.voltAmpsErrors[props.index] === true && (
-                                <div className={classes.locationError}>
-                                    Must be a number that is more than a zero.
-                                </div>
-                            )} */}
-                        </Grid>
-                        {!props.isPowerType1P240 && (
-                            <Grid item xs={6}>
-                                <TextField
-                                    className={classes.textField}
-                                    label="Blue Max Amps"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={maxVoltAmpsBlue}
-                                    onChange={(event) => {
-                                        setMaxVoltAmpsBlue(event.target.value)
-                                        props.handleThisLocationMaxVoltAmpsChange(
-                                            'blue',
-                                            event.target.value,
-                                            props.index
-                                        )
+                        <Grid item xs={12}>
+                            <FormControl variant="filled" fullWidth>
+                                <InputLabel
+                                    id="demo-simple-select-filled-label2"
+                                    style={{
+                                        marginTop: '-13px',
+                                        marginLeft: '5px',
                                     }}
-                                />
-                                {/* {props.voltAmpsErrors[props.index] === true && (
-                                <div className={classes.locationError}>
-                                    Must be a number that is more than a zero.
-                                </div>
-                            )} */}
-                            </Grid>
-                        )}
-                        <Grid item xs={6}>
-                            <TextField
-                                className={classes.textField}
-                                label="Red Max Amps"
-                                variant="outlined"
-                                fullWidth
-                                value={maxVoltAmpsRed}
-                                onChange={(event) => {
-                                    setMaxVoltAmpsRed(event.target.value)
-                                    props.handleThisLocationMaxVoltAmpsChange(
-                                        'red',
-                                        event.target.value,
-                                        props.index
-                                    )
-                                }}
-                            />
-                            {/* {props.voltAmpsErrors[props.index] === true && (
-                                <div className={classes.locationError}>
-                                    Must be a number that is more than a zero.
-                                </div>
-                            )} */}
+                                >
+                                    EVReadiBase Model
+                                </InputLabel>
+                                <Select
+                                    className={classes.textField}
+                                    label="EVReadiBase Model"
+                                    labelId="demo-simple-select-filled-label2"
+                                    variant="outlined"
+                                    value={props.readinbaseModel}
+                                    onChange={(e) =>
+                                        handleReadibaseChange(e.target.value)
+                                    }
+                                >
+                                    {props.readinbaseModels?.map((model) => (
+                                        <MenuItem value={model.value}>
+                                            {model.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
                         <Grid item xs={6}>
                             <FormControl variant="filled" fullWidth>
@@ -373,6 +297,117 @@ export default function LocationCardToCreate(props) {
                                     ))}
                                 </Select>
                             </FormControl>
+                        </Grid>
+                        <Grid item lg={6} md={12}>
+                            <TextField
+                                className={classes.textField}
+                                label="Number of Smart Outlets"
+                                variant="outlined"
+                                fullWidth
+                                value={numberOfSmartOutlets}
+                                onChange={(event) => {
+                                    setNumberOfSmartOutlets(event.target.value)
+                                    props.handleThisLocationNumberOfSmartOutletsChange(
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                            />
+                            {props.smartOutletsErrors[props.index] === true && (
+                                <div className={classes.locationError}>
+                                    Must be a number between 1 and 50.
+                                </div>
+                            )}
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                className={classes.textField}
+                                label="Location name"
+                                value={locationName}
+                                variant="outlined"
+                                onChange={(event) => {
+                                    setLocationName(event.target.value)
+                                    props.handleThisLocationNameChange(
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                                fullWidth
+                            />
+                            {props.locationsNamesErrors[props.index] ===
+                                true && (
+                                <div className={classes.locationError}>
+                                    Location name must have a value.
+                                </div>
+                            )}
+                        </Grid>
+                        <Grid item lg={4} md={12}>
+                            <TextField
+                                className={classes.textField}
+                                label="Black Max Amps"
+                                variant="outlined"
+                                fullWidth
+                                value={maxVoltAmpsBlack}
+                                onChange={(event) => {
+                                    setMaxVoltAmpsBlack(event.target.value)
+                                    props.handleThisLocationMaxVoltAmpsChange(
+                                        'black',
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                            />
+                            {/* {props.voltAmpsErrors[props.index] === true && (
+                                <div className={classes.locationError}>
+                                    Must be a number that is more than a zero.
+                                </div>
+                            )} */}
+                        </Grid>
+                        {!props.isPowerType1P240 && (
+                            <Grid item xs={4}>
+                                <TextField
+                                    className={classes.textField}
+                                    label="Blue Max Amps"
+                                    variant="outlined"
+                                    fullWidth
+                                    value={maxVoltAmpsBlue}
+                                    onChange={(event) => {
+                                        setMaxVoltAmpsBlue(event.target.value)
+                                        props.handleThisLocationMaxVoltAmpsChange(
+                                            'blue',
+                                            event.target.value,
+                                            props.index
+                                        )
+                                    }}
+                                />
+                                {/* {props.voltAmpsErrors[props.index] === true && (
+                                <div className={classes.locationError}>
+                                    Must be a number that is more than a zero.
+                                </div>
+                            )} */}
+                            </Grid>
+                        )}
+                        <Grid item xs={4}>
+                            <TextField
+                                className={classes.textField}
+                                label="Red Max Amps"
+                                variant="outlined"
+                                fullWidth
+                                value={maxVoltAmpsRed}
+                                onChange={(event) => {
+                                    setMaxVoltAmpsRed(event.target.value)
+                                    props.handleThisLocationMaxVoltAmpsChange(
+                                        'red',
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                            />
+                            {/* {props.voltAmpsErrors[props.index] === true && (
+                                <div className={classes.locationError}>
+                                    Must be a number that is more than a zero.
+                                </div>
+                            )} */}
                         </Grid>
                     </Grid>
                 </Grid>

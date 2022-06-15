@@ -15,6 +15,7 @@ import './LocationCard.css'
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined'
 import NoImageAvailable from './../../assets/img/noImageAvailable.png'
 import SmartOutlets from './propertySmartOutlets/SmartOutlets'
+import PropertyEVReadiBases from './PropertyEVReadiBases/PropertyEVReadiBases'
 import { getLocationSmartOutletsById } from './../dashboardService'
 
 const useStyles = makeStyles({
@@ -391,6 +392,9 @@ const LocationCard = (props) => {
                         getSmartOutletData={getSmartOutletData}
                         powerTypeIs1P240={props.propertyPowerType === '1P-240'}
                     />
+                </Grid>
+                <Grid container xs={12} className="smartOutletsArea">
+                    <PropertyEVReadiBases />
                 </Grid>
             </Collapse>
         </React.Fragment>

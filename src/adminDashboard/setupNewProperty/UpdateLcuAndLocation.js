@@ -176,6 +176,7 @@ export default function UpdateLcuAndLocation(props) {
     const [lcuName, setLcuName] = useState('')
     const [lcuModel, setLcuModel] = useState('LCU10')
     const [soModel, setSoModel] = useState(undefined)
+    const [readinbaseModel, setReadinbaseModel] = useState(undefined)
     const [photoBinaries, setPhotoBinaries] = React.useState([])
     const [photoFileNames, setPhotoFileNames] = React.useState([])
     const [amountOfSmartOutlets, setAmountOfSmartOutlets] = React.useState([])
@@ -184,6 +185,8 @@ export default function UpdateLcuAndLocation(props) {
     const [locationsNamesErrors, setLocationsNamesErrors] = React.useState([])
     const [hasErrors, setHasErrors] = React.useState(false)
     const [models, setModels] = useState([])
+
+    const readinbaseModels = [{ label: 'SO3RB', value: 'SO3RB' }]
 
     const sampleLocationObject = {
         description: '',
@@ -572,9 +575,14 @@ export default function UpdateLcuAndLocation(props) {
                                         handleThisLocationNumberOfSmartOutletsChange={
                                             handleThisLocationNumberOfSmartOutletsChange
                                         }
+                                        handleReadibaseChange={
+                                            setReadinbaseModel
+                                        }
                                         setSoModel={setSoModel}
+                                        readinbaseModel={readinbaseModel}
                                         soModel={soModel}
                                         models={models}
+                                        readinbaseModels={readinbaseModels}
                                         setIsLoading={setIsLoading}
                                         isPowerType1P240={
                                             props.isPowerType1P240

@@ -98,8 +98,6 @@ const SmartOutlets = (props) => {
         handleNewOpen()
     }
 
-    console.log('!!!HERE!!!!', props.smartOutlets)
-
     return (
         <div className="smartOutletsContainer">
             <Grid container justifyContent="space-between">
@@ -129,9 +127,10 @@ const SmartOutlets = (props) => {
                                             <span
                                                 className={classes.cardHeader}
                                             >
-                                                Parking Spot:{' '}
+                                                SO:{' '}
                                             </span>
                                             <span className="smartSo">
+                                                Parking Spot{' '}
                                                 {outlet.parkingSpot ?? '-'}
                                             </span>
                                         </Grid>
