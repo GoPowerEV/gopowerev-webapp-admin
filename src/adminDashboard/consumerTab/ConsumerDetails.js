@@ -175,6 +175,9 @@ const ConsumerDetails = (props) => {
                         </Grid>
                     </Grid>
                     <Collapse in={sessionsOpened}>
+                        <div className="active-chargin-session-bar">
+                            No Active Charging Session
+                        </div>
                         <SessionsTable />
                     </Collapse>
                 </div>

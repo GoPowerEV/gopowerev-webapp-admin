@@ -82,7 +82,7 @@ const PropertyEVReadiBases = (props) => {
                                 >
                                     <Grid item xs={12}>
                                         <span className={classes.cardHeader}>
-                                            SO:{' '}
+                                            RB:{' '}
                                         </span>
                                         <span className="smartSo">6</span>
                                     </Grid>
@@ -134,7 +134,19 @@ const PropertyEVReadiBases = (props) => {
                                                 classes.operationalStatusHeader
                                             }
                                         >
-                                            Breaker
+                                            BreakNumA
+                                        </Typography>
+                                        <Typography className={classes.status}>
+                                            01
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Typography
+                                            className={
+                                                classes.operationalStatusHeader
+                                            }
+                                        >
+                                            BreakNumB
                                         </Typography>
                                         <Typography className={classes.status}>
                                             01
