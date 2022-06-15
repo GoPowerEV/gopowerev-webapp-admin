@@ -12,12 +12,14 @@ import Box from '@material-ui/core/Box'
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined'
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined'
 import SetupNewProperty from './setupNewProperty/SetupNewProperty'
 import AddNewInstaller from './addNewInstaller/AddNewInstaller'
 import Properties from './properties/Properties'
 import DashboardTab from './dashboardTab/DashboardTab'
+import ConsumerTab from './consumerTab/ConsumerTab'
 import Installers from './installers/Installers'
 import { useHistory } from 'react-router-dom'
 import './AdminDashboard.css'
@@ -196,6 +198,8 @@ export default function AdminDashboard(props) {
             history.push('/admin-dashboard')
         } else if (newValue === 2) {
             history.push('/dashboard/installers')
+        } else if (newValue === 3) {
+            history.push('/dashboard/consumer')
         }
         setDisplaySetupNewProperty(false)
         setDisplayAddNewInstaller(false)
@@ -282,6 +286,12 @@ export default function AdminDashboard(props) {
                     setDisplaySetupNewProperty(false)
                     setDisplayAddNewInstaller(false)
                     setValue(2)
+                } else if (urlLocation === 'consumer') {
+                    setViewThisProperty(null)
+                    history.push('/dashboard/' + urlLocation)
+                    setDisplaySetupNewProperty(false)
+                    setDisplayAddNewInstaller(false)
+                    setValue(3)
                 } else if (urlLocation === 'setup-new-property') {
                     setViewThisProperty(null)
                     history.push('/dashboard/' + urlLocation)
@@ -324,7 +334,7 @@ export default function AdminDashboard(props) {
                                 variant="scrollable"
                                 value={value}
                                 onChange={handleChange}
-                                aria-label="Vertical tabs example"
+                                aria-label="Menu"
                                 className={classes.tabs}
                             >
                                 <Tab
@@ -384,6 +394,25 @@ export default function AdminDashboard(props) {
                                     label="Installers"
                                     {...a11yProps(2)}
                                 />
+                                <Tab
+                                    className={classes.customTab}
+                                    icon={
+                                        <PersonOutlineOutlinedIcon
+                                            style={{
+                                                marginTop: '4px',
+                                                marginRight: '-20px',
+                                                float: 'left',
+                                            }}
+                                        />
+                                    }
+                                    classes={{
+                                        root: classes.tabRoot,
+                                        selected: classes.tabSelected,
+                                        wrapper: classes.alignment,
+                                    }}
+                                    label="Consumer"
+                                    {...a11yProps(3)}
+                                />
                             </Tabs>
                             <div className="hr-container">
                                 <hr className="dotted-hr" />
@@ -436,6 +465,9 @@ export default function AdminDashboard(props) {
                                 </TabPanel>
                                 <TabPanel value={value} index={2}>
                                     <Installers token={props.token} />
+                                </TabPanel>
+                                <TabPanel value={value} index={3}>
+                                    <ConsumerTab />
                                 </TabPanel>
                             </Paper>
                         </Grid>
