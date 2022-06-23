@@ -1,5 +1,24 @@
 import { API_URL, API_URL_ADMIN } from './../constants'
 
+export function getAllCustomers(token, setIsLoading, setAllConsumers) {
+    setIsLoading(true)
+    fetch(API_URL_ADMIN + 'admin/customers', {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                setIsLoading(false)
+                setAllConsumers(result)
+            },
+            (error) => {}
+        )
+}
+
 export function getAllProperties(token, setIsLoading, setAllProperties) {
     setIsLoading(true)
     fetch(API_URL + 'properties', {

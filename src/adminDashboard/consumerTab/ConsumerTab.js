@@ -15,16 +15,19 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import ConsumerDetails from './ConsumerDetails'
+import { getAllCustomers } from './../dashboardService'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.white,
         color: theme.palette.common.black,
+        fontFamily: 'Nunito Sans, sans-serif !important',
     },
     [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
         fontWeight: 'bold',
         cursor: 'pointer',
+        fontFamily: 'Nunito Sans, sans-serif !important',
     },
 }))
 
@@ -47,27 +50,10 @@ const ConsumerTab = (props) => {
     const [isLoading, setIsLoading] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
     const [searchVal, setSearchVal] = useState()
-
-    const rows = [
-        createData(
-            'Jaime Flaore',
-            '913-388-7526',
-            '123@gmail.com',
-            'Lakeside Townhomes',
-            'Pending',
-            'Good',
-            25
-        ),
-        createData(
-            'Jaime Flaore',
-            '913-388-7526',
-            '123@gmail.com',
-            'Lakeside Townhomes',
-            'Pending',
-            'Bad',
-            0
-        ),
-    ]
+    const [allConsumers, setAllConsumers] = useState([])
+    const [rows, setRows] = useState([])
+    const [allRows, setAllRows] = useState([])
+    const [activeSearch, setActiveSearch] = useState(false)
 
     const handeSearchChange = (value) => {
         setSearchVal(value)
@@ -81,7 +67,92 @@ const ConsumerTab = (props) => {
         setShowDetails(false)
     }
 
-    useEffect(() => {}, [])
+    const removeDups = (array) => {
+        const unique = Array.from(new Set(array.map((a) => a.email))).map(
+            (email) => {
+                return array.find((a) => a.email === email)
+            }
+        )
+        return unique
+    }
+
+    useEffect(() => {
+        if (props.token) {
+            getAllCustomers(props.token, setIsLoading, setAllConsumers)
+        }
+    }, [props.token])
+
+    useEffect(() => {
+        let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
+        setRows([])
+        if (searchVal?.length > 2) {
+            setActiveSearch(true)
+            let results = allConsumersTemp.filter(
+                (consumer) =>
+                    consumer.property?.name?.includes(searchVal) ||
+                    consumer.user?.firstName?.includes(searchVal) ||
+                    consumer.user?.lastName?.includes(searchVal) ||
+                    consumer.user?.cognitoUuid?.includes(searchVal) ||
+                    consumer.user?.phoneNumber?.includes(searchVal)
+            )
+            if (results?.length > 0) {
+                let tempRows = []
+                results.forEach((consumer) => {
+                    let userInfo = consumer.user
+                    let propertyInfo = consumer.property
+                    let requestInfo = consumer.propertyRequest
+                    let walletInfo = consumer.userWallet
+                    tempRows.push(
+                        createData(
+                            userInfo.firstName + ' ' + userInfo.lastName,
+                            userInfo.phoneNumber,
+                            userInfo.email,
+                            propertyInfo.name,
+                            requestInfo.status.charAt(0).toUpperCase() +
+                                requestInfo.status.slice(1),
+                            walletInfo.creditStanding === false
+                                ? 'Bad'
+                                : 'Good',
+                            walletInfo.creditBalance / 100
+                        )
+                    )
+                })
+                setRows(removeDups(tempRows))
+            } else {
+                setRows([])
+            }
+        } else {
+            setRows(removeDups(allRows))
+            setActiveSearch(false)
+        }
+    }, [searchVal])
+
+    useEffect(() => {
+        setRows([])
+        if (allConsumers?.length > 0 && !activeSearch) {
+            let tempRows = []
+            allConsumers.forEach((consumer) => {
+                let userInfo = consumer.user
+                let propertyInfo = consumer.property
+                let requestInfo = consumer.propertyRequest
+                let walletInfo = consumer.userWallet
+                tempRows.push(
+                    createData(
+                        userInfo.firstName + ' ' + userInfo.lastName,
+                        userInfo.phoneNumber,
+                        userInfo.email,
+                        propertyInfo.name,
+                        requestInfo.status.charAt(0).toUpperCase() +
+                            requestInfo.status.slice(1),
+                        walletInfo.creditStanding === false ? 'Bad' : 'Good',
+                        walletInfo.creditBalance / 100
+                    )
+                )
+            })
+            setRows(removeDups(tempRows))
+            setAllRows(removeDups(tempRows))
+        }
+    }, [activeSearch, allConsumers])
 
     return (
         <React.Fragment>
@@ -98,7 +169,7 @@ const ConsumerTab = (props) => {
                                 id="search"
                                 className="searchField"
                                 fullWidth
-                                placeholder="Search by User ID, Name, or Mobile"
+                                placeholder="Search by User ID, Name, Phone Number, or Property Name"
                                 variant="outlined"
                                 value={searchVal}
                                 onChange={(e) =>
@@ -110,9 +181,17 @@ const ConsumerTab = (props) => {
                             />
                         </Grid>
                         <hr className="consumerHr" />
+                        {activeSearch && (
+                            <div className="search-header">
+                                Based on your search we found {rows?.length}{' '}
+                                results
+                            </div>
+                        )}
                         <TableContainer component={Paper}>
                             <Table
-                                sx={{ minWidth: 700 }}
+                                sx={{
+                                    minWidth: 700,
+                                }}
                                 aria-label="customized table"
                             >
                                 <TableHead>
@@ -185,7 +264,7 @@ const ConsumerTab = (props) => {
                         </TableContainer>
                     </>
                 ) : (
-                    <ConsumerDetails goBack={goBack} />
+                    <ConsumerDetails token={props.token} goBack={goBack} />
                 )}
             </div>
             {isLoading && (

@@ -467,7 +467,7 @@ export default function AdminDashboard(props) {
                                     <Installers token={props.token} />
                                 </TabPanel>
                                 <TabPanel value={value} index={3}>
-                                    <ConsumerTab />
+                                    <ConsumerTab token={props.token} />
                                 </TabPanel>
                             </Paper>
                         </Grid>

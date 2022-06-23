@@ -63,8 +63,15 @@
     text-transform: none !important;
 }
 
+.search-header {
+    margin-bottom: 20px;
+    color: black;
+    font-weight: bold;
+}
+
 .table-container {
     margin-top: 45px;
+    font-family: 'Nunito Sans', sans-serif !important;
 }
 
 .table-container .MuiTableContainer-root {
