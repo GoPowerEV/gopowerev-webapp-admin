@@ -64,7 +64,7 @@ const SessionsTable = (props) => {
                 <TableHead>
                     <TableRow>
                         <StyledTableCell>Vehicle</StyledTableCell>
-                        <StyledTableCell>Spot ID</StyledTableCell>
+                        <StyledTableCell>Parking Spot</StyledTableCell>
                         <StyledTableCell>Date</StyledTableCell>
                         <StyledTableCell>Session Start</StyledTableCell>
                         <StyledTableCell>Session Length</StyledTableCell>
@@ -85,7 +85,7 @@ const SessionsTable = (props) => {
                             <StyledTableCell>{row.length}</StyledTableCell>
                             <StyledTableCell>{row.time}</StyledTableCell>
                             <StyledTableCell>{row.kwh}</StyledTableCell>
-                            <StyledTableCell>{row.cost}</StyledTableCell>
+                            <StyledTableCell>${row.cost}</StyledTableCell>
                         </StyledTableRow>
                     ))}
                 </TableBody>
