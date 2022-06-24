@@ -30,14 +30,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }))
 
-function createData(vehicle, date, transaction, credits, debits, balance) {
-    return { vehicle, date, transaction, credits, debits, balance }
+function createData(date, transaction, credits, debits, balance) {
+    return { date, transaction, credits, debits, balance }
 }
 
 const BillingTable = (props) => {
     const rows = [
-        createData('Johns Tesla M3', '04/06', 'Funds Added', '25', null, 50),
-        createData('Janes HummerEV', '04/01', 'Card debited', null, '15', 35),
+        createData('04/06', 'Funds Added', '25', null, 50),
+        createData('04/01', 'Card debited', null, '15', 35),
     ]
 
     return (
@@ -45,7 +45,6 @@ const BillingTable = (props) => {
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
                 <TableHead>
                     <TableRow>
-                        <StyledTableCell>Vehicle</StyledTableCell>
                         <StyledTableCell>Date</StyledTableCell>
                         <StyledTableCell>Transaction</StyledTableCell>
                         <StyledTableCell>Credits</StyledTableCell>
@@ -56,9 +55,6 @@ const BillingTable = (props) => {
                 <TableBody>
                     {rows.map((row) => (
                         <StyledTableRow key={row.name}>
-                            <StyledTableCell component="th" scope="row">
-                                {row.vehicle}
-                            </StyledTableCell>
                             <StyledTableCell>{row.date}</StyledTableCell>
                             <StyledTableCell>{row.transaction}</StyledTableCell>
                             <StyledTableCell>

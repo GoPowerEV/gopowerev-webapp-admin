@@ -6,6 +6,7 @@ import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutl
 import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined'
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
+import ElectricCarOutlinedIcon from '@mui/icons-material/ElectricCarOutlined'
 import Grid from '@material-ui/core/Grid'
 import './ConsumerTab.css'
 import { useHistory } from 'react-router-dom'
@@ -23,6 +24,7 @@ const ConsumerDetails = (props) => {
     const [sessionsOpened, setSessionsOpened] = useState(true)
     const [userData, setUserData] = useState({})
     const [propertyData, setPropertyData] = useState({})
+    const [vehicleData, setVehicleData] = useState({})
     const history = useHistory()
 
     const toggleBillingInfo = () => {
@@ -37,6 +39,7 @@ const ConsumerDetails = (props) => {
         console.log('here it is!!', props.currentlyViewedCustomer)
         setUserData(props.currentlyViewedCustomer[0].user)
         setPropertyData(props.currentlyViewedCustomer[0].property)
+        // setVehicleData(props.currentlyViewedCustomer[0].property)
     }, [props.currentlyViewedCustomer])
 
     return (
@@ -83,7 +86,7 @@ const ConsumerDetails = (props) => {
                         direction="row"
                         justifyContent="spacing-between"
                         alignItems="center"
-                        spacing={1}
+                        spacing={4}
                     >
                         {/* LEFT SIDE */}
                         <Grid item xs={6}>
@@ -109,16 +112,42 @@ const ConsumerDetails = (props) => {
                                         {propertyData.name}
                                     </span>
                                 </Grid>
-                                <Grid item lg={6} md={12}>
+                                <Grid item lg={8} md={12}>
                                     <EmailOutlinedIcon />
                                     <span className="consumer-detail-grey">
                                         {userData.email ?? '-'}
                                     </span>
                                 </Grid>
-                                <Grid item lg={6} md={12}>
+                                <Grid item lg={4} md={12}>
                                     <LocalPhoneOutlinedIcon />
                                     <span className="consumer-detail-grey">
                                         {userData.phoneNumber ?? '-'}
+                                    </span>
+                                </Grid>
+                            </Grid>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="spacing-between"
+                                alignItems="center"
+                                spacing={1}
+                                className="vehicle-section"
+                            >
+                                <Grid item xs={12}>
+                                    <span className="blackHeaderVehicles">
+                                        Vehicles
+                                    </span>
+                                </Grid>
+                                <Grid item lg={8} md={12}>
+                                    <ElectricCarOutlinedIcon />
+                                    <span className="consumer-detail-grey">
+                                        John's Tesla M3
+                                    </span>
+                                </Grid>
+                                <Grid item lg={4} md={12}>
+                                    <ElectricCarOutlinedIcon />
+                                    <span className="consumer-detail-grey">
+                                        John's HummerEV
                                     </span>
                                 </Grid>
                             </Grid>
