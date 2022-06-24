@@ -19,12 +19,39 @@
     font-size: 19px;
 }
 
-.blachHeader {
-    margin-top: 20px;
-    margin-bottom: 10px;
+.blackHeader {
     font-weight: bold;
     color: black;
     font-size: 19px;
+}
+
+.billingSection {
+    margin-top: 30px !important;
+}
+
+.consumer-detail-grey {
+    font-size: 17px;
+    font-weight: bold;
+    position: relative;
+    top: -5px;
+    margin-left: 10px;
+}
+
+.divider {
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #bababa;
+}
+
+.greyHeader {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.smallBlackHeader {
+    font-weight: bold;
+    color: black;
+    font-size: 16px;
 }
 
 .searchField div {
@@ -69,8 +96,15 @@
     font-weight: bold;
 }
 
+.snapshot-container {
+    background-color: #f5f5f5;
+    border: 1px solid #e1e0e0;
+    border-radius: 7px;
+    padding: 20px;
+}
+
 .table-container {
-    margin-top: 45px;
+    margin-top: 25px;
     font-family: 'Nunito Sans', sans-serif !important;
 }
 
@@ -103,4 +137,22 @@
     padding-bottom: 7px;
     padding-left: 20px;
     border: 0.5px solid #8080806e;
+}
+
+@media only screen and (max-width: 1400px) {
+    .consumer-detail-grey {
+        font-size: 14px;
+        font-weight: bold;
+        position: relative;
+        top: -7px;
+        margin-left: 10px;
+    }
+
+    .blackHeader {
+        font-size: 15px;
+    }
+
+    .greyHeader {
+        font-size: 15px;
+    }
 }

@@ -3,6 +3,9 @@ import Button from '@material-ui/core/Button'
 import IconButton from '@mui/material/IconButton'
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
 import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined'
+import FmdGoodOutlinedIcon from '@mui/icons-material/FmdGoodOutlined'
+import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined'
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import Grid from '@material-ui/core/Grid'
 import './ConsumerTab.css'
 import { useHistory } from 'react-router-dom'
@@ -18,6 +21,8 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 const ConsumerDetails = (props) => {
     const [billingOpened, setBillingOpened] = useState(true)
     const [sessionsOpened, setSessionsOpened] = useState(true)
+    const [userData, setUserData] = useState({})
+    const [propertyData, setPropertyData] = useState({})
     const history = useHistory()
 
     const toggleBillingInfo = () => {
@@ -27,6 +32,12 @@ const ConsumerDetails = (props) => {
     const toggleSessionsInfo = () => {
         setSessionsOpened(!sessionsOpened)
     }
+
+    useEffect(() => {
+        console.log('here it is!!', props.currentlyViewedCustomer)
+        setUserData(props.currentlyViewedCustomer[0].user)
+        setPropertyData(props.currentlyViewedCustomer[0].property)
+    }, [props.currentlyViewedCustomer])
 
     return (
         <React.Fragment>
@@ -72,7 +83,100 @@ const ConsumerDetails = (props) => {
                         direction="row"
                         justifyContent="spacing-between"
                         alignItems="center"
+                        spacing={1}
+                    >
+                        {/* LEFT SIDE */}
+                        <Grid item xs={6}>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="spacing-between"
+                                alignItems="center"
+                                spacing={1}
+                            >
+                                <Grid item xs={12}>
+                                    <span className="blackHeader">
+                                        {userData.firstName} {userData.lastName}
+                                    </span>
+                                    <span className="divider">|</span>
+                                    <span className="greyHeader">
+                                        {userData.cognitoUuid}
+                                    </span>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FmdGoodOutlinedIcon />
+                                    <span className="consumer-detail-grey">
+                                        {propertyData.name}
+                                    </span>
+                                </Grid>
+                                <Grid item lg={6} md={12}>
+                                    <EmailOutlinedIcon />
+                                    <span className="consumer-detail-grey">
+                                        {userData.email ?? '-'}
+                                    </span>
+                                </Grid>
+                                <Grid item lg={6} md={12}>
+                                    <LocalPhoneOutlinedIcon />
+                                    <span className="consumer-detail-grey">
+                                        {userData.phoneNumber ?? '-'}
+                                    </span>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        {/* RIGHT SIDE */}
+                        <Grid item xs={6}>
+                            <div className="snapshot-container">
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justifyContent="spacing-between"
+                                    alignItems="center"
+                                    spacing={1}
+                                >
+                                    <Grid item xs={12}>
+                                        <div className="blackHeader">
+                                            Snap Shot
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <span className="smallBlackHeader">
+                                            100
+                                        </span>{' '}
+                                        Total Sessions
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <span className="smallBlackHeader">
+                                            200
+                                        </span>{' '}
+                                        hrs{' '}
+                                        <span className="smallBlackHeader">
+                                            45
+                                        </span>{' '}
+                                        min Total Charge Time
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <span className="smallBlackHeader">
+                                            5000
+                                        </span>{' '}
+                                        Total kWh
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <span className="smallBlackHeader">
+                                            $5400
+                                        </span>{' '}
+                                        Total User Debits
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </Grid>
+                    </Grid>
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="spacing-between"
+                        alignItems="center"
                         xs={12}
+                        className="billingSection"
                     >
                         <Grid item xs={11}>
                             <Grid
@@ -80,10 +184,12 @@ const ConsumerDetails = (props) => {
                                 direction="row"
                                 justifyContent="flex-start"
                                 alignItems="center"
-                                spacing={5}
+                                spacing={4}
                             >
                                 <Grid item>
-                                    <span className="blachHeader">Billing</span>
+                                    <span className="blackHeader billingSection">
+                                        Billing
+                                    </span>
                                 </Grid>
                                 <Grid item>
                                     <Button
@@ -91,6 +197,14 @@ const ConsumerDetails = (props) => {
                                         variant="contained"
                                     >
                                         Manage Balance
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        className="regular-button"
+                                        variant="contained"
+                                    >
+                                        Reset Password
                                     </Button>
                                 </Grid>
                             </Grid>

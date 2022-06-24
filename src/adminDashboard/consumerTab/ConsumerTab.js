@@ -41,8 +41,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }))
 
-function createData(name, number, email, property, status, standing, balance) {
-    return { name, number, email, property, status, standing, balance }
+function createData(
+    id,
+    name,
+    number,
+    email,
+    property,
+    status,
+    standing,
+    balance
+) {
+    return { id, name, number, email, property, status, standing, balance }
 }
 
 const ConsumerTab = (props) => {
@@ -54,12 +63,19 @@ const ConsumerTab = (props) => {
     const [rows, setRows] = useState([])
     const [allRows, setAllRows] = useState([])
     const [activeSearch, setActiveSearch] = useState(false)
+    const [currentlyViewedCustomer, setCurrentlyViewedCustomer] = useState({})
 
     const handeSearchChange = (value) => {
         setSearchVal(value)
     }
 
-    const goToDetails = () => {
+    const goToDetails = (id) => {
+        console.log('here is the id', id)
+        let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
+        let result = allConsumersTemp.filter(
+            (consumer) => consumer.user?.cognitoUuid === id
+        )
+        setCurrentlyViewedCustomer(result)
         setShowDetails(true)
     }
 
@@ -104,6 +120,7 @@ const ConsumerTab = (props) => {
                     let walletInfo = consumer.userWallet
                     tempRows.push(
                         createData(
+                            userInfo?.cognitoUuid,
                             userInfo.firstName + ' ' + userInfo.lastName,
                             userInfo.phoneNumber,
                             userInfo.email,
@@ -129,6 +146,7 @@ const ConsumerTab = (props) => {
 
     useEffect(() => {
         setRows([])
+        console.log('here is all customer data', allConsumers)
         if (allConsumers?.length > 0 && !activeSearch) {
             let tempRows = []
             allConsumers.forEach((consumer) => {
@@ -138,6 +156,7 @@ const ConsumerTab = (props) => {
                 let walletInfo = consumer.userWallet
                 tempRows.push(
                     createData(
+                        userInfo?.cognitoUuid,
                         userInfo.firstName + ' ' + userInfo.lastName,
                         userInfo.phoneNumber,
                         userInfo.email,
@@ -149,6 +168,7 @@ const ConsumerTab = (props) => {
                     )
                 )
             })
+            console.log('here you go', tempRows)
             setRows(removeDups(tempRows))
             setAllRows(removeDups(tempRows))
         }
@@ -219,7 +239,7 @@ const ConsumerTab = (props) => {
                                     {rows.map((row) => (
                                         <StyledTableRow
                                             key={row.name}
-                                            onClick={() => goToDetails()}
+                                            onClick={() => goToDetails(row.id)}
                                         >
                                             <StyledTableCell
                                                 component="th"
@@ -264,7 +284,11 @@ const ConsumerTab = (props) => {
                         </TableContainer>
                     </>
                 ) : (
-                    <ConsumerDetails token={props.token} goBack={goBack} />
+                    <ConsumerDetails
+                        token={props.token}
+                        goBack={goBack}
+                        currentlyViewedCustomer={currentlyViewedCustomer}
+                    />
                 )}
             </div>
             {isLoading && (
