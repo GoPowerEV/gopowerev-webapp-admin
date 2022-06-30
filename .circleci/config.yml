@@ -42,14 +42,9 @@ jobs:
               cat ./deployment_envs/.env.prod > .env
               GENERATE_SOURCEMAP=false
             elif [ $CIRCLE_BRANCH == qa ]; then
-              echo "BUILDING QA"
               cat ./deployment_envs/.env.qa > .env
-              echo "------------------"
-              cat .env
-              echo "------------------"
               GENERATE_SOURCEMAP=false
             fi
-            cat .env
             npm run build:dev
       - save_cache:
           key: admin-app-dependencies-{{ checksum "package.json" }}
@@ -72,8 +67,8 @@ jobs:
             ls -la
             aws --version
             cd build
-            # aws s3 rm s3://gopev-admin-web-app-dev --recursive
-            # aws s3 sync . s3://gopev-admin-web-app-dev
+            aws s3 rm s3://gopev-admin-web-app-dev --recursive
+            aws s3 sync . s3://gopev-admin-web-app-dev
   deployQA:
     executor: aws-cli/default
     steps:
@@ -87,5 +82,5 @@ jobs:
             ls -la
             aws --version
             cd build
-            # aws s3 rm s3://gopev-admin-web-app-qa --recursive
-            # aws s3 sync . s3://gopev-admin-web-app-qa
+            aws s3 rm s3://gopev-admin-web-app-qa --recursive
+            aws s3 sync . s3://gopev-admin-web-app-qa
