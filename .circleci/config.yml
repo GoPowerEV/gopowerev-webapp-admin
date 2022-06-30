@@ -40,8 +40,9 @@ jobs:
             npx browserslist@latest --update-db
             if [ $CIRCLE_BRANCH == master ]; then
               cat ./deployment_envs/.env.prod > .env
-              GENERATE_SOURCEMAP=false npm run build:dev
+              GENERATE_SOURCEMAP=false
             elif [ $CIRCLE_BRANCH == qa ]; then
+              echo "BUILDING QA"
               cat ./deployment_envs/.env.qa > .env
               GENERATE_SOURCEMAP=false
             fi
