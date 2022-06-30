@@ -44,6 +44,9 @@ jobs:
             elif [ $CIRCLE_BRANCH == qa ]; then
               echo "BUILDING QA"
               cat ./deployment_envs/.env.qa > .env
+              echo "------------------"
+              cat .env
+              echo "------------------"
               GENERATE_SOURCEMAP=false
             fi
             cat .env
