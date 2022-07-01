@@ -105,11 +105,21 @@ const ConsumerTab = (props) => {
             setActiveSearch(true)
             let results = allConsumersTemp.filter(
                 (consumer) =>
-                    consumer.property?.name?.includes(searchVal) ||
-                    consumer.user?.firstName?.includes(searchVal) ||
-                    consumer.user?.lastName?.includes(searchVal) ||
-                    consumer.user?.cognitoUuid?.includes(searchVal) ||
-                    consumer.user?.phoneNumber?.includes(searchVal)
+                    consumer.property?.name
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.firstName
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.lastName
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.cognitoUuid
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.phoneNumber
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase())
             )
             if (results?.length > 0) {
                 let tempRows = []
@@ -136,13 +146,14 @@ const ConsumerTab = (props) => {
                 })
                 setRows(removeDups(tempRows))
             } else {
+                console.log('HERE!!!', rows.length)
                 setRows([])
             }
         } else {
             setRows(removeDups(allRows))
             setActiveSearch(false)
         }
-    }, [searchVal])
+    }, [allConsumers, allRows, searchVal])
 
     useEffect(() => {
         setRows([])
@@ -207,81 +218,90 @@ const ConsumerTab = (props) => {
                                 results
                             </div>
                         )}
-                        <TableContainer component={Paper}>
-                            <Table
-                                sx={{
-                                    minWidth: 700,
-                                }}
-                                aria-label="customized table"
-                            >
-                                <TableHead>
-                                    <TableRow>
-                                        <StyledTableCell>Name</StyledTableCell>
-                                        <StyledTableCell>
-                                            Number
-                                        </StyledTableCell>
-                                        <StyledTableCell>Email</StyledTableCell>
-                                        <StyledTableCell>
-                                            Property
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            Status
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            Standing
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            Balance
-                                        </StyledTableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <StyledTableRow
-                                            key={row.name}
-                                            onClick={() => goToDetails(row.id)}
-                                        >
-                                            <StyledTableCell
-                                                component="th"
-                                                scope="row"
+                        {rows?.length > 0 && (
+                            <TableContainer component={Paper}>
+                                <Table
+                                    sx={{
+                                        minWidth: 700,
+                                    }}
+                                    aria-label="customized table"
+                                >
+                                    <TableHead>
+                                        <TableRow>
+                                            <StyledTableCell>
+                                                Name
+                                            </StyledTableCell>
+                                            <StyledTableCell>
+                                                Number
+                                            </StyledTableCell>
+                                            <StyledTableCell>
+                                                Email
+                                            </StyledTableCell>
+                                            <StyledTableCell>
+                                                Property
+                                            </StyledTableCell>
+                                            <StyledTableCell>
+                                                Status
+                                            </StyledTableCell>
+                                            <StyledTableCell>
+                                                Standing
+                                            </StyledTableCell>
+                                            <StyledTableCell>
+                                                Balance
+                                            </StyledTableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {rows.map((row) => (
+                                            <StyledTableRow
+                                                key={row.name}
+                                                onClick={() =>
+                                                    goToDetails(row.id)
+                                                }
                                             >
-                                                {row.name}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                {row.number}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                {row.email}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                {row.property}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                {row.status === 'Pending' ? (
-                                                    <span className="pending-tile">
-                                                        {row.status}
-                                                    </span>
-                                                ) : (
-                                                    row.status
-                                                )}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                {row.standing === 'Bad' ? (
-                                                    <span className="red-text">
-                                                        {row.standing}
-                                                    </span>
-                                                ) : (
-                                                    row.standing
-                                                )}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                ${row.balance}
-                                            </StyledTableCell>
-                                        </StyledTableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                                                <StyledTableCell
+                                                    component="th"
+                                                    scope="row"
+                                                >
+                                                    {row.name}
+                                                </StyledTableCell>
+                                                <StyledTableCell>
+                                                    {row.number}
+                                                </StyledTableCell>
+                                                <StyledTableCell>
+                                                    {row.email}
+                                                </StyledTableCell>
+                                                <StyledTableCell>
+                                                    {row.property}
+                                                </StyledTableCell>
+                                                <StyledTableCell>
+                                                    {row.status ===
+                                                    'Pending' ? (
+                                                        <span className="pending-tile">
+                                                            {row.status}
+                                                        </span>
+                                                    ) : (
+                                                        row.status
+                                                    )}
+                                                </StyledTableCell>
+                                                <StyledTableCell>
+                                                    {row.standing === 'Bad' ? (
+                                                        <span className="red-text">
+                                                            {row.standing}
+                                                        </span>
+                                                    ) : (
+                                                        row.standing
+                                                    )}
+                                                </StyledTableCell>
+                                                <StyledTableCell>
+                                                    ${row.balance}
+                                                </StyledTableCell>
+                                            </StyledTableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
                     </>
                 ) : (
                     <ConsumerDetails
