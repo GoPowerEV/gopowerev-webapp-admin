@@ -7,13 +7,19 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - build:
+      - build
+      - deployDev:
+          requires:
+            - build
           filters:
             branches:
               only: develop
-      - deploy:
+      - deployQA:
           requires:
             - build
+          filters:
+            branches:
+              only: qa
 
 jobs:
   build:
@@ -32,6 +38,13 @@ jobs:
             npm --version
             npm install reactjs
             npx browserslist@latest --update-db
+            if [ $CIRCLE_BRANCH == master ]; then
+              cat ./deployment_envs/.env.prod > .env
+              GENERATE_SOURCEMAP=false
+            elif [ $CIRCLE_BRANCH == qa ]; then
+              cat ./deployment_envs/.env.qa > .env
+              GENERATE_SOURCEMAP=false
+            fi
             npm run build:dev
       - save_cache:
           key: admin-app-dependencies-{{ checksum "package.json" }}
@@ -41,7 +54,7 @@ jobs:
           root: .
           paths:
             - build
-  deploy:
+  deployDev:
     executor: aws-cli/default
     steps:
       - aws-cli/setup:
@@ -56,3 +69,18 @@ jobs:
             cd build
             aws s3 rm s3://gopev-admin-web-app-dev --recursive
             aws s3 sync . s3://gopev-admin-web-app-dev
+  deployQA:
+    executor: aws-cli/default
+    steps:
+      - aws-cli/setup:
+          profile-name: circleci
+      - attach_workspace:
+          at: .
+      - run:
+          name: Upload
+          command: |
+            ls -la
+            aws --version
+            cd build
+            aws s3 rm s3://gopev-admin-web-app-qa --recursive
+            aws s3 sync . s3://gopev-admin-web-app-qa
