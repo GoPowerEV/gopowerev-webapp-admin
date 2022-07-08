@@ -39,7 +39,7 @@ const ConsumerDetails = (props) => {
         console.log('here it is!!', props.currentlyViewedCustomer)
         setUserData(props.currentlyViewedCustomer[0].user)
         setPropertyData(props.currentlyViewedCustomer[0].property)
-        // setVehicleData(props.currentlyViewedCustomer[0].property)
+        setVehicleData(props.currentlyViewedCustomer[0].user.vehicles)
     }, [props.currentlyViewedCustomer])
 
     return (
@@ -138,18 +138,23 @@ const ConsumerDetails = (props) => {
                                         Vehicles
                                     </span>
                                 </Grid>
-                                <Grid item lg={8} md={12}>
-                                    <ElectricCarOutlinedIcon />
-                                    <span className="consumer-detail-grey">
-                                        John's Tesla M3
-                                    </span>
-                                </Grid>
-                                <Grid item lg={4} md={12}>
-                                    <ElectricCarOutlinedIcon />
-                                    <span className="consumer-detail-grey">
-                                        John's HummerEV
-                                    </span>
-                                </Grid>
+                                {vehicleData?.length === 0 && (
+                                    <Grid item lg={8} md={12}>
+                                        <span className="consumer-detail-grey-none">
+                                            No Vehicle
+                                        </span>
+                                    </Grid>
+                                )}
+                                {vehicleData?.length > 0 &&
+                                    vehicleData?.map((vehicle, i) => (
+                                        <Grid item lg={8} md={12}>
+                                            <ElectricCarOutlinedIcon />
+                                            <span className="consumer-detail-grey">
+                                                {vehicle.year} {vehicle.make}{' '}
+                                                {vehicle.model}
+                                            </span>
+                                        </Grid>
+                                    ))}
                             </Grid>
                         </Grid>
                         {/* RIGHT SIDE */}

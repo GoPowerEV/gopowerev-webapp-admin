@@ -47,6 +47,13 @@
     margin-left: 10px;
 }
 
+.consumer-detail-grey-none {
+    font-size: 17px;
+    font-weight: bold;
+    position: relative;
+    top: -5px;
+}
+
 .divider {
     margin-left: 10px;
     margin-right: 10px;
@@ -156,6 +163,13 @@
         position: relative;
         top: -7px;
         margin-left: 10px;
+    }
+
+    .consumer-detail-grey-none {
+        font-size: 14px;
+        font-weight: bold;
+        position: relative;
+        top: -7px;
     }
 
     .blackHeader {
