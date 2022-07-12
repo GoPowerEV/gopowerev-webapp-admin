@@ -180,8 +180,10 @@ export default function UpdateLcuAndLocation(props) {
     const [photoBinaries, setPhotoBinaries] = React.useState([])
     const [photoFileNames, setPhotoFileNames] = React.useState([])
     const [amountOfSmartOutlets, setAmountOfSmartOutlets] = React.useState([])
+    const [amountOfBases, setAmountOfBases] = React.useState([])
     const [voltAmpsErrors, setVoltAmpsErrors] = React.useState([])
     const [smartOutletsErrors, setSmartOutletsErrors] = React.useState([])
+    const [basesErrors, setBasesErrors] = React.useState([])
     const [locationsNamesErrors, setLocationsNamesErrors] = React.useState([])
     const [hasErrors, setHasErrors] = React.useState(false)
     const [models, setModels] = useState([])
@@ -225,9 +227,11 @@ export default function UpdateLcuAndLocation(props) {
         }
         // CLEANING UP SMART OUTLET ERRORS
         let smartOutletsErrorsTemp = smartOutletsErrors
+        let basesErrorsTemp = basesErrors
         if (smartOutletsErrors[index]) {
             smartOutletsErrorsTemp.splice(index, 1)
             setSmartOutletsErrors(smartOutletsErrorsTemp)
+            setBasesErrors(basesErrorsTemp)
         }
     }
 
@@ -276,6 +280,27 @@ export default function UpdateLcuAndLocation(props) {
         } else {
             setSubmitButtonDisabled(false)
             return false
+        }
+    }
+
+    const handleThisLocationNumberOfReadiBasesChange = (value, index) => {
+        if (isNaN(Number(value))) {
+            let tempErrors = basesErrors
+            tempErrors[index] = true
+            setBasesErrors(tempErrors)
+            setHasErrors(true)
+        } else if (Number(value) < 0 || Number(value) > 50) {
+            let tempErrors = basesErrors
+            tempErrors[index] = true
+            setBasesErrors(tempErrors)
+            setHasErrors(true)
+        } else {
+            let tempErrors = basesErrors
+            tempErrors[index] = null
+            setBasesErrors(tempErrors)
+            let tempAmountOfBases = amountOfBases
+            tempAmountOfBases[index] = Number(value)
+            setAmountOfBases(tempAmountOfBases)
         }
     }
 
@@ -360,9 +385,24 @@ export default function UpdateLcuAndLocation(props) {
         checkIfThereAreStillErrors()
     }
 
+    const checkBases = () => {
+        let tempErrors = basesErrors
+        amountOfBases.forEach((base, index) => {
+            if (base === 0 || base === null) {
+                tempErrors[index] = true
+                setHasErrors(true)
+            } else {
+                tempErrors[index] = null
+            }
+        })
+        setLocationsNamesErrors(tempErrors)
+        checkIfThereAreStillErrors()
+    }
+
     const validateAndSubmit = () => {
         checkLocationsNames()
         checkSmartOutlets()
+        checkBases()
         checkIfThereAreStillErrors()
         if (!hasErrors && lcuName) {
             props.handleSubmitForInstallation(
@@ -371,6 +411,8 @@ export default function UpdateLcuAndLocation(props) {
                 locations,
                 photoBinaries,
                 amountOfSmartOutlets,
+                amountOfBases,
+                readinbaseModel,
                 soModel
             )
         } else {
@@ -420,11 +462,13 @@ export default function UpdateLcuAndLocation(props) {
         checkIfThereAreStillErrors()
     }, [
         smartOutletsErrors,
+        basesErrors,
         locationsNamesErrors,
         lcuName,
         lcuModel,
         locations,
         photoBinaries,
+        amountOfBases,
         amountOfSmartOutlets,
         soModel,
     ])
@@ -568,12 +612,16 @@ export default function UpdateLcuAndLocation(props) {
                                         getBinaryFromImg={getBinaryFromImg}
                                         photoFileNames={photoFileNames}
                                         smartOutletsErrors={smartOutletsErrors}
+                                        basesErrors={basesErrors}
                                         handleThisLocationMaxVoltAmpsChange={
                                             handleThisLocationMaxVoltAmpsChange
                                         }
                                         voltAmpsErrors={voltAmpsErrors}
                                         handleThisLocationNumberOfSmartOutletsChange={
                                             handleThisLocationNumberOfSmartOutletsChange
+                                        }
+                                        handleThisLocationNumberOfReadiBasesChange={
+                                            handleThisLocationNumberOfReadiBasesChange
                                         }
                                         handleReadibaseChange={
                                             setReadinbaseModel

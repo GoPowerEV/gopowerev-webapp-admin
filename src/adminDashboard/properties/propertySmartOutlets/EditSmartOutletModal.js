@@ -53,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const numberOfParkingSpotsOptions = [1, 2, 3]
+
 const breakNumOptions = [
     0,
     1,
@@ -175,6 +177,9 @@ export default function EditSmartOutletModal(props) {
     const [feedColors, setFeedColors] = useState(props.outletData.feedColors)
     const [breakNumA, setBreakNumA] = useState(props.outletData.breakNumA)
     const [breakNumB, setBreakNumB] = useState(props.outletData.breakNumB)
+    const [numberOfParkingSpots, setNumberOfParkingSpots] = useState(
+        props.outletData.parkingSpotCount
+    )
     const [mac, setMac] = useState(props.outletData.macAddr)
     const [outletData, setOutletData] = useState(props.outletData)
     const [modalStyle] = useState(getModalStyle)
@@ -190,6 +195,7 @@ export default function EditSmartOutletModal(props) {
         setFeedColors(props.outletData.feedColors)
         setBreakNumA(props.outletData.breakNumA)
         setBreakNumB(props.outletData.breakNumB)
+        setNumberOfParkingSpots(props.outletData.parkingSpotCount)
         console.log('here is the data!!', props.outletData)
     }, [props.outletData])
 
@@ -232,6 +238,8 @@ export default function EditSmartOutletModal(props) {
             setBreakNumA(value)
         } else if (field === 'breakNumB') {
             setBreakNumB(value)
+        } else if (field === 'parkingSpotCount') {
+            setNumberOfParkingSpots(value)
         } else {
             setMac(value)
         }
@@ -447,7 +455,45 @@ export default function EditSmartOutletModal(props) {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={5}></Grid>
+                        <Grid item xs={5}>
+                            <InputLabel
+                                id="breakNumB"
+                                style={{
+                                    fontSize: '12px',
+                                    paddingLeft: '5px',
+                                    marginBottom: '2px',
+                                }}
+                            >
+                                Number of Parking Spots
+                            </InputLabel>
+                            <FormControl fullWidth>
+                                <Select
+                                    labelId="numberOfParkingSpots"
+                                    variant="outlined"
+                                    id="numberOfParkingSpots"
+                                    value={numberOfParkingSpots}
+                                    style={{
+                                        backgroundColor: '#e8e8e8',
+                                        borderRadius: '10px',
+                                    }}
+                                    onBlur={() => saveOutletInfo()}
+                                    onChange={(e) =>
+                                        handleOutletFieldChange(
+                                            e.target.value,
+                                            'parkingSpotCount'
+                                        )
+                                    }
+                                >
+                                    {numberOfParkingSpotsOptions?.map(
+                                        (option) => (
+                                            <MenuItem value={option}>
+                                                {option}
+                                            </MenuItem>
+                                        )
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                         <Grid item xs={5}>
                             <TextField
                                 fullWidth

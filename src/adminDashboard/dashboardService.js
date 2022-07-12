@@ -122,7 +122,8 @@ export function getAllLocationSmartOutlets(
 export function getLocationSmartOutletsById(
     token,
     id,
-    setSmartOutletsOfThisProperty
+    setSmartOutletsOfThisProperty,
+    setReadiBases
 ) {
     fetch(API_URL + 'smart-outlets?locationUUID=' + id, {
         method: 'GET',
@@ -134,7 +135,18 @@ export function getLocationSmartOutletsById(
         .then((res) => res.json())
         .then(
             (result) => {
-                setSmartOutletsOfThisProperty(result.smartOutlets)
+                if (setReadiBases) {
+                    setSmartOutletsOfThisProperty(result.smartOutlets)
+                } else {
+                    let outlets = result.smartOutlets.fitler(
+                        (so) => so.installationState !== 'ready'
+                    )
+                    setSmartOutletsOfThisProperty(outlets)
+                    let bases = result.smartOutlets.fitler(
+                        (so) => so.installationState === 'ready'
+                    )
+                    setReadiBases(bases)
+                }
             },
             (error) => {}
         )

@@ -68,96 +68,135 @@ const PropertyEVReadiBases = (props) => {
     return (
         <div className="smartOutletsContainer">
             <Grid container justifyContent="space-between">
-                <div className="outletHeader">EVReadiBase (1)</div>
+                <div className="outletHeader">
+                    EVReadiBases ({props.readiBases?.length})
+                </div>
             </Grid>
-            <Grid container xs={12} spacing={2}>
-                <React.Fragment>
-                    <Grid item xl={4} lg={4} md={6} xs={12}>
-                        <Card className={classes.root}>
-                            <CardContent className={classes.content}>
-                                <Grid
-                                    container
-                                    spacing={1}
-                                    justifyContent="space-between"
-                                >
-                                    <Grid item xs={12}>
-                                        <span className={classes.cardHeader}>
-                                            RB:{' '}
-                                        </span>
-                                        <span className="smartSo">6</span>
+            <>
+                {props.readiBases?.length === 0 && <div>-</div>}
+                {props.readiBases?.length > 0 && (
+                    <>
+                        <Grid container xs={12} spacing={2}>
+                            {props.readiBases?.map((base, index) => (
+                                <React.Fragment>
+                                    <Grid item xl={4} lg={4} md={6} xs={12}>
+                                        <Card className={classes.root}>
+                                            <CardContent
+                                                className={classes.content}
+                                            >
+                                                <Grid
+                                                    container
+                                                    spacing={1}
+                                                    justifyContent="space-between"
+                                                >
+                                                    <Grid item xs={12}>
+                                                        <span
+                                                            className={
+                                                                classes.cardHeader
+                                                            }
+                                                        >
+                                                            RB:{' '}
+                                                        </span>
+                                                        <span className="smartSo">
+                                                            6
+                                                        </span>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <Typography
+                                                            className={
+                                                                classes.operationalStatusHeader
+                                                            }
+                                                        >
+                                                            Model
+                                                        </Typography>
+                                                        <Typography
+                                                            className={
+                                                                classes.status
+                                                            }
+                                                        >
+                                                            {base.baseModel}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <Typography
+                                                            className={
+                                                                classes.operationalStatusHeader
+                                                            }
+                                                        >
+                                                            Admin Status
+                                                        </Typography>
+                                                        <Typography
+                                                            className={
+                                                                classes.status
+                                                            }
+                                                        >
+                                                            {base.adminStatus}
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid
+                                                    container
+                                                    spacing={1}
+                                                    justifyContent="space-between"
+                                                >
+                                                    <Grid item xs={4}>
+                                                        <Typography
+                                                            className={
+                                                                classes.operationalStatusHeader
+                                                            }
+                                                        >
+                                                            Feed Colors
+                                                        </Typography>
+                                                        <Typography
+                                                            className={
+                                                                classes.status
+                                                            }
+                                                        >
+                                                            {base.feedColors}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <Typography
+                                                            className={
+                                                                classes.operationalStatusHeader
+                                                            }
+                                                        >
+                                                            BreakNumA
+                                                        </Typography>
+                                                        <Typography
+                                                            className={
+                                                                classes.status
+                                                            }
+                                                        >
+                                                            {base.breakNumA}
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={4}>
+                                                        <Typography
+                                                            className={
+                                                                classes.operationalStatusHeader
+                                                            }
+                                                        >
+                                                            BreakNumB
+                                                        </Typography>
+                                                        <Typography
+                                                            className={
+                                                                classes.status
+                                                            }
+                                                        >
+                                                            {base.breakNumB}
+                                                        </Typography>
+                                                    </Grid>
+                                                </Grid>
+                                            </CardContent>
+                                        </Card>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={
-                                                classes.operationalStatusHeader
-                                            }
-                                        >
-                                            Model
-                                        </Typography>
-                                        <Typography className={classes.status}>
-                                            123cdF23
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={
-                                                classes.operationalStatusHeader
-                                            }
-                                        >
-                                            Admin Status
-                                        </Typography>
-                                        <Typography className={classes.status}>
-                                            Installed
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                                <Grid
-                                    container
-                                    spacing={1}
-                                    justifyContent="space-between"
-                                >
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={
-                                                classes.operationalStatusHeader
-                                            }
-                                        >
-                                            Feed Colors
-                                        </Typography>
-                                        <Typography className={classes.status}>
-                                            Red-Black
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={
-                                                classes.operationalStatusHeader
-                                            }
-                                        >
-                                            BreakNumA
-                                        </Typography>
-                                        <Typography className={classes.status}>
-                                            01
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography
-                                            className={
-                                                classes.operationalStatusHeader
-                                            }
-                                        >
-                                            BreakNumB
-                                        </Typography>
-                                        <Typography className={classes.status}>
-                                            01
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </React.Fragment>
-            </Grid>
+                                </React.Fragment>
+                            ))}
+                        </Grid>
+                    </>
+                )}
+            </>
         </div>
     )
 }
