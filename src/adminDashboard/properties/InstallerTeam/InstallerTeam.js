@@ -81,7 +81,7 @@ const InstallerTeam = (props) => {
             {!isLoading && (
                 <Collapse in={installerTeamOpened}>
                     <Grid container spacing={2} xs={11}>
-                        {installerTeam?.length > 0 &&
+                        {installerTeam &&
                             installerTeam?.map((teamMember, i) => (
                                 <InstallerCard
                                     key={i}

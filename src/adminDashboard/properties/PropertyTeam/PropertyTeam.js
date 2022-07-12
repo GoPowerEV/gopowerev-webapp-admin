@@ -82,7 +82,7 @@ const PropertyTeam = (props) => {
             {!isLoading && (
                 <Collapse in={propertyTeamOpened}>
                     <Grid container spacing={2} xs={11}>
-                        {propertyTeam?.length > 0 &&
+                        {propertyTeam &&
                             propertyTeam?.map((teamMember, i) => (
                                 <TeamMemberCard
                                     key={i}
