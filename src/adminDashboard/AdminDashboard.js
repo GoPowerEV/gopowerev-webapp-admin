@@ -82,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
         borderBottomLeftRadius: '25px',
         paddingTop: '35px',
         height: '100%',
+        minHeight: '1000px',
     },
     mainBody: {
         textAlign: 'center',
@@ -89,8 +90,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#FFFFFF',
         borderTopRightRadius: '25px',
         borderBottomRightRadius: '25px',
-        minHeight: '700px',
         height: '100%',
+        minHeight: '1000px',
     },
     tabRoot: {
         textTransform: 'initial',
