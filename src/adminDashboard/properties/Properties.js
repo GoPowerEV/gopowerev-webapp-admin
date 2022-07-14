@@ -196,7 +196,7 @@ const Properties = (props) => {
             openedPropertyLocations.forEach((location) => {
                 getPropertySmartOutletsByPropertyId(
                     props.token,
-                    location.locationUUID,
+                    props.viewThisProperty,
                     setOpenedPropertySmartOutlets,
                     setIsLoading
                 )
