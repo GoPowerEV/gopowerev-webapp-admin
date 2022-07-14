@@ -317,6 +317,7 @@ export default function SetupNewProperty(props) {
             let locationObject = {
                 locationUUID: locationId,
                 model: soModel,
+                installationState: 'powered',
             }
             if (props.token) {
                 fetch(API_URL + 'smart-outlets', {
@@ -346,7 +347,6 @@ export default function SetupNewProperty(props) {
 
     const createBases = (amountOfBases, locationId, model) => {
         console.log('this is the amount of bases', amountOfBases)
-        console.log('locationId', locationId)
         for (var i = 0; i < amountOfBases; i++) {
             setIsLoading(true)
             let locationObject = {
