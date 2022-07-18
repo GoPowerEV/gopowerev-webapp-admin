@@ -17,18 +17,19 @@ import DrawerComponent from './mobileNavDrawyer/Drawer'
 
 const useStyles = makeStyles((theme) => ({
     navlinks: {
-        marginLeft: theme.spacing(4),
         display: 'flex',
     },
     logo: {
         flexGrow: '1',
         cursor: 'pointer',
+        textAlign: 'center',
+        marginLeft: '22rem',
     },
     link: {
         textDecoration: 'none',
         cursor: 'pointer',
         color: 'white',
-        fontSize: '18px',
+        fontSize: '16px',
         fontWeight: 'bold',
         marginLeft: theme.spacing(4),
         marginRight: '10px',
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#12BFA2',
         textDecoration: 'none',
         color: 'white',
-        fontSize: '18px',
+        fontSize: '16px',
         fontWeight: 'bold',
         marginLeft: theme.spacing(4),
         marginRight: '10px',

@@ -196,7 +196,6 @@ export default function EditSmartOutletModal(props) {
         setBreakNumA(props.outletData.breakNumA)
         setBreakNumB(props.outletData.breakNumB)
         setNumberOfParkingSpots(props.outletData.parkingSpotCount)
-        console.log('here is the data!!', props.outletData)
     }, [props.outletData])
 
     const saveOutletInfo = () => {
@@ -337,7 +336,7 @@ export default function EditSmartOutletModal(props) {
                                 label="Model"
                                 disabled
                                 variant="filled"
-                                value={outletData?.model ?? '-'}
+                                value={outletData?.model?.model ?? '-'}
                             />
                         </Grid>
                         <Grid item xs={5}>
