@@ -113,6 +113,8 @@ const LcuCard = (props) => {
         }
     }, [props.lcu.adminStatus])
 
+    console.log('here is the LCU info', lcuInfo)
+
     return (
         <React.Fragment>
             <Grid
@@ -165,7 +167,9 @@ const LcuCard = (props) => {
                 </Grid>
                 <Grid item xs={3}>
                     <div className="lcuHeader">Heartbeat</div>
-                    <div className="lcuRowText">{lcuInfo.heartbeat ?? '-'}</div>
+                    <div className="lcuRowText">
+                        {lcuInfo.lastHeartbeat ?? '-'}
+                    </div>
                 </Grid>
                 <Grid item>
                     {!lcuInfoOpened ? (
