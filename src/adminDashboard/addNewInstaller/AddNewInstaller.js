@@ -182,7 +182,7 @@ export default function AddNewInstaller(props) {
                         <>
                             <Grid item xs={6}>
                                 <span className={classes.firstHeader}>
-                                    Add New Partner
+                                    Assign New Role
                                 </span>
                                 <div className="addNewInstallerMainContainer">
                                     <TextField
@@ -237,12 +237,12 @@ export default function AddNewInstaller(props) {
                                         disabled={disableButton}
                                         onClick={() => sendInvite()}
                                     >
-                                        Send Invite
+                                        Assign Role
                                     </Button>
                                     <br />
                                     {showSuccessMessage && (
                                         <div className="installerSuccessrMessageText">
-                                            Invite sent!
+                                            Role assigned!
                                         </div>
                                     )}
                                     {callFailedError && (
