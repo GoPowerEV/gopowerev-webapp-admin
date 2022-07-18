@@ -105,7 +105,7 @@ function Navbar(props) {
                                 Login
                             </Link>
                         )}
-                        {props.loggedIn && (
+                        {props.loggedIn && props.isAdmin && (
                             <span
                                 onClick={goToDashboard}
                                 className={

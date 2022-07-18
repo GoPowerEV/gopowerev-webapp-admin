@@ -49,7 +49,9 @@ const Login = (props) => {
                 setEmail('')
                 setPassword('')
                 setIsLoading(false)
-                history.push('/admin-dashboard')
+                if (props.isAdmin) {
+                    history.push('/admin-dashboard')
+                }
             })
             .catch((err) => {
                 console.log(err)
@@ -86,7 +88,11 @@ const Login = (props) => {
                                 <div className="login-form-container">
                                     <TextField
                                         id="email"
-                                        error={wrongPassword}
+                                        error={
+                                            wrongPassword ||
+                                            props.displayAccountIsNotAdminError ===
+                                                true
+                                        }
                                         label="Your Email"
                                         variant="outlined"
                                         value={email}
@@ -102,10 +108,17 @@ const Login = (props) => {
                                     />
                                     <TextField
                                         id="password"
-                                        error={wrongPassword}
+                                        error={
+                                            wrongPassword ||
+                                            props.displayAccountIsNotAdminError ===
+                                                true
+                                        }
                                         helperText={
                                             wrongPassword
                                                 ? 'Incorrect email or password'
+                                                : props.displayAccountIsNotAdminError ===
+                                                  true
+                                                ? 'Your account does not have admin access.'
                                                 : ''
                                         }
                                         label="Password"

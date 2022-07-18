@@ -6,6 +6,7 @@ import {
     Redirect,
 } from 'react-router-dom'
 import Amplify, { Auth, Hub } from 'aws-amplify'
+import { API_URL } from './constants'
 import Navbar from './navBar/Navbar'
 import Footer from './footer/Footer'
 import Login from './navigationComponents/login/Login'
@@ -16,6 +17,11 @@ import './App.css'
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [
+        displayAccountIsNotAdminError,
+        setDisplayAccountIsNotAdminError,
+    ] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [token, setToken] = useState(null)
 
@@ -55,12 +61,44 @@ function App() {
             })
     }
 
-    async function isUserLoggedIn() {
+    // async function isUserLoggedIn() {
+    //     try {
+    //         await Auth.currentAuthenticatedUser()
+    //         return true
+    //     } catch {
+    //         return false
+    //     }
+    // }
+
+    const isUserAdmin = (token) => {
+        if (token) {
+            fetch(API_URL + 'roles', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log()
+                        setIsAdmin(result?.includes('ADMIN'))
+                        setDisplayAccountIsNotAdminError(
+                            !result?.includes('ADMIN')
+                        )
+                        logOut()
+                    },
+                    (error) => {}
+                )
+        }
+    }
+
+    const logOut = async () => {
         try {
-            await Auth.currentAuthenticatedUser()
-            return true
-        } catch {
-            return false
+            await Auth.signOut()
+        } catch (error) {
+            console.log('error signing out: ', error)
         }
     }
 
@@ -68,6 +106,7 @@ function App() {
         await Auth.currentSession()
             .then((response) => {
                 setToken(response.idToken.jwtToken)
+                isUserAdmin(response.idToken.jwtToken)
             })
             .catch((err) => {
                 console.log('ERROR', err)
@@ -98,13 +137,13 @@ function App() {
             <div className="App">
                 {/* ARE YOU SURE YOU WANT TO LOGOUT MODAL */}
                 <LogoutModal handleClose={handleClose} open={openModal} />
-                <Navbar loggedIn={loggedIn} logout={logout} />
+                <Navbar loggedIn={loggedIn} isAdmin={isAdmin} logout={logout} />
                 <Switch>
                     <Route
                         exact
                         path="/"
                         render={() => {
-                            return loggedIn === true ? (
+                            return loggedIn === true && isAdmin === true ? (
                                 <Redirect to="/admin-dashboard" />
                             ) : (
                                 <Redirect to="/login" />
@@ -115,7 +154,7 @@ function App() {
                         exact
                         path="/admin-dashboard"
                         render={() => {
-                            return loggedIn === true ? (
+                            return loggedIn === true && isAdmin === true ? (
                                 <AdminDashboard
                                     path={'admin-dashboard'}
                                     loggedIn={loggedIn}
@@ -172,7 +211,7 @@ function App() {
                         exact
                         path="/login"
                         render={() => {
-                            return loggedIn === true ? (
+                            return loggedIn === true && isAdmin === true ? (
                                 <AdminDashboard
                                     path={'admin-dashboard'}
                                     loggedIn={loggedIn}
@@ -180,7 +219,12 @@ function App() {
                                     token={token}
                                 />
                             ) : (
-                                <Login />
+                                <Login
+                                    isAdmin={isAdmin}
+                                    displayAccountIsNotAdminError={
+                                        displayAccountIsNotAdminError
+                                    }
+                                />
                             )
                         }}
                     />
