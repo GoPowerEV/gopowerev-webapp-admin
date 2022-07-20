@@ -6,29 +6,40 @@ import {
     Redirect,
 } from 'react-router-dom'
 import Amplify, { Auth, Hub } from 'aws-amplify'
-import { API_URL } from './constants'
 import Navbar from './navBar/Navbar'
 import Footer from './footer/Footer'
 import Login from './navigationComponents/login/Login'
 import LogoutModal from './navigationComponents/logout/LogOutModal'
 import AdminDashboard from './adminDashboard/AdminDashboard'
 import { useHistory } from 'react-router-dom'
+import { API_URL } from './constants'
 import './App.css'
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false)
+    const [openModal, setOpenModal] = useState(false)
+    const [token, setToken] = useState(null)
     const [isAdmin, setIsAdmin] = useState(false)
     const [
         displayAccountIsNotAdminError,
         setDisplayAccountIsNotAdminError,
     ] = useState(false)
-    const [openModal, setOpenModal] = useState(false)
-    const [token, setToken] = useState(null)
 
     const history = useHistory()
 
     const logout = () => {
         setOpenModal(true)
+    }
+
+    const getToken = async () => {
+        await Auth.currentSession()
+            .then((response) => {
+                setToken(response.idToken.jwtToken)
+                isUserAdmin(response.idToken.jwtToken)
+            })
+            .catch((err) => {
+                console.log('ERROR', err)
+            })
     }
 
     const handleClose = () => {
@@ -54,24 +65,29 @@ function App() {
         await Auth.currentAuthenticatedUser()
             .then((user) => {
                 setLoggedIn(true)
+                getToken()
+                console.log('here is app login true')
             })
             .catch((err) => {
                 console.log('ERROR', err)
+                console.log('here is app login false')
                 setLoggedIn(false)
             })
     }
 
-    // async function isUserLoggedIn() {
-    //     try {
-    //         await Auth.currentAuthenticatedUser()
-    //         return true
-    //     } catch {
-    //         return false
-    //     }
-    // }
+    const logOut = async () => {
+        try {
+            console.log('here loggin out')
+            await Auth.signOut()
+            setIsAdmin(false)
+            setLoggedIn(false)
+        } catch (error) {
+            console.log('error signing out: ', error)
+        }
+    }
 
     const isUserAdmin = (token) => {
-        if (token) {
+        if (token && !isAdmin) {
             fetch(API_URL + 'roles', {
                 method: 'GET',
                 headers: {
@@ -82,35 +98,16 @@ function App() {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log()
-                        setIsAdmin(result?.includes('ADMIN'))
-                        setDisplayAccountIsNotAdminError(
-                            !result?.includes('ADMIN')
-                        )
-                        logOut()
+                        console.log('here is admin result', result)
+                        if (result?.includes('ADMIN')) {
+                            setIsAdmin(true)
+                        } else {
+                            logOut()
+                        }
                     },
                     (error) => {}
                 )
         }
-    }
-
-    const logOut = async () => {
-        try {
-            await Auth.signOut()
-        } catch (error) {
-            console.log('error signing out: ', error)
-        }
-    }
-
-    const getToken = async () => {
-        await Auth.currentSession()
-            .then((response) => {
-                setToken(response.idToken.jwtToken)
-                isUserAdmin(response.idToken.jwtToken)
-            })
-            .catch((err) => {
-                console.log('ERROR', err)
-            })
     }
 
     useEffect(() => {
@@ -126,17 +123,16 @@ function App() {
         checkIfUserIsLoggedIn()
     }, [])
 
-    useEffect(() => {
-        if (loggedIn) {
-            getToken()
-        }
-    }, [loggedIn])
-
     return (
         <Router>
             <div className="App">
                 {/* ARE YOU SURE YOU WANT TO LOGOUT MODAL */}
-                <LogoutModal handleClose={handleClose} open={openModal} />
+                <LogoutModal
+                    handleClose={handleClose}
+                    open={openModal}
+                    setIsAdmin={setIsAdmin}
+                    setLoggedIn={setLoggedIn}
+                />
                 <Navbar loggedIn={loggedIn} isAdmin={isAdmin} logout={logout} />
                 <Switch>
                     <Route
@@ -218,14 +214,19 @@ function App() {
                                     history={history}
                                     token={token}
                                 />
-                            ) : (
+                            ) : loggedIn === false && isAdmin === false ? (
                                 <Login
-                                    isAdmin={isAdmin}
+                                    setDisplayAccountIsNotAdminError={
+                                        setDisplayAccountIsNotAdminError
+                                    }
                                     displayAccountIsNotAdminError={
                                         displayAccountIsNotAdminError
                                     }
+                                    setToken={setToken}
+                                    setIsAdmin={setIsAdmin}
+                                    setLoggedIn={setLoggedIn}
                                 />
-                            )
+                            ) : null
                         }}
                     />
                 </Switch>
