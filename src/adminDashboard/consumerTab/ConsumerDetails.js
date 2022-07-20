@@ -151,7 +151,7 @@ const ConsumerDetails = (props) => {
                                             <ElectricCarOutlinedIcon />
                                             <span className="consumer-detail-grey">
                                                 {vehicle.year} {vehicle.make}{' '}
-                                                {vehicle.model}
+                                                {vehicle.model} | {vehicle.name}
                                             </span>
                                         </Grid>
                                     ))}

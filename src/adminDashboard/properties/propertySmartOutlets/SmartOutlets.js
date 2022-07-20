@@ -301,7 +301,7 @@ const SmartOutlets = (props) => {
                                                   outlet.lastHeartbeat
                                               ).format(
                                                   'MM/DD/YYYY, h:mm:ss a'
-                                              ) ?? '-'
+                                              ) + ' UTC' ?? '-'
                                             : '-'}
                                     </Typography>
                                 </CardContent>
