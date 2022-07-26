@@ -201,7 +201,7 @@ export default function EditSmartOutletModal(props) {
     const saveOutletInfo = () => {
         setIsLoading(true)
         if (props.token) {
-            fetch(API_URL + 'smart-outlets/' + outletData.soUUID, {
+            fetch(API_URL + 'smart-outlets/' + props.outletData.uuid, {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -239,7 +239,7 @@ export default function EditSmartOutletModal(props) {
         } else if (field === 'breakNumB') {
             setBreakNumB(value)
         } else if (field === 'parkingSpotCount') {
-            setNumberOfParkingSpots(value)
+            setNumberOfParkingSpots(parseInt(value))
         } else {
             setMac(value)
         }
@@ -247,6 +247,9 @@ export default function EditSmartOutletModal(props) {
         tempOutlet[field] = value
 
         setOutletData(tempOutlet)
+        if (field === 'parkingSpotCount') {
+            saveOutletInfo()
+        }
     }
 
     const body = (
@@ -476,7 +479,6 @@ export default function EditSmartOutletModal(props) {
                                         backgroundColor: '#e8e8e8',
                                         borderRadius: '10px',
                                     }}
-                                    onBlur={() => saveOutletInfo()}
                                     onChange={(e) =>
                                         handleOutletFieldChange(
                                             e.target.value,
