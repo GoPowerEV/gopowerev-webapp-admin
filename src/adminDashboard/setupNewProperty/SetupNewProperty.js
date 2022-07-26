@@ -351,7 +351,7 @@ export default function SetupNewProperty(props) {
             setIsLoading(true)
             let locationObject = {
                 locationUUID: locationId,
-                model: model,
+                baseModel: model,
                 installationState: 'ready',
             }
             if (props.token) {
