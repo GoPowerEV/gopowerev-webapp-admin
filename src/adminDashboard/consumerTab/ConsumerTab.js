@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Button from '@material-ui/core/Button'
+import { currencyFormatter } from './../../generalUtils/GeneralUtils'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -13,6 +13,7 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import Button from '@material-ui/core/Button'
 import Paper from '@mui/material/Paper'
 import ConsumerDetails from './ConsumerDetails'
 import { getAllCustomers } from './../dashboardService'
@@ -245,32 +246,49 @@ const ConsumerTab = (props) => {
                                             <StyledTableCell>
                                                 Balance
                                             </StyledTableCell>
+                                            <StyledTableCell>
+                                                Action
+                                            </StyledTableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {rows.map((row) => (
-                                            <StyledTableRow
-                                                key={row.name}
-                                                onClick={() =>
-                                                    goToDetails(row.id)
-                                                }
-                                            >
+                                            <StyledTableRow key={row.name}>
                                                 <StyledTableCell
                                                     component="th"
                                                     scope="row"
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
                                                 >
                                                     {row.name}
                                                 </StyledTableCell>
-                                                <StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
                                                     {row.number}
                                                 </StyledTableCell>
-                                                <StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
                                                     {row.email}
                                                 </StyledTableCell>
-                                                <StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
                                                     {row.property}
                                                 </StyledTableCell>
-                                                <StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
                                                     {row.status ===
                                                     'Pending' ? (
                                                         <span className="pending-tile">
@@ -280,7 +298,11 @@ const ConsumerTab = (props) => {
                                                         row.status
                                                     )}
                                                 </StyledTableCell>
-                                                <StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
                                                     {row.standing === 'Bad' ? (
                                                         <span className="red-text">
                                                             {row.standing}
@@ -289,8 +311,22 @@ const ConsumerTab = (props) => {
                                                         row.standing
                                                     )}
                                                 </StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
+                                                    {currencyFormatter.format(
+                                                        row.balance
+                                                    )}
+                                                </StyledTableCell>
                                                 <StyledTableCell>
-                                                    ${row.balance}
+                                                    <Button
+                                                        className="consumer-tab-action-button"
+                                                        variant="contained"
+                                                    >
+                                                        Activate
+                                                    </Button>
                                                 </StyledTableCell>
                                             </StyledTableRow>
                                         ))}

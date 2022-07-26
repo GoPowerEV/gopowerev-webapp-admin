@@ -148,6 +148,16 @@
     margin-top: 5px;
 }
 
+.consumer-tab-action-button {
+    font-family: 'Nunito Sans', sans-serif !important;
+    background-color: #12bfa2 !important;
+    font-size: 15px !important;
+    margin-right: 20px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+}
+
 .grey-border {
     border-radius: 7px;
     padding-top: 7px;
