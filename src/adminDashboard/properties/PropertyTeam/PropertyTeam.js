@@ -52,7 +52,6 @@ const PropertyTeam = (props) => {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log('here you go', result)
                         setIsLoading(false)
                         if (result.code) {
                             setPropertyTeam([])

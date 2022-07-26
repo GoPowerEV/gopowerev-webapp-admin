@@ -14,11 +14,30 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Collapse from '@material-ui/core/Collapse'
+import { makeStyles } from '@material-ui/core/styles'
 import LocationCard from './LocationCard'
 import './Properties.css'
-import { getLcuBadgeClass, getBadgeText } from './utils/PropertyUtils'
+import { getLcuBadgeClass, getLcuBadgeText } from './utils/PropertyUtils'
 import { adminStateOptions, modelOptions } from './../dashboardConstants'
 import AddNewLocationModal from './AddNewLocationModal/AddNewLocationModal'
+import moment from 'moment'
+
+const useStyles = makeStyles((theme) => ({
+    select: {
+        fontFamily: 'Nunito Sans, sans-serif !important',
+        backgroundColor: '#e8e8e8',
+        borderRadius: '10px',
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#757575',
+        },
+        '&.Mui-focused .MuiFormLabel-root': {
+            color: '#757575 !important',
+        },
+    },
+    inputFocused: {
+        color: '#757575 !important',
+    },
+}))
 
 const LcuCard = (props) => {
     const [lcuInfo, setLcuInfo] = useState(props.lcu)
@@ -36,6 +55,8 @@ const LcuCard = (props) => {
     const [lcuInfoOpened, setLcuInfoOpened] = useState(false)
     const [openModal, setOpenModal] = useState(false)
 
+    const classes = useStyles()
+
     const toggleLcuInfo = () => {
         setLcuInfoOpened(!lcuInfoOpened)
     }
@@ -43,7 +64,6 @@ const LcuCard = (props) => {
     const saveLCUInfo = () => {
         props.setIsLoading(true)
         if (props.token) {
-            console.log('about to save this  LCU info', lcuInfo)
             fetch(API_URL + 'lcus/' + lcuInfo.lcuUUID, {
                 method: 'PUT',
                 headers: {
@@ -113,8 +133,6 @@ const LcuCard = (props) => {
         }
     }, [props.lcu.adminStatus])
 
-    console.log('here is the LCU info', lcuInfo)
-
     return (
         <React.Fragment>
             <Grid
@@ -128,12 +146,23 @@ const LcuCard = (props) => {
                     <div className="lcuRowText">{lcuInfo.name ?? '-'}</div>
                 </Grid>
                 <Grid item xs={2}>
-                    <FormControl fullWidth>
-                        <InputLabel id="adminState">Admin State</InputLabel>
+                    <FormControl fullWidth style={{ marginTop: '8px' }}>
+                        <InputLabel
+                            id="adminState"
+                            classes={{ focused: classes.inputFocused }}
+                            style={{
+                                paddingLeft: '19px',
+                                top: '-7px',
+                                zIndex: '99',
+                            }}
+                        >
+                            Admin State
+                        </InputLabel>
                         <Select
                             labelId="adminState"
-                            variant="standard"
+                            variant="outlined"
                             id="adminState"
+                            className={classes.select}
                             value={adminState}
                             onChange={(e) =>
                                 handleLCUFieldChange(
@@ -144,31 +173,33 @@ const LcuCard = (props) => {
                             onBlur={() => saveLCUInfo()}
                             label="Admin State"
                         >
-                            {adminStateOptions?.map((option) => {
-                                return (
-                                    <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                    >
-                                        {option.label ?? option.value}
-                                    </MenuItem>
-                                )
-                            })}
+                            {adminStateOptions?.map((option) => (
+                                <MenuItem
+                                    key={option.value}
+                                    value={option.value}
+                                >
+                                    {option.label ?? option.value}
+                                </MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <div className="lcuHeader">Status</div>
                     <div
                         className={getLcuBadgeClass(lcuInfo.operationalStatus)}
                     >
-                        {getBadgeText(lcuInfo.operationalStatus)}
+                        {getLcuBadgeText(lcuInfo.operationalStatus)}
                     </div>
                 </Grid>
                 <Grid item xs={3}>
                     <div className="lcuHeader">Heartbeat</div>
                     <div className="lcuRowText">
-                        {lcuInfo.lastHeartbeat ?? '-'}
+                        {lcuInfo.lastHeartbeat !== null
+                            ? moment(lcuInfo.lastHeartbeat).format(
+                                  'MM/DD/YYYY, h:mm:ss a'
+                              ) + ' UTC' ?? '-'
+                            : '-'}
                     </div>
                 </Grid>
                 <Grid item>
@@ -202,7 +233,7 @@ const LcuCard = (props) => {
                                 : 'editLcuDetailsContainer'
                         }
                     >
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -219,7 +250,7 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <FormControl
                                 fullWidth
                                 className="editableFieldSelectContainer"
@@ -252,7 +283,7 @@ const LcuCard = (props) => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -272,7 +303,7 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -292,7 +323,7 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -312,7 +343,7 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -332,7 +363,7 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -352,14 +383,8 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                    </Grid>
-                    <Grid
-                        container
-                        spacing={3}
-                        xs={12}
-                        className="editLcuDetailsContainer"
-                    >
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}></Grid>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -379,7 +404,7 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"
@@ -399,7 +424,7 @@ const LcuCard = (props) => {
                                 }}
                             />
                         </Grid>
-                        <Grid item lg={3} md={6} s={12} xs={12}>
+                        <Grid item lg={3} md={6} sm={12} xs={12}>
                             <TextField
                                 fullWidth
                                 className="editableField"

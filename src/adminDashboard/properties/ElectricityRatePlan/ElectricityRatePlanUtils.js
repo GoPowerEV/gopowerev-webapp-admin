@@ -20,7 +20,6 @@ export const getPlanInfo = (token, propertyUUID, setIsLoading, setPlanInfo) => {
                 (result) => {
                     setIsLoading(false)
                     setPlanInfo(result)
-                    console.log('here is ER result', result)
                 },
                 (error) => {
                     console.log('HERE ERROR')
@@ -46,7 +45,6 @@ export const savePlanInfo = (token, setIsLoading, data, toggleInfo) => {
                 (result) => {
                     setIsLoading(false)
                     toggleInfo()
-                    console.log('here is CREATE RESULT', result)
                 },
                 (error) => {
                     setIsLoading(false)
@@ -82,7 +80,6 @@ export const updatePlanInfo = (
                 (result) => {
                     setIsLoading(false)
                     toggleInfo()
-                    console.log('here is UPDATE RESULT', result)
                 },
                 (error) => {
                     setIsLoading(false)

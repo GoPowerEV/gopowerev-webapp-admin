@@ -187,7 +187,7 @@ export default function EditSmartOutletModal(props) {
 
     useEffect(() => {
         setOutletData(props.outletData)
-        setFirmware(props.outletData.fwVersion)
+        setFirmware(props.outletData?.fwVersion)
         setHardware(props.outletData.hwVersion)
         setSerialNumber(props.outletData.serialNumber)
         setParkingSpot(props.outletData.parkingSpot)
@@ -213,7 +213,6 @@ export default function EditSmartOutletModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('save outlet success', result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -226,7 +225,9 @@ export default function EditSmartOutletModal(props) {
         if (field === 'hwVersion') {
             setHardware(value)
         } else if (field === 'fwVersion') {
-            setFirmware(value)
+            let tempFw = firmware
+            tempFw.releaseVersion = value
+            setFirmware(tempFw)
         } else if (field === 'serialNumber') {
             setSerialNumber(value)
         } else if (field === 'parkingSpot') {
@@ -560,7 +561,7 @@ export default function EditSmartOutletModal(props) {
                                 id="soFwVersion"
                                 label="Firmware Version"
                                 variant="filled"
-                                value={firmware}
+                                value={firmware?.releaseVersion}
                                 onChange={(e) =>
                                     handleOutletFieldChange(
                                         e.target.value,

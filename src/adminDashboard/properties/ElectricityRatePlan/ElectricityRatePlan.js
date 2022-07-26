@@ -47,6 +47,7 @@ export default function ElectricityRatePlan(props) {
     const [l1Options, setL1Options] = useState([])
     const [l2Options, setL2Options] = useState([])
     const [disabledButton, setDisabledButton] = useState(true)
+    const [dataLoaded, setDataLoaded] = useState(false)
     const [planInfo, setPlanInfo] = useState({})
 
     const toggleInfo = () => {
@@ -169,6 +170,7 @@ export default function ElectricityRatePlan(props) {
     }, [props.token, props.propertyUUID])
 
     useEffect(() => {
+        console.log('here it is, dataLoaded', planInfo)
         if (
             planInfo &&
             ratePlanOptions?.length > 0 &&
@@ -184,17 +186,11 @@ export default function ElectricityRatePlan(props) {
                 )?.label
             )
             setUtilityRatePlan(planInfo.electricityRatesUUID)
-            console.log('here setting l1', l1MarginRate)
             setL1MarginRate(planInfo.l1electricityMarginsUUID)
             setL2MarginRate(planInfo.l2electricityMarginsUUID)
+            setDataLoaded(true)
         }
-    }, [
-        l1MarginRate,
-        l1Options?.length,
-        l2Options?.length,
-        planInfo,
-        ratePlanOptions,
-    ])
+    }, [l1Options?.length, l2Options?.length, planInfo, ratePlanOptions])
 
     return (
         <>

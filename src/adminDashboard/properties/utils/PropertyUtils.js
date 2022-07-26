@@ -27,16 +27,18 @@ export const getPropertyBadgeClass = (status) => {
 }
 
 export const getLcuBadgeClass = (status) => {
-    if (status === 'Inspected') {
-        return 'brightGreen lcuBadge'
-    } else if (status === 'New') {
-        return 'pink lcuBadge'
-    } else if (status === 'Ready For Install') {
-        return 'purple lcuBadge'
-    } else if (status === 'operational') {
-        return 'blue lcuBadge'
-    } else {
+    if (status === 'info: never-connected') {
         return 'yellow lcuBadge'
+    } else {
+        return 'brightGreen lcuBadge'
+    }
+}
+
+export const getLcuBadgeText = (status) => {
+    if (status === 'info: never-connected') {
+        return 'Never Connected'
+    } else {
+        return 'OK'
     }
 }
 
@@ -50,9 +52,9 @@ export const getBadgeText = (status) => {
     } else if (status === 'operational') {
         return 'Opertational'
     } else if (status === 'info: never-connected') {
-        return 'Not connected'
+        return 'Never Connected'
     } else if (status === 'never-connected') {
-        return 'Not connected'
+        return 'Never Connected'
     } else if (status === 'Ok') {
         return 'OK'
     } else {

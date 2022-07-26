@@ -70,7 +70,6 @@ const ConsumerTab = (props) => {
     }
 
     const goToDetails = (id) => {
-        console.log('here is the id', id)
         let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
         let result = allConsumersTemp.filter(
             (consumer) => consumer.user?.cognitoUuid === id
@@ -146,7 +145,6 @@ const ConsumerTab = (props) => {
                 })
                 setRows(removeDups(tempRows))
             } else {
-                console.log('HERE!!!', rows.length)
                 setRows([])
             }
         } else {
@@ -157,7 +155,6 @@ const ConsumerTab = (props) => {
 
     useEffect(() => {
         setRows([])
-        console.log('here is all customer data', allConsumers)
         if (allConsumers?.length > 0 && !activeSearch) {
             let tempRows = []
             allConsumers.forEach((consumer) => {
@@ -179,7 +176,6 @@ const ConsumerTab = (props) => {
                     )
                 )
             })
-            console.log('here you go', tempRows)
             setRows(removeDups(tempRows))
             setAllRows(removeDups(tempRows))
         }

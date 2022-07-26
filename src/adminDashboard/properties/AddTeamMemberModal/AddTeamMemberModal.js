@@ -103,7 +103,6 @@ export default function AddTeamMemberModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('here are all installers', result)
                         setInstallerGridData(result)
                     },
                     (error) => {
@@ -145,10 +144,6 @@ export default function AddTeamMemberModal(props) {
                             .then(
                                 (result2) => {
                                     setIsLoading(false)
-                                    console.log(
-                                        'here are all the admins',
-                                        result2
-                                    )
                                     setAdminGridData(result1.concat(result2))
                                     setAllOwners(result2)
                                     fetch(
@@ -168,10 +163,6 @@ export default function AddTeamMemberModal(props) {
                                         .then(
                                             (result3) => {
                                                 setIsLoading(false)
-                                                console.log(
-                                                    'here are all the admins',
-                                                    result3
-                                                )
                                                 setAdminGridData(
                                                     result2.concat(result3)
                                                 )

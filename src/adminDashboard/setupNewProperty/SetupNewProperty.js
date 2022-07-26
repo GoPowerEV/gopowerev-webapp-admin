@@ -595,10 +595,6 @@ export default function SetupNewProperty(props) {
         tempPropertyInfo.installerUUID = installerUuid
         setPropertyInfo(tempPropertyInfo)
         handleCompleteSecondStep(tempPropertyInfo)
-        console.log(
-            'here step 2. Installer being added.' +
-                JSON.stringify(tempPropertyInfo)
-        )
     }
 
     const dragOver = (e) => {

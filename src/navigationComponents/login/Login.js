@@ -65,14 +65,12 @@ const Login = (props) => {
                             setDisplayAccountIsNotAdminError(false)
                             props.setDisplayAccountIsNotAdminError(false)
                             props.setLoggedIn(true)
-                            console.log('here setting login as true')
                         } else {
                             logOut()
                             props.setIsAdmin(false)
                             setDisplayAccountIsNotAdminError(true)
                             props.setDisplayAccountIsNotAdminError(true)
                             props.setLoggedIn(false)
-                            console.log('here setting login as false')
                         }
                     },
                     (error) => {}
@@ -94,7 +92,6 @@ const Login = (props) => {
 
     const logOut = async () => {
         try {
-            console.log('here loggin out')
             await Auth.signOut()
             props.setIsAdmin(false)
             props.setLoggedIn(false)

@@ -36,7 +36,6 @@ const ConsumerDetails = (props) => {
     }
 
     useEffect(() => {
-        console.log('here it is!!', props.currentlyViewedCustomer)
         setUserData(props.currentlyViewedCustomer[0].user)
         setPropertyData(props.currentlyViewedCustomer[0].property)
         setVehicleData(props.currentlyViewedCustomer[0].user.vehicles)

@@ -188,8 +188,6 @@ const LocationCard = (props) => {
         getSmartOutletData()
     }, [])
 
-    console.log('here are the smart outlets', smartOutlets)
-
     useEffect(() => {}, [smartOutlets])
 
     return (
