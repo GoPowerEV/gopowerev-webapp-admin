@@ -133,6 +133,8 @@ const LcuCard = (props) => {
         }
     }, [props.lcu.adminStatus])
 
+    console.log('here is lcu info', lcuInfo)
+
     return (
         <React.Fragment>
             <Grid

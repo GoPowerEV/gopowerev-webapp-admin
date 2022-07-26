@@ -27,7 +27,7 @@ export const getPropertyBadgeClass = (status) => {
 }
 
 export const getLcuBadgeClass = (status) => {
-    if (status === 'info: never-connected') {
+    if (status === 'info: never-connected' || status === null) {
         return 'yellow lcuBadge'
     } else {
         return 'brightGreen lcuBadge'
@@ -35,7 +35,7 @@ export const getLcuBadgeClass = (status) => {
 }
 
 export const getLcuBadgeText = (status) => {
-    if (status === 'info: never-connected') {
+    if (status === 'info: never-connected' || status === null) {
         return 'Never Connected'
     } else {
         return 'OK'

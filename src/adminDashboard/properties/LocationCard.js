@@ -190,6 +190,8 @@ const LocationCard = (props) => {
 
     useEffect(() => {}, [smartOutlets])
 
+    console.log('here it is readiBases', readiBases)
+
     return (
         <React.Fragment>
             <Grid container>
