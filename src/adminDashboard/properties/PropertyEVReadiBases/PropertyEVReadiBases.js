@@ -98,7 +98,7 @@ const PropertyEVReadiBases = (props) => {
                                                             RB:{' '}
                                                         </span>
                                                         <span className="smartSo">
-                                                            6
+                                                            {index + 1}
                                                         </span>
                                                     </Grid>
                                                     <Grid item xs={4}>

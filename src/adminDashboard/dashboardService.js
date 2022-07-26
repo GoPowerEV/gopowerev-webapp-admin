@@ -135,14 +135,14 @@ export function getLocationSmartOutletsById(
         .then((res) => res.json())
         .then(
             (result) => {
-                if (setReadiBases) {
+                if (!setReadiBases) {
                     setSmartOutletsOfThisProperty(result.smartOutlets)
                 } else {
-                    let outlets = result.smartOutlets.fitler(
+                    let outlets = result.smartOutlets.filter(
                         (so) => so.installationState !== 'ready'
                     )
                     setSmartOutletsOfThisProperty(outlets)
-                    let bases = result.smartOutlets.fitler(
+                    let bases = result.smartOutlets.filter(
                         (so) => so.installationState === 'ready'
                     )
                     setReadiBases(bases)
