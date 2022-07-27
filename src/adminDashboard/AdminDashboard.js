@@ -13,6 +13,7 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined'
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined'
 import EvStationOutlinedIcon from '@material-ui/icons/EvStationOutlined'
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined'
+import FlashOnOutlinedIcon from '@mui/icons-material/FlashOnOutlined'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined'
 import SetupNewProperty from './setupNewProperty/SetupNewProperty'
@@ -20,6 +21,7 @@ import AddNewInstaller from './addNewInstaller/AddNewInstaller'
 import Properties from './properties/Properties'
 import DashboardTab from './dashboardTab/DashboardTab'
 import ConsumerTab from './consumerTab/ConsumerTab'
+import SessionsTab from './sessionsTab/SessionsTab'
 import Installers from './installers/Installers'
 import { useHistory } from 'react-router-dom'
 import './AdminDashboard.css'
@@ -134,8 +136,9 @@ const useStyles = makeStyles((theme) => ({
     outlinedButton: {
         fontFamily: 'Nunito Sans, sans-serif !important',
         color: '#FFFFFF',
+        border: '1px solid #15192412',
+        backgroundColor: '#0BAC90',
         fontWeight: 'bold',
-        borderColor: '#FFFFFF',
         borderRadius: '12px',
         fontSize: '17px',
         marginLeft: '30px',
@@ -151,8 +154,9 @@ const useStyles = makeStyles((theme) => ({
     outlinedButtonInstaller: {
         fontFamily: 'Nunito Sans, sans-serif !important',
         color: '#FFFFFF',
+        border: '1px solid #15192412',
+        backgroundColor: '#0BAC90',
         fontWeight: 'bold',
-        borderColor: '#FFFFFF',
         borderRadius: '12px',
         fontSize: '17px',
         marginLeft: '30px',
@@ -201,6 +205,8 @@ export default function AdminDashboard(props) {
             history.push('/dashboard/installers')
         } else if (newValue === 3) {
             history.push('/dashboard/consumer')
+        } else if (newValue === 4) {
+            history.push('/dashboard/sessions')
         }
         setDisplaySetupNewProperty(false)
         setDisplayAddNewInstaller(false)
@@ -293,6 +299,12 @@ export default function AdminDashboard(props) {
                     setDisplaySetupNewProperty(false)
                     setDisplayAddNewInstaller(false)
                     setValue(3)
+                } else if (urlLocation === 'sessions') {
+                    setViewThisProperty(null)
+                    history.push('/dashboard/' + urlLocation)
+                    setDisplaySetupNewProperty(false)
+                    setDisplayAddNewInstaller(false)
+                    setValue(4)
                 } else if (urlLocation === 'setup-new-property') {
                     setViewThisProperty(null)
                     history.push('/dashboard/' + urlLocation)
@@ -414,6 +426,25 @@ export default function AdminDashboard(props) {
                                     label="Consumer"
                                     {...a11yProps(3)}
                                 />
+                                <Tab
+                                    className={classes.customTab}
+                                    icon={
+                                        <FlashOnOutlinedIcon
+                                            style={{
+                                                marginTop: '4px',
+                                                marginRight: '-20px',
+                                                float: 'left',
+                                            }}
+                                        />
+                                    }
+                                    classes={{
+                                        root: classes.tabRoot,
+                                        selected: classes.tabSelected,
+                                        wrapper: classes.alignment,
+                                    }}
+                                    label="Sessions"
+                                    {...a11yProps(4)}
+                                />
                             </Tabs>
                             <div className="hr-container">
                                 <hr className="dotted-hr" />
@@ -469,6 +500,9 @@ export default function AdminDashboard(props) {
                                 </TabPanel>
                                 <TabPanel value={value} index={3}>
                                     <ConsumerTab token={props.token} />
+                                </TabPanel>
+                                <TabPanel value={value} index={4}>
+                                    <SessionsTab token={props.token} />
                                 </TabPanel>
                             </Paper>
                         </Grid>
