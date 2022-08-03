@@ -135,7 +135,7 @@ const ConsumerTab = (props) => {
                             userInfo.phoneNumber,
                             userInfo.email,
                             propertyInfo.name,
-                            requestInfo.status.charAt(0).toUpperCase() +
+                            requestInfo?.status?.charAt(0).toUpperCase() +
                                 requestInfo.status.slice(1),
                             walletInfo.creditStanding === false
                                 ? 'Bad'
@@ -170,8 +170,8 @@ const ConsumerTab = (props) => {
                         userInfo.phoneNumber,
                         userInfo.email,
                         propertyInfo.name,
-                        requestInfo.status.charAt(0).toUpperCase() +
-                            requestInfo.status.slice(1),
+                        requestInfo?.status?.charAt(0).toUpperCase() +
+                            requestInfo?.status?.slice(1),
                         walletInfo.creditStanding === false ? 'Bad' : 'Good',
                         walletInfo.creditBalance / 100
                     )

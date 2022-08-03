@@ -404,7 +404,7 @@ export default function AdminDashboard(props) {
                                         selected: classes.tabSelected,
                                         wrapper: classes.alignment,
                                     }}
-                                    label="Installers"
+                                    label="Partners"
                                     {...a11yProps(2)}
                                 />
                                 <Tab
