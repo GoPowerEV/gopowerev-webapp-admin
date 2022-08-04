@@ -19,6 +19,25 @@ export function getAllCustomers(token, setIsLoading, setAllConsumers) {
         )
 }
 
+export function getAllInstallers(token, setIsLoading, setAllUInstallers) {
+    setIsLoading(true)
+    fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                setIsLoading(false)
+                setAllUInstallers(result)
+            },
+            (error) => {}
+        )
+}
+
 export function getAllProperties(token, setIsLoading, setAllProperties) {
     setIsLoading(true)
     fetch(API_URL + 'properties', {
@@ -175,24 +194,5 @@ export function getPropertySmartOutletsByPropertyId(
             (error) => {
                 setIsLoading(false)
             }
-        )
-}
-
-export function getAllInstallers(token, setIsLoading, setAllInstallers) {
-    setIsLoading(true)
-    fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
-        method: 'GET',
-        headers: {
-            Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => res.json())
-        .then(
-            (result) => {
-                setIsLoading(false)
-                setAllInstallers(result)
-            },
-            (error) => {}
         )
 }

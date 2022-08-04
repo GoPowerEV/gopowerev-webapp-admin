@@ -1,14 +1,17 @@
 .topButton {
     font-family: 'Nunito Sans', sans-serif !important;
     width: 100px;
-    background-color: #12bfa2 !important;
-    margin-top: 20px;
-    color: #ffffff !important;
+    margin-right: 20px !important;
     font-weight: bold !important;
     text-transform: none !important;
     font-size: 15px !important;
     border-radius: 5px !important;
     float: left;
+}
+
+.activeButton {
+    background-color: #12bfa2 !important;
+    color: #ffffff !important;
 }
 
 .boldTex {

@@ -349,6 +349,9 @@ export default function AdminDashboard(props) {
                                 onChange={handleChange}
                                 aria-label="Menu"
                                 className={classes.tabs}
+                                TabIndicatorProps={{
+                                    style: { background: 'none' },
+                                }}
                             >
                                 <Tab
                                     className={classes.customTab}

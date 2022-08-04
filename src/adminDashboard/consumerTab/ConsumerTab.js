@@ -159,6 +159,7 @@ const ConsumerTab = (props) => {
         if (allConsumers?.length > 0 && !activeSearch) {
             let tempRows = []
             allConsumers.forEach((consumer) => {
+                console.log('here it is', consumer)
                 let userInfo = consumer.user
                 let propertyInfo = consumer.property
                 let requestInfo = consumer.propertyRequest
