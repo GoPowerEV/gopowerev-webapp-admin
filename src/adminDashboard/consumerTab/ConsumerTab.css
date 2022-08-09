@@ -73,18 +73,11 @@
 
 .searchField div {
     border-radius: 12px;
+    margin-top: 20px;
 }
 
 .red-text {
     color: red !important;
-}
-
-.pending-tile {
-    background-color: #ffb72b;
-    color: white;
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 7px;
 }
 
 .consumer-step-icon {
@@ -164,6 +157,26 @@
     padding-bottom: 7px;
     padding-left: 20px;
     border: 0.5px solid #8080806e;
+}
+
+.status {
+    font-family: 'Nunito Sans', sans-serif !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.accepted {
+    background-color: #12bfa2 !important;
+}
+
+.pending {
+    background-color: #ffb72b !important;
+}
+
+.red {
+    background-color: red !important;
 }
 
 @media only screen and (max-width: 1400px) {

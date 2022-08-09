@@ -16,6 +16,10 @@ import TableRow from '@mui/material/TableRow'
 import Button from '@material-ui/core/Button'
 import Paper from '@mui/material/Paper'
 import ConsumerDetails from './ConsumerDetails'
+import {
+    getConsumerStatusClass,
+    getConsumerStatusWording,
+} from './../../generalUtils/GeneralUtils'
 import { getAllCustomers } from './../dashboardService'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -42,17 +46,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }))
 
-function createData(
-    id,
-    name,
-    number,
-    email,
-    property,
-    status,
-    standing,
-    balance
-) {
-    return { id, name, number, email, property, status, standing, balance }
+function createData(id, name, email, property, status) {
+    return { id, name, email, property, status }
 }
 
 const ConsumerTab = (props) => {
@@ -65,6 +60,7 @@ const ConsumerTab = (props) => {
     const [allRows, setAllRows] = useState([])
     const [activeSearch, setActiveSearch] = useState(false)
     const [currentlyViewedCustomer, setCurrentlyViewedCustomer] = useState({})
+    const [activeTab, setActiveTab] = useState('all')
 
     const handeSearchChange = (value) => {
         setSearchVal(value)
@@ -90,6 +86,14 @@ const ConsumerTab = (props) => {
             }
         )
         return unique
+    }
+
+    const handleTabChange = (tab) => {
+        if (tab === 'all') {
+            setActiveTab(tab)
+        } else {
+            setActiveTab(tab)
+        }
     }
 
     useEffect(() => {
@@ -132,15 +136,10 @@ const ConsumerTab = (props) => {
                         createData(
                             userInfo?.cognitoUuid,
                             userInfo.firstName + ' ' + userInfo.lastName,
-                            userInfo.phoneNumber,
                             userInfo.email,
                             propertyInfo.name,
                             requestInfo?.status?.charAt(0).toUpperCase() +
-                                requestInfo.status.slice(1),
-                            walletInfo.creditStanding === false
-                                ? 'Bad'
-                                : 'Good',
-                            walletInfo.creditBalance / 100
+                                requestInfo.status.slice(1)
                         )
                     )
                 })
@@ -159,7 +158,7 @@ const ConsumerTab = (props) => {
         if (allConsumers?.length > 0 && !activeSearch) {
             let tempRows = []
             allConsumers.forEach((consumer) => {
-                console.log('here it is', consumer)
+                console.log('here it is allConsumers', allConsumers)
                 let userInfo = consumer.user
                 let propertyInfo = consumer.property
                 let requestInfo = consumer.propertyRequest
@@ -168,13 +167,10 @@ const ConsumerTab = (props) => {
                     createData(
                         userInfo?.cognitoUuid,
                         userInfo.firstName + ' ' + userInfo.lastName,
-                        userInfo.phoneNumber,
                         userInfo.email,
                         propertyInfo.name,
                         requestInfo?.status?.charAt(0).toUpperCase() +
-                            requestInfo?.status?.slice(1),
-                        walletInfo.creditStanding === false ? 'Bad' : 'Good',
-                        walletInfo.creditBalance / 100
+                            requestInfo?.status?.slice(1)
                     )
                 )
             })
@@ -188,12 +184,43 @@ const ConsumerTab = (props) => {
             <div className="consumerMainBody">
                 {!showDetails ? (
                     <>
-                        <div className="tabHeader">Search Results</div>
-                        <Grid
-                            container
-                            className="allPropertiesContainer"
-                            xs={7}
-                        >
+                        <div className="tabHeader">Filter By Status</div>
+                        <Grid container xs={7}>
+                            <Button
+                                className={
+                                    activeTab === 'all'
+                                        ? 'topButton activeButton'
+                                        : 'topButton'
+                                }
+                                variant="contained"
+                                onClick={() => handleTabChange('all')}
+                            >
+                                All
+                            </Button>
+                            <Button
+                                className={
+                                    activeTab === 'active'
+                                        ? 'topButton activeButton'
+                                        : 'topButton'
+                                }
+                                variant="contained"
+                                onClick={() => handleTabChange('active')}
+                            >
+                                Active
+                            </Button>
+                            <Button
+                                className={
+                                    activeTab === 'pending'
+                                        ? 'topButton activeButton'
+                                        : 'topButton'
+                                }
+                                variant="contained"
+                                onClick={() => handleTabChange('pending')}
+                            >
+                                Pending
+                            </Button>
+                        </Grid>
+                        <Grid container xs={7}>
                             <TextField
                                 id="search"
                                 className="searchField"
@@ -230,22 +257,13 @@ const ConsumerTab = (props) => {
                                                 Name
                                             </StyledTableCell>
                                             <StyledTableCell>
-                                                Number
+                                                Status
                                             </StyledTableCell>
                                             <StyledTableCell>
                                                 Email
                                             </StyledTableCell>
                                             <StyledTableCell>
                                                 Property
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                Status
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                Standing
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                Balance
                                             </StyledTableCell>
                                             <StyledTableCell>
                                                 Action
@@ -269,7 +287,15 @@ const ConsumerTab = (props) => {
                                                         goToDetails(row.id)
                                                     }
                                                 >
-                                                    {row.number}
+                                                    <span
+                                                        className={getConsumerStatusClass(
+                                                            row.status
+                                                        )}
+                                                    >
+                                                        {getConsumerStatusWording(
+                                                            row.status
+                                                        )}
+                                                    </span>
                                                 </StyledTableCell>
                                                 <StyledTableCell
                                                     onClick={() =>
@@ -285,49 +311,33 @@ const ConsumerTab = (props) => {
                                                 >
                                                     {row.property}
                                                 </StyledTableCell>
-                                                <StyledTableCell
-                                                    onClick={() =>
-                                                        goToDetails(row.id)
-                                                    }
-                                                >
-                                                    {row.status ===
-                                                    'Pending' ? (
-                                                        <span className="pending-tile">
-                                                            {row.status}
-                                                        </span>
-                                                    ) : (
-                                                        row.status
-                                                    )}
-                                                </StyledTableCell>
-                                                <StyledTableCell
-                                                    onClick={() =>
-                                                        goToDetails(row.id)
-                                                    }
-                                                >
-                                                    {row.standing === 'Bad' ? (
-                                                        <span className="red-text">
-                                                            {row.standing}
-                                                        </span>
-                                                    ) : (
-                                                        row.standing
-                                                    )}
-                                                </StyledTableCell>
-                                                <StyledTableCell
-                                                    onClick={() =>
-                                                        goToDetails(row.id)
-                                                    }
-                                                >
-                                                    {currencyFormatter.format(
-                                                        row.balance
-                                                    )}
-                                                </StyledTableCell>
                                                 <StyledTableCell>
-                                                    <Button
-                                                        className="consumer-tab-action-button"
-                                                        variant="contained"
-                                                    >
-                                                        Activate
-                                                    </Button>
+                                                    {row.status ===
+                                                        'Requested' && (
+                                                        <>
+                                                            <Button
+                                                                className="consumer-tab-action-button"
+                                                                variant="contained"
+                                                            >
+                                                                Activate
+                                                            </Button>
+                                                            <Button
+                                                                className="consumer-tab-action-button red"
+                                                                variant="contained"
+                                                            >
+                                                                Reject
+                                                            </Button>
+                                                        </>
+                                                    )}
+                                                    {row.status ===
+                                                        'Accepted' && (
+                                                        <Button
+                                                            className="consumer-tab-action-button red"
+                                                            variant="contained"
+                                                        >
+                                                            Disable
+                                                        </Button>
+                                                    )}
                                                 </StyledTableCell>
                                             </StyledTableRow>
                                         ))}
