@@ -63,6 +63,9 @@ export default function AddTeamMemberModal(props) {
     const [disableButton, setDisableButton] = useState(true)
     const [installerGridData, setInstallerGridData] = useState([])
     const [adminGridData, setAdminGridData] = useState([])
+    const [allManagers, setAllManagers] = useState([])
+    const [allOwners, setAllOwners] = useState([])
+    const [allAdmins, setAllAdmins] = useState([])
     const [selectionModel, setSelectionModel] = React.useState([])
     const [callFailedError, setCallFailedError] = useState(false)
     const [showSuccessMessage, setShowSuccessMessage] = useState(false)
@@ -100,7 +103,6 @@ export default function AddTeamMemberModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('here are all installers', result)
                         setInstallerGridData(result)
                     },
                     (error) => {
@@ -127,6 +129,7 @@ export default function AddTeamMemberModal(props) {
                         setAdminGridData(result1)
                         setIsLoading(false)
                         setIsLoading(true)
+                        setAllManagers(result1)
                         fetch(
                             API_URL_ADMIN + 'admin/users?role=PROPERTY_OWNER',
                             {
@@ -141,8 +144,33 @@ export default function AddTeamMemberModal(props) {
                             .then(
                                 (result2) => {
                                     setIsLoading(false)
-
-                                    // setAdminGridData(result1.concat(result2))
+                                    setAdminGridData(result1.concat(result2))
+                                    setAllOwners(result2)
+                                    fetch(
+                                        API_URL_ADMIN +
+                                            'admin/users?role=ADMIN',
+                                        {
+                                            method: 'GET',
+                                            headers: {
+                                                Authorization:
+                                                    'Bearer ' + props.token,
+                                                'Content-Type':
+                                                    'application/json',
+                                            },
+                                        }
+                                    )
+                                        .then((res) => res.json())
+                                        .then(
+                                            (result3) => {
+                                                setIsLoading(false)
+                                                setAdminGridData(
+                                                    result2.concat(result3)
+                                                )
+                                            },
+                                            (error) => {
+                                                setIsLoading(false)
+                                            }
+                                        )
                                 },
                                 (error) => {
                                     setIsLoading(false)

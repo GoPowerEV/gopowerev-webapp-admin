@@ -73,7 +73,7 @@ export default function AreYouSureModal(props) {
                 .then((res) => {
                     props.setIsLoading(false)
                     props.reloadPropertyInfo(props.propertyUUID)
-                    res.json()
+                    // res.json()
                 })
                 .then(
                     (result) => {},

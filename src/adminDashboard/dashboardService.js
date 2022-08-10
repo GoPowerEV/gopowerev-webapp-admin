@@ -19,6 +19,25 @@ export function getAllCustomers(token, setIsLoading, setAllConsumers) {
         )
 }
 
+export function getAllInstallers(token, setIsLoading, setAllUInstallers) {
+    setIsLoading(true)
+    fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        .then(
+            (result) => {
+                setIsLoading(false)
+                setAllUInstallers(result)
+            },
+            (error) => {}
+        )
+}
+
 export function getAllProperties(token, setIsLoading, setAllProperties) {
     setIsLoading(true)
     fetch(API_URL + 'properties', {
@@ -122,7 +141,8 @@ export function getAllLocationSmartOutlets(
 export function getLocationSmartOutletsById(
     token,
     id,
-    setSmartOutletsOfThisProperty
+    setSmartOutletsOfThisProperty,
+    setReadiBases
 ) {
     fetch(API_URL + 'smart-outlets?locationUUID=' + id, {
         method: 'GET',
@@ -134,7 +154,18 @@ export function getLocationSmartOutletsById(
         .then((res) => res.json())
         .then(
             (result) => {
-                setSmartOutletsOfThisProperty(result.smartOutlets)
+                if (!setReadiBases) {
+                    setSmartOutletsOfThisProperty(result.smartOutlets)
+                } else {
+                    let outlets = result.smartOutlets.filter(
+                        (so) => so.installationState !== 'ready'
+                    )
+                    setSmartOutletsOfThisProperty(outlets)
+                    let bases = result.smartOutlets.filter(
+                        (so) => so.installationState === 'ready'
+                    )
+                    setReadiBases(bases)
+                }
             },
             (error) => {}
         )
@@ -163,24 +194,5 @@ export function getPropertySmartOutletsByPropertyId(
             (error) => {
                 setIsLoading(false)
             }
-        )
-}
-
-export function getAllInstallers(token, setIsLoading, setAllInstallers) {
-    setIsLoading(true)
-    fetch(API_URL_ADMIN + 'admin/users?role=INSTALLER', {
-        method: 'GET',
-        headers: {
-            Authorization: 'Bearer ' + token,
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((res) => res.json())
-        .then(
-            (result) => {
-                setIsLoading(false)
-                setAllInstallers(result)
-            },
-            (error) => {}
         )
 }

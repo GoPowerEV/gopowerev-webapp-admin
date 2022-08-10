@@ -98,6 +98,8 @@ const SmartOutlets = (props) => {
         handleNewOpen()
     }
 
+    console.log('here is so data', props.smartOutlets)
+
     return (
         <div className="smartOutletsContainer">
             <Grid container justifyContent="space-between">
@@ -256,7 +258,7 @@ const SmartOutlets = (props) => {
                                                 </div>
                                             </div>
                                         </Grid>
-                                        <Grid item xs={5}>
+                                        <Grid item xs={6}>
                                             <div
                                                 className={
                                                     outlet.status
@@ -301,7 +303,7 @@ const SmartOutlets = (props) => {
                                                   outlet.lastHeartbeat
                                               ).format(
                                                   'MM/DD/YYYY, h:mm:ss a'
-                                              ) ?? '-'
+                                              ) + ' UTC' ?? '-'
                                             : '-'}
                                     </Typography>
                                 </CardContent>

@@ -12,17 +12,34 @@ import Login from './navigationComponents/login/Login'
 import LogoutModal from './navigationComponents/logout/LogOutModal'
 import AdminDashboard from './adminDashboard/AdminDashboard'
 import { useHistory } from 'react-router-dom'
+import { API_URL } from './constants'
 import './App.css'
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [token, setToken] = useState(null)
+    const [isAdmin, setIsAdmin] = useState(false)
+    const [
+        displayAccountIsNotAdminError,
+        setDisplayAccountIsNotAdminError,
+    ] = useState(false)
 
     const history = useHistory()
 
     const logout = () => {
         setOpenModal(true)
+    }
+
+    const getToken = async () => {
+        await Auth.currentSession()
+            .then((response) => {
+                setToken(response.idToken.jwtToken)
+                isUserAdmin(response.idToken.jwtToken)
+            })
+            .catch((err) => {
+                console.log('ERROR', err)
+            })
     }
 
     const handleClose = () => {
@@ -48,30 +65,49 @@ function App() {
         await Auth.currentAuthenticatedUser()
             .then((user) => {
                 setLoggedIn(true)
+                getToken()
+                console.log('here is app login true')
             })
             .catch((err) => {
                 console.log('ERROR', err)
+                console.log('here is app login false')
                 setLoggedIn(false)
             })
     }
 
-    async function isUserLoggedIn() {
+    const logOut = async () => {
         try {
-            await Auth.currentAuthenticatedUser()
-            return true
-        } catch {
-            return false
+            console.log('here loggin out')
+            await Auth.signOut()
+            setIsAdmin(false)
+            setLoggedIn(false)
+        } catch (error) {
+            console.log('error signing out: ', error)
         }
     }
 
-    const getToken = async () => {
-        await Auth.currentSession()
-            .then((response) => {
-                setToken(response.idToken.jwtToken)
+    const isUserAdmin = (token) => {
+        if (token && !isAdmin) {
+            fetch(API_URL + 'roles', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
             })
-            .catch((err) => {
-                console.log('ERROR', err)
-            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log('here is admin result', result)
+                        if (result?.includes('ADMIN')) {
+                            setIsAdmin(true)
+                        } else {
+                            logOut()
+                        }
+                    },
+                    (error) => {}
+                )
+        }
     }
 
     useEffect(() => {
@@ -87,24 +123,23 @@ function App() {
         checkIfUserIsLoggedIn()
     }, [])
 
-    useEffect(() => {
-        if (loggedIn) {
-            getToken()
-        }
-    }, [loggedIn])
-
     return (
         <Router>
             <div className="App">
                 {/* ARE YOU SURE YOU WANT TO LOGOUT MODAL */}
-                <LogoutModal handleClose={handleClose} open={openModal} />
-                <Navbar loggedIn={loggedIn} logout={logout} />
+                <LogoutModal
+                    handleClose={handleClose}
+                    open={openModal}
+                    setIsAdmin={setIsAdmin}
+                    setLoggedIn={setLoggedIn}
+                />
+                <Navbar loggedIn={loggedIn} isAdmin={isAdmin} logout={logout} />
                 <Switch>
                     <Route
                         exact
                         path="/"
                         render={() => {
-                            return loggedIn === true ? (
+                            return loggedIn === true && isAdmin === true ? (
                                 <Redirect to="/admin-dashboard" />
                             ) : (
                                 <Redirect to="/login" />
@@ -115,7 +150,7 @@ function App() {
                         exact
                         path="/admin-dashboard"
                         render={() => {
-                            return loggedIn === true ? (
+                            return loggedIn === true && isAdmin === true ? (
                                 <AdminDashboard
                                     path={'admin-dashboard'}
                                     loggedIn={loggedIn}
@@ -172,16 +207,26 @@ function App() {
                         exact
                         path="/login"
                         render={() => {
-                            return loggedIn === true ? (
+                            return loggedIn === true && isAdmin === true ? (
                                 <AdminDashboard
                                     path={'admin-dashboard'}
                                     loggedIn={loggedIn}
                                     history={history}
                                     token={token}
                                 />
-                            ) : (
-                                <Login />
-                            )
+                            ) : loggedIn === false && isAdmin === false ? (
+                                <Login
+                                    setDisplayAccountIsNotAdminError={
+                                        setDisplayAccountIsNotAdminError
+                                    }
+                                    displayAccountIsNotAdminError={
+                                        displayAccountIsNotAdminError
+                                    }
+                                    setToken={setToken}
+                                    setIsAdmin={setIsAdmin}
+                                    setLoggedIn={setLoggedIn}
+                                />
+                            ) : null
                         }}
                     />
                 </Switch>

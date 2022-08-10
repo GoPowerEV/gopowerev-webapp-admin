@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Button from '@material-ui/core/Button'
+import { currencyFormatter } from './../../generalUtils/GeneralUtils'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -13,9 +13,15 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import Button from '@material-ui/core/Button'
 import Paper from '@mui/material/Paper'
 import ConsumerDetails from './ConsumerDetails'
+import {
+    getConsumerStatusClass,
+    getConsumerStatusWording,
+} from './../../generalUtils/GeneralUtils'
 import { getAllCustomers } from './../dashboardService'
+import AreYouSureModal from './AreYouSureModal/AreYouSureModal'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -41,17 +47,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }))
 
-function createData(
-    id,
-    name,
-    number,
-    email,
-    property,
-    status,
-    standing,
-    balance
-) {
-    return { id, name, number, email, property, status, standing, balance }
+function createData(id, name, email, property, status) {
+    return { id, name, email, property, status }
 }
 
 const ConsumerTab = (props) => {
@@ -64,18 +61,40 @@ const ConsumerTab = (props) => {
     const [allRows, setAllRows] = useState([])
     const [activeSearch, setActiveSearch] = useState(false)
     const [currentlyViewedCustomer, setCurrentlyViewedCustomer] = useState({})
+    const [activeTab, setActiveTab] = useState('all')
+    const [openModal, setOpenModal] = useState(false)
+    const [modalMode, setModalMode] = useState(null)
+    const [modalUserName, setModalUserName] = useState(null)
+    const [modalUserEmail, setModalUseEmail] = useState(null)
+
+    const handleClose = () => {
+        setOpenModal(false)
+    }
+
+    const handleModalOpen = (mode, name, email) => {
+        if (mode === 'activate') {
+            setModalMode('activate')
+        } else if (mode === 'reject') {
+            setModalMode('reject')
+        } else {
+            setModalMode('disable')
+        }
+        setModalUserName(name)
+        setModalUseEmail(email)
+        setOpenModal(true)
+    }
 
     const handeSearchChange = (value) => {
         setSearchVal(value)
     }
 
     const goToDetails = (id) => {
-        console.log('here is the id', id)
         let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
-        let result = allConsumersTemp.filter(
+        let result = allConsumersTemp?.filter(
             (consumer) => consumer.user?.cognitoUuid === id
         )
         setCurrentlyViewedCustomer(result)
+        console.log('here setting this result', result)
         setShowDetails(true)
     }
 
@@ -92,6 +111,45 @@ const ConsumerTab = (props) => {
         return unique
     }
 
+    const handleTabChange = (tab) => {
+        setActiveTab(tab)
+        if (tab === 'active' || tab === 'pending') {
+            setActiveSearch(true)
+            const filterOn = tab === 'active' ? 'accepted' : 'requested'
+            let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
+            let results = allConsumersTemp?.filter((consumer) =>
+                consumer?.propertyRequest?.status?.includes(
+                    filterOn.toLowerCase()
+                )
+            )
+
+            if (results?.length > 0) {
+                let tempRows = []
+                results.forEach((consumer) => {
+                    let userInfo = consumer.user
+                    let propertyInfo = consumer.property
+                    let requestInfo = consumer.propertyRequest
+                    tempRows.push(
+                        createData(
+                            userInfo?.cognitoUuid,
+                            userInfo.firstName + ' ' + userInfo.lastName,
+                            userInfo.email,
+                            propertyInfo.name,
+                            requestInfo?.status?.charAt(0).toUpperCase() +
+                                requestInfo.status.slice(1)
+                        )
+                    )
+                })
+                setRows(removeDups(tempRows))
+            } else {
+                setRows([])
+            }
+        } else {
+            setRows(removeDups(allRows))
+            setActiveSearch(false)
+        }
+    }
+
     useEffect(() => {
         if (props.token) {
             getAllCustomers(props.token, setIsLoading, setAllConsumers)
@@ -100,16 +158,26 @@ const ConsumerTab = (props) => {
 
     useEffect(() => {
         let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
-        setRows([])
         if (searchVal?.length > 2) {
+            setActiveTab('all')
             setActiveSearch(true)
-            let results = allConsumersTemp.filter(
+            let results = allConsumersTemp?.filter(
                 (consumer) =>
-                    consumer.property?.name?.includes(searchVal) ||
-                    consumer.user?.firstName?.includes(searchVal) ||
-                    consumer.user?.lastName?.includes(searchVal) ||
-                    consumer.user?.cognitoUuid?.includes(searchVal) ||
-                    consumer.user?.phoneNumber?.includes(searchVal)
+                    consumer.property?.name
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.firstName
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.lastName
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.cognitoUuid
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase()) ||
+                    consumer.user?.phoneNumber
+                        ?.toLowerCase()
+                        .includes(searchVal.toLowerCase())
             )
             if (results?.length > 0) {
                 let tempRows = []
@@ -122,15 +190,10 @@ const ConsumerTab = (props) => {
                         createData(
                             userInfo?.cognitoUuid,
                             userInfo.firstName + ' ' + userInfo.lastName,
-                            userInfo.phoneNumber,
                             userInfo.email,
                             propertyInfo.name,
-                            requestInfo.status.charAt(0).toUpperCase() +
-                                requestInfo.status.slice(1),
-                            walletInfo.creditStanding === false
-                                ? 'Bad'
-                                : 'Good',
-                            walletInfo.creditBalance / 100
+                            requestInfo?.status?.charAt(0).toUpperCase() +
+                                requestInfo.status.slice(1)
                         )
                     )
                 })
@@ -142,11 +205,9 @@ const ConsumerTab = (props) => {
             setRows(removeDups(allRows))
             setActiveSearch(false)
         }
-    }, [searchVal])
+    }, [allConsumers, allRows, searchVal])
 
     useEffect(() => {
-        setRows([])
-        console.log('here is all customer data', allConsumers)
         if (allConsumers?.length > 0 && !activeSearch) {
             let tempRows = []
             allConsumers.forEach((consumer) => {
@@ -158,17 +219,13 @@ const ConsumerTab = (props) => {
                     createData(
                         userInfo?.cognitoUuid,
                         userInfo.firstName + ' ' + userInfo.lastName,
-                        userInfo.phoneNumber,
                         userInfo.email,
                         propertyInfo.name,
-                        requestInfo.status.charAt(0).toUpperCase() +
-                            requestInfo.status.slice(1),
-                        walletInfo.creditStanding === false ? 'Bad' : 'Good',
-                        walletInfo.creditBalance / 100
+                        requestInfo?.status?.charAt(0).toUpperCase() +
+                            requestInfo?.status?.slice(1)
                     )
                 )
             })
-            console.log('here you go', tempRows)
             setRows(removeDups(tempRows))
             setAllRows(removeDups(tempRows))
         }
@@ -179,12 +236,43 @@ const ConsumerTab = (props) => {
             <div className="consumerMainBody">
                 {!showDetails ? (
                     <>
-                        <div className="tabHeader">Search Results</div>
-                        <Grid
-                            container
-                            className="allPropertiesContainer"
-                            xs={7}
-                        >
+                        <div className="tabHeader">Filter By Status</div>
+                        <Grid container xs={7}>
+                            <Button
+                                className={
+                                    activeTab === 'all'
+                                        ? 'topButton activeButton'
+                                        : 'topButton'
+                                }
+                                variant="contained"
+                                onClick={() => handleTabChange('all')}
+                            >
+                                All
+                            </Button>
+                            <Button
+                                className={
+                                    activeTab === 'active'
+                                        ? 'topButton activeButton'
+                                        : 'topButton'
+                                }
+                                variant="contained"
+                                onClick={() => handleTabChange('active')}
+                            >
+                                Active
+                            </Button>
+                            <Button
+                                className={
+                                    activeTab === 'pending'
+                                        ? 'topButton activeButton'
+                                        : 'topButton'
+                                }
+                                variant="contained"
+                                onClick={() => handleTabChange('pending')}
+                            >
+                                Pending
+                            </Button>
+                        </Grid>
+                        <Grid container xs={7}>
                             <TextField
                                 id="search"
                                 className="searchField"
@@ -207,81 +295,129 @@ const ConsumerTab = (props) => {
                                 results
                             </div>
                         )}
-                        <TableContainer component={Paper}>
-                            <Table
-                                sx={{
-                                    minWidth: 700,
-                                }}
-                                aria-label="customized table"
-                            >
-                                <TableHead>
-                                    <TableRow>
-                                        <StyledTableCell>Name</StyledTableCell>
-                                        <StyledTableCell>
-                                            Number
-                                        </StyledTableCell>
-                                        <StyledTableCell>Email</StyledTableCell>
-                                        <StyledTableCell>
-                                            Property
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            Status
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            Standing
-                                        </StyledTableCell>
-                                        <StyledTableCell>
-                                            Balance
-                                        </StyledTableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <StyledTableRow
-                                            key={row.name}
-                                            onClick={() => goToDetails(row.id)}
-                                        >
-                                            <StyledTableCell
-                                                component="th"
-                                                scope="row"
-                                            >
-                                                {row.name}
+                        {rows?.length > 0 && (
+                            <TableContainer component={Paper}>
+                                <Table
+                                    sx={{
+                                        minWidth: 700,
+                                    }}
+                                    aria-label="customized table"
+                                >
+                                    <TableHead>
+                                        <TableRow>
+                                            <StyledTableCell>
+                                                Name
                                             </StyledTableCell>
                                             <StyledTableCell>
-                                                {row.number}
+                                                Status
                                             </StyledTableCell>
                                             <StyledTableCell>
-                                                {row.email}
+                                                Email
                                             </StyledTableCell>
                                             <StyledTableCell>
-                                                {row.property}
+                                                Property
                                             </StyledTableCell>
                                             <StyledTableCell>
-                                                {row.status === 'Pending' ? (
-                                                    <span className="pending-tile">
-                                                        {row.status}
+                                                Action
+                                            </StyledTableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {rows.map((row) => (
+                                            <StyledTableRow key={row.id}>
+                                                <StyledTableCell
+                                                    component="th"
+                                                    scope="row"
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
+                                                    {row.name}
+                                                </StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
+                                                    <span
+                                                        className={getConsumerStatusClass(
+                                                            row.status
+                                                        )}
+                                                    >
+                                                        {getConsumerStatusWording(
+                                                            row.status
+                                                        )}
                                                     </span>
-                                                ) : (
-                                                    row.status
-                                                )}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                {row.standing === 'Bad' ? (
-                                                    <span className="red-text">
-                                                        {row.standing}
-                                                    </span>
-                                                ) : (
-                                                    row.standing
-                                                )}
-                                            </StyledTableCell>
-                                            <StyledTableCell>
-                                                ${row.balance}
-                                            </StyledTableCell>
-                                        </StyledTableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                                                </StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
+                                                    {row.email}
+                                                </StyledTableCell>
+                                                <StyledTableCell
+                                                    onClick={() =>
+                                                        goToDetails(row.id)
+                                                    }
+                                                >
+                                                    {row.property}
+                                                </StyledTableCell>
+                                                <StyledTableCell>
+                                                    {row.status ===
+                                                        'Requested' && (
+                                                        <>
+                                                            <Button
+                                                                className="consumer-tab-action-button"
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    handleModalOpen(
+                                                                        'activate',
+                                                                        row.name,
+                                                                        row.email
+                                                                    )
+                                                                }
+                                                            >
+                                                                Activate
+                                                            </Button>
+                                                            <Button
+                                                                className="consumer-tab-action-button red"
+                                                                variant="contained"
+                                                                onClick={() =>
+                                                                    handleModalOpen(
+                                                                        'reject',
+                                                                        row.name,
+                                                                        row.email
+                                                                    )
+                                                                }
+                                                            >
+                                                                Reject
+                                                            </Button>
+                                                        </>
+                                                    )}
+                                                    {row.status ===
+                                                        'Accepted' && (
+                                                        <Button
+                                                            className="consumer-tab-action-button red"
+                                                            variant="contained"
+                                                            onClick={() =>
+                                                                handleModalOpen(
+                                                                    'disable',
+                                                                    row.name,
+                                                                    row.email
+                                                                )
+                                                            }
+                                                        >
+                                                            Disable
+                                                        </Button>
+                                                    )}
+                                                </StyledTableCell>
+                                            </StyledTableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
                     </>
                 ) : (
                     <ConsumerDetails
@@ -296,6 +432,14 @@ const ConsumerTab = (props) => {
                     <CircularProgress style={{ color: '#12BFA2' }} />
                 </div>
             )}
+            <AreYouSureModal
+                userName={modalUserName}
+                userEmail={modalUserEmail}
+                modalMode={modalMode}
+                handleClose={handleClose}
+                open={openModal}
+                token={props.token}
+            />
         </React.Fragment>
     )
 }

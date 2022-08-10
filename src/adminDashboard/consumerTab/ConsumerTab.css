@@ -31,8 +31,8 @@
     font-size: 17px;
 }
 
-.billingSection {
-    margin-top: 30px !important;
+.buttonSection {
+    margin-top: 25px !important;
 }
 
 .vehicle-section {
@@ -47,6 +47,13 @@
     margin-left: 10px;
 }
 
+.consumer-detail-grey-none {
+    font-size: 17px;
+    font-weight: bold;
+    position: relative;
+    top: -5px;
+}
+
 .divider {
     margin-left: 10px;
     margin-right: 10px;
@@ -58,6 +65,10 @@
     font-size: 17px;
 }
 
+.grey-text {
+    font-size: 17px;
+}
+
 .smallBlackHeader {
     font-weight: bold;
     color: black;
@@ -66,18 +77,11 @@
 
 .searchField div {
     border-radius: 12px;
+    margin-top: 20px;
 }
 
 .red-text {
     color: red !important;
-}
-
-.pending-tile {
-    background-color: #ffb72b;
-    color: white;
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 7px;
 }
 
 .consumer-step-icon {
@@ -98,6 +102,28 @@
     color: #ffffff !important;
     font-weight: bold !important;
     text-transform: none !important;
+}
+
+.are-you-sure-modal {
+    font-family: 'Nunito Sans', sans-serif !important;
+}
+
+.modal-desc {
+    font-size: 16px !important;
+}
+
+.modal-user-info-container {
+    background-color: #eeeeee;
+    margin-top: 5px;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.modal-name {
+    color: black;
+    font-weight: bold;
+    font-size: 17px;
+    margin-bottom: 5px;
 }
 
 .search-header {
@@ -136,9 +162,20 @@
     background-color: #12bfa24a !important;
     border: 1px solid #12bfa2;
     border-radius: 7px;
+    margin-bottom: 10px;
     text-align: center;
     padding: 2px;
     margin-top: 5px;
+}
+
+.consumer-tab-action-button {
+    font-family: 'Nunito Sans', sans-serif !important;
+    background-color: #12bfa2 !important;
+    font-size: 15px !important;
+    margin-right: 20px !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    text-transform: none !important;
 }
 
 .grey-border {
@@ -149,6 +186,26 @@
     border: 0.5px solid #8080806e;
 }
 
+.status {
+    font-family: 'Nunito Sans', sans-serif !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.accepted {
+    background-color: #12bfa2 !important;
+}
+
+.pending {
+    background-color: #ffb72b !important;
+}
+
+.red {
+    background-color: red !important;
+}
+
 @media only screen and (max-width: 1400px) {
     .consumer-detail-grey {
         font-size: 14px;
@@ -156,6 +213,13 @@
         position: relative;
         top: -7px;
         margin-left: 10px;
+    }
+
+    .consumer-detail-grey-none {
+        font-size: 14px;
+        font-weight: bold;
+        position: relative;
+        top: -7px;
     }
 
     .blackHeader {

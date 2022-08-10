@@ -240,7 +240,6 @@ const CurrentlyViewedProperty = (props) => {
     }
 
     useEffect(() => {
-        console.log('here is there property', props.property)
         setProperty(props.property)
         setPropertyName(props.property.name)
         setPropertyAddress(props.property.address1)

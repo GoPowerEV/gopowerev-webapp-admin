@@ -64,6 +64,7 @@ const LocationCard = (props) => {
         props.location.description
     )
     const [smartOutlets, setSmartOutlets] = useState([])
+    const [readiBases, setReadiBases] = useState([])
     const classes = useStyles()
 
     const uploadLocationImg = async () => {
@@ -172,7 +173,8 @@ const LocationCard = (props) => {
         getLocationSmartOutletsById(
             props.token,
             locationInfo.locationUUID,
-            setSmartOutlets
+            setSmartOutlets,
+            setReadiBases
         )
     }
 
@@ -187,6 +189,8 @@ const LocationCard = (props) => {
     }, [])
 
     useEffect(() => {}, [smartOutlets])
+
+    console.log('here it is readiBases', readiBases)
 
     return (
         <React.Fragment>
@@ -394,7 +398,7 @@ const LocationCard = (props) => {
                     />
                 </Grid>
                 <Grid container xs={12} className="smartOutletsArea">
-                    <PropertyEVReadiBases />
+                    <PropertyEVReadiBases readiBases={readiBases} />
                 </Grid>
             </Collapse>
         </React.Fragment>

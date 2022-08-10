@@ -38,7 +38,7 @@ const SessionsTable = (props) => {
     const rows = [
         createData(
             'Johns Tesla M3',
-            '1243',
+            '1244',
             '04.06',
             '5:45PM PST',
             '7hrs 50 min',
@@ -75,7 +75,7 @@ const SessionsTable = (props) => {
                 </TableHead>
                 <TableBody>
                     {rows.map((row) => (
-                        <StyledTableRow key={row.vehicle}>
+                        <StyledTableRow key={row.spotId}>
                             <StyledTableCell component="th" scope="row">
                                 {row.vehicle}
                             </StyledTableCell>

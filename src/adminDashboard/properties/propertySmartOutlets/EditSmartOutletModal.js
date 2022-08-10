@@ -53,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
+const numberOfParkingSpotsOptions = [1, 2, 3]
+
 const breakNumOptions = [
     0,
     1,
@@ -175,6 +177,9 @@ export default function EditSmartOutletModal(props) {
     const [feedColors, setFeedColors] = useState(props.outletData.feedColors)
     const [breakNumA, setBreakNumA] = useState(props.outletData.breakNumA)
     const [breakNumB, setBreakNumB] = useState(props.outletData.breakNumB)
+    const [numberOfParkingSpots, setNumberOfParkingSpots] = useState(
+        props.outletData.parkingSpotCount
+    )
     const [mac, setMac] = useState(props.outletData.macAddr)
     const [outletData, setOutletData] = useState(props.outletData)
     const [modalStyle] = useState(getModalStyle)
@@ -182,7 +187,7 @@ export default function EditSmartOutletModal(props) {
 
     useEffect(() => {
         setOutletData(props.outletData)
-        setFirmware(props.outletData.fwVersion)
+        setFirmware(props.outletData?.fwVersion)
         setHardware(props.outletData.hwVersion)
         setSerialNumber(props.outletData.serialNumber)
         setParkingSpot(props.outletData.parkingSpot)
@@ -190,13 +195,13 @@ export default function EditSmartOutletModal(props) {
         setFeedColors(props.outletData.feedColors)
         setBreakNumA(props.outletData.breakNumA)
         setBreakNumB(props.outletData.breakNumB)
-        console.log('here is the data!!', props.outletData)
+        setNumberOfParkingSpots(props.outletData.parkingSpotCount)
     }, [props.outletData])
 
     const saveOutletInfo = () => {
         setIsLoading(true)
         if (props.token) {
-            fetch(API_URL + 'smart-outlets/' + outletData.soUUID, {
+            fetch(API_URL + 'smart-outlets/' + props.outletData.uuid, {
                 method: 'PUT',
                 headers: {
                     Authorization: 'Bearer ' + props.token,
@@ -208,7 +213,6 @@ export default function EditSmartOutletModal(props) {
                 .then(
                     (result) => {
                         setIsLoading(false)
-                        console.log('save outlet success', result)
                     },
                     (error) => {
                         setIsLoading(false)
@@ -221,7 +225,9 @@ export default function EditSmartOutletModal(props) {
         if (field === 'hwVersion') {
             setHardware(value)
         } else if (field === 'fwVersion') {
-            setFirmware(value)
+            let tempFw = firmware
+            tempFw.releaseVersion = value
+            setFirmware(tempFw)
         } else if (field === 'serialNumber') {
             setSerialNumber(value)
         } else if (field === 'parkingSpot') {
@@ -232,6 +238,8 @@ export default function EditSmartOutletModal(props) {
             setBreakNumA(value)
         } else if (field === 'breakNumB') {
             setBreakNumB(value)
+        } else if (field === 'parkingSpotCount') {
+            setNumberOfParkingSpots(parseInt(value))
         } else {
             setMac(value)
         }
@@ -239,6 +247,9 @@ export default function EditSmartOutletModal(props) {
         tempOutlet[field] = value
 
         setOutletData(tempOutlet)
+        if (field === 'parkingSpotCount') {
+            saveOutletInfo()
+        }
     }
 
     const body = (
@@ -329,7 +340,7 @@ export default function EditSmartOutletModal(props) {
                                 label="Model"
                                 disabled
                                 variant="filled"
-                                value={outletData?.model ?? '-'}
+                                value={outletData?.model?.model ?? '-'}
                             />
                         </Grid>
                         <Grid item xs={5}>
@@ -447,7 +458,44 @@ export default function EditSmartOutletModal(props) {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={5}></Grid>
+                        <Grid item xs={5}>
+                            <InputLabel
+                                id="breakNumB"
+                                style={{
+                                    fontSize: '12px',
+                                    paddingLeft: '5px',
+                                    marginBottom: '2px',
+                                }}
+                            >
+                                Number of Parking Spots
+                            </InputLabel>
+                            <FormControl fullWidth>
+                                <Select
+                                    labelId="numberOfParkingSpots"
+                                    variant="outlined"
+                                    id="numberOfParkingSpots"
+                                    value={numberOfParkingSpots}
+                                    style={{
+                                        backgroundColor: '#e8e8e8',
+                                        borderRadius: '10px',
+                                    }}
+                                    onChange={(e) =>
+                                        handleOutletFieldChange(
+                                            e.target.value,
+                                            'parkingSpotCount'
+                                        )
+                                    }
+                                >
+                                    {numberOfParkingSpotsOptions?.map(
+                                        (option) => (
+                                            <MenuItem value={option}>
+                                                {option}
+                                            </MenuItem>
+                                        )
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                         <Grid item xs={5}>
                             <TextField
                                 fullWidth
@@ -515,7 +563,7 @@ export default function EditSmartOutletModal(props) {
                                 id="soFwVersion"
                                 label="Firmware Version"
                                 variant="filled"
-                                value={firmware}
+                                value={firmware?.releaseVersion}
                                 onChange={(e) =>
                                     handleOutletFieldChange(
                                         e.target.value,

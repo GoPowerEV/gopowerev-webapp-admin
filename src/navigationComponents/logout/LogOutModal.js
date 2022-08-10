@@ -62,6 +62,8 @@ export default function LogoutModal(props) {
         try {
             await Auth.signOut()
             setIsLoading(false)
+            props.setIsAdmin(false)
+            props.setLoggedIn(false)
             props.handleClose()
             history.push('/login')
         } catch (error) {

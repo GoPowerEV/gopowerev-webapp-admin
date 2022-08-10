@@ -317,6 +317,7 @@ export default function SetupNewProperty(props) {
             let locationObject = {
                 locationUUID: locationId,
                 model: soModel,
+                installationState: 'powered',
             }
             if (props.token) {
                 fetch(API_URL + 'smart-outlets', {
@@ -344,13 +345,50 @@ export default function SetupNewProperty(props) {
         }
     }
 
+    const createBases = (amountOfBases, locationId, model) => {
+        console.log('this is the amount of bases', amountOfBases)
+        for (var i = 0; i < amountOfBases; i++) {
+            setIsLoading(true)
+            let locationObject = {
+                locationUUID: locationId,
+                baseModel: model,
+                installationState: 'ready',
+            }
+            if (props.token) {
+                fetch(API_URL + 'smart-outlets', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: 'Bearer ' + props.token,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(locationObject),
+                })
+                    .then((res) => res.json())
+                    .then(
+                        async (result) => {
+                            setIsLoading(false)
+                            console.log(
+                                'created readibase successfully',
+                                result
+                            )
+                        },
+                        (error) => {
+                            setIsLoading(false)
+                        }
+                    )
+            }
+        }
+    }
+
     const createLocation = async (
         lcuId,
         location,
         photoBinaries,
         index,
         amountOfSmartOutlets,
+        amountOfBases,
         propertyId,
+        baseModel,
         soModel
     ) => {
         let locationId = null
@@ -395,6 +433,13 @@ export default function SetupNewProperty(props) {
                                 soModel
                             )
                         }
+                        if (amountOfBases.length > 0 && amountOfBases[index]) {
+                            await createBases(
+                                amountOfBases[index],
+                                locationId,
+                                baseModel
+                            )
+                        }
                         setIsLoading(false)
                         props.goToProperties()
                     },
@@ -411,7 +456,9 @@ export default function SetupNewProperty(props) {
         locations,
         photoBinaries,
         amountOfSmartOutlets,
+        amountOfBases,
         propertyUUID,
+        baseModel,
         soModel
     ) => {
         setIsLoading(true)
@@ -439,7 +486,9 @@ export default function SetupNewProperty(props) {
                                 photoBinaries,
                                 index,
                                 amountOfSmartOutlets,
+                                amountOfBases,
                                 propertyUUID,
+                                baseModel,
                                 soModel
                             )
                         })
@@ -457,6 +506,8 @@ export default function SetupNewProperty(props) {
         locations,
         photoBinaries,
         amountOfSmartOutlets,
+        amountOfBases,
+        baseModel,
         soModel
     ) => {
         // console.log('here lcuName', lcuName)
@@ -486,7 +537,9 @@ export default function SetupNewProperty(props) {
                         locations,
                         photoBinaries,
                         amountOfSmartOutlets,
+                        amountOfBases,
                         result.propertyUUID,
+                        baseModel,
                         soModel
                     )
                 },
@@ -542,10 +595,6 @@ export default function SetupNewProperty(props) {
         tempPropertyInfo.installerUUID = installerUuid
         setPropertyInfo(tempPropertyInfo)
         handleCompleteSecondStep(tempPropertyInfo)
-        console.log(
-            'here step 2. Installer being added.' +
-                JSON.stringify(tempPropertyInfo)
-        )
     }
 
     const dragOver = (e) => {

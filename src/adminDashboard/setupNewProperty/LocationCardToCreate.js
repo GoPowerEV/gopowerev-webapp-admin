@@ -155,6 +155,7 @@ export default function LocationCardToCreate(props) {
     const [photoAdded, setPhotoAdded] = React.useState(false)
     const [photoFile, setPhotoFile] = React.useState(null)
     const [numberOfSmartOutlets, setNumberOfSmartOutlets] = useState([])
+    const [numberOfBases, setNumberOfBases] = useState([])
     const [locationName, setLocationName] = useState()
     const [maxVoltAmpsBlack, setMaxVoltAmpsBlack] = useState(0)
     const [maxVoltAmpsBlue, setMaxVoltAmpsBlue] = useState(0)
@@ -240,7 +241,7 @@ export default function LocationCardToCreate(props) {
                                 Location {props.index + 1} Details
                             </div>
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={6}>
                             <FormControl variant="filled" fullWidth>
                                 <InputLabel
                                     id="demo-simple-select-filled-label2"
@@ -268,6 +269,27 @@ export default function LocationCardToCreate(props) {
                                     ))}
                                 </Select>
                             </FormControl>
+                        </Grid>
+                        <Grid item lg={6} md={12}>
+                            <TextField
+                                className={classes.textField}
+                                label="Number of EVReadiBases"
+                                variant="outlined"
+                                fullWidth
+                                value={numberOfBases}
+                                onChange={(event) => {
+                                    setNumberOfBases(event.target.value)
+                                    props.handleThisLocationNumberOfReadiBasesChange(
+                                        event.target.value,
+                                        props.index
+                                    )
+                                }}
+                            />
+                            {props.basesErrors[props.index] === true && (
+                                <div className={classes.locationError}>
+                                    Must be a number between 1 and 50.
+                                </div>
+                            )}
                         </Grid>
                         <Grid item xs={6}>
                             <FormControl variant="filled" fullWidth>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Collapse, CircularProgress, Grid } from '@material-ui/core'
+import { Collapse, CircularProgress, Grid, Snackbar } from '@material-ui/core'
+import MuiAlert from '@mui/material/Alert'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined'
@@ -8,12 +9,30 @@ import TeamMemberCard from './TeamMemberCard'
 import InviteTeamMemberCard from './InviteTeamMemberCard'
 import { API_URL_ADMIN } from '../../../constants'
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+})
+
 const PropertyTeam = (props) => {
     const [propertyTeamOpened, setPropertyTeamOpened] = useState(true)
     const [isLoading, setIsLoading] = useState(false)
     const [propertyTeam, setPropertyTeam] = useState([])
+    const [open, setOpen] = useState(false)
+    const [errorMsg, setErrorMsg] = useState()
 
     const totalAmountInTeam = 3
+
+    const showAlert = () => {
+        setOpen(true)
+    }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setOpen(false)
+    }
 
     const getPropertyTeam = () => {
         setIsLoading(true)
@@ -33,9 +52,14 @@ const PropertyTeam = (props) => {
                 .then((res) => res.json())
                 .then(
                     (result) => {
-                        console.log('here you go', result)
                         setIsLoading(false)
-                        setPropertyTeam(result)
+                        if (result.code) {
+                            setPropertyTeam([])
+                            setErrorMsg(result.message)
+                            showAlert()
+                        } else {
+                            setPropertyTeam(result)
+                        }
                     },
                     (error) => {
                         setIsLoading(false)
@@ -54,6 +78,15 @@ const PropertyTeam = (props) => {
 
     return (
         <>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert
+                    onClose={handleClose}
+                    severity="error"
+                    sx={{ width: '100%' }}
+                >
+                    Property Team: {errorMsg}
+                </Alert>
+            </Snackbar>
             <hr className="propertiesHrLcu" />
             <Grid container justifyContent="space-between">
                 <Grid item>
@@ -82,7 +115,7 @@ const PropertyTeam = (props) => {
             {!isLoading && (
                 <Collapse in={propertyTeamOpened}>
                     <Grid container spacing={2} xs={11}>
-                        {propertyTeam?.length > 0 &&
+                        {propertyTeam &&
                             propertyTeam?.map((teamMember, i) => (
                                 <TeamMemberCard
                                     key={i}

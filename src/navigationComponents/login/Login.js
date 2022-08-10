@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import Phone1 from './../../assets/img/phone1.png'
 import Phone2 from './../../assets/img/phone2.png'
+import { API_URL } from './../../constants'
 import {
     TextField,
     InputAdornment,
@@ -24,6 +25,11 @@ const Login = (props) => {
     const [isLoading, setIsLoading] = useState(false)
     const [disabledButton, setDisabledButton] = useState(false)
     const [wrongPassword, setWrongPassword] = useState(false)
+    const [token, setToken] = useState(null)
+    const [
+        displayAccountIsNotAdminError,
+        setDisplayAccountIsNotAdminError,
+    ] = useState(false)
 
     const history = useHistory()
 
@@ -39,6 +45,62 @@ const Login = (props) => {
         setRememberMe(event.target.checked)
     }
 
+    const isUserAdmin = (token) => {
+        if (token) {
+            fetch(API_URL + 'roles', {
+                method: 'GET',
+                headers: {
+                    Authorization: 'Bearer ' + token,
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((res) => res.json())
+                .then(
+                    (result) => {
+                        console.log()
+                        props.setIsAdmin(result?.includes('ADMIN'))
+                        if (result?.includes('ADMIN')) {
+                            history.push('/admin-dashboard')
+                            props.setIsAdmin(true)
+                            setDisplayAccountIsNotAdminError(false)
+                            props.setDisplayAccountIsNotAdminError(false)
+                            props.setLoggedIn(true)
+                        } else {
+                            logOut()
+                            props.setIsAdmin(false)
+                            setDisplayAccountIsNotAdminError(true)
+                            props.setDisplayAccountIsNotAdminError(true)
+                            props.setLoggedIn(false)
+                        }
+                    },
+                    (error) => {}
+                )
+        }
+    }
+
+    const getToken = async () => {
+        await Auth.currentSession()
+            .then((response) => {
+                setToken(response.idToken.jwtToken)
+                props.setToken(response.idToken.jwtToken)
+                isUserAdmin(response.idToken.jwtToken)
+            })
+            .catch((err) => {
+                console.log('ERROR', err)
+            })
+    }
+
+    const logOut = async () => {
+        try {
+            await Auth.signOut()
+            props.setIsAdmin(false)
+            props.setLoggedIn(false)
+            history.push('/login')
+        } catch (error) {
+            console.log('error signing out: ', error)
+        }
+    }
+
     const logIn = async (e) => {
         setIsLoading(true)
         await Auth.signIn({
@@ -49,7 +111,7 @@ const Login = (props) => {
                 setEmail('')
                 setPassword('')
                 setIsLoading(false)
-                history.push('/admin-dashboard')
+                getToken()
             })
             .catch((err) => {
                 console.log(err)
@@ -86,7 +148,11 @@ const Login = (props) => {
                                 <div className="login-form-container">
                                     <TextField
                                         id="email"
-                                        error={wrongPassword}
+                                        error={
+                                            wrongPassword ||
+                                            displayAccountIsNotAdminError ||
+                                            props.displayAccountIsNotAdminError
+                                        }
                                         label="Your Email"
                                         variant="outlined"
                                         value={email}
@@ -102,10 +168,17 @@ const Login = (props) => {
                                     />
                                     <TextField
                                         id="password"
-                                        error={wrongPassword}
+                                        error={
+                                            wrongPassword ||
+                                            displayAccountIsNotAdminError ||
+                                            props.displayAccountIsNotAdminError
+                                        }
                                         helperText={
                                             wrongPassword
                                                 ? 'Incorrect email or password'
+                                                : displayAccountIsNotAdminError ||
+                                                  props.displayAccountIsNotAdminError
+                                                ? 'Your account does not have admin access.'
                                                 : ''
                                         }
                                         label="Password"
