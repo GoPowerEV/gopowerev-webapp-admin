@@ -103,6 +103,47 @@ const ConsumerTab = (props) => {
     }, [props.token])
 
     useEffect(() => {
+        if (allConsumers && activeTab) {
+            if (activeTab === 'active' || activeTab === 'pending') {
+                setActiveSearch(true)
+                const filterOn =
+                    activeTab === 'active' ? 'accepted' : 'requested'
+                let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
+                let results = allConsumersTemp.filter((consumer) =>
+                    consumer?.propertyRequest?.status?.includes(
+                        filterOn.toLowerCase()
+                    )
+                )
+
+                if (results?.length > 0) {
+                    let tempRows = []
+                    results.forEach((consumer) => {
+                        let userInfo = consumer.user
+                        let propertyInfo = consumer.property
+                        let requestInfo = consumer.propertyRequest
+                        tempRows.push(
+                            createData(
+                                userInfo?.cognitoUuid,
+                                userInfo.firstName + ' ' + userInfo.lastName,
+                                userInfo.email,
+                                propertyInfo.name,
+                                requestInfo?.status?.charAt(0).toUpperCase() +
+                                    requestInfo.status.slice(1)
+                            )
+                        )
+                    })
+                    setRows(removeDups(tempRows))
+                } else {
+                    setRows([])
+                }
+            } else {
+                setRows(removeDups(allRows))
+                setActiveSearch(false)
+            }
+        }
+    }, [allConsumers, allRows, activeTab, rows])
+
+    useEffect(() => {
         let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
         setRows([])
         if (searchVal?.length > 2) {
@@ -158,7 +199,6 @@ const ConsumerTab = (props) => {
         if (allConsumers?.length > 0 && !activeSearch) {
             let tempRows = []
             allConsumers.forEach((consumer) => {
-                console.log('here it is allConsumers', allConsumers)
                 let userInfo = consumer.user
                 let propertyInfo = consumer.property
                 let requestInfo = consumer.propertyRequest
