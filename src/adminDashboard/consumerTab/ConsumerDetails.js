@@ -18,13 +18,18 @@ import SessionsTable from './tables/SessionsTable'
 import { Collapse } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreOutlined'
 import ExpandLessIcon from '@material-ui/icons/ExpandLessOutlined'
+import { getConsumerChargingHistory } from './ConsumerTabService'
 
 const ConsumerDetails = (props) => {
+    const [isLoading, setIsLoading] = useState(false)
     const [billingOpened, setBillingOpened] = useState(true)
     const [sessionsOpened, setSessionsOpened] = useState(true)
     const [userData, setUserData] = useState({})
     const [propertyData, setPropertyData] = useState({})
     const [vehicleData, setVehicleData] = useState({})
+    const [chargingSessions, setChargingSessions] = useState([])
+    const [billingData, setBillingData] = useState([])
+    const [snapshotData, setSnapshotData] = useState({})
     const history = useHistory()
 
     const toggleBillingInfo = () => {
@@ -39,7 +44,18 @@ const ConsumerDetails = (props) => {
         setUserData(props.currentlyViewedCustomer[0].user)
         setPropertyData(props.currentlyViewedCustomer[0].property)
         setVehicleData(props.currentlyViewedCustomer[0].user.vehicles)
-    }, [props.currentlyViewedCustomer])
+        if (userData.cognitoUuid) {
+            console.log('here calling api')
+            getConsumerChargingHistory(
+                userData.cognitoUuid,
+                props.token,
+                setIsLoading,
+                setChargingSessions,
+                setBillingData,
+                setSnapshotData
+            )
+        }
+    }, [props.currentlyViewedCustomer, props.token, userData.cognitoUuid])
 
     return (
         <React.Fragment>
@@ -73,6 +89,7 @@ const ConsumerDetails = (props) => {
                         <span className="tabHeader">Users</span>
                     </Grid>
                 </Grid>
+                <hr className="consumerHr" />
                 <div
                     className={
                         billingOpened
@@ -173,29 +190,25 @@ const ConsumerDetails = (props) => {
                                     </Grid>
                                     <Grid item xs={6}>
                                         <span className="smallBlackHeader">
-                                            100
+                                            {snapshotData?.totalSessions}
                                         </span>{' '}
                                         Total Sessions
                                     </Grid>
                                     <Grid item xs={6}>
                                         <span className="smallBlackHeader">
-                                            200
+                                            {snapshotData?.totalChargeTime}
                                         </span>{' '}
-                                        hrs{' '}
-                                        <span className="smallBlackHeader">
-                                            45
-                                        </span>{' '}
-                                        min Total Charge Time
+                                        Total Charge Time
                                     </Grid>
                                     <Grid item xs={6}>
                                         <span className="smallBlackHeader">
-                                            5000
+                                            {snapshotData?.totalKwh}
                                         </span>{' '}
                                         Total kWh
                                     </Grid>
                                     <Grid item xs={6}>
                                         <span className="smallBlackHeader">
-                                            $5400
+                                            {snapshotData?.totalDebited}
                                         </span>{' '}
                                         Total User Debits
                                     </Grid>
@@ -209,9 +222,9 @@ const ConsumerDetails = (props) => {
                         justifyContent="spacing-between"
                         alignItems="center"
                         xs={12}
-                        className="billingSection"
+                        className="buttonSection"
                     >
-                        <Grid item xs={11}>
+                        <Grid item xs={12}>
                             <Grid
                                 container
                                 direction="row"
@@ -219,11 +232,6 @@ const ConsumerDetails = (props) => {
                                 alignItems="center"
                                 spacing={4}
                             >
-                                <Grid item>
-                                    <span className="blackHeader billingSection">
-                                        Billing
-                                    </span>
-                                </Grid>
                                 <Grid item>
                                     <Button
                                         className="regular-button"
@@ -239,6 +247,30 @@ const ConsumerDetails = (props) => {
                                     >
                                         Reset Password
                                     </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button
+                                        className="regular-button"
+                                        variant="contained"
+                                    >
+                                        View User's Property
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                            <hr className="consumerHr" />
+                        </Grid>
+                        <Grid item xs={11}>
+                            <Grid
+                                container
+                                direction="row"
+                                justifyContent="flex-start"
+                                alignItems="center"
+                                spacing={4}
+                            >
+                                <Grid item>
+                                    <span className="blackHeader billingSection">
+                                        Billing
+                                    </span>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -292,7 +324,7 @@ const ConsumerDetails = (props) => {
                                 spacing={5}
                             >
                                 <Grid item>
-                                    <span className="blachHeader">
+                                    <span className="blackHeader billingSection">
                                         Charging Sessions
                                     </span>
                                 </Grid>

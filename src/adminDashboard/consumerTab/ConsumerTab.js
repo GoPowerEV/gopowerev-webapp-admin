@@ -68,10 +68,11 @@ const ConsumerTab = (props) => {
 
     const goToDetails = (id) => {
         let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
-        let result = allConsumersTemp.filter(
+        let result = allConsumersTemp?.filter(
             (consumer) => consumer.user?.cognitoUuid === id
         )
         setCurrentlyViewedCustomer(result)
+        console.log('here setting this result', result)
         setShowDetails(true)
     }
 
@@ -89,10 +90,41 @@ const ConsumerTab = (props) => {
     }
 
     const handleTabChange = (tab) => {
-        if (tab === 'all') {
-            setActiveTab(tab)
+        setActiveTab(tab)
+        if (tab === 'active' || tab === 'pending') {
+            setActiveSearch(true)
+            const filterOn = tab === 'active' ? 'accepted' : 'requested'
+            let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
+            let results = allConsumersTemp?.filter((consumer) =>
+                consumer?.propertyRequest?.status?.includes(
+                    filterOn.toLowerCase()
+                )
+            )
+
+            if (results?.length > 0) {
+                let tempRows = []
+                results.forEach((consumer) => {
+                    let userInfo = consumer.user
+                    let propertyInfo = consumer.property
+                    let requestInfo = consumer.propertyRequest
+                    tempRows.push(
+                        createData(
+                            userInfo?.cognitoUuid,
+                            userInfo.firstName + ' ' + userInfo.lastName,
+                            userInfo.email,
+                            propertyInfo.name,
+                            requestInfo?.status?.charAt(0).toUpperCase() +
+                                requestInfo.status.slice(1)
+                        )
+                    )
+                })
+                setRows(removeDups(tempRows))
+            } else {
+                setRows([])
+            }
         } else {
-            setActiveTab(tab)
+            setRows(removeDups(allRows))
+            setActiveSearch(false)
         }
     }
 
@@ -103,52 +135,11 @@ const ConsumerTab = (props) => {
     }, [props.token])
 
     useEffect(() => {
-        if (allConsumers && activeTab) {
-            if (activeTab === 'active' || activeTab === 'pending') {
-                setActiveSearch(true)
-                const filterOn =
-                    activeTab === 'active' ? 'accepted' : 'requested'
-                let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
-                let results = allConsumersTemp.filter((consumer) =>
-                    consumer?.propertyRequest?.status?.includes(
-                        filterOn.toLowerCase()
-                    )
-                )
-
-                if (results?.length > 0) {
-                    let tempRows = []
-                    results.forEach((consumer) => {
-                        let userInfo = consumer.user
-                        let propertyInfo = consumer.property
-                        let requestInfo = consumer.propertyRequest
-                        tempRows.push(
-                            createData(
-                                userInfo?.cognitoUuid,
-                                userInfo.firstName + ' ' + userInfo.lastName,
-                                userInfo.email,
-                                propertyInfo.name,
-                                requestInfo?.status?.charAt(0).toUpperCase() +
-                                    requestInfo.status.slice(1)
-                            )
-                        )
-                    })
-                    setRows(removeDups(tempRows))
-                } else {
-                    setRows([])
-                }
-            } else {
-                setRows(removeDups(allRows))
-                setActiveSearch(false)
-            }
-        }
-    }, [allConsumers, allRows, activeTab, rows])
-
-    useEffect(() => {
         let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
-        setRows([])
         if (searchVal?.length > 2) {
+            setActiveTab('all')
             setActiveSearch(true)
-            let results = allConsumersTemp.filter(
+            let results = allConsumersTemp?.filter(
                 (consumer) =>
                     consumer.property?.name
                         ?.toLowerCase()
@@ -195,7 +186,6 @@ const ConsumerTab = (props) => {
     }, [allConsumers, allRows, searchVal])
 
     useEffect(() => {
-        setRows([])
         if (allConsumers?.length > 0 && !activeSearch) {
             let tempRows = []
             allConsumers.forEach((consumer) => {
@@ -312,7 +302,7 @@ const ConsumerTab = (props) => {
                                     </TableHead>
                                     <TableBody>
                                         {rows.map((row) => (
-                                            <StyledTableRow key={row.name}>
+                                            <StyledTableRow key={row.id}>
                                                 <StyledTableCell
                                                     component="th"
                                                     scope="row"
