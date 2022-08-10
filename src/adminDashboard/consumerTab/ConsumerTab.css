@@ -65,6 +65,10 @@
     font-size: 17px;
 }
 
+.grey-text {
+    font-size: 17px;
+}
+
 .smallBlackHeader {
     font-weight: bold;
     color: black;
@@ -98,6 +102,28 @@
     color: #ffffff !important;
     font-weight: bold !important;
     text-transform: none !important;
+}
+
+.are-you-sure-modal {
+    font-family: 'Nunito Sans', sans-serif !important;
+}
+
+.modal-desc {
+    font-size: 16px !important;
+}
+
+.modal-user-info-container {
+    background-color: #eeeeee;
+    margin-top: 5px;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.modal-name {
+    color: black;
+    font-weight: bold;
+    font-size: 17px;
+    margin-bottom: 5px;
 }
 
 .search-header {
@@ -136,6 +162,7 @@
     background-color: #12bfa24a !important;
     border: 1px solid #12bfa2;
     border-radius: 7px;
+    margin-bottom: 10px;
     text-align: center;
     padding: 2px;
     margin-top: 5px;

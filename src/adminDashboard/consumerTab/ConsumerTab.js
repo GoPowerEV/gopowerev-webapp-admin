@@ -21,6 +21,7 @@ import {
     getConsumerStatusWording,
 } from './../../generalUtils/GeneralUtils'
 import { getAllCustomers } from './../dashboardService'
+import AreYouSureModal from './AreYouSureModal/AreYouSureModal'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -61,6 +62,27 @@ const ConsumerTab = (props) => {
     const [activeSearch, setActiveSearch] = useState(false)
     const [currentlyViewedCustomer, setCurrentlyViewedCustomer] = useState({})
     const [activeTab, setActiveTab] = useState('all')
+    const [openModal, setOpenModal] = useState(false)
+    const [modalMode, setModalMode] = useState(null)
+    const [modalUserName, setModalUserName] = useState(null)
+    const [modalUserEmail, setModalUseEmail] = useState(null)
+
+    const handleClose = () => {
+        setOpenModal(false)
+    }
+
+    const handleModalOpen = (mode, name, email) => {
+        if (mode === 'activate') {
+            setModalMode('activate')
+        } else if (mode === 'reject') {
+            setModalMode('reject')
+        } else {
+            setModalMode('disable')
+        }
+        setModalUserName(name)
+        setModalUseEmail(email)
+        setOpenModal(true)
+    }
 
     const handeSearchChange = (value) => {
         setSearchVal(value)
@@ -348,12 +370,26 @@ const ConsumerTab = (props) => {
                                                             <Button
                                                                 className="consumer-tab-action-button"
                                                                 variant="contained"
+                                                                onClick={() =>
+                                                                    handleModalOpen(
+                                                                        'activate',
+                                                                        row.name,
+                                                                        row.email
+                                                                    )
+                                                                }
                                                             >
                                                                 Activate
                                                             </Button>
                                                             <Button
                                                                 className="consumer-tab-action-button red"
                                                                 variant="contained"
+                                                                onClick={() =>
+                                                                    handleModalOpen(
+                                                                        'reject',
+                                                                        row.name,
+                                                                        row.email
+                                                                    )
+                                                                }
                                                             >
                                                                 Reject
                                                             </Button>
@@ -364,6 +400,13 @@ const ConsumerTab = (props) => {
                                                         <Button
                                                             className="consumer-tab-action-button red"
                                                             variant="contained"
+                                                            onClick={() =>
+                                                                handleModalOpen(
+                                                                    'disable',
+                                                                    row.name,
+                                                                    row.email
+                                                                )
+                                                            }
                                                         >
                                                             Disable
                                                         </Button>
@@ -389,6 +432,14 @@ const ConsumerTab = (props) => {
                     <CircularProgress style={{ color: '#12BFA2' }} />
                 </div>
             )}
+            <AreYouSureModal
+                userName={modalUserName}
+                userEmail={modalUserEmail}
+                modalMode={modalMode}
+                handleClose={handleClose}
+                open={openModal}
+                token={props.token}
+            />
         </React.Fragment>
     )
 }

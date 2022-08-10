@@ -40,12 +40,15 @@ const ConsumerDetails = (props) => {
         setSessionsOpened(!sessionsOpened)
     }
 
+    const goToUsersProperty = () => {
+        history.push('/property/' + propertyData.uuid)
+    }
+
     useEffect(() => {
         setUserData(props.currentlyViewedCustomer[0].user)
         setPropertyData(props.currentlyViewedCustomer[0].property)
         setVehicleData(props.currentlyViewedCustomer[0].user.vehicles)
         if (userData.cognitoUuid) {
-            console.log('here calling api')
             getConsumerChargingHistory(
                 userData.cognitoUuid,
                 props.token,
@@ -252,6 +255,7 @@ const ConsumerDetails = (props) => {
                                     <Button
                                         className="regular-button"
                                         variant="contained"
+                                        onClick={() => goToUsersProperty()}
                                     >
                                         View User's Property
                                     </Button>
@@ -298,7 +302,10 @@ const ConsumerDetails = (props) => {
                         </Grid>
                     </Grid>
                     <Collapse in={billingOpened}>
-                        <BillingTable />
+                        <div className="grey-text">
+                            You have no billing history
+                        </div>
+                        {/* <BillingTable /> */}
                     </Collapse>
                 </div>
                 <div
@@ -357,7 +364,10 @@ const ConsumerDetails = (props) => {
                         <div className="active-chargin-session-bar">
                             No Active Charging Session
                         </div>
-                        <SessionsTable />
+                        {/* <SessionsTable /> */}
+                        <div className="grey-text">
+                            You have no charging session history
+                        </div>
                     </Collapse>
                 </div>
             </div>
