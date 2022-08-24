@@ -94,8 +94,9 @@ export default function AreYouSureModal(props) {
     }
 
     const handleYesAction = () => {
-        if (props.modalMode) {
+        if (props.modalMode && props.userId) {
             setIsLoading(true)
+            props.activateThisUser(setIsLoading, props.userRequest)
         }
     }
 

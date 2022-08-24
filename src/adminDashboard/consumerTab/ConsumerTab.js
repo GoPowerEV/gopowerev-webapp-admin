@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { currencyFormatter } from './../../generalUtils/GeneralUtils'
+import { REACT_APP_PROPERTY_ADMIN_URL } from '../../constants'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -47,8 +48,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }))
 
-function createData(id, name, email, property, status) {
-    return { id, name, email, property, status }
+function createData(id, name, email, property, status, requestInfo) {
+    return { id, name, email, property, status, requestInfo }
 }
 
 const ConsumerTab = (props) => {
@@ -65,13 +66,15 @@ const ConsumerTab = (props) => {
     const [openModal, setOpenModal] = useState(false)
     const [modalMode, setModalMode] = useState(null)
     const [modalUserName, setModalUserName] = useState(null)
-    const [modalUserEmail, setModalUseEmail] = useState(null)
+    const [modalUserEmail, setModalUserEmail] = useState(null)
+    const [modalUserId, setModalUserId] = useState(null)
+    const [modalUserRequest, setModalUserRequest] = useState(null)
 
     const handleClose = () => {
         setOpenModal(false)
     }
 
-    const handleModalOpen = (mode, name, email) => {
+    const handleModalOpen = (mode, name, email, id, requestInfo) => {
         if (mode === 'activate') {
             setModalMode('activate')
         } else if (mode === 'reject') {
@@ -80,7 +83,9 @@ const ConsumerTab = (props) => {
             setModalMode('disable')
         }
         setModalUserName(name)
-        setModalUseEmail(email)
+        setModalUserEmail(email)
+        setModalUserRequest(requestInfo)
+        setModalUserId(id)
         setOpenModal(true)
     }
 
@@ -150,11 +155,45 @@ const ConsumerTab = (props) => {
         }
     }
 
+    const activateThisUser = (setIsLoading, userRequest) => {
+        console.log('here is the request info', userRequest)
+        fetch(
+            REACT_APP_PROPERTY_ADMIN_URL +
+                '/user-property-charging-requests/' +
+                userRequest.requestUuid,
+            {
+                method: 'PUT',
+                headers: {
+                    Authorization: 'Bearer ' + props.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ status: 'ACCEPTED' }),
+            }
+        )
+            .then((res) => res.json())
+            .then(
+                (result) => {
+                    setIsLoading(false)
+                },
+                (error) => {
+                    setIsLoading(false)
+                }
+            )
+    }
+
+    const disableThisUser = () => {}
+
     useEffect(() => {
         if (props.token) {
             getAllCustomers(props.token, setIsLoading, setAllConsumers)
         }
     }, [props.token])
+
+    useEffect(() => {
+        if (allConsumers) {
+            console.log('here it is', allConsumers)
+        }
+    }, [allConsumers])
 
     useEffect(() => {
         let allConsumersTemp = JSON.parse(JSON.stringify(allConsumers))
@@ -193,7 +232,8 @@ const ConsumerTab = (props) => {
                             userInfo.email,
                             propertyInfo.name,
                             requestInfo?.status?.charAt(0).toUpperCase() +
-                                requestInfo.status.slice(1)
+                                requestInfo.status.slice(1),
+                            requestInfo
                         )
                     )
                 })
@@ -222,7 +262,8 @@ const ConsumerTab = (props) => {
                         userInfo.email,
                         propertyInfo.name,
                         requestInfo?.status?.charAt(0).toUpperCase() +
-                            requestInfo?.status?.slice(1)
+                            requestInfo?.status?.slice(1),
+                        requestInfo
                     )
                 )
             })
@@ -374,7 +415,9 @@ const ConsumerTab = (props) => {
                                                                     handleModalOpen(
                                                                         'activate',
                                                                         row.name,
-                                                                        row.email
+                                                                        row.email,
+                                                                        row.id,
+                                                                        row.requestInfo
                                                                     )
                                                                 }
                                                             >
@@ -387,7 +430,9 @@ const ConsumerTab = (props) => {
                                                                     handleModalOpen(
                                                                         'reject',
                                                                         row.name,
-                                                                        row.email
+                                                                        row.email,
+                                                                        row.id,
+                                                                        row.requestInfo
                                                                     )
                                                                 }
                                                             >
@@ -404,7 +449,9 @@ const ConsumerTab = (props) => {
                                                                 handleModalOpen(
                                                                     'disable',
                                                                     row.name,
-                                                                    row.email
+                                                                    row.email,
+                                                                    row.id,
+                                                                    row.requestInfo
                                                                 )
                                                             }
                                                         >
@@ -435,10 +482,14 @@ const ConsumerTab = (props) => {
             <AreYouSureModal
                 userName={modalUserName}
                 userEmail={modalUserEmail}
+                userId={modalUserId}
+                userRequest={modalUserRequest}
                 modalMode={modalMode}
                 handleClose={handleClose}
                 open={openModal}
                 token={props.token}
+                activateThisUser={activateThisUser}
+                disableThisUser={disableThisUser}
             />
         </React.Fragment>
     )

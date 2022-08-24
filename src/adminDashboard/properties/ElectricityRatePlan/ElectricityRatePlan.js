@@ -130,21 +130,23 @@ export default function ElectricityRatePlan(props) {
     }
 
     const updateThis = () => {
-        const dataToSend = {
-            electricityRatesUUID: utilityRatePlan,
-            l1electricityMarginsUUID: l1MarginRate,
-            l2electricityMarginsUUID: l2MarginRate,
-            ownerMarginAmount: Number(marginAmount),
-            ownerMarginType: margin,
-            propertyUUID: props.propertyUUID,
+        if (planInfo.propertyPowerPlanUUID) {
+            const dataToSend = {
+                electricityRatesUUID: utilityRatePlan,
+                l1electricityMarginsUUID: l1MarginRate,
+                l2electricityMarginsUUID: l2MarginRate,
+                ownerMarginAmount: Number(marginAmount),
+                ownerMarginType: margin,
+                propertyUUID: props.propertyUUID,
+            }
+            updatePlanInfo(
+                props.token,
+                setIsLoading,
+                dataToSend,
+                toggleInfo,
+                planInfo.propertyPowerPlanUUID
+            )
         }
-        updatePlanInfo(
-            props.token,
-            setIsLoading,
-            dataToSend,
-            toggleInfo,
-            planInfo.propertyPowerPlanUUID
-        )
     }
 
     useEffect(() => {
