@@ -130,15 +130,15 @@ export default function ElectricityRatePlan(props) {
     }
 
     const updateThis = () => {
+        const dataToSend = {
+            electricityRatesUUID: utilityRatePlan,
+            l1electricityMarginsUUID: l1MarginRate,
+            l2electricityMarginsUUID: l2MarginRate,
+            ownerMarginAmount: Number(marginAmount),
+            ownerMarginType: margin,
+            propertyUUID: props.propertyUUID,
+        }
         if (planInfo.propertyPowerPlanUUID) {
-            const dataToSend = {
-                electricityRatesUUID: utilityRatePlan,
-                l1electricityMarginsUUID: l1MarginRate,
-                l2electricityMarginsUUID: l2MarginRate,
-                ownerMarginAmount: Number(marginAmount),
-                ownerMarginType: margin,
-                propertyUUID: props.propertyUUID,
-            }
             updatePlanInfo(
                 props.token,
                 setIsLoading,
@@ -146,6 +146,8 @@ export default function ElectricityRatePlan(props) {
                 toggleInfo,
                 planInfo.propertyPowerPlanUUID
             )
+        } else {
+            saveThis()
         }
     }
 
@@ -172,7 +174,6 @@ export default function ElectricityRatePlan(props) {
     }, [props.token, props.propertyUUID])
 
     useEffect(() => {
-        console.log('here it is, dataLoaded', planInfo)
         if (
             planInfo &&
             ratePlanOptions?.length > 0 &&
