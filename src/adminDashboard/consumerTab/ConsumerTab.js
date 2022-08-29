@@ -421,7 +421,8 @@ const ConsumerTab = (props) => {
                                                                     )
                                                                 }
                                                             >
-                                                                Activate
+                                                                Electricity Rate
+                                                                Plan
                                                             </Button>
                                                             <Button
                                                                 className="consumer-tab-action-button red"
