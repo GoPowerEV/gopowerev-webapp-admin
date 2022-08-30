@@ -398,7 +398,12 @@ const LocationCard = (props) => {
                     />
                 </Grid>
                 <Grid container xs={12} className="smartOutletsArea">
-                    <PropertyEVReadiBases readiBases={readiBases} />
+                    <PropertyEVReadiBases
+                        readiBases={readiBases}
+                        token={props.token}
+                        locationdUuid={locationInfo.locationUUID}
+                        getSmartOutletData={getSmartOutletData}
+                    />
                 </Grid>
             </Collapse>
         </React.Fragment>

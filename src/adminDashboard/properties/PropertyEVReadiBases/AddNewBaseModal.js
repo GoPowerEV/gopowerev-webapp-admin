@@ -4,7 +4,7 @@ import { API_URL, API_URL_ADMIN } from '../../../constants'
 import Modal from '@material-ui/core/Modal'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import './AddNewSmartOutletModal.css'
+import './PropertyEVReadiBases.css'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 
@@ -51,19 +51,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function AddNewSmartOutletModal(props) {
+export default function AddNewBaseModal(props) {
     const [isLoading, setIsLoading] = useState(false)
     const [selectedModel, setSelectedModel] = useState(undefined)
     const [models, setModels] = useState([])
-    const [soData, setSoData] = useState({
-        locationUUID: props.createSmartOutletForThisLocation,
-        model: 'Proto X2',
-    })
     const [modalStyle] = useState(getModalStyle)
     const classes = useStyles()
 
-    const addNewSmartOutlet = () => {
+    const addNewBase = () => {
         setIsLoading(true)
+        let baseObject = {
+            locationUUID: props.createSmartOutletForThisLocation,
+            baseModel: selectedModel,
+            installationState: 'ready',
+        }
         if (props.token) {
             fetch(API_URL + 'smart-outlets', {
                 method: 'POST',
@@ -71,7 +72,7 @@ export default function AddNewSmartOutletModal(props) {
                     Authorization: 'Bearer ' + props.token,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(soData),
+                body: JSON.stringify(baseObject),
             })
                 .then((res) => res.json())
                 .then(
@@ -89,42 +90,10 @@ export default function AddNewSmartOutletModal(props) {
 
     const handleOutletTypeChange = (value) => {
         setSelectedModel(value)
-        setSoData({
-            locationUUID: props.createSmartOutletForThisLocation,
-            model: value,
-        })
     }
 
     useEffect(() => {
-        if (props.token) {
-            fetch(API_URL_ADMIN + 'admin/so-model', {
-                method: 'GET',
-                headers: {
-                    Authorization: 'Bearer ' + props.token,
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((res) => res.json())
-                .then(
-                    (result) => {
-                        if (result?.length > 0) {
-                            let allModels = []
-                            result.forEach((element) => {
-                                const tempModel = {
-                                    label: element.model,
-                                    value: element.model,
-                                }
-                                allModels.push(tempModel)
-                            })
-                            console.log('here are all models', allModels)
-                            setModels(allModels)
-                        }
-                    },
-                    (error) => {
-                        setIsLoading(false)
-                    }
-                )
-        }
+        setModels([{ label: 'SO3RB', value: 'SO3RB' }])
     }, [props.token])
 
     const body = (
@@ -188,9 +157,9 @@ export default function AddNewSmartOutletModal(props) {
                                 <Button
                                     className="addNewSOButton"
                                     variant="outlined"
-                                    onClick={() => addNewSmartOutlet()}
+                                    onClick={() => addNewBase()}
                                 >
-                                    Add New Smart Outlet To This Location
+                                    Add New ReadiBase To This Location
                                 </Button>
                             </Grid>
                         </Grid>

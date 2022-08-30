@@ -112,7 +112,7 @@ const SmartOutlets = (props) => {
                     variant="outlined"
                     onClick={addNewSmartOutlet}
                 >
-                    Add New Smart Outlet
+                    Add New
                 </Button>
             </Grid>
             <Grid container xs={12} spacing={2}>
