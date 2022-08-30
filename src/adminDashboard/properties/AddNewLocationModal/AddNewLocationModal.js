@@ -255,6 +255,7 @@ export default function AddNewLocationModal(props) {
             let locationObject = {
                 locationUUID: locationId,
                 model: 'Proto X2',
+                installationState: 'powered',
             }
             if (props.token) {
                 fetch(API_URL + 'smart-outlets', {

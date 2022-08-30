@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import './PropertyEVReadiBases.css'
 import { makeStyles } from '@material-ui/core/styles'
 import AddNewBaseModal from './AddNewBaseModal'
+import EditBaseModal from './EditBaseModal'
 
 const useStyles = makeStyles({
     root: {
@@ -233,8 +234,8 @@ const PropertyEVReadiBases = (props) => {
                     </>
                 )}
             </>
-            {/* EDIT SMART OUTLET MODAL */}
-            {/* <EditSmartOutletModal
+            {/* EDIT READIBASE MODAL */}
+            <EditBaseModal
                 handleOpen={handleOpen}
                 handleClose={handleClose}
                 open={openModal}
@@ -242,8 +243,8 @@ const PropertyEVReadiBases = (props) => {
                 outletData={currentlyViewedOutlet}
                 outletIndex={outletIndex}
                 powerTypeIs1P240={props.powerTypeIs1P240}
-            /> */}
-            {/* ADD NEW SMART OUTLET MODAL */}
+            />
+            {/* ADD NEW READIBASE MODAL */}
             <AddNewBaseModal
                 handleOpen={handleNewOpen}
                 handleClose={handleNewClose}

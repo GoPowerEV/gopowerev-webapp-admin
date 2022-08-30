@@ -58,6 +58,7 @@ export default function AddNewSmartOutletModal(props) {
     const [soData, setSoData] = useState({
         locationUUID: props.createSmartOutletForThisLocation,
         model: 'Proto X2',
+        installationState: 'powered',
     })
     const [modalStyle] = useState(getModalStyle)
     const classes = useStyles()
@@ -92,6 +93,7 @@ export default function AddNewSmartOutletModal(props) {
         setSoData({
             locationUUID: props.createSmartOutletForThisLocation,
             model: value,
+            installationState: 'powered',
         })
     }
 

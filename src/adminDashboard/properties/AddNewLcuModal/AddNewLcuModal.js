@@ -261,6 +261,7 @@ export default function AddNewLcuModal(props) {
             let soObject = {
                 locationUUID: locationId,
                 model: 'Proto X2',
+                installationState: 'powered',
             }
             if (props.token) {
                 fetch(API_URL + 'smart-outlets', {
