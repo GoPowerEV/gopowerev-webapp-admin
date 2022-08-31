@@ -6,6 +6,8 @@ import CardContent from '@material-ui/core/CardContent'
 import Grid from '@material-ui/core/Grid'
 import './PropertyEVReadiBases.css'
 import { makeStyles } from '@material-ui/core/styles'
+import AddNewBaseModal from './AddNewBaseModal'
+import EditBaseModal from './EditBaseModal'
 
 const useStyles = makeStyles({
     root: {
@@ -63,7 +65,35 @@ const PropertyEVReadiBases = (props) => {
         createSmartOutletForThisLocation,
         setCreateSmartOutletForThisLocation,
     ] = useState()
+    const [openModal, setOpenModal] = useState(false)
+    const [openNewModal, setOpenNewModal] = useState(false)
     const [outletIndex, setOutletIndex] = useState()
+
+    const handleOpen = (outletData, index) => {
+        setOpenModal(true)
+        setCurrentlyViewedOutlet(outletData)
+        setOutletIndex(index + 1)
+    }
+
+    const handleClose = () => {
+        setOpenModal(false)
+        setCurrentlyViewedOutlet({})
+        setOutletIndex()
+    }
+
+    const handleNewOpen = () => {
+        setOpenNewModal(true)
+    }
+
+    const handleNewClose = () => {
+        setCreateSmartOutletForThisLocation()
+        setOpenNewModal(false)
+    }
+
+    const addNewBase = () => {
+        setCreateSmartOutletForThisLocation(props.locationdUuid)
+        handleNewOpen()
+    }
 
     return (
         <div className="smartOutletsContainer">
@@ -71,6 +101,13 @@ const PropertyEVReadiBases = (props) => {
                 <div className="outletHeader">
                     EVReadiBases ({props.readiBases?.length})
                 </div>
+                <Button
+                    className="addNewLocButton"
+                    variant="outlined"
+                    onClick={addNewBase}
+                >
+                    Add New
+                </Button>
             </Grid>
             <>
                 {props.readiBases?.length === 0 && <div>-</div>}
@@ -197,6 +234,27 @@ const PropertyEVReadiBases = (props) => {
                     </>
                 )}
             </>
+            {/* EDIT READIBASE MODAL */}
+            <EditBaseModal
+                handleOpen={handleOpen}
+                handleClose={handleClose}
+                open={openModal}
+                token={props.token}
+                outletData={currentlyViewedOutlet}
+                outletIndex={outletIndex}
+                powerTypeIs1P240={props.powerTypeIs1P240}
+            />
+            {/* ADD NEW READIBASE MODAL */}
+            <AddNewBaseModal
+                handleOpen={handleNewOpen}
+                handleClose={handleNewClose}
+                createSmartOutletForThisLocation={
+                    createSmartOutletForThisLocation
+                }
+                open={openNewModal}
+                token={props.token}
+                getSmartOutletData={props.getSmartOutletData}
+            />
         </div>
     )
 }

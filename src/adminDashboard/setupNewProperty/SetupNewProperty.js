@@ -349,7 +349,7 @@ export default function SetupNewProperty(props) {
         console.log('this is the amount of bases', amountOfBases)
         for (var i = 0; i < amountOfBases; i++) {
             setIsLoading(true)
-            let locationObject = {
+            let baseObject = {
                 locationUUID: locationId,
                 baseModel: model,
                 installationState: 'ready',
@@ -361,7 +361,7 @@ export default function SetupNewProperty(props) {
                         Authorization: 'Bearer ' + props.token,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(locationObject),
+                    body: JSON.stringify(baseObject),
                 })
                     .then((res) => res.json())
                     .then(
