@@ -248,8 +248,6 @@ export default function AddNewLocationModal(props) {
     }
 
     const createSmartOutlets = (amountOfOutlets, locationId) => {
-        console.log('this is the amount of outlets', amountOfOutlets)
-        console.log('locationId', locationId)
         for (var i = 0; i < amountOfOutlets; i++) {
             setIsLoading(true)
             let locationObject = {
