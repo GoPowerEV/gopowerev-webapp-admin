@@ -70,6 +70,7 @@ const PropertyEVReadiBases = (props) => {
     const [outletIndex, setOutletIndex] = useState()
 
     const handleOpen = (outletData, index) => {
+        console.log('here opening this modal')
         setOpenModal(true)
         setCurrentlyViewedOutlet(outletData)
         setOutletIndex(index + 1)
@@ -106,7 +107,7 @@ const PropertyEVReadiBases = (props) => {
                     variant="outlined"
                     onClick={addNewBase}
                 >
-                    Add New
+                    Add New ReadiBase
                 </Button>
             </Grid>
             <>
@@ -117,7 +118,12 @@ const PropertyEVReadiBases = (props) => {
                             {props.readiBases?.map((base, index) => (
                                 <React.Fragment>
                                     <Grid item xl={4} lg={4} md={6} xs={12}>
-                                        <Card className={classes.root}>
+                                        <Card
+                                            className={classes.root}
+                                            onClick={() =>
+                                                handleOpen(base, index)
+                                            }
+                                        >
                                             <CardContent
                                                 className={classes.content}
                                             >

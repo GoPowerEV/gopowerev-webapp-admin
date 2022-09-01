@@ -295,9 +295,11 @@ export default function EditSmartOutletModal(props) {
                                 Heartbeat
                             </div>
                             <div className="smartOutletGridLocationHeaderSmall smartOutletGridItem">
-                                {moment(outletData?.lastHeartbeat).format(
-                                    'MM/DD/YYYY, h:mm:ss a'
-                                )}
+                                {outletData?.lastHeartbeat
+                                    ? moment(outletData?.lastHeartbeat).format(
+                                          'MM/DD/YYYY, h:mm:ss a'
+                                      )
+                                    : '-'}
                             </div>
                         </Grid>
                         <Grid item xs={3}>
