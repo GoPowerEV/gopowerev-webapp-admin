@@ -48,6 +48,7 @@ const allRoles = [
 const installerOnly = [{ label: 'Installer', value: 'INSTALLER' }]
 
 const allRolesWithoutInstaller = [
+    { label: 'All', value: 'All' },
     { label: 'Admin', value: 'ADMIN' },
     { label: 'Property Manager', value: 'PROPERTY_MANAGER' },
     { label: 'Property Owner', value: 'PROPERTY_OWNER' },
@@ -63,6 +64,7 @@ export default function AddTeamMemberModal(props) {
     const [disableButton, setDisableButton] = useState(true)
     const [installerGridData, setInstallerGridData] = useState([])
     const [adminGridData, setAdminGridData] = useState([])
+    const [allAdminGridData, setAllAdminGridData] = useState([])
     const [allManagers, setAllManagers] = useState([])
     const [allOwners, setAllOwners] = useState([])
     const [allAdmins, setAllAdmins] = useState([])
@@ -162,9 +164,15 @@ export default function AddTeamMemberModal(props) {
                                         .then((res) => res.json())
                                         .then(
                                             (result3) => {
+                                                setAllAdmins(result3)
                                                 setIsLoading(false)
                                                 setAdminGridData(
                                                     result2.concat(result3)
+                                                )
+                                                setAllAdminGridData(
+                                                    adminGridData.concat(
+                                                        result3
+                                                    )
                                                 )
                                             },
                                             (error) => {
@@ -244,6 +252,18 @@ export default function AddTeamMemberModal(props) {
         setSelectionModel([])
         props.handleClose()
     }
+
+    useEffect(() => {
+        if (role === 'ADMIN') {
+            setAdminGridData(allAdmins)
+        } else if (role === 'PROPERTY_OWNER') {
+            setAdminGridData(allOwners)
+        } else if (role === 'PROPERTY_MANAGER') {
+            setAdminGridData(allManagers)
+        } else {
+            setAdminGridData(allAdminGridData)
+        }
+    }, [role])
 
     useEffect(() => {
         if (props.token && props.propertyUUID) {

@@ -5,11 +5,13 @@ export const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 export const getConsumerStatusClass = (status) => {
     if (status === 'Accepted') {
-        return 'accepted status'
+        return 'consumer-tab-action-button accepted status'
     } else if (status === 'Requested') {
-        return 'pending status'
+        return 'consumer-tab-action-button pending status'
+    } else if (!status) {
+        return 'consumer-tab-action-button red status'
     } else {
-        return 'pending status'
+        return 'consumer-tab-action-button pending status'
     }
 }
 
@@ -19,6 +21,6 @@ export const getConsumerStatusWording = (status) => {
     } else if (status === 'Requested') {
         return 'Pending'
     } else {
-        return 'No status'
+        return 'None'
     }
 }

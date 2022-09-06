@@ -168,11 +168,6 @@ const feedColorOptionsVar2 = [{ label: 'Red-Black', value: 'Red-Black' }]
 
 export default function EditSmartOutletModal(props) {
     const [isLoading, setIsLoading] = useState(false)
-    const [serialNumber, setSerialNumber] = useState(
-        props.outletData.serialNumber
-    )
-    const [firmware, setFirmware] = useState(props.outletData.fwVersion)
-    const [hardware, setHardware] = useState(props.outletData.hwVersion)
     const [parkingSpot, setParkingSpot] = useState(props.outletData.parkingSpot)
     const [feedColors, setFeedColors] = useState(props.outletData.feedColors)
     const [breakNumA, setBreakNumA] = useState(props.outletData.breakNumA)
@@ -180,18 +175,13 @@ export default function EditSmartOutletModal(props) {
     const [numberOfParkingSpots, setNumberOfParkingSpots] = useState(
         props.outletData.parkingSpotCount
     )
-    const [mac, setMac] = useState(props.outletData.macAddr)
     const [outletData, setOutletData] = useState(props.outletData)
     const [modalStyle] = useState(getModalStyle)
     const classes = useStyles()
 
     useEffect(() => {
         setOutletData(props.outletData)
-        setFirmware(props.outletData?.fwVersion)
-        setHardware(props.outletData.hwVersion)
-        setSerialNumber(props.outletData.serialNumber)
         setParkingSpot(props.outletData.parkingSpot)
-        setMac(props.outletData.macAddr)
         setFeedColors(props.outletData.feedColors)
         setBreakNumA(props.outletData.breakNumA)
         setBreakNumB(props.outletData.breakNumB)
@@ -222,15 +212,7 @@ export default function EditSmartOutletModal(props) {
     }
 
     const handleOutletFieldChange = (value, field) => {
-        if (field === 'hwVersion') {
-            setHardware(value)
-        } else if (field === 'fwVersion') {
-            let tempFw = firmware
-            tempFw.releaseVersion = value
-            setFirmware(tempFw)
-        } else if (field === 'serialNumber') {
-            setSerialNumber(value)
-        } else if (field === 'parkingSpot') {
+        if (field === 'parkingSpot') {
             setParkingSpot(value)
         } else if (field === 'feedColors') {
             setFeedColors(value)
@@ -240,14 +222,16 @@ export default function EditSmartOutletModal(props) {
             setBreakNumB(value)
         } else if (field === 'parkingSpotCount') {
             setNumberOfParkingSpots(parseInt(value))
-        } else {
-            setMac(value)
         }
         let tempOutlet = outletData
         tempOutlet[field] = value
 
         setOutletData(tempOutlet)
-        if (field === 'parkingSpotCount') {
+        if (
+            field === 'parkingSpotCount' ||
+            field === 'breakNumA' ||
+            field === 'breakNumB'
+        ) {
             saveOutletInfo()
         }
     }
@@ -497,86 +481,6 @@ export default function EditSmartOutletModal(props) {
                                     )}
                                 </Select>
                             </FormControl>
-                        </Grid>
-                        <Grid item xs={5}>
-                            <TextField
-                                fullWidth
-                                className="editableField"
-                                id="soMac"
-                                label="MAC Address"
-                                variant="filled"
-                                value={mac}
-                                onChange={(e) =>
-                                    handleOutletFieldChange(
-                                        e.target.value,
-                                        'macAddr'
-                                    )
-                                }
-                                onBlur={() => saveOutletInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <TextField
-                                fullWidth
-                                className="editableField"
-                                id="soSerial"
-                                label="Serial Number"
-                                variant="filled"
-                                value={serialNumber}
-                                onChange={(e) =>
-                                    handleOutletFieldChange(
-                                        e.target.value,
-                                        'serialNumber'
-                                    )
-                                }
-                                onBlur={() => saveOutletInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <TextField
-                                fullWidth
-                                className="editableField"
-                                id="soHwVersion"
-                                label="Hardware Version"
-                                variant="filled"
-                                value={hardware}
-                                onChange={(e) =>
-                                    handleOutletFieldChange(
-                                        e.target.value,
-                                        'hwVersion'
-                                    )
-                                }
-                                onBlur={() => saveOutletInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <TextField
-                                fullWidth
-                                className="editableField"
-                                id="soFwVersion"
-                                label="Firmware Version"
-                                variant="filled"
-                                value={firmware?.releaseVersion}
-                                onChange={(e) =>
-                                    handleOutletFieldChange(
-                                        e.target.value,
-                                        'fwVersion'
-                                    )
-                                }
-                                onBlur={() => saveOutletInfo()}
-                                InputProps={{
-                                    endAdornment: <EditOutlinedIcon />,
-                                }}
-                            />
                         </Grid>
                     </Grid>
                 )}
