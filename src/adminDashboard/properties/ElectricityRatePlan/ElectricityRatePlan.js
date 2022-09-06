@@ -180,7 +180,12 @@ export default function ElectricityRatePlan(props) {
             l1Options?.length > 0 &&
             l2Options?.length > 0
         ) {
-            setMarginAmount(planInfo.ownerMarginAmount / 100)
+            setMarginAmount(
+                planInfo.ownerMarginAmount !== null ||
+                    planInfo.ownerMarginAmount !== 0
+                    ? planInfo.ownerMarginAmount / 100
+                    : 0
+            )
             setMargin(planInfo.ownerMarginType)
             setUtilityRatePlanString(
                 ratePlanOptions.find(
