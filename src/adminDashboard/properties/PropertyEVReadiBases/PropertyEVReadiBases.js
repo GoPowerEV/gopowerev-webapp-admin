@@ -96,6 +96,8 @@ const PropertyEVReadiBases = (props) => {
         handleNewOpen()
     }
 
+    console.log('here is the base info', props.readiBases)
+
     return (
         <div className="smartOutletsContainer">
             <Grid container justifyContent="space-between">
@@ -157,7 +159,8 @@ const PropertyEVReadiBases = (props) => {
                                                                 classes.status
                                                             }
                                                         >
-                                                            {base.baseModel}
+                                                            {base?.model
+                                                                ?.model ?? '-'}
                                                         </Typography>
                                                     </Grid>
                                                     <Grid item xs={4}>

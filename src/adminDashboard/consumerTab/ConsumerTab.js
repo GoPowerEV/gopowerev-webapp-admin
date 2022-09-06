@@ -380,15 +380,16 @@ const ConsumerTab = (props) => {
                                                         goToDetails(row.id)
                                                     }
                                                 >
-                                                    <span
+                                                    <Button
                                                         className={getConsumerStatusClass(
                                                             row.status
                                                         )}
+                                                        variant="contained"
                                                     >
                                                         {getConsumerStatusWording(
                                                             row.status
                                                         )}
-                                                    </span>
+                                                    </Button>
                                                 </StyledTableCell>
                                                 <StyledTableCell
                                                     onClick={() =>
@@ -421,8 +422,7 @@ const ConsumerTab = (props) => {
                                                                     )
                                                                 }
                                                             >
-                                                                Electricity Rate
-                                                                Plan
+                                                                Accept
                                                             </Button>
                                                             <Button
                                                                 className="consumer-tab-action-button red"

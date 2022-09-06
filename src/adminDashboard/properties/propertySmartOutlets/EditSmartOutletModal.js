@@ -247,7 +247,11 @@ export default function EditSmartOutletModal(props) {
         tempOutlet[field] = value
 
         setOutletData(tempOutlet)
-        if (field === 'parkingSpotCount') {
+        if (
+            field === 'parkingSpotCount' ||
+            field === 'breakNumA' ||
+            field === 'breakNumB'
+        ) {
             saveOutletInfo()
         }
     }

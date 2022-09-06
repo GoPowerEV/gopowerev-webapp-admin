@@ -158,6 +158,16 @@
     text-transform: none !important;
 }
 
+.status {
+    font-family: 'Nunito Sans', sans-serif !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-size: 15px !important;
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 20px !important;
+}
+
 .active-chargin-session-bar {
     background-color: #12bfa24a !important;
     border: 1px solid #12bfa2;
@@ -176,22 +186,7 @@
     color: #ffffff !important;
     font-weight: bold !important;
     text-transform: none !important;
-}
-
-.grey-border {
-    border-radius: 7px;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    padding-left: 20px;
-    border: 0.5px solid #8080806e;
-}
-
-.status {
-    font-family: 'Nunito Sans', sans-serif !important;
-    color: #ffffff !important;
-    font-weight: bold !important;
-    border-radius: 5px;
-    padding: 10px;
+    width: 80px !important;
 }
 
 .accepted {
@@ -204,6 +199,14 @@
 
 .red {
     background-color: red !important;
+}
+
+.grey-border {
+    border-radius: 7px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 20px;
+    border: 0.5px solid #8080806e;
 }
 
 @media only screen and (max-width: 1400px) {

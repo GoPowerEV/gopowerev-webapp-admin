@@ -200,6 +200,19 @@ export default function CheckboxSelectionGrid(props) {
         }
     }
 
+    const getPartnerRole = (role) => {
+        let roleToReturn = '-'
+        if (role === 'PROPERTY_OWNER') {
+            roleToReturn = 'Owner'
+        } else if (role === 'ADMIN') {
+            roleToReturn = 'Admin'
+        } else {
+            roleToReturn = 'Manager'
+        }
+
+        return roleToReturn
+    }
+
     const transformData = () => {
         let rowsTemp = []
         const data =
@@ -210,11 +223,14 @@ export default function CheckboxSelectionGrid(props) {
             installerTeam &&
             propertyTeam
         ) {
+            console.log('here is the grid data', data)
             data.forEach((element) => {
                 const tempObj = {
                     id: element.cognitoUUID,
                     role:
-                        props.showInstaller === true ? 'Installer' : 'Manager',
+                        props.showInstaller === true
+                            ? 'Installer'
+                            : getPartnerRole(element.role),
                     name: element.firstName
                         ? element.firstName + ' ' + element.lastName
                         : '-',

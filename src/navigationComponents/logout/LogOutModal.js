@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { Auth } from 'aws-amplify'
@@ -74,25 +75,28 @@ export default function LogoutModal(props) {
     const body = (
         <div style={modalStyle} className={classes.paper}>
             <h2 id="simple-modal-title">Are you sure you want to logout?</h2>
-            <div id="simple-modal-description">
-                <Button
-                    fullWidth
-                    variant="contained"
-                    className={classes.submit}
-                    onClick={logOut}
-                >
-                    Yes
-                </Button>
-                <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.cancel}
-                    onClick={props.handleClose}
-                >
-                    No
-                </Button>
-            </div>
+            {!isLoading && (
+                <div id="simple-modal-description">
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        className={classes.submit}
+                        onClick={logOut}
+                    >
+                        Yes
+                    </Button>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.cancel}
+                        onClick={props.handleClose}
+                    >
+                        No
+                    </Button>
+                </div>
+            )}
+            {isLoading && <CircularProgress />}
             <LogoutModal />
         </div>
     )
@@ -105,7 +109,6 @@ export default function LogoutModal(props) {
             aria-describedby="simple-modal-description"
         >
             {body}
-            {/* <CircularProgress /> */}
         </Modal>
     )
 }
