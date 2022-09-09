@@ -205,9 +205,9 @@ const ConsumerDetails = (props) => {
                                     </Grid>
                                     <Grid item xs={6}>
                                         <span className="smallBlackHeader">
-                                            {snapshotData?.totalKwh}
+                                            {snapshotData?.totalKwh?.power}
                                         </span>{' '}
-                                        Total kWh
+                                        Total {snapshotData?.totalKwh?.unit}
                                     </Grid>
                                     <Grid item xs={6}>
                                         <span className="smallBlackHeader">
