@@ -20,6 +20,12 @@ workflows:
           filters:
             branches:
               only: qa
+      - deployProd:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
 
 jobs:
   build:
@@ -38,7 +44,7 @@ jobs:
             npm --version
             npm install reactjs
             npx browserslist@latest --update-db
-            if [ $CIRCLE_BRANCH == master ]; then
+            if [ $CIRCLE_BRANCH == main ]; then
               cat ./deployment_envs/.env.prod > .env
               GENERATE_SOURCEMAP=false
             elif [ $CIRCLE_BRANCH == qa ]; then
@@ -84,3 +90,25 @@ jobs:
             cd build
             aws s3 rm s3://gopev-admin-web-app-qa --recursive
             aws s3 sync . s3://gopev-admin-web-app-qa
+  deployProd:
+    executor: aws-cli/default
+    steps:
+      - run:
+          command: |
+            echo 'export AWS_ACCESS_KEY_ID=$PROD_AWS_ACCESS_KEY_ID' >> "$BASH_ENV"
+            echo 'export AWS_SECRET_ACCESS_KEY=$PROD_AWS_SECRET_ACCESS_KEY' >> "$BASH_ENV"
+            source "$BASH_ENV"
+          name: Set AWS Prod account
+      - aws-cli/setup:
+          profile-name: circleci-prod
+      - attach_workspace:
+          at: .
+      - run:
+          name: Upload
+          command: |
+            ls -la
+            aws --version
+            cd build
+            aws s3 ls s3://gopev-admin-web-app-prod
+            # aws s3 rm s3://gopev-admin-web-app-prod --recursive
+            # aws s3 sync . s3://gopev-admin-web-app-prod
