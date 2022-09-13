@@ -109,6 +109,5 @@ jobs:
             ls -la
             aws --version
             cd build
-            aws s3 ls s3://gopev-admin-web-app-prod
-            # aws s3 rm s3://gopev-admin-web-app-prod --recursive
-            # aws s3 sync . s3://gopev-admin-web-app-prod
+            aws s3 rm s3://gopev-admin-web-app-prod --recursive
+            aws s3 sync . s3://gopev-admin-web-app-prod
